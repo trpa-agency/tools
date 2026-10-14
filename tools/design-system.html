@@ -313,8 +313,9 @@
         <button type="button" class="active" data-brand="" style="--c:#0072CE" aria-checked="true" role="radio"><i></i>TRPA agency</button>
         <button type="button" data-brand="eip" style="--c:#6EBE44" aria-checked="false" role="radio"><i></i>EIP</button>
         <button type="button" data-brand="tahoe-living" style="--c:#5B7B6B" aria-checked="false" role="radio"><i></i>Tahoe Living</button>
+        <button type="button" data-brand="ltinfo" style="--c:#3e72b0" aria-checked="false" role="radio"><i></i>LT Info embed</button>
       </div>
-      <div class="hint">Re-themes every live specimen below with one attribute, <code>data-brand</code>. The page shell stays agency blue.</div>
+      <div class="hint">Re-themes every live specimen below with one attribute, <code>data-brand</code>. The page shell stays agency blue. LT Info embed is not a brand: it previews the platform styling that laketahoeinfo.org embeds must match.</div>
     </div>
     <div class="toc-group">Start</div>
     <a href="#overview">Overview</a>
@@ -337,6 +338,7 @@
     <div class="toc-group">Patterns</div>
     <a href="#shell">App shell</a>
     <a href="#pages">Page types</a>
+    <a href="#ltinfo">Lake Tahoe Info embeds</a>
     <a href="#maps">Map conventions</a>
     <a href="#states">States</a>
     <a href="#a11y">Accessibility</a>
@@ -387,6 +389,7 @@
         <tr><td><b>TRPA agency</b></td><td>Planning, permitting, transportation, monitoring, data, gallery pages, anything on trpa.gov or maps.trpa.gov by default</td><td><span class="status-dot"><i style="background:#0072CE"></i>#0072CE</span></td><td><span class="status-dot"><i style="background:#003B71"></i>#003B71</span></td><td><span class="status-dot"><i style="background:#E87722"></i>#E87722</span></td><td>Open Sans</td><td>8px cards, 7px controls</td><td><code>(none)</code></td></tr>
         <tr><td><b>EIP</b></td><td>Environmental Improvement Program, Forest Health, Aquatic Invasive Species, Stormwater, the EIP Project Tracker family</td><td><span class="status-dot"><i style="background:#007DC3"></i>#007DC3</span></td><td><span class="status-dot"><i style="background:#0B1F41"></i>#0B1F41</span></td><td><span class="status-dot"><i style="background:#F16022"></i>#F16022</span></td><td>Lexend Deca</td><td>Pill-rounded controls</td><td><code>data-brand="eip"</code></td></tr>
         <tr><td><b>Tahoe Living</b></td><td>Housing and community engagement for tahoeliving.org and Cultivating Community materials. Housing tools for staff or trpa.gov stay agency.</td><td><span class="status-dot"><i style="background:#5B7B6B"></i>#5B7B6B</span></td><td><span class="status-dot"><i style="background:#2D5A3D"></i>#2D5A3D</span></td><td><span class="status-dot"><i style="background:#C4704B"></i>#C4704B</span></td><td>Montserrat</td><td>12px cards, warm neutrals</td><td><code>data-brand="tahoe-living"</code></td></tr>
+        <tr><td><b>LT Info embed</b> (not a brand)</td><td>Charts, maps, and dashboards that laketahoeinfo.org pulls in by URL: threshold indicators, monitoring program dashboards, transportation data trends, climate outcomes. They match the host platform, not TRPA. See <a href="#ltinfo">Lake Tahoe Info embeds</a>.</td><td><span class="status-dot"><i style="background:#3e72b0"></i>#3e72b0</span></td><td><span class="status-dot"><i style="background:#2f3f56"></i>#2f3f56</span></td><td><span class="status-dot"><i style="background:#e49937"></i>#e49937</span></td><td>Lexend Deca</td><td>4px cards, no shell</td><td><code>data-brand="ltinfo"</code></td></tr>
       </table>
       <h3>Site categories</h3>
       <p>maps.trpa.gov groups apps into categories, each with a color from the agency palette. The color marks the category on gallery cards and section headings. It is a label, not a theme: a Planning app is still agency blue inside.</p>
@@ -928,8 +931,68 @@ const PLOT_CONFIG = { displayModeBar: false, responsive: true };</code></pre>
       </ul>
     </section>
 
+
+    <section class="ds" id="ltinfo">
+      <h2><span class="num">18</span>Lake Tahoe Info embeds</h2>
+      <p class="lead">Lake Tahoe Info is TRPA's data platform, built and hosted by ESA at laketahoeinfo.org. TRPA staff manage its content in a CMS and supply the data visualizations as standalone HTML files on GitHub Pages that the CMS pulls in by URL. Those files match the platform, not this design system's brands.</p>
+      <p>Sampled from the live sites on Oct. 13, 2026. The full token set, the API routes, and each dashboard's page anatomy live in the skills listed under <a href="#tokens">Tokens and snippets</a>: <code>ltinfo-platform</code> plus one skill per dashboard. The token file carries the same values as a preview layer, <code>data-brand="ltinfo"</code>, which the brand switcher uses.</p>
+      <h3>Platform palette</h3>
+      <div class="swatches" data-palette="ltinfo"></div>
+      <h4>Card header color by dashboard</h4>
+      <p>Each dashboard overrides the card header. An embed that draws its own section bars uses its host's color.</p>
+      <div class="cat-row">
+        <span class="cat-pill" style="--c:#6c91a4">Threshold Dashboard<code>#6c91a4</code></span>
+        <span class="cat-pill" style="--c:#789440">Monitoring Dashboard<code>#789440</code></span>
+        <span class="cat-pill" style="--c:#2c5282">Transportation Tracker<code>#2c5282</code></span>
+        <span class="cat-pill" style="--c:#A9BCB0">Climate, goal colors instead<code>#A9BCB0 #E88670 #384960 #4C7D60</code></span>
+      </div>
+      <h4>Threshold category theme colors</h4>
+      <div class="ramp-row"><span>Ten categories</span><div class="ramp" data-ramp="#9CC3EA,#B94F41,#F78814,#B0A843,#9A5710,#415414,#0F3F6F,#9E2220,#675EA1,#DB5B00"></div></div>
+      <p class="note">Air Quality, Fisheries, Recreation, Scenic Resources, Soil Conservation, Vegetation Preservation, Water Quality, Wildlife, Noise, Transportation and Sustainable Communities. Use a category's color for its series in a cross-category chart.</p>
+      <h3>Three kinds of embed, one contract</h3>
+      <table class="ds">
+        <tr><th>Kind</th><th>Host slot</th><th>What it is</th><th>Size it lives in</th></tr>
+        <tr><td><b>Threshold element</b></td><td>Status panel or Evaluation Map on an indicator page</td><td>One chart or one map per file. The CMS supplies narrative, status, and structure.</td><td>Chart about 400 by 400 px, map about 435 by 300 px, in a two-column card</td></tr>
+        <tr><td><b>Climate chart or map</b></td><td>Outcome page</td><td>One chart or map per file, registered on the indicator.</td><td>Full column, iframe classes <code>primary-chart</code>, <code>map</code>, <code>secondary-chart</code></td></tr>
+        <tr><td><b>Monitoring dashboard</b></td><td>Dashboard card on a program page</td><td>One complete dashboard per program in one file. The card supplies only its header and a Fullscreen control.</td><td>About 980 px wide on <code>#f7f7f7</code>, iframe class <code>dashboard-frame</code></td></tr>
+      </table>
+      <ul>
+        <li><b>No chrome.</b> No logo, title, or footer. The host card provides them.</li>
+        <li><b>Background matches the slot.</b> White for threshold and climate embeds, <code>#f7f7f7</code> for a monitoring Dashboard card. Never a brand color.</li>
+        <li><b>Lexend Deca everywhere</b>, including Plotly layouts and AG Grid themes. Plotly does not inherit the page font.</li>
+        <li><b>Fluid width.</b> Design for the slot and check 375 px. Post the document height to the parent on load and resize.</li>
+        <li><b>Stop wheel zoom on maps</b> so page scrolling inside the iframe does not become map zooming.</li>
+        <li><b>Every chart has a table view and a CSV download.</b> Load Plotly from a CDN, never the 3.6 MB inlined export.</li>
+        <li><b>Status colors</b> are the platform scale on both the threshold and climate sites: on track <code>#188c16</code>, caution <code>#efd13d</code>, off track <code>#be4c4c</code>, no target <code>#3e72b0</code>.</li>
+      </ul>
+      <div class="brand-scope frame" data-label="Embed specimen on the monitoring card body" data-brand="ltinfo">
+        <div class="two">
+          <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+            <div class="kpi"><div class="v">13,350</div><div class="l">Acres of subalpine conifer</div></div>
+            <div class="kpi accent"><div class="v">56</div><div class="l">Monitoring sites</div></div>
+            <div class="kpi success"><div class="v up">+4.2%</div><div class="l">Since 2019</div></div>
+          </div>
+          <div class="stack">
+            <div class="panel-sec"><div class="sec-title">How it is measured<button type="button" class="sec-tool">Table</button></div><p class="sec-help">Ground plots inform remote sensing. Median of all sites, both directions.</p><div class="row"><calcite-button appearance="solid" kind="brand" scale="s" icon-start="file-csv">CSV</calcite-button><calcite-button appearance="outline" kind="brand" scale="s" icon-start="table">Table</calcite-button></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">The specimen uses the <code>ltinfo</code> token layer: Lexend Deca, <code>#3e72b0</code> primary, 4px corners, <code>#f7f7f7</code> card body. The brand switcher applies the same layer to every specimen on this page.</p>
+      <pre><code><span class="cmt">// Plotly layout for an LT Info embed</span>
+const LTI_COLORS = ['#3e72b0', '#e49937', '#89bf40', '#5a9cb0', '#be4c4c', '#646820', '#89cad7', '#2c5f72'];
+const LTI_LAYOUT = {
+  font: { family: 'Lexend Deca, sans-serif', color: '#333333', size: 13 },
+  paper_bgcolor: 'white', plot_bgcolor: 'white',   <span class="cmt">// '#f7f7f7' inside a monitoring Dashboard card</span>
+  margin: { t: 10, r: 10, b: 40, l: 50 },
+  xaxis: { gridcolor: '#dcdcdc', linecolor: '#dcdcdc', automargin: true },
+  yaxis: { gridcolor: '#dcdcdc', linecolor: '#dcdcdc', zeroline: false },
+  colorway: LTI_COLORS, hovermode: 'x unified', legend: { orientation: 'h', y: -0.2 }
+};</code></pre>
+      <p class="note">The anonymous API at <code>internalapi.laketahoeinfo.org</code> serves everything the public pages show. Routes and JSON shapes are in the dashboard skills.</p>
+    </section>
+
     <section class="ds" id="maps">
-      <h2><span class="num">18</span>Map conventions</h2>
+      <h2><span class="num">19</span>Map conventions</h2>
       <ul>
         <li><b>Basemap</b> <code>gray-vector</code>. Imagery only on explicit toggle.</li>
         <li><b>Initial view</b> centered on the lake, <code>[-120.04, 39.09]</code>, zoom 10, unless the tool opens on a feature.</li>
@@ -946,7 +1009,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="states">
-      <h2><span class="num">19</span>States</h2>
+      <h2><span class="num">20</span>States</h2>
       <p>A panel is empty, loading, showing results, or failing. Design all four.</p>
       <div class="brand-scope frame" data-label="Empty, loading, error">
         <div class="two">
@@ -965,7 +1028,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="a11y">
-      <h2><span class="num">20</span>Accessibility</h2>
+      <h2><span class="num">21</span>Accessibility</h2>
       <ul>
         <li><b>Contrast.</b> Text meets WCAG 2.2 AA at 4.5 to 1. Help text is #6B7688, not lighter. EIP Blue and all oranges get their text steps when they carry words.</li>
         <li><b>Focus.</b> <code>:focus-visible</code> draws a 2px brand outline with 2px offset on everything, including custom buttons.</li>
@@ -979,7 +1042,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="writing">
-      <h2><span class="num">21</span>Writing for the interface</h2>
+      <h2><span class="num">22</span>Writing for the interface</h2>
       <p>Interface copy follows the TRPA Style Guide, with a few adaptations for buttons and labels.</p>
       <table class="ds">
         <tr><th style="width:200px">Rule</th><th>Do</th><th>Don't</th></tr>
@@ -999,7 +1062,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
 
     <!-- ═══════════════ RESOURCES ═══════════════ -->
     <section class="ds" id="tokens">
-      <h2><span class="num">22</span>Tokens and snippets</h2>
+      <h2><span class="num">23</span>Tokens and snippets</h2>
       <p>Link the token file and the brand follows. Tools that must stay fully self-contained paste the <code>:root</code> block instead; this page and the skills are the places to copy from.</p>
       <pre><code>&lt;link rel="stylesheet" href="https://maps.trpa.gov/assets/trpa-tokens.css" /&gt;
 <span class="cmt">&lt;!-- then, for an EIP tool --&gt;</span>
@@ -1011,23 +1074,23 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
       </div>
       <h3>Semantic tokens</h3>
       <table class="ds">
-        <tr><th>Token</th><th>Agency</th><th>EIP</th><th>Tahoe Living</th><th>Use</th></tr>
-        <tr><td><code>--brand-primary</code></td><td>#0072CE</td><td>#007DC3</td><td>#5B7B6B</td><td>Links, active fills, primary buttons, selection</td></tr>
-        <tr><td><code>--brand-primary-text</code></td><td>#0072CE</td><td>#0068A8</td><td>#5B7B6B</td><td>Primary color at text size (AA)</td></tr>
-        <tr><td><code>--brand-primary-hover</code></td><td>#003B71</td><td>#0B1F41</td><td>#2D5A3D</td><td>Hover and press</td></tr>
-        <tr><td><code>--brand-primary-light</code></td><td>#E8F1F8</td><td>#E0F0FA</td><td>#EAF0EC</td><td>Selected rows, wells, chips</td></tr>
-        <tr><td><code>--brand-dark</code></td><td>#003B71</td><td>#0B1F41</td><td>#2D5A3D</td><td>Headings, dark headers, active filter pills, toasts</td></tr>
-        <tr><td><code>--brand-accent</code></td><td>#E87722</td><td>#F16022</td><td>#C4704B</td><td>Subject features, beta, highlight fills</td></tr>
-        <tr><td><code>--brand-accent-text</code></td><td>#B55A10</td><td>#B5430E</td><td>#A85D3D</td><td>Accent at text size</td></tr>
-        <tr><td><code>--brand-text</code></td><td>#003B71</td><td>#0B1F41</td><td>#2C2C2C</td><td>Body text</td></tr>
-        <tr><td><code>--brand-page</code></td><td>#F5F7FA</td><td>#F5F7FA</td><td>#F7F3ED</td><td>Page background</td></tr>
-        <tr><td><code>--gray-text</code></td><td>#6B7688</td><td>#6B7688</td><td>#5A5A5A</td><td>Help text, labels, column headers</td></tr>
-        <tr><td><code>--gray-border</code></td><td>#E2E6EC</td><td>#E2E6EC</td><td>#E0DDD7</td><td>Hairlines, control borders</td></tr>
-        <tr><td><code>--brand-font</code></td><td>Open Sans</td><td>Lexend Deca</td><td>Montserrat</td><td>Everything</td></tr>
-        <tr><td><code>--brand-radius</code></td><td>8px</td><td>10px</td><td>12px</td><td>Cards, dialogs, popups</td></tr>
-        <tr><td><code>--brand-radius-control</code></td><td>7px</td><td>999px</td><td>8px</td><td>Inputs, segmented controls</td></tr>
-        <tr><td><code>--status-success</code> / <code>-danger</code> / <code>-warning</code></td><td>forest / brick / orange</td><td>#2F6B13 / #B3261E / EIP orange</td><td>pine / #A85D3D / gold</td><td>Badges, deltas, notices</td></tr>
-        <tr><td><code>--chart-1</code> to <code>--chart-8</code></td><td colspan="3">The three colorways in the Color section</td><td>Plotly colorway, map renderers</td></tr>
+        <tr><th>Token</th><th>Agency</th><th>EIP</th><th>Tahoe Living</th><th>LT Info embed</th><th>Use</th></tr>
+        <tr><td><code>--brand-primary</code></td><td>#0072CE</td><td>#007DC3</td><td>#5B7B6B</td><td>#3e72b0</td><td>Links, active fills, primary buttons, selection</td></tr>
+        <tr><td><code>--brand-primary-text</code></td><td>#0072CE</td><td>#0068A8</td><td>#5B7B6B</td><td>#3e72b0</td><td>Primary color at text size (AA)</td></tr>
+        <tr><td><code>--brand-primary-hover</code></td><td>#003B71</td><td>#0B1F41</td><td>#2D5A3D</td><td>#2f3f56</td><td>Hover and press</td></tr>
+        <tr><td><code>--brand-primary-light</code></td><td>#E8F1F8</td><td>#E0F0FA</td><td>#EAF0EC</td><td>#e7eff1</td><td>Selected rows, wells, chips</td></tr>
+        <tr><td><code>--brand-dark</code></td><td>#003B71</td><td>#0B1F41</td><td>#2D5A3D</td><td>#2f3f56</td><td>Headings, dark headers, active filter pills, toasts</td></tr>
+        <tr><td><code>--brand-accent</code></td><td>#E87722</td><td>#F16022</td><td>#C4704B</td><td>#e49937</td><td>Subject features, beta, highlight fills</td></tr>
+        <tr><td><code>--brand-accent-text</code></td><td>#B55A10</td><td>#B5430E</td><td>#A85D3D</td><td>#c47b17</td><td>Accent at text size</td></tr>
+        <tr><td><code>--brand-text</code></td><td>#003B71</td><td>#0B1F41</td><td>#2C2C2C</td><td>#333333</td><td>Body text</td></tr>
+        <tr><td><code>--brand-page</code></td><td>#F5F7FA</td><td>#F5F7FA</td><td>#F7F3ED</td><td>#f7f7f7</td><td>Page background</td></tr>
+        <tr><td><code>--gray-text</code></td><td>#6B7688</td><td>#6B7688</td><td>#5A5A5A</td><td>#4b4b4b</td><td>Help text, labels, column headers</td></tr>
+        <tr><td><code>--gray-border</code></td><td>#E2E6EC</td><td>#E2E6EC</td><td>#E0DDD7</td><td>#efefef</td><td>Hairlines, control borders</td></tr>
+        <tr><td><code>--brand-font</code></td><td>Open Sans</td><td>Lexend Deca</td><td>Montserrat</td><td>Lexend Deca</td><td>Everything</td></tr>
+        <tr><td><code>--brand-radius</code></td><td>8px</td><td>10px</td><td>12px</td><td>4px</td><td>Cards, dialogs, popups</td></tr>
+        <tr><td><code>--brand-radius-control</code></td><td>7px</td><td>999px</td><td>8px</td><td>4px</td><td>Inputs, segmented controls</td></tr>
+        <tr><td><code>--status-success</code> / <code>-danger</code> / <code>-warning</code></td><td>forest / brick / orange</td><td>#2F6B13 / #B3261E / EIP orange</td><td>pine / #A85D3D / gold</td><td>#188c16 / #be4c4c / #e49937</td><td>Badges, deltas, notices</td></tr>
+        <tr><td><code>--chart-1</code> to <code>--chart-8</code></td><td colspan="4">The colorways in the Color section and the Lake Tahoe Info section</td><td>Plotly colorway, map renderers</td></tr>
       </table>
       <h3>Claude Code skills</h3>
       <p>The same rules live as skills so generated tools come out on brand without pasting this page in. Pair a brand skill with the stack skill on every build. The skills are published as a Claude Code plugin marketplace at <a href="https://github.com/trpa-agency/trpa-claude-skills" target="_blank" rel="noopener">trpa-agency/trpa-claude-skills</a>; each one links back here and to the token file.</p>
@@ -1037,7 +1100,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
         <div class="res"><b>tahoe-living-brand</b>Sage and terracotta palette, Montserrat, warm neutrals, housing semantic colors, bilingual notes.</div>
         <div class="res"><b>trpa-dashboard-stack</b>Calcite, ArcGIS SDK, Plotly, AG Grid: load order, page template, fetch pagination, conventions.</div>
         <div class="res"><b>trpa-dashboard-qa</b>Pre-deploy checklist: data, brand, stack, accessibility, mobile, and copy checks before a tool goes live.</div>
-        <div class="res"><b>ltinfo-platform</b>Lake Tahoe Info shell, tokens sampled from the live site, embed contract, and API conventions. LT Info embeds use the platform's styling, not this page's brands.</div>
+        <div class="res"><b>ltinfo-platform</b>Lake Tahoe Info shell, tokens sampled from the live site, embed contract, and API conventions. LT Info embeds use the platform's styling, not this page's brands; the <code>ltinfo</code> token layer mirrors it. See <a href="#ltinfo">Lake Tahoe Info embeds</a>.</div>
         <div class="res"><b>trpa-threshold-dashboard, trpa-monitoring-dashboard, trpa-transportation-tracker, trpa-climate-dashboard</b>One skill per LT Info dashboard: framework, page anatomy, API routes, and file conventions for the charts and maps TRPA embeds.</div>
       </div>
       <h4>Install</h4>
@@ -1049,7 +1112,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="references">
-      <h2><span class="num">23</span>References</h2>
+      <h2><span class="num">24</span>References</h2>
       <p>Systems this one borrows from. Calcite supplies the components; the others shaped how the documentation is organized: foundations before components, semantic tokens over raw hex, chart palettes as a first-class section, and a department-level brand layered over a shared base.</p>
       <div class="res-grid">
         <div class="res"><b><a href="https://developers.arcgis.com/calcite-design-system/" target="_blank" rel="noopener">Calcite Design System</a></b>Esri. Foundations (color, typography, icons), 35-plus web components, semantic tokens with -1, -2, -3 hierarchy. Our component layer.<div class="note">Current version pages list 5.x; this site pins 5.0.</div></div>
@@ -1117,6 +1180,18 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
       { name: 'EIP Navy', hex: '#0B1F41', pms: 'P 282 C', tok: '--eip-navy', role: 'Body text, dark backgrounds, footers.' },
       { name: 'Blue text', hex: '#0068A8', tok: '--eip-blue-text', role: 'EIP Blue darkened one step for words and Calcite brand.' },
       { name: 'Alert text', hex: '#B5430E', tok: '--eip-alert-text', role: 'EIP Orange darkened for words, beta chip, tier 3.' }
+    ],
+    'ltinfo': [
+      { name: 'Primary', hex: '#3e72b0', tok: '--primary', role: 'Page titles, links in nav, first chart series.' },
+      { name: 'Navy', hex: '#2f3f56', tok: '--ltinfo-blue', role: 'Header, footer, primary buttons.' },
+      { name: 'Green', hex: '#89bf40', tok: '--ltinfo-green', role: 'Platform green; Monitoring card headers use #789440.' },
+      { name: 'Orange', hex: '#e49937', tok: '--ltinfo-orange', role: 'Highlights, second series, warning.' },
+      { name: 'Teal', hex: '#5a9cb0', tok: '--secondary', role: 'Secondary series.' },
+      { name: 'Olive', hex: '#646820', tok: '--ltinfo-olive', role: 'Sixth series.' },
+      { name: 'Card body', hex: '#f7f7f7', tok: '--card-body-bg-color', role: 'Card body and a monitoring embed\'s page background.' },
+      { name: 'Border', hex: '#efefef', tok: '--gray-100', role: 'Card borders, label bars.' },
+      { name: 'Text', hex: '#333333', tok: '(card text)', role: 'Body text in cards; page text is #4b4b4b.' },
+      { name: 'Link', hex: '#337ab7', tok: '--color-link', role: 'Links in content.' }
     ],
     'tl': [
       { name: 'Sage', hex: '#5B7B6B', tok: '--tl-sage', role: 'Primary. Nav, headers, links, chart series 1.' },
@@ -1235,7 +1310,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
   buildChart();
 
   /* ── Brand switcher ── */
-  const NAMES = { '': 'TRPA agency', 'eip': 'EIP', 'tahoe-living': 'Tahoe Living' };
+  const NAMES = { '': 'TRPA agency', 'eip': 'EIP', 'tahoe-living': 'Tahoe Living', 'ltinfo': 'LT Info embed' };
   document.querySelectorAll('.brand-pick button').forEach(btn => btn.addEventListener('click', () => {
     document.querySelectorAll('.brand-pick button').forEach(b => { b.classList.toggle('active', b === btn); b.setAttribute('aria-checked', b === btn); });
     const brand = btn.dataset.brand;

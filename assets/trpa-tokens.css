@@ -198,3 +198,69 @@
   --calcite-color-border-1:     var(--tl-border);
   --calcite-button-corner-radius: 8px;
 }
+
+/* ── Lake Tahoe Info embeds: charts, maps, and dashboards that laketahoeinfo.org
+   pulls in by URL. Not a TRPA brand: these values are the platform's own
+   tokens, sampled from the live site on Oct. 13, 2026 (see the ltinfo-platform
+   skill). An embed has no shell; the host card supplies it. ── */
+[data-brand="ltinfo"] {
+  --lti-primary:   #3e72b0;   /* --primary on the host */
+  --lti-navy:      #2f3f56;   /* header and footer */
+  --lti-green:     #89bf40;
+  --lti-orange:    #e49937;
+  --lti-teal:      #5a9cb0;
+  --lti-olive:     #646820;
+  --lti-card-body: #f7f7f7;   /* card body; a monitoring dashboard's page background */
+  --lti-border:    #efefef;
+  --lti-header-thresholds:     #6c91a4;   /* card header color per dashboard */
+  --lti-header-monitoring:     #789440;
+  --lti-header-transportation: #2c5282;
+
+  --brand-primary:        var(--lti-primary);
+  --brand-primary-text:   var(--lti-primary);
+  --brand-primary-hover:  var(--lti-navy);
+  --brand-primary-light:  #e7eff1;
+  --brand-dark:           var(--lti-navy);
+  --brand-accent:         var(--lti-orange);
+  --brand-accent-text:    #c47b17;
+  --brand-accent-light:   #fff6ea;
+  --brand-text:           #333333;
+  --brand-surface:        #ffffff;
+  --brand-page:           var(--lti-card-body);
+  --brand-border:         var(--lti-border);
+  --brand-shadow:         0 4px 6px 0 rgba(0, 0, 0, 0.10);
+  --brand-shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.06);
+
+  --gray-bg:      var(--lti-card-body);
+  --gray-border:  var(--lti-border);
+  --gray-text:    #4b4b4b;
+  --gray-muted:   #8a8a8a;
+
+  --brand-font:           'Lexend Deca', sans-serif;
+  --brand-font-heading:   var(--brand-font);
+  --brand-radius:         4px;
+  --brand-radius-control: 4px;
+  --brand-radius-pill:    999px;
+
+  --status-success:       #188c16;
+  --status-success-light: #eaf8ea;
+  --status-warning:       var(--lti-orange);
+  --status-warning-text:  #c47b17;
+  --status-warning-light: #fff6ea;
+  --status-danger:        #be4c4c;
+  --status-danger-light:  #fdf0f0;
+  --status-info:          var(--lti-primary);
+  --status-info-light:    #e7eff1;
+
+  --chart-1: #3e72b0; --chart-2: #e49937; --chart-3: #89bf40; --chart-4: #5a9cb0;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+
+  --calcite-color-brand:        var(--lti-primary);
+  --calcite-color-brand-hover:  var(--lti-navy);
+  --calcite-color-brand-press:  var(--lti-navy);
+  --calcite-font-family:        var(--brand-font);
+  --calcite-color-text-1:       var(--brand-text);
+  --calcite-color-text-2:       var(--brand-text);
+  --calcite-color-border-1:     var(--lti-border);
+  --calcite-button-corner-radius: 4px;
+}
