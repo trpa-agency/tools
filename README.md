@@ -1,6 +1,6 @@
 # TRPA Maps
 
-Official production mapping apps of TRPA, served at **maps.trpa.gov** via GitHub Pages. This site replaces the gallery at gis.trpa.org as apps are migrated and new apps are built.
+Official production mapping apps of TRPA, served at **apps.trpa.gov** via GitHub Pages. This site replaces the gallery at gis.trpa.org as apps are migrated and new apps are built.
 
 ## Structure
 
@@ -22,7 +22,7 @@ maps/
 └── data/               # Open data and developer resources
 ```
 
-Each category folder has an `index.html` landing page that lists only its apps. Migrated and new apps live as subfolders inside their category, e.g. `planning/localplans/` → `maps.trpa.gov/planning/localplans/`.
+Each category folder has an `index.html` landing page that lists only its apps. Migrated and new apps live as subfolders inside their category, e.g. `planning/localplans/` → `apps.trpa.gov/planning/localplans/`.
 
 ## Adding or updating an app
 
@@ -79,10 +79,10 @@ Then open http://localhost:8000.
 
 Pushed to `main` → published by GitHub Pages at `trpa-agency.github.io/maps`.
 
-To cut over to the maps.trpa.gov custom domain later:
+To cut over to the apps.trpa.gov custom domain later:
 
-1. Add a DNS CNAME record pointing `maps.trpa.gov` to `trpa-agency.github.io`.
-2. Add a `CNAME` file at the repo root containing `maps.trpa.gov` (or set the custom domain in Settings → Pages, which commits the file).
+1. Add a DNS CNAME record pointing `apps.trpa.gov` to `trpa-agency.github.io`.
+2. Add a `CNAME` file at the repo root containing `apps.trpa.gov` (or set the custom domain in Settings → Pages, which commits the file).
 3. Enforce HTTPS in Settings → Pages once the certificate provisions.
 
 Do not commit the `CNAME` file before DNS is in place, GitHub Pages redirects the github.io URL to the custom domain, which breaks the site if the domain does not resolve.
