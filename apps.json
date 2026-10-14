@@ -414,6 +414,18 @@
       "beta": true
     },
     {
+      "id": "surveys",
+      "title": "Survey Gallery",
+      "category": "tools",
+      "url": "surveys/",
+      "thumbnail": "assets/thumbs/surveys.svg",
+      "description": "Public surveys and feedback forms published by TRPA with ArcGIS Survey123. Loads live from TRPA's organization, open surveys first.",
+      "tags": [
+        "Surveys"
+      ],
+      "beta": true
+    },
+    {
       "id": "nearmap",
       "title": "Nearmap Imagery",
       "category": "tools",

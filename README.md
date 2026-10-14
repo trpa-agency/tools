@@ -19,6 +19,8 @@ maps/
 ├── eip/                # Environmental Improvement Program apps (stormwater, forest health, SEZ)
 ├── tools/              # General viewers and TRPA-built tools
 ├── monitoring/         # Threshold, climate, lake clarity, wildfire, and smoke dashboards
+├── storymaps/          # Story Map Gallery, live from ArcGIS Online
+├── surveys/            # Survey Gallery, live from ArcGIS Online; surveys.json groups, describes, and hides forms
 └── data/               # Open data and developer resources
 ```
 
