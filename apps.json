@@ -1,0 +1,562 @@
+{
+  "site": {
+    "title": "TRPA Maps",
+    "subtitle": "Mapping applications of the Tahoe Regional Planning Agency",
+    "domain": "apps.trpa.gov"
+  },
+  "categories": [
+    {
+      "slug": "planning",
+      "name": "Planning",
+      "color": "#0072CE",
+      "description": "Zoning, local plans, housing, and shoreline maps supporting the Regional Plan."
+    },
+    {
+      "slug": "transportation",
+      "name": "Transportation",
+      "color": "#003B71",
+      "description": "Transit, active transportation, safety, and travel data for the Regional Transportation Plan."
+    },
+    {
+      "slug": "permitting",
+      "name": "Permitting",
+      "color": "#E87722",
+      "description": "Parcel lookup, permit records, and property information tools."
+    },
+    {
+      "slug": "eip",
+      "name": "Environmental Improvement",
+      "color": "#4A6118",
+      "description": "Environmental Improvement Program (EIP) maps for stormwater, forest health, and restoration."
+    },
+    {
+      "slug": "tools",
+      "name": "Tools",
+      "color": "#7B6A8A",
+      "description": "Interactive mapping and analysis apps built by TRPA."
+    },
+    {
+      "slug": "monitoring",
+      "name": "Monitoring",
+      "color": "#9C3E27",
+      "description": "Environmental threshold, lake clarity, climate resilience, wildfire, and smoke dashboards tracking conditions in the Tahoe Basin."
+    },
+    {
+      "slug": "data",
+      "name": "Data & Developers",
+      "color": "#B47E00",
+      "description": "Open data, service directories, and resources for GIS users and developers."
+    }
+  ],
+  "apps": [
+    {
+      "id": "localplans",
+      "title": "Local Plans and Zoning",
+      "category": "planning",
+      "url": "https://gis.trpa.org/localplans/",
+      "thumbnail": "assets/thumbs/localplans.png",
+      "description": "Explore zoning for the Lake Tahoe Region. Click individual plan area statements, community plans, and area plans for zoning information and links to plan documents.",
+      "tags": [
+        "Zoning",
+        "Area Plans"
+      ]
+    },
+    {
+      "id": "parcellookup",
+      "title": "What Can I Do on My Parcel?",
+      "category": "planning",
+      "url": "https://trpa-agency.github.io/Planning/LongRange/html/parcel-lookup.html",
+      "thumbnail": "assets/thumbs/parcel-lookup.svg",
+      "description": "Enter an address or APN to see the zoning district, tolerance district, special designations, and the full list of permitted uses for any parcel in the Basin.",
+      "tags": [
+        "Zoning",
+        "Permitted Uses",
+        "Parcels"
+      ],
+      "beta": true
+    },
+    {
+      "id": "districtexplorer",
+      "title": "Where Can I Build?",
+      "category": "planning",
+      "url": "https://trpa-agency.github.io/Planning/LongRange/html/district-explorer.html",
+      "thumbnail": "assets/thumbs/district-explorer.svg",
+      "description": "Pick a use category, then a specific use type, to see every zoning district in the Basin where that use is permitted or conditionally approved, with density limits and plan details.",
+      "tags": [
+        "Zoning",
+        "Permitted Uses",
+        "Density"
+      ],
+      "beta": true
+    },
+    {
+      "id": "transportation",
+      "title": "Transportation Map",
+      "category": "transportation",
+      "url": "https://gis.trpa.org/transportation/",
+      "thumbnail": "assets/thumbs/transportation.png",
+      "description": "Existing and proposed transit routes, active transportation facilities, areas identified for safety improvements, crash locations, and electric vehicle charging stations.",
+      "tags": [
+        "Transportation"
+      ]
+    },
+    {
+      "id": "transportationtracker",
+      "title": "Transportation Tracker",
+      "category": "transportation",
+      "url": "https://transportation.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/transportation-tracker.png",
+      "description": "Lake Tahoe Info module tracking progress on the Regional Transportation Plan: transit ridership, trail use, vehicle miles traveled, and other performance measures.",
+      "tags": [
+        "Transportation",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "housing",
+      "title": "Housing Resources",
+      "category": "planning",
+      "url": "https://gis.trpa.org/housing",
+      "thumbnail": "assets/thumbs/housing.png",
+      "description": "Housing resources web map for the Tahoe Region.",
+      "tags": [
+        "Housing"
+      ]
+    },
+    {
+      "id": "housingprogress",
+      "title": "Housing Progress Since 2012",
+      "category": "planning",
+      "url": "https://trpa-agency.github.io/Planning/LongRange/html/multifamily-housing.html",
+      "thumbnail": "assets/thumbs/housing-progress.svg",
+      "description": "Multifamily, deed-restricted, and accessory dwelling units built since the 2012 Regional Plan, by jurisdiction, plus the project pipeline. Map, charts, featured projects, and a filterable table joined live to parcel and vacation home rental services.",
+      "tags": [
+        "Housing",
+        "Deed Restrictions",
+        "ADUs"
+      ],
+      "beta": true
+    },
+    {
+      "id": "deedrestrictions",
+      "title": "Deed Restriction Explorer",
+      "category": "planning",
+      "url": "https://trpa-agency.github.io/Planning/LongRange/html/deed-restriction-explorer.html",
+      "thumbnail": "assets/thumbs/deed-restrictions.svg",
+      "description": "Map and grid for browsing deed-restricted parcels across the Basin. Filter by restriction type, status, and county; search by APN, description, or address; export to CSV.",
+      "tags": [
+        "Housing",
+        "Deed Restrictions",
+        "Parcels"
+      ],
+      "beta": true
+    },
+    {
+      "id": "cccbeis",
+      "title": "CCCB EIS Cumulative Projects",
+      "category": "planning",
+      "url": "https://trpa-agency.github.io/Planning/LongRange/html/CCCB_EIS_Webmap_trpabrand.html",
+      "thumbnail": "assets/thumbs/cccb-eis.svg",
+      "description": "Cumulative project parcels and the five focal scenic viewpoints from the visual analysis in the Cultivating Community, Conserving the Basin (CCCB) Environmental Impact Statement.",
+      "tags": [
+        "Housing",
+        "EIS",
+        "Scenic"
+      ],
+      "beta": true
+    },
+    {
+      "id": "cccbeis-tl",
+      "title": "CCCB EIS Cumulative Projects (Tahoe Living)",
+      "category": "planning",
+      "url": "https://trpa-agency.github.io/Planning/LongRange/html/CCCB_EIS_Webmap_tahoelivingbrand.html",
+      "thumbnail": "assets/thumbs/cccb-eis-tl.svg",
+      "description": "The same cumulative project parcels and focal viewpoints, styled in the Tahoe Living brand for housing and community engagement contexts.",
+      "tags": [
+        "Housing",
+        "EIS",
+        "Tahoe Living"
+      ],
+      "beta": true
+    },
+    {
+      "id": "shoreline",
+      "title": "Shoreline Plan Map",
+      "category": "planning",
+      "url": "https://gis.trpa.org/shorelinemap",
+      "thumbnail": "assets/thumbs/shoreline.png",
+      "description": "Current inventory of shoreline structures, natural features, and environmental constraints along the 72 miles of Lake Tahoe shoreline.",
+      "tags": [
+        "Shoreline"
+      ]
+    },
+    {
+      "id": "permitreview",
+      "title": "Permit Review Map",
+      "category": "permitting",
+      "url": "https://gis.trpa.org/PermitReview",
+      "thumbnail": "assets/thumbs/permitreview.png",
+      "description": "Displays the map layers necessary to review a TRPA permit application.",
+      "tags": [
+        "Permits"
+      ]
+    },
+    {
+      "id": "parcels",
+      "title": "Parcel and Permit Records",
+      "category": "permitting",
+      "url": "https://parcels.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/parcels.png",
+      "description": "Look up parcel details, permit records, land capability, and coverage information on Lake Tahoe Info.",
+      "tags": [
+        "Parcels",
+        "Permits",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "completeness",
+      "title": "Permit Completeness Review",
+      "category": "permitting",
+      "url": "https://emulatecities.com/trpa/completeness",
+      "thumbnail": "assets/thumbs/completeness.png",
+      "description": "Enter a TRPA application file number to pull the parcel details on record and check a permit application for completeness. Built with Emulate Cities.",
+      "tags": [
+        "Permits",
+        "Parcels"
+      ],
+      "external": true,
+      "beta": true
+    },
+    {
+      "id": "eipprojects",
+      "title": "EIP Projects Map",
+      "category": "eip",
+      "url": "https://trpa-agency.github.io/EIP/html/projects-map.html",
+      "thumbnail": "assets/thumbs/eip-projects-map.png",
+      "description": "Every Environmental Improvement Program (EIP) project with a known location on an interactive 2D and 3D map. Filter by focus area, stage, watershed, jurisdiction, program, and funding source.",
+      "tags": [
+        "EIP",
+        "Projects"
+      ],
+      "beta": true
+    },
+    {
+      "id": "eippriorities",
+      "title": "EIP Funding Priorities",
+      "category": "eip",
+      "url": "eip/funding-priorities.html",
+      "thumbnail": "assets/thumbs/eip-priorities.svg",
+      "description": "Build the EIP priority lists together: working groups mark projects Priority 1, 2, or 3 with a funding request on a Lake Tahoe Restoration Act (LTRA) list and an Other list, picks combine across reviewers, and the result exports in the master sheet layout.",
+      "tags": [
+        "EIP",
+        "Funding",
+        "Prioritization"
+      ],
+      "beta": true
+    },
+    {
+      "id": "eiptracker",
+      "title": "EIP Project Tracker",
+      "category": "eip",
+      "url": "https://eip.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/eip-tracker.png",
+      "description": "Lake Tahoe Info module with the full record of Environmental Improvement Program (EIP) projects: descriptions, partners, funding, accomplishments, and the EIP 5-Year Project List.",
+      "tags": [
+        "EIP",
+        "Projects",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "stormwatertools",
+      "title": "Stormwater Tools",
+      "category": "eip",
+      "url": "https://stormwater.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/stormwater-tools.png",
+      "description": "Lake Tahoe Info module for the Lake Clarity Crediting Program: urban catchments, stormwater treatment and load reduction modeling, and jurisdiction credit tracking.",
+      "tags": [
+        "Stormwater",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "bmp",
+      "title": "BMP Mapping Tool",
+      "category": "eip",
+      "url": "https://gis.trpa.org/bmpmappingtool",
+      "thumbnail": "assets/thumbs/bmp.png",
+      "description": "View best management practices (BMPs) layers, catchments, and APN labels. Locate parcels by address, APN, or catchment name and export selections.",
+      "tags": [
+        "Stormwater",
+        "BMP"
+      ]
+    },
+    {
+      "id": "sezviewer",
+      "title": "Tahoe SEZ Viewer",
+      "category": "eip",
+      "url": "https://gis.trpa.org/tahoesezviewer",
+      "thumbnail": "assets/thumbs/sezviewer.png",
+      "description": "Stream environment zone (SEZ) baseline condition assessment web map for the Lake Tahoe Basin.",
+      "tags": [
+        "SEZ",
+        "Restoration"
+      ]
+    },
+    {
+      "id": "watchduty",
+      "title": "Watch Duty",
+      "category": "monitoring",
+      "url": "https://app.watchduty.org/",
+      "thumbnail": "assets/thumbs/watchduty.png",
+      "description": "Real-time wildfire alerts, incident maps, evacuation orders, and air quality for California and Nevada, reported by Watch Duty's volunteer and staff reporters. Not a TRPA product.",
+      "tags": [
+        "Fire",
+        "Evacuation",
+        "Air Quality"
+      ],
+      "external": true
+    },
+    {
+      "id": "smokemap",
+      "title": "48-Hour Smoke Forecast",
+      "category": "monitoring",
+      "url": "https://gis.trpa.org/smokemap",
+      "thumbnail": "assets/thumbs/smokemap.png",
+      "description": "Smoke forecast for the Tahoe Basin and surrounding region, updated every 24 hours by the National Weather Service. Concentrations reported in micrograms per cubic meter.",
+      "tags": [
+        "Forest Health",
+        "Fire"
+      ]
+    },
+    {
+      "id": "smokemap-next",
+      "title": "Smoke Forecast and Air Quality",
+      "category": "monitoring",
+      "url": "tools/smoke-map.html",
+      "thumbnail": "assets/thumbs/smokemap-beta.svg",
+      "description": "Prototype replacement for the 48-hour smoke forecast, rebuilt on the current ArcGIS Maps SDK with live standalone layers in place of a stored web map. Adds evacuation zones, satellite hot spots and smoke plumes, and the hourly AirNow air quality surface alongside monitors and low-cost sensors.",
+      "tags": [
+        "Forest Health",
+        "Fire",
+        "Air Quality",
+        "Evacuation"
+      ],
+      "beta": true
+    },
+    {
+      "id": "parcelexplorer",
+      "title": "Parcel Change Explorer",
+      "category": "tools",
+      "url": "tools/parcel-explorer.html",
+      "thumbnail": "assets/thumbs/parcel-explorer.svg",
+      "description": "Follow any parcel from 2012 to today: residential units, tourist accommodation units, commercial floor area, zoning, and land use by year, with the current assessor record. Compare two years to build and download a parcel-level change table.",
+      "tags": [
+        "Parcels",
+        "Development Rights",
+        "Zoning"
+      ],
+      "beta": true
+    },
+    {
+      "id": "publicnotice",
+      "title": "Public Notice List",
+      "category": "tools",
+      "url": "tools/public-notice.html",
+      "thumbnail": "assets/thumbs/public-notice.svg",
+      "description": "Build the owner mailing list for a public notice. Pick the subject parcels, set a notice distance, review who is inside it, and export a CSV, Avery mailing labels, and a map of the notice area.",
+      "tags": [
+        "Permitting",
+        "Parcels",
+        "Mailing Labels"
+      ],
+      "beta": true
+    },
+    {
+      "id": "eiplocator",
+      "title": "Project Locator",
+      "category": "tools",
+      "url": "tools/locator.html",
+      "thumbnail": "assets/thumbs/eip-locator.png",
+      "description": "Make consistent, branded locator maps for presentations and reports. Search an address, APN, or EIP project, pick a style and layout, and export a PowerPoint slide or PNG.",
+      "tags": [
+        "EIP",
+        "Locator"
+      ],
+      "beta": true
+    },
+    {
+      "id": "mapmaker",
+      "title": "Map Maker",
+      "category": "tools",
+      "url": "https://gis.trpa.org/mapmaker/",
+      "thumbnail": "assets/thumbs/mapmaker.png",
+      "description": "Interactive web map for exploring TRPA datasets. Turn layers on and off and export a map to PDF.",
+      "tags": [
+        "General"
+      ]
+    },
+    {
+      "id": "storymaps",
+      "title": "Story Map Gallery",
+      "category": "tools",
+      "url": "storymaps/",
+      "thumbnail": "assets/thumbs/storymaps.png",
+      "description": "Gallery of narrative story maps published by TRPA on ArcGIS Online. Loads live from TRPA's organization, newest first.",
+      "tags": [
+        "Story Maps"
+      ],
+      "beta": true
+    },
+    {
+      "id": "surveys",
+      "title": "Survey Gallery",
+      "category": "tools",
+      "url": "surveys/",
+      "thumbnail": "assets/thumbs/surveys.svg",
+      "description": "Public surveys and feedback forms published by TRPA with ArcGIS Survey123. Loads live from TRPA's organization, open surveys first.",
+      "tags": [
+        "Surveys"
+      ],
+      "beta": true
+    },
+    {
+      "id": "nearmap",
+      "title": "Nearmap Imagery",
+      "category": "tools",
+      "url": "https://apps.nearmap.com/maps",
+      "thumbnail": "assets/thumbs/nearmap.png",
+      "description": "High-resolution aerial imagery in Nearmap MapBrowser, updated multiple times per year. Requires a TRPA Nearmap account.",
+      "tags": [
+        "Imagery"
+      ],
+      "external": true
+    },
+    {
+      "id": "designsystem",
+      "title": "Design System",
+      "category": "tools",
+      "url": "tools/design-system.html",
+      "thumbnail": "assets/thumbs/design-system.svg",
+      "description": "Colors, type, components, and page patterns behind TRPA web tools, with live specimens that switch between the agency, Environmental Improvement Program (EIP), and Tahoe Living brands. Includes the shared token stylesheet.",
+      "tags": [
+        "Design",
+        "Branding",
+        "Developers"
+      ],
+      "beta": true
+    },
+    {
+      "id": "datainventory",
+      "title": "Tahoe Data Inventory",
+      "category": "data",
+      "url": "tools/data-inventory.html",
+      "thumbnail": "assets/thumbs/data-inventory.png",
+      "description": "Searchable inventory of every data asset across Tahoe Open Data, LT Info, TRPA REST services, and eight partner agencies. Rebuilt automatically each month.",
+      "tags": [
+        "Open Data",
+        "Inventory"
+      ],
+      "beta": true
+    },
+    {
+      "id": "opendatapolicy",
+      "title": "Open Data Policy and Developer Guide",
+      "category": "data",
+      "url": "tools/open-data-policy.html",
+      "thumbnail": "assets/thumbs/open-data-policy.png",
+      "description": "How to use and access data published on tahoeopendata.org, including attribution, delivery channels, and developer examples.",
+      "tags": [
+        "Open Data",
+        "Developers"
+      ],
+      "beta": true
+    },
+    {
+      "id": "thresholds",
+      "title": "Threshold Dashboard",
+      "category": "monitoring",
+      "url": "https://thresholds.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/thresholds.png",
+      "description": "Lake Tahoe Info module reporting status and trend for every environmental threshold standard adopted for the Tahoe Region, from the most recent Threshold Evaluation.",
+      "tags": [
+        "Thresholds",
+        "Monitoring",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring Dashboard",
+      "category": "monitoring",
+      "url": "https://monitoring.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/monitoring.png",
+      "description": "Lake Tahoe Info module with the environmental monitoring indicators tracked by TRPA and partners, including data downloads and method documentation.",
+      "tags": [
+        "Monitoring",
+        "Indicators",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "climate",
+      "title": "Climate Resilience Dashboard",
+      "category": "monitoring",
+      "url": "https://climate.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/climate.png",
+      "description": "Lake Tahoe Info module tracking 33 climate resilience metrics across greenhouse gas emissions, air quality, forest health, and resilient systems for the Tahoe Basin.",
+      "tags": [
+        "Climate",
+        "Monitoring",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "clarity",
+      "title": "Lake Clarity Tracker",
+      "category": "monitoring",
+      "url": "https://clarity.laketahoeinfo.org",
+      "thumbnail": "assets/thumbs/clarity.png",
+      "description": "Lake Tahoe Info module on Lake Tahoe clarity: annual Secchi depth, the drivers of clarity loss, and progress toward the clarity restoration target.",
+      "tags": [
+        "Lake Clarity",
+        "Monitoring",
+        "Lake Tahoe Info"
+      ],
+      "external": true
+    },
+    {
+      "id": "opendata",
+      "title": "Tahoe Open Data",
+      "category": "data",
+      "url": "https://www.tahoeopendata.org",
+      "thumbnail": "assets/thumbs/opendata.png",
+      "description": "Regional geographic data warehouse for the Tahoe Basin. Download GIS data and connect to shared services.",
+      "tags": [
+        "Open Data"
+      ],
+      "external": true
+    },
+    {
+      "id": "rest",
+      "title": "ArcGIS REST Services",
+      "category": "data",
+      "url": "https://maps.trpa.org/server/rest/services",
+      "thumbnail": "assets/thumbs/rest.png",
+      "description": "ArcGIS Server REST services directory for developers building on TRPA data.",
+      "tags": [
+        "Developers",
+        "REST"
+      ],
+      "external": true
+    }
+  ]
+}

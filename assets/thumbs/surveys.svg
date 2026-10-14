@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 266" width="400" height="266" role="img"
+     aria-label="Survey gallery: three survey cards with checkboxes and a submit button">
+  <rect width="400" height="266" fill="#EEF1F5"/>
+
+  <!-- Back cards -->
+  <rect x="40"  y="44" width="150" height="190" rx="10" fill="#FFFFFF" stroke="#DDDDDD" transform="rotate(-6 115 139)"/>
+  <rect x="210" y="44" width="150" height="190" rx="10" fill="#FFFFFF" stroke="#DDDDDD" transform="rotate(6 285 139)"/>
+  <rect x="40"  y="44" width="150" height="8" rx="4" fill="#E87722" transform="rotate(-6 115 139)"/>
+  <rect x="210" y="44" width="150" height="8" rx="4" fill="#4A6118" transform="rotate(6 285 139)"/>
+
+  <!-- Front card -->
+  <rect x="120" y="28" width="160" height="214" rx="10" fill="#FFFFFF" stroke="#B4CBE8" stroke-width="1.5"/>
+  <path d="M130 28 H270 A10 10 0 0 1 280 38 V40 H120 V38 A10 10 0 0 1 130 28 Z" fill="#0072CE"/>
+  <rect x="136" y="54" width="104" height="9" rx="4" fill="#003B71"/>
+  <rect x="136" y="69" width="76"  height="6" rx="3" fill="#B4CBE8"/>
+
+  <!-- Question rows -->
+  <g>
+    <rect x="136" y="92"  width="14" height="14" rx="3" fill="#0072CE"/>
+    <path d="M139 99 l3 3 l6 -6" stroke="#FFFFFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="158" y="95"  width="96" height="7" rx="3" fill="#C9D3DF"/>
+
+    <rect x="136" y="116" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8FA3BA" stroke-width="1.5"/>
+    <rect x="158" y="119" width="80" height="7" rx="3" fill="#C9D3DF"/>
+
+    <rect x="136" y="140" width="14" height="14" rx="3" fill="#0072CE"/>
+    <path d="M139 147 l3 3 l6 -6" stroke="#FFFFFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="158" y="143" width="88" height="7" rx="3" fill="#C9D3DF"/>
+
+    <rect x="136" y="166" width="128" height="26" rx="4" fill="#FFFFFF" stroke="#8FA3BA" stroke-width="1.5"/>
+    <rect x="143" y="176" width="60" height="6" rx="3" fill="#DDE4EC"/>
+  </g>
+
+  <!-- Submit -->
+  <rect x="136" y="204" width="70" height="24" rx="12" fill="#E87722"/>
+  <rect x="150" y="213" width="42" height="6" rx="3" fill="#FFFFFF"/>
+</svg>

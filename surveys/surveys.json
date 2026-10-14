@@ -1,0 +1,128 @@
+{
+  "_readme": "Curation for surveys/index.html. The page lists every public Survey123 form in TRPA's ArcGIS Online org live; this file only groups, describes, and hides them. A public form missing from 'surveys' still shows, under 'other'. 'past': true moves a form to Past surveys even if Survey123 still accepts responses (most TRPA forms are never closed). A form whose Survey123 schedule end date has passed, or that is set to Closed in Survey123, goes to Past on its own.",
+  "groups": [
+    {
+      "slug": "public-input",
+      "name": "Public input",
+      "color": "#0072CE",
+      "description": "Surveys that shape TRPA plans and programs. Tell us how you live, work, and travel in the Tahoe Basin."
+    },
+    {
+      "slug": "feedback",
+      "name": "Plan and tool feedback",
+      "color": "#4A6118",
+      "description": "Comment on draft updates, dashboards, and web tools TRPA is building."
+    },
+    {
+      "slug": "events",
+      "name": "Events and webinars",
+      "color": "#E87722",
+      "description": "Sign-in sheets and follow-up surveys for TRPA workshops, coffee hours, and webinars."
+    },
+    {
+      "slug": "other",
+      "name": "Other surveys",
+      "color": "#7B6A8A",
+      "description": "Recently published forms that have not been sorted into a group yet."
+    }
+  ],
+  "hide": {
+    "3229d1abf5e14e1da5246a546a6814bb": "Template, title says do not use",
+    "06f26df8a2ab4ddab59c4f82ee06d8e5": "Back end for the EIP Funding Priorities tool, reviewers submit from the tool"
+  },
+  "surveys": {
+    "a3f9c4602cef4f958839e3c6b9c58dae": {
+      "group": "public-input",
+      "title": "Transportation Safety in Tahoe",
+      "description": "Combined Active Transportation Plan and Vision Zero survey on how safe it feels to walk, bike, drive, and ride transit around the lake.",
+      "tags": ["Transportation", "Safety"]
+    },
+    "c9246f83e0b24fbaa95990210a91b50f": {
+      "group": "public-input",
+      "description": "Encuesta sobre la seguridad del transporte en Tahoe. Spanish version of the Transportation Safety in Tahoe survey.",
+      "tags": ["Transportation", "Safety"],
+      "lang": "es"
+    },
+    "71e45730de784d3ca759a9afc8a22b27": {
+      "group": "public-input",
+      "description": "Public feedback on traffic safety for the Lake Tahoe Vision Zero strategy.",
+      "tags": ["Transportation", "Safety"]
+    },
+    "0321005adc624c7aa785d315813d7111": {
+      "group": "public-input",
+      "description": "A few quick questions on how you get around the Tahoe Basin.",
+      "tags": ["Transportation"]
+    },
+    "8cce772890954a7ab40e0725fc706c2a": {
+      "group": "public-input",
+      "title": "Regional Transportation Plan Demographics Survey (Spanish)",
+      "description": "Encuesta demográfica del Plan Regional de Transporte. Demographic questions for the Regional Transportation Plan, in Spanish.",
+      "tags": ["Transportation"],
+      "lang": "es"
+    },
+    "5f9c9adfb4c14f509937c6462d89fa65": {
+      "group": "public-input",
+      "title": "Transportation Resilience Survey",
+      "description": "Where do hazards like wildfire, flooding, and winter storms disrupt travel in the Basin? Input for the Transportation Resilience Improvement Plan, funded by the federal PROTECT program.",
+      "tags": ["Transportation", "Resilience"]
+    },
+    "c2a823ad0dd842cc9fce9539fd59a388": {
+      "group": "public-input",
+      "title": "Homes and Transportation Characteristics",
+      "description": "Links homes by year built to garage size and household vehicles.",
+      "tags": ["Housing", "Transportation"],
+      "past": true
+    },
+    "8538fbbf820641709491b5ee52c9b68e": {
+      "group": "feedback",
+      "description": "Comment on proposed updates to the forest health threshold standards and indicators.",
+      "tags": ["Forest Health", "Thresholds"]
+    },
+    "af50182b00784721a12460e1660e2366": {
+      "group": "feedback",
+      "title": "Transportation Patterns Page Feedback",
+      "description": "Tell us what works and what does not on the Transportation Tracker travel patterns page.",
+      "tags": ["Transportation", "Dashboards"]
+    },
+    "f4e0b38aab1d412e978b5ab0bb64702f": {
+      "group": "feedback",
+      "title": "TRPA App Feedback",
+      "description": "Report a problem or suggest an improvement for a TRPA web tool, such as the EIP Project Locator.",
+      "tags": ["Web Tools"]
+    },
+    "b8051a1682e34038bae1ccc8b6ee54d9": {
+      "group": "events",
+      "title": "Coffee Hour: Protection, Preservation, and Production",
+      "description": "Sign in and share questions for the Sept. 17 housing coffee hour.",
+      "tags": ["Housing"],
+      "past": true
+    },
+    "93171063fd0147b883808e3c093c7738": {
+      "group": "events",
+      "title": "Coffee Hour: ADUs with the Tahoe Housing Hub",
+      "description": "Sign in and share questions for the accessory dwelling unit coffee hour with the Tahoe Housing Hub.",
+      "tags": ["Housing"],
+      "past": true
+    },
+    "2c791e157dca4391a759ed0e5e835bce": {
+      "group": "events",
+      "title": "Stormwater and Housing 101 Webinar",
+      "description": "Registration and feedback for the Stormwater and Housing 101 webinar.",
+      "tags": ["Housing", "Stormwater"],
+      "past": true
+    },
+    "c9c6963b01fa4bdd96340ab8b97df41f": {
+      "group": "events",
+      "title": "TRPA 101 Webinar, Jan. 27, 2025",
+      "description": "Registration and feedback for the TRPA 101 webinar.",
+      "tags": ["Agency"],
+      "past": true
+    },
+    "ef2cdd90e2244a7bad5e1c0f734511b4": {
+      "group": "events",
+      "title": "BBP Sign In",
+      "description": "Sign-in sheet for in-person sessions.",
+      "tags": ["Sign In"]
+    }
+  }
+}

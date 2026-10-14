@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Survey Gallery - TRPA Maps</title>
+  <meta name="description" content="Public surveys and feedback forms published by the Tahoe Regional Planning Agency with ArcGIS Survey123." />
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+
+  <!-- Calcite Design System -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+
+  <!-- Open Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/site.css" />
+
+  <style>
+    .survey-toolbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem 2rem 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .survey-toolbar h2 { margin: 0; font-size: 1.25rem; }
+    .survey-toolbar calcite-input { flex: 1; min-width: 220px; max-width: 420px; }
+    .survey-count {
+      display: inline-block;
+      background: var(--trpa-navy);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      margin-left: 0.5rem;
+      vertical-align: 2px;
+    }
+    .intro {
+      max-width: 1200px;
+      margin: 0.25rem auto 0;
+      padding: 0 2rem;
+      color: var(--gray-medium);
+      font-size: 0.88rem;
+    }
+
+    /* ── Survey cards ── */
+    .survey-card {
+      background: #fff;
+      border: 1px solid var(--gray-border);
+      border-top: 4px solid var(--cat-color, var(--trpa-blue));
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .survey-card:hover {
+      box-shadow: 0 4px 14px rgba(0, 59, 113, 0.18);
+      transform: translateY(-2px);
+    }
+    .survey-card .card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.95rem 1rem 0.35rem;
+    }
+    .survey-card .icon {
+      flex: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: color-mix(in srgb, var(--cat-color) 12%, #fff);
+      color: var(--cat-color);
+    }
+    .survey-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--trpa-navy);
+    }
+    .survey-card p {
+      margin: 0;
+      padding: 0 1rem 0.75rem;
+      font-size: 0.82rem;
+      color: var(--gray-medium);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .survey-card .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 0.55rem 1rem 0.7rem;
+      border-top: 1px solid var(--gray-light);
+      font-size: 0.72rem;
+      color: var(--gray-medium);
+    }
+    .survey-card .tag {
+      display: inline-block;
+      background: var(--gray-light);
+      border: 1px solid var(--gray-border);
+      border-radius: 999px;
+      padding: 0.05rem 0.55rem;
+      margin-right: 0.3rem;
+      font-size: 0.7rem;
+      color: var(--trpa-navy);
+    }
+    .status {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 0.1rem 0.55rem;
+      margin-right: 0.3rem;
+    }
+    .status.open { background: #E3EDD3; color: var(--trpa-forest); }
+    .status.past { background: var(--gray-light); color: var(--gray-medium); border: 1px solid var(--gray-border); }
+    .status.lang { background: var(--trpa-ice); color: var(--trpa-navy); }
+    .survey-card.is-past { opacity: 0.82; }
+    .survey-card.is-past .icon { filter: grayscale(0.7); }
+
+    /* ── Past surveys ── */
+    details.past-section { margin-top: 2.25rem; }
+    details.past-section > summary {
+      cursor: pointer;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--trpa-navy);
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--gray-border);
+      margin-bottom: 0.5rem;
+    }
+    details.past-section > .cat-desc { color: var(--gray-medium); font-size: 0.85rem; margin: 0 0 1rem; }
+    .survey-status {
+      color: var(--gray-medium);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="https://www.trpa.gov" title="Tahoe Regional Planning Agency">
+      <img class="logo" src="../assets/TRPALogo_WHITE.png" alt="Tahoe Regional Planning Agency logo" />
+    </a>
+    <div class="titles">
+      <h1><a href="../">TRPA Maps</a></h1>
+      <div class="subtitle">Mapping applications of the Tahoe Regional Planning Agency</div>
+    </div>
+    <nav class="header-links">
+      <a href="https://www.trpa.gov">trpa.gov</a>
+      <a href="https://www.laketahoeinfo.org">Lake Tahoe Info</a>
+      <a href="https://www.tahoeopendata.org">Open Data</a>
+    </nav>
+  </header>
+  <div class="accent-bar"></div>
+
+  <nav class="breadcrumb"><a href="../">All maps and apps</a> &rsaquo; Survey Gallery</nav>
+
+  <div class="survey-toolbar">
+    <h2>Survey Gallery <span class="survey-count" id="survey-count"></span></h2>
+    <calcite-input id="survey-search" placeholder="Search surveys" icon="search" clearable scale="m"></calcite-input>
+  </div>
+  <p class="intro">
+    Public surveys and feedback forms published by TRPA with ArcGIS Survey123. Each one opens in a new window and takes
+    a few minutes. Updated automatically.
+  </p>
+
+  <main class="gallery" id="gallery">
+    <p class="survey-status" id="survey-status">Loading surveys&hellip;</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        Tahoe Regional Planning Agency<br />
+        128 Market Street, Stateline, NV 89449 &middot; <a href="https://www.trpa.gov">trpa.gov</a>
+      </div>
+      <div>
+        <a href="https://maps.trpa.org/server/rest/services">REST Services</a> &middot;
+        <a href="https://www.tahoeopendata.org">Tahoe Open Data</a> &middot;
+        <a href="https://www.laketahoeinfo.org">Lake Tahoe Info</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const ORG_ID = 'fXXSUzHD5JjcOt1v';
+    const SHARING = 'https://www.arcgis.com/sharing/rest';
+
+    // Every public Survey123 form in the org; surveys.json only groups, describes, and hides them
+    async function fetchAllForms() {
+      const forms = [];
+      let start = 1;
+      while (start > 0) {
+        const params = new URLSearchParams({
+          q: `orgid:${ORG_ID} type:"Form"`,
+          sortField: 'modified',
+          sortOrder: 'desc',
+          num: '100',
+          start: String(start),
+          f: 'json'
+        });
+        const data = await (await fetch(`${SHARING}/search?${params}`)).json();
+        forms.push(...(data.results || []).filter(it => it.type === 'Form' && it.access === 'public'));
+        start = data.nextStart > 0 ? data.nextStart : 0;
+      }
+      return forms;
+    }
+
+    // Closed in Survey123, or past the schedule end date. Connect forms without web settings count as open.
+    async function isClosed(id) {
+      try {
+        const form = await (await fetch(`${SHARING}/content/items/${id}/info/form.json`)).json();
+        const s = form.settings && form.settings.openStatusInfo;
+        if (!s) return false;
+        if (s.status === 'closed') return true;
+        const end = s.schedule && s.schedule.end;
+        return !!end && new Date(end) < new Date();
+      } catch (e) {
+        return false;
+      }
+    }
+
+    const esc = s => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // Survey123 item titles are often staff working titles; tidy the obvious ones when no override is set
+    const tidyTitle = t => t.replace(/\s*-\s*Copy$/i, '').replace(/\s+-\s+/g, ': ').replace(/\s{2,}/g, ' ').trim();
+
+    function cardHTML(s, color) {
+      const date = new Date(s.modified).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+      const pills = (s.past ? '<span class="status past">Past</span>' : '<span class="status open">Open</span>')
+        + (s.lang === 'es' ? '<span class="status lang">Español</span>' : '');
+      const tags = s.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('');
+      const search = [s.title, s.description, s.tags.join(' '), s.lang === 'es' ? 'spanish español' : ''].join(' ').toLowerCase();
+      return `<a class="survey-card${s.past ? ' is-past' : ''}" style="--cat-color:${color}"
+                 href="https://survey123.arcgis.com/share/${s.id}" target="_blank" rel="noopener"
+                 data-search="${esc(search)}">
+        <div class="card-head">
+          <span class="icon"><calcite-icon icon="${s.lang === 'es' ? 'language' : 'survey'}" scale="m"></calcite-icon></span>
+          <h3>${esc(s.title)}</h3>
+        </div>
+        <p>${esc(s.description)}</p>
+        <div class="card-footer">
+          <span>${pills}${tags}</span>
+          <span>Updated ${date}</span>
+        </div>
+      </a>`;
+    }
+
+    function sectionHTML(group, items) {
+      return `<section class="category-section" style="--cat-color:${group.color}">
+        <h2>${esc(group.name)}</h2>
+        <p class="cat-desc">${esc(group.description)}</p>
+        <div class="card-grid">${items.map(s => cardHTML(s, group.color)).join('')}</div>
+      </section>`;
+    }
+
+    function wireSearch() {
+      const input = document.getElementById('survey-search');
+      input.addEventListener('calciteInputInput', () => {
+        const q = (input.value || '').trim().toLowerCase();
+        document.querySelectorAll('.survey-card').forEach(c => {
+          c.style.display = !q || c.dataset.search.includes(q) ? '' : 'none';
+        });
+        document.querySelectorAll('.category-section, details.past-section').forEach(sec => {
+          const any = [...sec.querySelectorAll('.survey-card')].some(c => c.style.display !== 'none');
+          sec.style.display = any || !q ? '' : 'none';
+          if (q && any && sec.tagName === 'DETAILS') sec.open = true;
+        });
+      });
+    }
+
+    Promise.all([fetchAllForms(), fetch('surveys.json').then(r => r.json())])
+      .then(async ([forms, cfg]) => {
+        const groups = Object.fromEntries(cfg.groups.map(g => [g.slug, g]));
+        const visible = forms.filter(f => !(f.id in (cfg.hide || {})));
+        const closed = await Promise.all(visible.map(f => isClosed(f.id)));
+
+        const surveys = visible.map((f, i) => {
+          const o = cfg.surveys[f.id] || {};
+          return {
+            id: f.id,
+            modified: f.modified,
+            title: o.title || tidyTitle(f.title),
+            description: o.description || (f.snippet || '').trim() || 'Survey123 form published by TRPA.',
+            tags: o.tags || [],
+            lang: o.lang || '',
+            group: groups[o.group] ? o.group : 'other',
+            past: !!o.past || closed[i]
+          };
+        });
+
+        const open = surveys.filter(s => !s.past);
+        const past = surveys.filter(s => s.past);
+
+        let html = cfg.groups
+          .map(g => [g, open.filter(s => s.group === g.slug)])
+          .filter(([, items]) => items.length)
+          .map(([g, items]) => sectionHTML(g, items))
+          .join('');
+
+        if (!open.length) html += '<p class="empty-note">No surveys are open right now. Check back soon.</p>';
+
+        if (past.length) {
+          html += `<details class="past-section">
+            <summary>Past surveys and events (${past.length})</summary>
+            <p class="cat-desc">Closed surveys and forms from past events, kept for reference.</p>
+            <div class="card-grid">${past.map(s => cardHTML(s, groups[s.group].color)).join('')}</div>
+          </details>`;
+        }
+
+        document.getElementById('gallery').innerHTML = html;
+        document.getElementById('survey-count').textContent = `${open.length} open`;
+        wireSearch();
+      })
+      .catch(err => {
+        console.error('Failed to load surveys', err);
+        document.getElementById('survey-status').textContent =
+          'Unable to load surveys from ArcGIS Online right now. Please try again later.';
+      });
+  </script>
+</body>
+</html>
