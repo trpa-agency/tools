@@ -1091,8 +1091,18 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
         <tr><td><code>--status-success</code> / <code>-danger</code> / <code>-warning</code></td><td>forest / brick / orange</td><td>#2F6B13 / #B3261E / EIP orange</td><td>pine / #A85D3D / gold</td><td>#188c16 / #be4c4c / #e49937</td><td>Badges, deltas, notices</td></tr>
         <tr><td><code>--chart-1</code> to <code>--chart-8</code></td><td colspan="4">The colorways in the Color section and the Lake Tahoe Info section</td><td>Plotly colorway, map renderers</td></tr>
       </table>
-      <h3>Claude Code skills</h3>
-      <p>The same rules live as skills so generated tools come out on brand without pasting this page in. Pair a brand skill with the stack skill on every build. The skills are published as a Claude Code plugin marketplace at <a href="https://github.com/trpa-agency/trpa-claude-skills" target="_blank" rel="noopener">trpa-agency/trpa-claude-skills</a>; each one links back here and to the token file.</p>
+      <h3>Claude skills</h3>
+      <p>Everything on this page also exists as Claude skills, so a tool Claude builds comes out on brand without pasting the page into the prompt. They are published as a Claude Code plugin marketplace at <a href="https://github.com/trpa-agency/trpa-claude-skills" target="_blank" rel="noopener">trpa-agency/trpa-claude-skills</a>, a public repo. Each skill links back here and to the token file, and this page links to them, so a rule changes in both places or in neither.</p>
+      <h4>Which skills for which job</h4>
+      <table class="ds">
+        <tr><th style="width:260px">You are building</th><th>Load these skills</th><th>Why</th></tr>
+        <tr><td>A tool for trpa.gov, apps.trpa.gov, or internal staff use</td><td><code>trpa-brand</code> + <code>trpa-dashboard-stack</code></td><td>Agency palette, Open Sans, writing rules; the four required libraries and page template</td></tr>
+        <tr><td>An EIP, Forest Health, AIS, or Stormwater tool or report</td><td><code>trpa-eip-brand</code> + <code>trpa-dashboard-stack</code></td><td>EIP Pantone palette, Lexend Deca, logo variants, priority ramp</td></tr>
+        <tr><td>A Tahoe Living or housing engagement page</td><td><code>tahoe-living-brand</code> + <code>trpa-dashboard-stack</code></td><td>Sage and terracotta, Montserrat, warm neutrals, bilingual notes</td></tr>
+        <tr><td>A chart, map, or dashboard that laketahoeinfo.org will embed</td><td><code>ltinfo-platform</code> + the dashboard's skill (<code>trpa-threshold-dashboard</code>, <code>trpa-monitoring-dashboard</code>, <code>trpa-transportation-tracker</code>, or <code>trpa-climate-dashboard</code>) + <code>trpa-dashboard-stack</code></td><td>Platform tokens and embed contract; that site's framework, page anatomy, API routes, and file conventions</td></tr>
+        <tr><td>Anything about to go live</td><td>add <code>trpa-dashboard-qa</code></td><td>Pre-deploy checklist: data, brand, stack, accessibility, mobile, copy</td></tr>
+        <tr><td>Data pulls from TRPA services or LT Info</td><td><code>trpa-data-services</code>, <code>trpa-zoning-services</code></td><td>Endpoints, schemas, token handling</td></tr>
+      </table>
       <div class="res-grid">
         <div class="res"><b>trpa-brand</b>Agency palette, Open Sans, logo rules, TRPA Style Guide writing rules, Plotly layout, locked data category colors.</div>
         <div class="res"><b>trpa-eip-brand</b>EIP Pantone palette, Lexend Deca, logo variants including Forest Health, the four-color chart cycle, priority ramp.</div>
@@ -1102,12 +1112,26 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
         <div class="res"><b>ltinfo-platform</b>Lake Tahoe Info shell, tokens sampled from the live site, embed contract, and API conventions. LT Info embeds use the platform's styling, not this page's brands; the <code>ltinfo</code> token layer mirrors it. See <a href="#ltinfo">Lake Tahoe Info embeds</a>.</div>
         <div class="res"><b>trpa-threshold-dashboard, trpa-monitoring-dashboard, trpa-transportation-tracker, trpa-climate-dashboard</b>One skill per LT Info dashboard: framework, page anatomy, API routes, and file conventions for the charts and maps TRPA embeds.</div>
       </div>
-      <h4>Install</h4>
+      <h4>How they load</h4>
+      <ul>
+        <li><b>Claude Code</b> installs them as plugins from the marketplace. Once installed, Claude reads each skill's description and loads the skill on its own when a request matches it, so "build a parcel lookup for the permitting team" picks up <code>trpa-brand</code> and <code>trpa-dashboard-stack</code> without being told. Naming a skill in the prompt forces it.</li>
+        <li><b>Cowork and claude.ai</b> read skills from your account's Skills library (Settings, then Skills). Upload one ZIP per skill from the repo's <code>dist</code> folder, or download the repo and upload the skill's folder; a skill is a folder with a <code>SKILL.md</code>. Use Replace on an existing skill's menu to update it and keep its ID. The desktop app syncs the library to Cowork about once an hour.</li>
+        <li><b>Updates.</b> Edit in the repo, commit, push. Claude Code users refresh with the marketplace update command below; library users replace the ZIP. Never edit a skill only in Cowork or only in a local folder, since the repo is the source.</li>
+      </ul>
       <pre><code><span class="cmt"># once, in Claude Code</span>
 /plugin marketplace add trpa-agency/trpa-claude-skills
-<span class="cmt"># then the design bundle</span>
-/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills</code></pre>
-      <p class="note">Cowork and claude.ai take a skill as an uploaded folder: download the repository as a ZIP and upload the folder for the skill you want.</p>
+<span class="cmt"># the design bundle</span>
+/plugin install trpa-brand@trpa-claude-skills trpa-eip-brand@trpa-claude-skills tahoe-living-brand@trpa-claude-skills trpa-dashboard-stack@trpa-claude-skills trpa-dashboard-qa@trpa-claude-skills
+<span class="cmt"># the Lake Tahoe Info bundle</span>
+/plugin install ltinfo-platform@trpa-claude-skills trpa-threshold-dashboard@trpa-claude-skills trpa-monitoring-dashboard@trpa-claude-skills trpa-transportation-tracker@trpa-claude-skills trpa-climate-dashboard@trpa-claude-skills
+<span class="cmt"># later, to pull changes</span>
+/plugin marketplace update trpa-claude-skills</code></pre>
+      <h4>Example prompts</h4>
+      <ul>
+        <li>"Build a single-file dashboard of EIP stormwater projects by jurisdiction with a map and a table." Loads <code>trpa-eip-brand</code> and <code>trpa-dashboard-stack</code>.</li>
+        <li>"Make the Forest Structure monitoring dashboard for monitoring.laketahoeinfo.org." Loads <code>ltinfo-platform</code>, <code>trpa-monitoring-dashboard</code>, and the stack skill, and styles for the Dashboard card rather than for TRPA.</li>
+        <li>"QA the public notice tool before I push it." Loads <code>trpa-dashboard-qa</code>.</li>
+      </ul>
     </section>
 
     <section class="ds" id="references">
