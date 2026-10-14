@@ -602,7 +602,11 @@
           list a project goes on.</li>
         <li><strong>Picks.</strong> For each project a reviewer sets a priority (1, 2, or 3, the same as the master sheet), a funding
           request in dollars, the LTRA criteria the project meets, and a note. <em>Send my picks</em> sends both lists to the survey's layer
-          after a confirmation. Sent picks land in TRPA's ArcGIS Online; the tool reads everyone's latest picks back (without email addresses).</li>
+          after a confirmation. Sent picks land in TRPA's ArcGIS Online; the tool reads everyone's latest picks back (without email addresses).
+          Sending again with the same email replaces what you sent before, or, if you choose <em>Add</em> in the confirmation, brings the earlier
+          picks along with the new ones. <em>Load them</em> under your email pulls your earlier picks into the browser to edit first.</li>
+        <li><strong>Picks received.</strong> Everyone whose picks have arrived is listed in the panel. Click a name to see only that reviewer's
+          picks on the current list, with their priority, request, and note in a <em>Their pick</em> column; click again to show everyone.</li>
         <li><strong>How picks combine.</strong> For each project the tool counts how many reviewers called it Priority 1, Priority 2, and
           Priority 3. The ranking is by Priority 1 votes, then Priority 2, then Priority 3, then name. <em>Group priority</em> is the priority most
           reviewers gave (ties go to the higher priority); <em>Group request</em> is the median of their requests; <em>Working group</em> lists
@@ -1486,7 +1490,7 @@
   and totals add those values. The Reviewers column shows how many picked the project and at which priority. Criteria are the Lake Tahoe Restoration Act criteria any of them ticked. Working group leads settle the final priority
   and dollar figure. Federal agency and project type are not in the Tracker and are to be added by the leads.</p>
 ${summary}${sections}
-<p class="note">EIP Funding Priorities, apps.trpa.gov · project records from the EIP Project Tracker (eip.laketahoeinfo.org) · ${escHtml(SURVEY.roundLabel)}</p>
+<p class="note">EIP Funding Priorities, ${escHtml(location.origin + location.pathname)} · project records from the EIP Project Tracker (eip.laketahoeinfo.org) · ${escHtml(SURVEY.roundLabel)}</p>
 </body></html>`;
       // The page address stays valid while this tab is open (not revoked), so a reload of the print tab still works
       const blob = new Blob([html], { type: "text/html" }), url = URL.createObjectURL(blob);
