@@ -161,6 +161,15 @@
     .rrow { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; font-size: 0.76rem; border-top: 1px solid var(--gray-border); background: #fff; }
     .rrow:first-child { border-top: none; }
     .rrow.me { background: var(--eip-blue-light); }
+    .rrow.pick { cursor: pointer; }
+    .rrow.pick:hover { background: var(--gray-bg); }
+    .rrow.focus { background: var(--eip-navy); color: #fff; }
+    .rrow.focus .r-who, .rrow.focus .r-who small, .rrow.focus .r-when { color: #fff; }
+    .rrow.focus .r-who em { color: #fff; opacity: 0.85; }
+    #reviewerChips .r-hint { font-size: 0.68rem; color: var(--gray-text); margin-top: 0.25rem; }
+    .focus-bar { display: flex; align-items: center; gap: 0.6rem; margin: 0.4rem 0.8rem 0; padding: 0.4rem 0.75rem; border-radius: 10px; background: var(--eip-navy); color: #fff; font-size: 0.78rem; }
+    .focus-bar button { margin-left: auto; border: 1px solid rgba(255,255,255,0.6); background: transparent; color: #fff; cursor: pointer; font-family: var(--font); font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 999px; min-height: 28px; }
+    .focus-bar button:hover { background: rgba(255,255,255,0.15); }
     .rrow .r-who { flex: 1; min-width: 0; color: var(--eip-navy); font-weight: 600; line-height: 1.35; }
     .rrow .r-who small { display: block; font-weight: 400; color: var(--gray-text); font-size: 0.7rem; }
     .rrow .r-who em { font-style: normal; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--eip-blue); margin-left: 0.25rem; }
@@ -398,8 +407,12 @@
         </label>
         <div class="row" id="surveyRow" style="align-items:center">
           <div class="foot-status" id="surveyStatus" style="flex:1" hidden></div>
-          <calcite-button id="refreshPicksBtn" icon-start="refresh" appearance="outline" kind="brand" scale="s" title="Reload everyone's submitted picks" label="Refresh picks"></calcite-button>
+          <calcite-button id="refreshPicksBtn" icon-start="refresh" appearance="outline" kind="brand" scale="s" title="Reload everyone's sent picks" label="Refresh picks"></calcite-button>
         </div>
+        <calcite-notice id="sentBefore" icon="clock" kind="info" scale="s" width="full" hidden>
+          <div slot="message" id="sentBeforeMsg"></div>
+          <calcite-button slot="actions-end" id="loadSentBtn" appearance="outline" kind="brand" scale="s" title="Bring the picks you sent before into this browser so you can edit them and send again">Load them</calcite-button>
+        </calcite-notice>
         <div id="reviewerChips" aria-label="Reviewers whose picks are loaded"></div>
         <details class="more">
           <summary>Working group lead tools and CSV fallback</summary>
@@ -545,6 +558,7 @@
           <div style="padding:0.4rem 0.8rem 0"><calcite-notice id="startHint" icon="lightbulb" kind="brand" scale="s" width="full" closable>
             <div slot="message"><b>Start here:</b> click 1, 2, or 3 under <em>My priority</em> on a project your working group wants funded.
             Type a request in the <em>Request</em> column, or click the row for the request, criteria, and a note.</div></calcite-notice></div>
+          <div class="focus-bar" id="focusBar" hidden><span>Showing the <span id="focusCount"></span> sent by <b id="focusWho"></b> on this list, in their priority order.</span><button id="focusClear">Show everyone</button></div>
           <div id="gridWrap"><div class="load-wrap" id="gridLoading"><calcite-loader inline scale="m" label="Loading EIP projects"></calcite-loader> Loading EIP projects from the Tracker snapshot</div><div id="grid" hidden></div></div>
           <div id="chartsWrap" hidden>
             <div class="tiles" id="tiles"></div>
@@ -563,6 +577,11 @@
     <div class="dlg">
       <p>Sending as <b id="sendWho"></b></p>
       <div id="sendLists"></div>
+      <div id="sendModeWrap" hidden style="margin:0.4rem 0 0.6rem">
+        <div class="send-h">You have sent picks before</div>
+        <label class="toggle" style="margin-bottom:0.25rem"><input type="radio" name="sendMode" value="replace" checked /> <span>Replace what I sent before with the picks above</span></label>
+        <label class="toggle"><input type="radio" name="sendMode" value="add" /> <span id="sendAddLabel">Add the picks above to what I sent before</span></label>
+      </div>
       <p class="fine" id="sendNote"></p>
       <p class="send-err" id="sendErr" hidden></p>
     </div>
@@ -746,6 +765,7 @@
     let imports = loadLS(LS_IMPORTS, {});                              // CSV fallback: { reviewerName: { wg, picks } }
     let remote = {}, remoteLoadedAt = 0;                               // submissions: { key: { who, agency, wg, picks, when } }
     let selectedId = null, activeTab = "list", snapshotDate = null, fullView = false;
+    let focusWho = null;        // a reviewer label from Picks received; when set, the table shows only that reviewer's picks
     let map, view, ptLayer, hlLayer, Graphic, Point;
     let gridApi = null, chartsDirty = true;
     const myKey = () => review.email ? fnv(review.email.trim().toLowerCase()) : "";
@@ -833,11 +853,18 @@
     // count once they are sent (the submission comes back as a remote list), so a draft never skews the group.
     function reviewerLists() {
       const out = [];
-      for (const [who, m] of Object.entries(imports)) out.push({ who, wg: m.wg || "", picks: m.picks || {} });
-      for (const [, rv] of Object.entries(remote)) out.push({ who: whoLabel(rv.who, rv.agency), wg: rv.wg || "", picks: rv.picks });
+      for (const [who, m] of Object.entries(imports)) out.push({ key: "csv:" + who, who, wg: m.wg || "", picks: m.picks || {} });
+      for (const [k, rv] of Object.entries(remote)) out.push({ key: k, who: whoLabel(rv.who, rv.agency), wg: rv.wg || "", picks: rv.picks });
       return out;
     }
     const reviewerCount = () => reviewerLists().length;
+    // The focused reviewer's picks on the current list, or null when nobody is focused (or the key no longer matches a list).
+    // focusWho holds the reviewer key (two reviewers can share a display name).
+    const focusEntry = () => focusWho ? reviewerLists().find(x => x.key === focusWho) || null : null;
+    function focusPicks() {
+      const r = focusEntry(); if (!r) return null;
+      return Object.fromEntries(Object.entries(r.picks).filter(([, p]) => p.t && p.l === listKey));
+    }
     const listReviewerCount = (l) => reviewerLists().filter(r => Object.values(r.picks).some(p => p.t && p.l === l)).length;   // reviewers with picks on one list
     // Everyone's picks of one project on one list: who, working group, tier, request, note (n is criteria plus text; crit and note are the parts)
     function picksFor(id, l) {
@@ -873,6 +900,7 @@
     const chipsOn = (el) => [...el.querySelectorAll("button.on")].map(b => b.dataset.v);
     const comboVals = (el) => (el.selectedItems || []).map(i => i.value);
     function passes(p) {
+      const fp = focusPicks(); if (fp && !fp[p.id]) return false;
       if (!$("nonEip").checked && !p.isEip) return false;
       if (!chipsOn($("stageChips")).includes(p.stage)) return false;
       if ($("pickedOnly").checked && !(p.tl.n || (myPick(p.id) || {}).l === listKey && myPick(p.id).t)) return false;
@@ -971,6 +999,7 @@
       "Funding": "Whether the available funding entered in the panel covers this project's request, going down the group ranking. Shown when an amount is set or a project is pinned or excluded.",
       "My priority": "Your working group's priority for this project on the list you are viewing: 1 (highest), 2, or 3. Click to set or change; blank removes it. A project can be on one of your two lists, not both.",
       "Request": "Your funding request for this project from this list, in dollars. An orange mark means it differs from what the Tracker shows; one of the two should be updated.",
+      "Their pick": "What the reviewer selected under Picks received gave this project: priority, request, and note. Click Show everyone above the table to go back to the full list.",
       "Votes": "How many reviewers gave this project Priority 1, 2, and 3 on this list, from everyone whose picks have been sent or imported. Your own count once you send them. Hover for names, requests, and notes.",
       "Group priority": "The priority most reviewers gave this project on this list (ties go to the higher priority), with the number of reviewers who picked it.",
       "Group request": "The median of reviewers' funding requests for this project on this list. Hover for each reviewer's figure.",
@@ -1032,6 +1061,9 @@
             valueSetter: (p) => setMyPick(p.data.id, { n: String(p.newValue || "") }), cellStyle: mineStyle },
           { headerName: "Project", field: "name", flex: 2, minWidth: 220 },
           { headerName: "Project #", field: "id", width: 112, cellRenderer: (p) => `<a href="${escHtml(p.data.factUrl || p.data.url)}" target="_blank" rel="noopener noreferrer" title="Fact sheet on the EIP Project Tracker">${escHtml(p.value)}</a>` },
+          { headerName: "Their pick", colId: "theirs", width: 190, sortingOrder: bestFirst, valueGetter: (p) => { const fp = focusPicks(); return fp && fp[p.data.id] ? fp[p.data.id].t : null; }, comparator: (a, b) => (a || 9) - (b || 9),
+            cellRenderer: (p) => { const fp = focusPicks(), pk = fp && fp[p.data.id]; if (!pk) return ""; return `${tierBadge(pk.t)} ${pk.req != null ? fmtFull(pk.req) : '<span class="cov">no request</span>'}${pk.n ? ` <span class="cov" title="${escHtml(pk.n)}">${escHtml(pk.n.length > 40 ? pk.n.slice(0, 38) + "…" : pk.n)}</span>` : ""}`; },
+            tooltipValueGetter: (p) => { const fp = focusPicks(), pk = fp && fp[p.data.id]; return pk ? `Priority ${pk.t}${pk.req != null ? ", " + fmtFull(pk.req) : ""}${pk.c && pk.c.length ? "\nCriteria: " + critText(pk.c) : ""}${pk.n ? "\n" + pk.n : ""}` : ""; } },
           { headerName: "Votes", colId: "votes", width: 96, sortingOrder: bigFirst, valueGetter: (p) => p.data.tl.v[1] * 10000 + p.data.tl.v[2] * 100 + p.data.tl.v[3],
             cellRenderer: (p) => p.data.tl.n ? votesHtml(p.data.tl.v) : "", tooltipValueGetter: (p) => p.data.tl.rows.map(pickLine).join("\n") || "No sent picks for this project on this list yet" },
           { headerName: "Group priority", colId: "gTier", width: 118, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.tier,
@@ -1086,7 +1118,8 @@
       if (!gridApi) return;
       const n = pool.filter(p => !p.excluded).length, nx = pool.length - n, ranked = pool.filter(p => p.rank).length;
       const shown = gridApi.getDisplayedRowCount(), filtered = $("quickFilter").value.trim() && shown !== pool.length;
-      $("drawerCount").textContent = `${LISTS[listKey].long}: ${filtered ? `${shown.toLocaleString()} of ` : ""}${n.toLocaleString()} project${n === 1 ? "" : "s"}${ranked ? `, ${ranked} with sent picks` : ""}${nx ? `, ${nx} excluded` : ""}`;
+      $("drawerCount").textContent = focusPicks() ? `${LISTS[listKey].long}: ${focusEntry().who}'s ${n} pick${n === 1 ? "" : "s"}`
+        : `${LISTS[listKey].long}: ${filtered ? `${shown.toLocaleString()} of ` : ""}${n.toLocaleString()} project${n === 1 ? "" : "s"}${ranked ? `, ${ranked} with sent picks` : ""}${nx ? `, ${nx} excluded` : ""}`;
     }
     let startHintDismissed = false;
     function renderStartHint() {
@@ -1105,6 +1138,7 @@
       const all = gridApi.getAllGridColumns().map(c => c.getColId());
       const show = new Set(fullView ? all : REVIEWER_COLS);
       if (fullView || reviewerCount() > 0) { show.add("votes"); show.add("gTier"); show.add("gReq"); show.add("wg"); }
+      if (focusPicks()) show.add("theirs"); else show.delete("theirs");
       if (fullView || envelope() > 0 || pins.size || excluded.size) { show.add("fund"); show.add("flags"); }
       if (fullView || listKey === "ltra") show.add("tltra");
       gridApi.setColumnsVisible(all.filter(c => show.has(c)), true);
@@ -1115,8 +1149,21 @@
       gridApi.setGridOption("rowData", pool);
       applyColumnVisibility();
       gridApi.refreshCells({ force: true });
-      renderDrawerCount(); renderStartHint();
+      renderDrawerCount(); renderStartHint(); renderFocusBar();
     }
+    // Focus one reviewer's picks (click a row under Picks received); click again or Show everyone to clear
+    function setFocus(who) {
+      focusWho = who && focusWho !== who ? who : null;
+      recompute(); renderReviewers();
+      if (!gridApi) return;
+      if (focusWho) gridApi.applyColumnState({ state: [{ colId: "theirs", sort: "asc" }], defaultState: { sort: null } });
+      else gridApi.applyColumnState({ state: [{ colId: "wg", sort: "asc", sortIndex: 0 }, { colId: "rank", sort: "asc", sortIndex: 1 }], defaultState: { sort: null } });
+    }
+    function renderFocusBar() {
+      const fp = focusPicks(); $("focusBar").hidden = !fp;
+      if (fp) { const n = Object.keys(fp).length; $("focusWho").textContent = focusEntry().who; $("focusCount").textContent = `${n} pick${n === 1 ? "" : "s"}`; }
+    }
+    $("focusClear").addEventListener("click", () => setFocus(null));
     function toggleFlag(id, act) {
       if (act === "pin") { if (pins.has(id)) pins.delete(id); else { pins.add(id); excluded.delete(id); } }
       else { if (excluded.has(id)) excluded.delete(id); else { excluded.add(id); pins.delete(id); } }
@@ -1491,14 +1538,21 @@ ${summary}${sections}
       for (const [k, rv] of Object.entries(remote)) {
         const me = k === myKey();
         const when = rv.when ? apDate(rv.when, false) : "";
-        rows.push(`<li class="rrow${me ? " me" : ""}" title="Sent${rv.when ? " " + new Date(rv.when).toLocaleString() : ""}. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(whoLabel(rv.who, rv.agency))}${me ? ' <em>you</em>' : ""}<small>${escHtml(wgShort(rv.wg) || "no working group")} · ${counts(rv.picks)}</small></span><span class="r-when">${escHtml(when)}</span></li>`);
+        const label = whoLabel(rv.who, rv.agency), focused = focusWho === k;
+        rows.push(`<li class="rrow pick${me ? " me" : ""}${focused ? " focus" : ""}" data-key="${escHtml(k)}" role="button" tabindex="0" aria-pressed="${focused}" title="Sent${rv.when ? " " + new Date(rv.when).toLocaleString() : ""}. Click to show only these picks in the table. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(label)}${me ? ' <em>you</em>' : ""}<small>${escHtml(wgShort(rv.wg) || "no working group")} · ${counts(rv.picks)}</small></span><span class="r-when">${escHtml(when)}</span></li>`);
       }
       for (const [who, m] of Object.entries(imports)) {
-        rows.push(`<li class="rrow csv" title="Imported from a CSV${m.when ? " on " + new Date(m.when).toLocaleString() : ""}. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(who)} <em>CSV</em><small>${escHtml(wgShort(m.wg) || "no working group")} · ${counts(m.picks || {})}</small></span>${m.when ? `<span class="r-when">${escHtml(apDate(m.when, false))}</span>` : ""}<button class="r-x" data-who="${escHtml(who)}" title="Remove this imported list" aria-label="Remove ${escHtml(who)}">&times;</button></li>`);
+        const focused = focusWho === "csv:" + who;
+        rows.push(`<li class="rrow pick csv${focused ? " focus" : ""}" data-key="${escHtml("csv:" + who)}" role="button" tabindex="0" aria-pressed="${focused}" title="Imported from a CSV${m.when ? " on " + new Date(m.when).toLocaleString() : ""}. Click to show only these picks in the table. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(who)} <em>CSV</em><small>${escHtml(wgShort(m.wg) || "no working group")} · ${counts(m.picks || {})}</small></span>${m.when ? `<span class="r-when">${escHtml(apDate(m.when, false))}</span>` : ""}<button class="r-x" data-who="${escHtml(who)}" title="Remove this imported list" aria-label="Remove ${escHtml(who)}">&times;</button></li>`);
       }
-      el.innerHTML = rows.length ? `<div class="r-head">Picks received</div><ul class="rlist">${rows.join("")}</ul>` : "";
+      el.innerHTML = rows.length ? `<div class="r-head">Picks received</div><ul class="rlist">${rows.join("")}</ul><div class="r-hint">Click a reviewer to see only their picks in the table; click again to show everyone.</div>` : "";
     }
-    $("reviewerChips").addEventListener("click", (e) => { const b = e.target.closest(".r-x"); if (!b) return; delete imports[b.dataset.who]; saveLS(LS_IMPORTS, imports); renderReviewers(); recompute(); });
+    $("reviewerChips").addEventListener("click", (e) => {
+      const b = e.target.closest(".r-x");
+      if (b) { if (focusWho === "csv:" + b.dataset.who) focusWho = null; delete imports[b.dataset.who]; saveLS(LS_IMPORTS, imports); renderReviewers(); recompute(); return; }
+      const row = e.target.closest(".rrow.pick"); if (row) setFocus(row.dataset.key);
+    });
+    $("reviewerChips").addEventListener("keydown", (e) => { if (e.key !== "Enter" && e.key !== " ") return; const row = e.target.closest(".rrow.pick"); if (row) { e.preventDefault(); setFocus(row.dataset.key); } });
     $("clearReviewBtn").addEventListener("click", () => {
       if (!confirm("Clear your picks, requests, criteria, and notes on both lists, and remove imported CSV lists from this browser? Picks you already sent are not affected.")) return;
       review.picks = {}; imports = {};
@@ -1509,8 +1563,27 @@ ${summary}${sections}
     $("reviewerEmail").addEventListener("change", () => { review.email = $("reviewerEmail").value.trim(); saveLS(LS_REVIEW, review); recompute(); });
     $("reviewerWg").addEventListener("change", () => { review.wg = $("reviewerWg").value; saveLS(LS_REVIEW, review); updateSendState(); });
     ["reviewerName", "reviewerAgency", "reviewerEmail"].forEach(id => $(id).addEventListener("input", updateSendState));
+    // The reviewer's own earlier submission, matched by email, if the view has one
+    const myRemote = () => (myKey() && remote[myKey()]) || null;
+    // Earlier picks that are not in the current draft (same project in both: the draft wins)
+    const earlierExtras = () => { const rv = myRemote(); if (!rv) return []; return Object.entries(rv.picks).filter(([id, p]) => p.t && !(review.picks[id] && review.picks[id].t)).map(([id, p]) => [id, p]); };
+    function loadSent() {
+      const extras = earlierExtras(); if (!extras.length) { toast("Everything you sent before is already in your picks here.", 3500); return; }
+      for (const [id, p] of extras) review.picks[id] = { l: p.l, t: p.t, req: p.req ?? null, c: [...(p.c || [])], n: p.n || "" };
+      saveLS(LS_REVIEW, review); recompute();
+      toast(`Loaded ${extras.length} pick${extras.length === 1 ? "" : "s"} you sent before. Edit them here and send again when ready.`, 5000);
+    }
+    $("loadSentBtn").addEventListener("click", loadSent);
+    function renderSentBefore() {
+      const rv = myRemote(), n = $("sentBefore");
+      if (!rv) { n.hidden = true; return; }
+      const picks = Object.values(rv.picks).filter(p => p.t).length, extras = earlierExtras().length;
+      $("sentBeforeMsg").textContent = `You sent ${picks} pick${picks === 1 ? "" : "s"}${rv.when ? " on " + apDate(rv.when) : ""}.` + (extras ? ` ${extras} of them ${extras === 1 ? "is" : "are"} not in your picks here.` : " They are all in your picks here.");
+      $("loadSentBtn").hidden = !extras; n.hidden = false;
+    }
     // Footer Send button: enabled only when it can work, with the reason shown inline
     function updateSendState() {
+      renderSentBefore();
       const c = myPickCount(), n = c.ltra + c.other;
       $("pickCount").textContent = n ? `${c.ltra} LTRA · ${c.other} other` : "";
       const name = $("reviewerName").value.trim(), email = $("reviewerEmail").value.trim(), agency = $("reviewerAgency").value.trim(), wg = $("reviewerWg").value;
@@ -1560,12 +1633,22 @@ ${summary}${sections}
         sub.lists[l].map(id => { const pk = review.picks[id]; return `<li>${tierBadge(pk.t)} <span>${escHtml((proj(id) || {}).name || id)}</span> <span class="fine">${escHtml(id)}${pk.req != null ? ` · ${fmtFull(pk.req)}` : " · no request"}</span>${fullNote(pk) ? `<span class="fine note-line">${escHtml(fullNote(pk))}</span>` : ""}</li>`; }).join("") + "</ul>"
         : `<div class="send-h">${LISTS[l].long}</div><p class="fine">No picks on this list.</p>`).join("");
       const noReq = [...sub.lists.ltra, ...sub.lists.other].filter(id => review.picks[id].req == null).length;
-      $("sendNote").textContent = (Object.keys(remote).includes(fnv(sub.email.toLowerCase())) ? "You have sent picks before. This replaces them; only what you sent last counts. " : "Only what you sent last counts, so you can send again later. ")
+      const extras = earlierExtras(), before = !!myRemote();
+      $("sendModeWrap").hidden = !before;
+      if (before) {
+        const r = document.querySelector('input[name="sendMode"][value="replace"]'); r.checked = true;
+        const addOpt = document.querySelector('input[name="sendMode"][value="add"]'); addOpt.disabled = !extras.length;
+        $("sendAddLabel").textContent = extras.length ? `Add the picks above to what I sent before (brings along ${extras.length} earlier pick${extras.length === 1 ? "" : "s"} not shown here)` : "Add to what I sent before (everything you sent before is already above)";
+      }
+      $("sendNote").textContent = (before ? "Only what you send last counts, so either choice becomes your list of record. " : "Only what you send last counts, so you can send again later. ")
         + (noReq ? `${noReq} pick${noReq === 1 ? " has" : "s have"} no funding request; you can still send.` : "");
       $("sendErr").hidden = true; $("sendForm").hidden = true; $("sendGo").loading = false; $("sendGo").disabled = false;
       $("sendDialog").open = true;
     }
     async function confirmSend() {
+      // "Add" folds the earlier picks that are not in the draft into it before building the record
+      const mode = (document.querySelector('input[name="sendMode"]:checked') || {}).value;
+      if (!$("sendModeWrap").hidden && mode === "add" && earlierExtras().length) { for (const [id, p] of earlierExtras()) review.picks[id] = { l: p.l, t: p.t, req: p.req ?? null, c: [...(p.c || [])], n: p.n || "" }; saveLS(LS_REVIEW, review); recompute(); }
       const sub = buildSubmission(); if (!sub) return;
       const go = $("sendGo"); go.loading = true; go.disabled = true; $("sendErr").hidden = true;
       try {
@@ -1693,7 +1776,7 @@ ${summary}${sections}
       if (!confirm(msg)) return;
       resetFilters(true);
       envelopes = { ltra: null, other: null }; $("envInput").value = ""; fillMode = "skip"; $("modeSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === "skip"));
-      pins = new Set(); excluded = new Set();
+      pins = new Set(); excluded = new Set(); focusWho = null;
       review.picks = {}; saveLS(LS_REVIEW, review); imports = {}; saveLS(LS_IMPORTS, imports);
       $("envSec").classList.add("collapsed"); $("envToggle").textContent = "Show";
       if (fullView) $("colsBtn").click(); if (document.body.classList.contains("drawer-max")) $("maxBtn").click();
