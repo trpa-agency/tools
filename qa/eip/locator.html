@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Locator - TRPA Tools</title>
   <!-- Favicon follows the active style, EIP mark by default, TRPA when toggled (applyBrand) -->
-  <link rel="icon" id="faviconLink" href="../assets/favicon.png" />
-  <link rel="apple-touch-icon" href="../assets/favicon.png" />
+  <link rel="icon" id="faviconLink" href="../../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../../assets/favicon.png" />
 
   <!-- Calcite Design System -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
@@ -16,12 +17,12 @@
   <script src="https://js.arcgis.com/4.31/"></script>
 
   <!-- Brand fonts: self-hosted so exports render identically offline. -->
-  <link href="../assets/fonts/fonts.css" rel="stylesheet" />
+  <link href="../../assets/fonts/fonts.css" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../assets/trpa-tokens.css" />
+  <link rel="stylesheet" href="../../assets/trpa-tokens.css" />
   <style>
     :root {
-      /* Neutrals and the Calcite mapping come from ../assets/trpa-tokens.css; the
+      /* Neutrals and the Calcite mapping come from ../../assets/trpa-tokens.css; the
          --brand-* values below are overwritten at runtime by applyBrand() */
       --brand-primary: #007DC3;
       --brand-accent:  #F16022;
@@ -356,7 +357,7 @@
   <!-- ── Header: branding only ── -->
   <header id="appHeader">
     <div class="hdr-brand">
-      <img id="brandLogo" src="../assets/eip-logo.png" alt="Lake Tahoe EIP" />
+      <img id="brandLogo" src="../../assets/eip-logo.png" alt="Lake Tahoe EIP" />
       <div class="htitle">
         <span class="hagency" id="brandAgency">Environmental Improvement Program</span>
         <span class="hname">Project Locator</span>
@@ -640,11 +641,11 @@
       eip: { agency: "Environmental Improvement Program", exportName: "Lake Tahoe EIP",
         exportSub: "Environmental Improvement Program", primary: "#007DC3", accent: "#F16022",
         dark: "#0B1F41", font: "'Lexend Deca', system-ui, sans-serif",
-        logo: "../assets/eip-logo.png", favicon: "../assets/favicon.png", pin: "#007DC3", slideLogoH: 100 },
+        logo: "../../assets/eip-logo.png", favicon: "../../assets/favicon.png", pin: "#007DC3", slideLogoH: 100 },
       trpa: { agency: "Tahoe Regional Planning Agency", exportName: "Tahoe Regional Planning Agency",
         exportSub: "Lake Tahoe Region", primary: "#0072CE", accent: "#E87722",
         dark: "#003B71", font: "'Open Sans', system-ui, sans-serif",
-        logo: "assets/trpa-logo.png", favicon: "../assets/favicon.ico", pin: "#0072CE", slideLogoH: 150 },
+        logo: "assets/trpa-logo.png", favicon: "../../assets/favicon.ico", pin: "#0072CE", slideLogoH: 150 },
     };
     let brandKey = "eip";
     const brand = () => BRANDS[brandKey];

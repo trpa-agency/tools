@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild data/data-inventory.json for the Tahoe Data Inventory grid.
+"""Rebuild qa/data/data-inventory.json for the Tahoe Data Inventory grid.
 
 Sources, in order:
   1. Tahoe Open Data , every dataset in the tahoeopendata.org DCAT feed,
@@ -27,7 +27,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "data-inventory.json"
+OUT = ROOT / "qa" / "data" / "data-inventory.json"
 SEED = ROOT / "scripts" / "inventory_seed.json"
 SUMMARY = ROOT / "inventory_summary.md"
 
