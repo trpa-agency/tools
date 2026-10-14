@@ -1,4 +1,4 @@
-/* TRPA Maps, shared styles (trpa-brand) */
+/* TRPA Tools, shared styles (trpa-brand) */
 @import url("trpa-tokens.css");   /* palette, semantic tokens, Calcite mapping */
 :root {
   /* gallery pages keep their flatter grays; --gray-border here overrides the token value */

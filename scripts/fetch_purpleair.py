@@ -2,7 +2,7 @@
 
 The smoke map is a static page in a public repo, so it cannot hold a PurpleAir
 API key. This script runs in GitHub Actions with the key in a repo secret,
-writes tools/purpleair-tahoe.json, and the page fetches that file. The key never
+writes monitoring/purpleair-tahoe.json, and the page fetches that file. The key never
 reaches a browser, and the API is called once per run no matter how many people
 load the map.
 
@@ -76,7 +76,7 @@ AQI_TRIGGER = int(os.environ.get("PURPLEAIR_AQI_TRIGGER", 51))
 # populated by the time smoke actually arrives.
 FORECAST_LOOKAHEAD_HOURS = 12
 
-OUT_PATH = Path(__file__).resolve().parent.parent / "tools" / "purpleair-tahoe.json"
+OUT_PATH = Path(__file__).resolve().parent.parent / "monitoring" / "purpleair-tahoe.json"
 
 
 def get_json(url: str, params: dict | None = None, headers: dict | None = None,

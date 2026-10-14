@@ -1,30 +1,33 @@
-# TRPA Maps
+# TRPA Tools
 
-Official production mapping apps of TRPA, served at **apps.trpa.gov** via GitHub Pages. This site replaces the gallery at gis.trpa.org as apps are migrated and new apps are built.
+Official maps, apps, and tools of TRPA, to be served at **tools.trpa.gov** via GitHub Pages (today at trpa-agency.github.io/tools). This site replaces the gallery at gis.trpa.org as apps are migrated and new apps are built. It carries forward the history of `trpa-agency/maps` (apps.trpa.gov), which it replaces.
 
 ## Structure
 
 ```
-maps/
+tools/
 ├── index.html          # Main gallery, all apps grouped by category
 ├── apps.json           # Single source of truth for the app registry
 ├── 404.html            # Branded not-found page
 ├── assets/
 │   ├── site.css        # Shared styles (TRPA brand)
 │   ├── gallery.js      # Shared gallery renderer
+│   ├── trpa-tokens.css # Shared design tokens (see general/design-system.html)
+│   ├── fonts/          # Self-hosted Open Sans and Lexend Deca
 │   └── thumbs/         # App thumbnails
 ├── planning/           # Planning apps (zoning, housing, shoreline)
 ├── transportation/     # Transportation apps (transit, active transportation, Transportation Tracker)
-├── permitting/         # Permitting apps (parcels, permits, completeness review)
+├── permitting/         # Permitting apps (parcels, permits, public notice, completeness review)
 ├── eip/                # Environmental Improvement Program apps (stormwater, forest health, SEZ)
-├── tools/              # General viewers and TRPA-built tools
-├── monitoring/         # Threshold, climate, lake clarity, wildfire, and smoke dashboards
+├── general/            # General viewers, galleries, and the Design System reference
+├── monitoring/         # Threshold, climate, lake clarity, wildfire, and smoke dashboards (smoke-map.html + purpleair-tahoe.json)
 ├── storymaps/          # Story Map Gallery, live from ArcGIS Online
 ├── surveys/            # Survey Gallery, live from ArcGIS Online; surveys.json groups, describes, and hides forms
-└── data/               # Open data and developer resources
+├── data/               # Open data, the Tahoe Data Inventory, and the Open Data Policy
+└── docs/               # Planning documents
 ```
 
-Each category folder has an `index.html` landing page that lists only its apps. Migrated and new apps live as subfolders inside their category, e.g. `planning/localplans/` → `apps.trpa.gov/planning/localplans/`.
+Each category folder has an `index.html` landing page that lists only its apps. Apps built here live inside their category, as a single file (`permitting/public-notice.html`) or a subfolder for multi-file apps (`planning/localplans/` to `tools.trpa.gov/planning/localplans/`). There is no top-level `tools/` folder; on tools.trpa.gov that path would read twice.
 
 ## Adding or updating an app
 
@@ -43,7 +46,7 @@ Edit `apps.json`, every page reads from it, so no HTML changes are needed:
 }
 ```
 
-- `category` must match a `slug` in the `categories` array (`planning`, `transportation`, `permitting`, `eip`, `tools`, `monitoring`, `data`).
+- `category` must match a `slug` in the `categories` array (`planning`, `transportation`, `permitting`, `eip`, `general`, `monitoring`, `data`).
 - `url` can be relative (apps hosted in this repo) or absolute (apps still on gis.trpa.org or external sites like Lake Tahoe Info).
 - Set `"external": true` for non-TRPA-hosted sites. Thumbnails are 200 x 133 PNGs in `assets/thumbs/`.
 
@@ -55,8 +58,8 @@ Edit `apps.json`, every page reads from it, so no HTML changes are needed:
 
 ## Data inventory refresh
 
-The Tahoe Data Inventory ([tools/data-inventory.html](tools/data-inventory.html)) reads its rows
-from `tools/data-inventory.json`, which is rebuilt by `scripts/build_inventory.py` (stdlib-only
+The Tahoe Data Inventory ([data/data-inventory.html](data/data-inventory.html)) reads its rows
+from `data/data-inventory.json`, which is rebuilt by `scripts/build_inventory.py` (stdlib-only
 Python). The script crawls the Tahoe Open Data DCAT feed, the maps.trpa.org REST directory, and
 eight partner agency directories; the LT Info rows come from the static seed
 `scripts/inventory_seed.json` (no crawlable directory exists, edit that file to change them).
@@ -79,12 +82,12 @@ Then open http://localhost:8000.
 
 ## Deployment
 
-Pushed to `main` → published by GitHub Pages at `trpa-agency.github.io/maps`.
+Pushed to `main` → published by GitHub Pages at `trpa-agency.github.io/tools`.
 
-To cut over to the apps.trpa.gov custom domain later:
+To cut over to the tools.trpa.gov custom domain later:
 
-1. Add a DNS CNAME record pointing `apps.trpa.gov` to `trpa-agency.github.io`.
-2. Add a `CNAME` file at the repo root containing `apps.trpa.gov` (or set the custom domain in Settings → Pages, which commits the file).
+1. Add a DNS CNAME record pointing `tools.trpa.gov` to `trpa-agency.github.io`.
+2. Add a `CNAME` file at the repo root containing `tools.trpa.gov` (or set the custom domain in Settings → Pages, which commits the file).
 3. Enforce HTTPS in Settings → Pages once the certificate provisions.
 
 Do not commit the `CNAME` file before DNS is in place, GitHub Pages redirects the github.io URL to the custom domain, which breaks the site if the domain does not resolve.

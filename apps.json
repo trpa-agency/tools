@@ -1,8 +1,8 @@
 {
   "site": {
-    "title": "TRPA Maps",
-    "subtitle": "Mapping applications of the Tahoe Regional Planning Agency",
-    "domain": "apps.trpa.gov"
+    "title": "TRPA Tools",
+    "subtitle": "Maps, apps, and tools of the Tahoe Regional Planning Agency",
+    "domain": "tools.trpa.gov"
   },
   "categories": [
     {
@@ -30,10 +30,10 @@
       "description": "Environmental Improvement Program (EIP) maps for stormwater, forest health, and restoration."
     },
     {
-      "slug": "tools",
-      "name": "Tools",
+      "slug": "general",
+      "name": "General",
       "color": "#7B6A8A",
-      "description": "Interactive mapping and analysis apps built by TRPA."
+      "description": "General viewers, galleries, and tools built by TRPA."
     },
     {
       "slug": "monitoring",
@@ -338,7 +338,7 @@
       "id": "smokemap-next",
       "title": "Smoke Forecast and Air Quality",
       "category": "monitoring",
-      "url": "tools/smoke-map.html",
+      "url": "monitoring/smoke-map.html",
       "thumbnail": "assets/thumbs/smokemap-beta.svg",
       "description": "Prototype replacement for the 48-hour smoke forecast, rebuilt on the current ArcGIS Maps SDK with live standalone layers in place of a stored web map. Adds evacuation zones, satellite hot spots and smoke plumes, and the hourly AirNow air quality surface alongside monitors and low-cost sensors.",
       "tags": [
@@ -352,8 +352,8 @@
     {
       "id": "parcelexplorer",
       "title": "Parcel Change Explorer",
-      "category": "tools",
-      "url": "tools/parcel-explorer.html",
+      "category": "permitting",
+      "url": "permitting/parcel-explorer.html",
       "thumbnail": "assets/thumbs/parcel-explorer.svg",
       "description": "Follow any parcel from 2012 to today: residential units, tourist accommodation units, commercial floor area, zoning, and land use by year, with the current assessor record. Compare two years to build and download a parcel-level change table.",
       "tags": [
@@ -366,8 +366,8 @@
     {
       "id": "publicnotice",
       "title": "Public Notice List",
-      "category": "tools",
-      "url": "tools/public-notice.html",
+      "category": "permitting",
+      "url": "permitting/public-notice.html",
       "thumbnail": "assets/thumbs/public-notice.svg",
       "description": "Build the owner mailing list for a public notice. Pick the subject parcels, set a notice distance, review who is inside it, and export a CSV, Avery mailing labels, and a map of the notice area.",
       "tags": [
@@ -380,8 +380,8 @@
     {
       "id": "eiplocator",
       "title": "Project Locator",
-      "category": "tools",
-      "url": "tools/locator.html",
+      "category": "eip",
+      "url": "eip/locator.html",
       "thumbnail": "assets/thumbs/eip-locator.png",
       "description": "Make consistent, branded locator maps for presentations and reports. Search an address, APN, or EIP project, pick a style and layout, and export a PowerPoint slide or PNG.",
       "tags": [
@@ -393,7 +393,7 @@
     {
       "id": "mapmaker",
       "title": "Map Maker",
-      "category": "tools",
+      "category": "general",
       "url": "https://gis.trpa.org/mapmaker/",
       "thumbnail": "assets/thumbs/mapmaker.png",
       "description": "Interactive web map for exploring TRPA datasets. Turn layers on and off and export a map to PDF.",
@@ -404,7 +404,7 @@
     {
       "id": "storymaps",
       "title": "Story Map Gallery",
-      "category": "tools",
+      "category": "general",
       "url": "storymaps/",
       "thumbnail": "assets/thumbs/storymaps.png",
       "description": "Gallery of narrative story maps published by TRPA on ArcGIS Online. Loads live from TRPA's organization, newest first.",
@@ -416,7 +416,7 @@
     {
       "id": "surveys",
       "title": "Survey Gallery",
-      "category": "tools",
+      "category": "general",
       "url": "surveys/",
       "thumbnail": "assets/thumbs/surveys.svg",
       "description": "Public surveys and feedback forms published by TRPA with ArcGIS Survey123. Loads live from TRPA's organization, open surveys first.",
@@ -428,7 +428,7 @@
     {
       "id": "nearmap",
       "title": "Nearmap Imagery",
-      "category": "tools",
+      "category": "general",
       "url": "https://apps.nearmap.com/maps",
       "thumbnail": "assets/thumbs/nearmap.png",
       "description": "High-resolution aerial imagery in Nearmap MapBrowser, updated multiple times per year. Requires a TRPA Nearmap account.",
@@ -440,8 +440,8 @@
     {
       "id": "designsystem",
       "title": "Design System",
-      "category": "tools",
-      "url": "tools/design-system.html",
+      "category": "general",
+      "url": "general/design-system.html",
       "thumbnail": "assets/thumbs/design-system.svg",
       "description": "Colors, type, components, and page patterns behind TRPA web tools, with live specimens that switch between the agency, Environmental Improvement Program (EIP), and Tahoe Living brands. Includes the shared token stylesheet.",
       "tags": [
@@ -455,7 +455,7 @@
       "id": "datainventory",
       "title": "Tahoe Data Inventory",
       "category": "data",
-      "url": "tools/data-inventory.html",
+      "url": "data/data-inventory.html",
       "thumbnail": "assets/thumbs/data-inventory.png",
       "description": "Searchable inventory of every data asset across Tahoe Open Data, LT Info, TRPA REST services, and eight partner agencies. Rebuilt automatically each month.",
       "tags": [
@@ -468,7 +468,7 @@
       "id": "opendatapolicy",
       "title": "Open Data Policy and Developer Guide",
       "category": "data",
-      "url": "tools/open-data-policy.html",
+      "url": "data/open-data-policy.html",
       "thumbnail": "assets/thumbs/open-data-policy.png",
       "description": "How to use and access data published on tahoeopendata.org, including attribution, delivery channels, and developer examples.",
       "tags": [

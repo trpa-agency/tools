@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Locator - TRPA Maps</title>
+  <title>Project Locator - TRPA Tools</title>
   <!-- Favicon follows the active style, EIP mark by default, TRPA when toggled (applyBrand) -->
-  <link rel="icon" id="faviconLink" href="assets/favicon.png" />
-  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <link rel="icon" id="faviconLink" href="../assets/favicon.png" />
+  <link rel="apple-touch-icon" href="../assets/favicon.png" />
 
   <!-- Calcite Design System -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
@@ -16,7 +16,7 @@
   <script src="https://js.arcgis.com/4.31/"></script>
 
   <!-- Brand fonts: self-hosted so exports render identically offline. -->
-  <link href="assets/fonts/fonts.css" rel="stylesheet" />
+  <link href="../assets/fonts/fonts.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="../assets/trpa-tokens.css" />
   <style>
@@ -356,7 +356,7 @@
   <!-- ── Header: branding only ── -->
   <header id="appHeader">
     <div class="hdr-brand">
-      <img id="brandLogo" src="assets/eip-logo.png" alt="Lake Tahoe EIP" />
+      <img id="brandLogo" src="../assets/eip-logo.png" alt="Lake Tahoe EIP" />
       <div class="htitle">
         <span class="hagency" id="brandAgency">Environmental Improvement Program</span>
         <span class="hname">Project Locator</span>
@@ -640,7 +640,7 @@
       eip: { agency: "Environmental Improvement Program", exportName: "Lake Tahoe EIP",
         exportSub: "Environmental Improvement Program", primary: "#007DC3", accent: "#F16022",
         dark: "#0B1F41", font: "'Lexend Deca', system-ui, sans-serif",
-        logo: "assets/eip-logo.png", favicon: "assets/favicon.png", pin: "#007DC3", slideLogoH: 100 },
+        logo: "../assets/eip-logo.png", favicon: "../assets/favicon.png", pin: "#007DC3", slideLogoH: 100 },
       trpa: { agency: "Tahoe Regional Planning Agency", exportName: "Tahoe Regional Planning Agency",
         exportSub: "Lake Tahoe Region", primary: "#0072CE", accent: "#E87722",
         dark: "#003B71", font: "'Open Sans', system-ui, sans-serif",
@@ -681,7 +681,7 @@
     //
     // The Nearmap URL embeds the account API key: this page is public, so the
     // key is readable by anyone who views source. It must be domain-restricted
-    // to apps.trpa.gov / trpa-agency.github.io in the Nearmap admin console.
+    // to tools.trpa.gov / trpa-agency.github.io in the Nearmap admin console.
     const NEARMAP_KEY = "NGZhMTA4MDEtYTY5Yi00ODQwLWFmNDQtMDUxMmQwNTJhMmFj";
     const nearmapUrl = (place) => `https://api.nearmap.com/wms/v1/places/${place}/apikey/${NEARMAP_KEY}`;
     const IMAGERY = {

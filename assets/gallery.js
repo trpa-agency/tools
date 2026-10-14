@@ -1,4 +1,4 @@
-/* TRPA Maps, gallery renderer.
+/* TRPA Tools, gallery renderer.
    Each page sets window.GALLERY_CONFIG = { base: '' | '..', category: null | 'slug' }
    before loading this script. Apps live in apps.json at the repo root. */
 (function () {

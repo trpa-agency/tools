@@ -1,5 +1,7 @@
 # Map & Data Site Consolidation onto .gov
 
+> Superseded. The front door is now tools.trpa.gov (repo `trpa-agency/tools`), replacing the apps.trpa.gov plan below.
+
 ## The plan
 
 Two new .gov addresses, continuing what we started with data.trpa.gov:

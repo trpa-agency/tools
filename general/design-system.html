@@ -295,7 +295,7 @@
       <span class="hagency">Tahoe Regional Planning Agency</span>
       <h1 class="hname">Design System</h1>
     </div>
-    <a class="hdr-back" href="../tools/">All maps and apps</a>
+    <a class="hdr-back" href="../">All maps, apps, and tools</a>
   </div>
   <div class="hdr-links">
     <span class="beta-chip" title="Living document. Components are documented from the tools that ship on this site.">Beta</span>
@@ -349,9 +349,9 @@
 
   <main>
     <div class="hero">
-      <div class="over">TRPA Maps</div>
+      <div class="over">TRPA Tools</div>
       <h1>Design System</h1>
-      <p>The colors, type, components, and page patterns behind TRPA's web tools, documented from the tools that ship on apps.trpa.gov. Built on Esri's Calcite Design System, with TRPA's brand layered on top and two sub-brands for program work.</p>
+      <p>The colors, type, components, and page patterns behind TRPA's web tools, documented from the tools that ship on tools.trpa.gov. Built on Esri's Calcite Design System, with TRPA's brand layered on top and two sub-brands for program work.</p>
       <div class="stripe"><i style="background:#0072CE"></i><i style="background:#003B71"></i><i style="background:#E87722"></i><i style="background:#4A6118"></i><i style="background:#9C3E27"></i><i style="background:#B5A64C"></i><i style="background:#7B6A8A"></i><i style="background:#B4CBE8"></i></div>
     </div>
 
@@ -385,13 +385,13 @@
       <p>Pick the brand by the program the tool serves, not by taste. The TRPA agency brand is the default and the only one allowed for regulatory, permitting, planning, and transportation tools. Sub-brands apply only to their programs.</p>
       <table class="ds">
         <tr><th>Brand</th><th>Use for</th><th>Primary</th><th>Dark</th><th>Accent</th><th>Font</th><th>Corners</th><th>Attribute</th></tr>
-        <tr><td><b>TRPA agency</b></td><td>Planning, permitting, transportation, monitoring, data, gallery pages, anything on trpa.gov or apps.trpa.gov by default</td><td><span class="status-dot"><i style="background:#0072CE"></i>#0072CE</span></td><td><span class="status-dot"><i style="background:#003B71"></i>#003B71</span></td><td><span class="status-dot"><i style="background:#E87722"></i>#E87722</span></td><td>Open Sans</td><td>8px cards, 7px controls</td><td><code>(none)</code></td></tr>
+        <tr><td><b>TRPA agency</b></td><td>Planning, permitting, transportation, monitoring, data, gallery pages, anything on trpa.gov or tools.trpa.gov by default</td><td><span class="status-dot"><i style="background:#0072CE"></i>#0072CE</span></td><td><span class="status-dot"><i style="background:#003B71"></i>#003B71</span></td><td><span class="status-dot"><i style="background:#E87722"></i>#E87722</span></td><td>Open Sans</td><td>8px cards, 7px controls</td><td><code>(none)</code></td></tr>
         <tr><td><b>EIP</b></td><td>Environmental Improvement Program, Forest Health, Aquatic Invasive Species, Stormwater, the EIP Project Tracker family</td><td><span class="status-dot"><i style="background:#007DC3"></i>#007DC3</span></td><td><span class="status-dot"><i style="background:#0B1F41"></i>#0B1F41</span></td><td><span class="status-dot"><i style="background:#F16022"></i>#F16022</span></td><td>Lexend Deca</td><td>Pill-rounded controls</td><td><code>data-brand="eip"</code></td></tr>
         <tr><td><b>Tahoe Living</b></td><td>Housing and community engagement for tahoeliving.org and Cultivating Community materials. Housing tools for staff or trpa.gov stay agency.</td><td><span class="status-dot"><i style="background:#5B7B6B"></i>#5B7B6B</span></td><td><span class="status-dot"><i style="background:#2D5A3D"></i>#2D5A3D</span></td><td><span class="status-dot"><i style="background:#C4704B"></i>#C4704B</span></td><td>Montserrat</td><td>12px cards, warm neutrals</td><td><code>data-brand="tahoe-living"</code></td></tr>
         <tr><td><b>LT Info embed</b> (not a brand)</td><td>Charts, maps, and dashboards that laketahoeinfo.org pulls in by URL: threshold indicators, monitoring program dashboards, transportation data trends, climate outcomes. They match the host platform, not TRPA. See <a href="#ltinfo">Lake Tahoe Info embeds</a>.</td><td><span class="status-dot"><i style="background:#3e72b0"></i>#3e72b0</span></td><td><span class="status-dot"><i style="background:#2f3f56"></i>#2f3f56</span></td><td><span class="status-dot"><i style="background:#e49937"></i>#e49937</span></td><td>Lexend Deca</td><td>4px cards, no shell</td><td><code>data-brand="ltinfo"</code></td></tr>
       </table>
       <h3>Site categories</h3>
-      <p>apps.trpa.gov groups apps into categories, each with a color from the agency palette. The color marks the category on gallery cards and section headings. It is a label, not a theme: a Planning app is still agency blue inside.</p>
+      <p>tools.trpa.gov groups apps into categories, each with a color from the agency palette. The color marks the category on gallery cards and section headings. It is a label, not a theme: a Planning app is still agency blue inside.</p>
       <div class="cat-row" id="catRow"><span class="note">Loading categories from apps.json</span></div>
       <h3>Mixing brands</h3>
       <div class="do-dont">
@@ -458,7 +458,7 @@
       <h2><span class="num">04</span>Typography</h2>
       <p>Each brand has one web typeface. Agency documents use Calibri 11pt, and maps use Syntax, per the TRPA Style Guide. Open Sans is the web stand-in for Calibri.</p>
       <div class="font-cards">
-        <div class="font-card" style="font-family:'Open Sans',sans-serif"><div class="big">Open Sans</div><div class="alpha">Aa Bb Cc 0123456789 Lake Tahoe Region</div><div class="use"><b>TRPA agency.</b> Weights 400, 600, 700. Google Fonts, or self-hosted in <code>tools/assets/fonts</code> for exports.</div></div>
+        <div class="font-card" style="font-family:'Open Sans',sans-serif"><div class="big">Open Sans</div><div class="alpha">Aa Bb Cc 0123456789 Lake Tahoe Region</div><div class="use"><b>TRPA agency.</b> Weights 400, 600, 700. Google Fonts, or self-hosted in <code>assets/fonts</code> for exports.</div></div>
         <div class="font-card" style="font-family:'Lexend Deca',sans-serif"><div class="big">Lexend Deca</div><div class="alpha">Aa Bb Cc 0123456789 Lake Tahoe Region</div><div class="use"><b>EIP.</b> Weights 400 to 700. Section labels in the EIP print brand use Calder Dark; on the web use Lexend Deca in uppercase with letter spacing.</div></div>
         <div class="font-card" style="font-family:'Montserrat',sans-serif"><div class="big">Montserrat</div><div class="alpha">Aa Bb Cc 0123456789 Lake Tahoe Region</div><div class="use"><b>Tahoe Living.</b> Weights 400 to 700. Body 16px with line height 1.7 for a more relaxed reading rhythm.</div></div>
       </div>
@@ -516,7 +516,7 @@
       <div class="logo-grid">
         <div><div class="logo-tile"><img src="../assets/TRPALogo_COLOR.png" alt="TRPA color logo" /></div><div class="logo-cap"><b>TRPA color</b> on white or light backgrounds. <code>assets/TRPALogo_COLOR.png</code></div></div>
         <div><div class="logo-tile dark"><img src="../assets/TRPALogo_WHITE.png" alt="TRPA white logo" /></div><div class="logo-cap"><b>TRPA white</b> on navy or blue. <code>assets/TRPALogo_WHITE.png</code></div></div>
-        <div><div class="logo-tile"><img src="assets/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program logo" /></div><div class="logo-cap"><b>EIP primary</b> horizontal, full color. <code>tools/assets/eip-logo.png</code></div></div>
+        <div><div class="logo-tile"><img src="../assets/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program logo" /></div><div class="logo-cap"><b>EIP primary</b> horizontal, full color. <code>assets/eip-logo.png</code></div></div>
         <div><div class="logo-tile blue"><img src="../assets/TRPALogo_WHITE.png" alt="TRPA white logo on TRPA Blue" /></div><div class="logo-cap"><b>On TRPA Blue</b> always use the white variant.</div></div>
       </div>
       <h3>Rules</h3>
@@ -738,7 +738,7 @@
       <h3>App card</h3>
       <p>The gallery card: thumbnail with a 3px category-colored bottom border, title with optional Beta pill, two-line description, tags, and the host domain. The whole card is the link and lifts on hover.</p>
       <div class="frame" data-label="Gallery app card"><span class="brand-tag" data-brand-name>TRPA agency</span>
-        <a class="app-card" href="public-notice.html"><div class="thumb">P</div><div class="body"><h5>Public Notice List<span class="beta-pill">Beta</span></h5><p>Build the owner mailing list for a public notice. Pick the subject parcels, set a distance, review who is inside it, and export.</p></div><div class="foot"><span><span class="tag">Permitting</span> <span class="tag">Parcels</span></span><span>apps.trpa.gov</span></div></a>
+        <a class="app-card" href="../permitting/public-notice.html"><div class="thumb">P</div><div class="body"><h5>Public Notice List<span class="beta-pill">Beta</span></h5><p>Build the owner mailing list for a public notice. Pick the subject parcels, set a distance, review who is inside it, and export.</p></div><div class="foot"><span><span class="tag">Permitting</span> <span class="tag">Parcels</span></span><span>tools.trpa.gov</span></div></a>
       </div>
     </section>
 
@@ -885,7 +885,7 @@ const PLOT_CONFIG = { displayModeBar: false, responsive: true };</code></pre>
         <g font-size="11" font-weight="700" fill="#fff"><g><circle cx="12" cy="12" r="9" fill="#0072CE"/><text x="12" y="16" text-anchor="middle">1</text></g><g><circle cx="12" cy="79" r="9" fill="#0072CE"/><text x="12" y="83" text-anchor="middle">2</text></g><g><circle cx="276" cy="120" r="9" fill="#0072CE"/><text x="276" y="124" text-anchor="middle">3</text></g><g><circle cx="276" cy="373" r="9" fill="#0072CE"/><text x="276" y="377" text-anchor="middle">4</text></g><g><circle cx="300" cy="60" r="9" fill="#0072CE"/><text x="300" y="64" text-anchor="middle">5</text></g><g><circle cx="300" cy="287" r="9" fill="#0072CE"/><text x="300" y="291" text-anchor="middle">6</text></g><g><circle cx="740" cy="160" r="9" fill="#0072CE"/><text x="740" y="164" text-anchor="middle">7</text></g></g>
       </svg>
       <ol class="anno">
-        <li><b>Header.</b> White, 1px bottom border. Logo at 36px, agency overline in brand blue, tool name, a back link to "All maps and apps". Right side: Beta chip, about button, external links.</li>
+        <li><b>Header.</b> White, 1px bottom border. Logo at 36px, agency overline in brand blue, tool name, a back link to "All maps, apps, and tools". Right side: Beta chip, about button, external links.</li>
         <li><b>Search.</b> First thing in the panel. Address, APN, or project with grouped suggestions.</li>
         <li><b>Numbered sections.</b> Each step of the workflow: title, one line of help, controls. Collapsible when long.</li>
         <li><b>Pinned footer.</b> Status line plus the primary action and full-width exports. Never scrolls away.</li>
@@ -914,15 +914,15 @@ const PLOT_CONFIG = { displayModeBar: false, responsive: true };</code></pre>
       <h2><span class="num">17</span>Page types</h2>
       <table class="ds">
         <tr><th style="width:150px">Type</th><th>Shape</th><th>Base size</th><th>Example</th></tr>
-        <tr><td><b>Map tool</b></td><td>The app shell above. Full viewport, no page scroll.</td><td>14px</td><td><a href="public-notice.html">Public Notice List</a>, <a href="parcel-explorer.html">Parcel Change Explorer</a>, <a href="locator.html">Project Locator</a></td></tr>
-        <tr><td><b>Table tool</b></td><td>Navy header band with title and an updated pill, filter pill rows, a tall AG Grid, notes below.</td><td>15px</td><td><a href="data-inventory.html">Tahoe Data Inventory</a></td></tr>
-        <tr><td><b>Document</b></td><td>Navy header with overline, title, subtitle, and a meta line. One 880px column. Blue uppercase section bands, h2 rules in ice, dark code blocks with copy buttons, callouts, striped tables.</td><td>15px</td><td><a href="open-data-policy.html">Open Data Policy</a></td></tr>
-        <tr><td><b>Gallery</b></td><td>Navy site header with 56px logo, 5px blue accent bar, search and category pills, card grid in sections, navy footer. Driven by <code>apps.json</code>.</td><td>15px</td><td><a href="../">apps.trpa.gov</a>, <a href="./">Tools</a></td></tr>
+        <tr><td><b>Map tool</b></td><td>The app shell above. Full viewport, no page scroll.</td><td>14px</td><td><a href="../permitting/public-notice.html">Public Notice List</a>, <a href="../permitting/parcel-explorer.html">Parcel Change Explorer</a>, <a href="../eip/locator.html">Project Locator</a></td></tr>
+        <tr><td><b>Table tool</b></td><td>Navy header band with title and an updated pill, filter pill rows, a tall AG Grid, notes below.</td><td>15px</td><td><a href="../data/data-inventory.html">Tahoe Data Inventory</a></td></tr>
+        <tr><td><b>Document</b></td><td>Navy header with overline, title, subtitle, and a meta line. One 880px column. Blue uppercase section bands, h2 rules in ice, dark code blocks with copy buttons, callouts, striped tables.</td><td>15px</td><td><a href="../data/open-data-policy.html">Open Data Policy</a></td></tr>
+        <tr><td><b>Gallery</b></td><td>Navy site header with 56px logo, 5px blue accent bar, search and category pills, card grid in sections, navy footer. Driven by <code>apps.json</code>.</td><td>15px</td><td><a href="../">tools.trpa.gov</a>, <a href="./">General</a></td></tr>
         <tr><td><b>Reference</b></td><td>This page: app header, sticky section nav, white section cards on the gray page.</td><td>15px</td><td>Design System</td></tr>
       </table>
       <h3>Every page has</h3>
       <ul>
-        <li>The TRPA logo linking to trpa.gov and a way back to "All maps and apps".</li>
+        <li>The TRPA logo linking to trpa.gov and a way back to "All maps, apps, and tools".</li>
         <li>A <code>&lt;title&gt;</code> and meta description written in TRPA style.</li>
         <li>The favicon from <code>assets/favicon.ico</code>.</li>
         <li>An entry in <code>apps.json</code> with a 400 by 266 thumbnail, so the gallery finds it.</li>
@@ -1063,7 +1063,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     <section class="ds" id="tokens">
       <h2><span class="num">23</span>Tokens and snippets</h2>
       <p>Link the token file and the brand follows. Tools that must stay fully self-contained paste the <code>:root</code> block instead; this page and the skills are the places to copy from.</p>
-      <pre><code>&lt;link rel="stylesheet" href="https://apps.trpa.gov/assets/trpa-tokens.css" /&gt;
+      <pre><code>&lt;link rel="stylesheet" href="https://tools.trpa.gov/assets/trpa-tokens.css" /&gt;
 <span class="cmt">&lt;!-- then, for an EIP tool --&gt;</span>
 &lt;body data-brand="eip"&gt;</code></pre>
       <div class="row" style="margin:0.6rem 0 0.2rem">
@@ -1096,7 +1096,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
       <h4>Which skills for which job</h4>
       <table class="ds">
         <tr><th style="width:260px">You are building</th><th>Load these skills</th><th>Why</th></tr>
-        <tr><td>A tool for trpa.gov, apps.trpa.gov, or internal staff use</td><td><code>trpa-brand</code> + <code>trpa-dashboard-stack</code></td><td>Agency palette, Open Sans, writing rules; the four required libraries and page template</td></tr>
+        <tr><td>A tool for trpa.gov, tools.trpa.gov, or internal staff use</td><td><code>trpa-brand</code> + <code>trpa-dashboard-stack</code></td><td>Agency palette, Open Sans, writing rules; the four required libraries and page template</td></tr>
         <tr><td>An EIP, Forest Health, AIS, or Stormwater tool or report</td><td><code>trpa-eip-brand</code> + <code>trpa-dashboard-stack</code></td><td>EIP Pantone palette, Lexend Deca, logo variants, priority ramp</td></tr>
         <tr><td>A Tahoe Living or housing engagement page</td><td><code>tahoe-living-brand</code> + <code>trpa-dashboard-stack</code></td><td>Sage and terracotta, Montserrat, warm neutrals, bilingual notes</td></tr>
         <tr><td>A chart, map, or dashboard that laketahoeinfo.org will embed</td><td><code>ltinfo-platform</code> + the dashboard's skill (<code>trpa-threshold-dashboard</code>, <code>trpa-monitoring-dashboard</code>, <code>trpa-transportation-tracker</code>, or <code>trpa-climate-dashboard</code>) + <code>trpa-dashboard-stack</code></td><td>Platform tokens and embed contract; that site's framework, page anatomy, API routes, and file conventions</td></tr>
@@ -1153,7 +1153,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
 <footer class="site-footer">
   <div class="inner">
     <div>Tahoe Regional Planning Agency<br />128 Market Street, Stateline, NV 89449 &middot; <a href="https://www.trpa.gov">trpa.gov</a></div>
-    <div><a href="../">All maps and apps</a> &middot; <a href="https://maps.trpa.org/server/rest/services">REST Services</a> &middot; <a href="https://www.tahoeopendata.org">Tahoe Open Data</a> &middot; <a href="https://www.laketahoeinfo.org">Lake Tahoe Info</a></div>
+    <div><a href="../">All maps, apps, and tools</a> &middot; <a href="https://maps.trpa.org/server/rest/services">REST Services</a> &middot; <a href="https://www.tahoeopendata.org">Tahoe Open Data</a> &middot; <a href="https://www.laketahoeinfo.org">Lake Tahoe Info</a></div>
   </div>
 </footer>
 
@@ -1260,7 +1260,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
 
   /* ── Type scale ── */
   const TYPE = [
-    { label: 'Page title', spec: 'Gallery h1, 1.6rem 700', css: 'font-size:1.6rem;font-weight:700;line-height:1.2', text: 'TRPA Maps' },
+    { label: 'Page title', spec: 'Gallery h1, 1.6rem 700', css: 'font-size:1.6rem;font-weight:700;line-height:1.2', text: 'TRPA Tools' },
     { label: 'Tool name', spec: 'Header, 0.98rem 700', css: 'font-size:0.98rem;font-weight:700', text: 'Public Notice List' },
     { label: 'Agency overline', spec: '0.58rem 700, 0.07em tracking, uppercase, brand blue', css: 'font-size:0.58rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:#0072CE', text: 'Tahoe Regional Planning Agency' },
     { label: 'Section heading', spec: 'Document h2, 1.25rem 700', css: 'font-size:1.25rem;font-weight:700', text: 'How data is delivered' },
@@ -1286,7 +1286,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     const cats = reg.categories || [];
     $('catRow').innerHTML = cats.map(c => `<span class="cat-pill" style="--c:${c.color}">${c.name}<code>${c.color}</code></span>`).join('');
     const catName = Object.fromEntries(cats.map(c => [c.slug, c.name]));
-    allApps = (reg.apps || []).map(a => ({ title: a.title, category: catName[a.category] || a.category, tags: (a.tags || []).join(', '), beta: !!a.beta, host: /^[a-z]+:\/\//i.test(a.url) ? new URL(a.url).hostname.replace(/^www\./, '') : 'apps.trpa.gov' }));
+    allApps = (reg.apps || []).map(a => ({ title: a.title, category: catName[a.category] || a.category, tags: (a.tags || []).join(', '), beta: !!a.beta, host: /^[a-z]+:\/\//i.test(a.url) ? new URL(a.url).hostname.replace(/^www\./, '') : 'tools.trpa.gov' }));
     $('gridCount').textContent = `${allApps.length} apps in apps.json`;
     buildGrid();
   }).catch(() => { $('catRow').innerHTML = '<span class="note">Could not load apps.json (serve this page over http).</span>'; $('gridCount').textContent = 'apps.json unavailable'; });

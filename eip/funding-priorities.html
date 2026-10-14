@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EIP Funding Priorities - TRPA Maps</title>
+  <title>EIP Funding Priorities - TRPA Tools</title>
   <meta name="description" content="Working groups and partner agencies build the EIP priority lists: an LTRA list and an Other list, each project marked Priority 1, 2, or 3 with a funding request, combined across reviewers, exported in the master sheet layout." />
-  <link rel="icon" type="image/png" href="../tools/assets/favicon.png" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
 
   <!-- Calcite Design System -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
@@ -20,7 +20,7 @@
   <script src="https://js.arcgis.com/4.31/"></script>
 
   <!-- Brand fonts, self-hosted (Lexend Deca for the EIP shell) -->
-  <link href="../tools/assets/fonts/fonts.css" rel="stylesheet" />
+  <link href="../assets/fonts/fonts.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="../assets/trpa-tokens.css" />
   <style>
@@ -341,7 +341,7 @@
 
   <header id="appHeader">
     <div class="hdr-brand">
-      <img src="../tools/assets/eip-logo-76.png" alt="Lake Tahoe Environmental Improvement Program" width="auto" height="38" />
+      <img src="../assets/eip-logo-76.png" alt="Lake Tahoe Environmental Improvement Program" width="auto" height="38" />
       <a href="index.html" class="hdr-back">&larr; EIP maps</a>
       <div class="htitle">
         <span class="hagency">Environmental Improvement Program</span>
@@ -1446,7 +1446,7 @@
       if (!m.n) { toast(`No ${LISTS[listKey].label} picks have been sent or imported yet.`, 4000); return; }
       const title = `${SURVEY.round} ${listKey === "ltra" ? "LTRA Priority List" : "EIP Priority List, other funding"}`;
       const when = apDate(new Date());
-      const fontCss = new URL("../tools/assets/fonts/fonts.css", location.href).href;
+      const fontCss = new URL("../assets/fonts/fonts.css", location.href).href;
       const tier = (t) => `<span class="t t${t}">Priority ${t}</span>`;
       const who = (r) => escHtml(r.who.replace(/ · (.+)$/, " ($1)"));                       // "Ana Lee · CTC" reads as "Ana Lee (CTC)" in a table
       const critUnion = (rows) => critText([...new Set(rows.flatMap(r => r.crit))]);       // criteria any reviewer ticked, once each
