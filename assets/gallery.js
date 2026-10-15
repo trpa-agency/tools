@@ -1,9 +1,13 @@
 /* TRPA Tools, gallery renderer.
-   Each page sets window.GALLERY_CONFIG = { base: '' | '..', category: null | 'slug' }
-   before loading this script. Apps live in apps.json at the repo root. */
+   Each page sets window.GALLERY_CONFIG = { base: '' | '..' | '../..', category: null | 'slug', qa: bool }
+   before loading this script. base always points at the repo root, where apps.json lives.
+   Production pages (qa false) list apps without "beta": true; QA pages under qa/ list only beta apps. */
 (function () {
-  const cfg = Object.assign({ base: '', category: null }, window.GALLERY_CONFIG || {});
+  const cfg = Object.assign({ base: '', category: null, qa: false }, window.GALLERY_CONFIG || {});
   const base = cfg.base ? cfg.base.replace(/\/$/, '') + '/' : '';
+  // Category landing pages: root folders for production, qa/ folders for QA
+  const catRoot = base + (cfg.qa ? 'qa/' : '');
+  const inView = a => !!a.beta === !!cfg.qa;
 
   function hostOf(url) {
     try { return new URL(url).hostname.replace(/^www\./, ''); }
@@ -37,12 +41,12 @@
 
   function sectionHTML(cat, apps, linkHeading) {
     const heading = linkHeading
-      ? `<a href="${base}${cat.slug}/">${cat.name}</a><span class="view-all">View section &rsaquo;</span>`
+      ? `<a href="${catRoot}${cat.slug}/">${cat.name}</a><span class="view-all">View section &rsaquo;</span>`
       : cat.name;
     const cards = apps.map(a => cardHTML(a, cat.color)).join('');
     const body = apps.length
       ? `<div class="card-grid">${cards}</div>`
-      : `<p class="empty-note">Apps coming soon.</p>`;
+      : `<p class="empty-note">${cfg.qa ? 'Nothing in development in this category.' : 'Apps coming soon.'}</p>`;
     return `<section class="category-section" style="--cat-color:${cat.color}" data-category="${cat.slug}">
       <h2>${heading}</h2>
       <p class="cat-desc">${cat.description}</p>
@@ -71,20 +75,22 @@
       const target = document.getElementById('gallery');
       if (!target) return;
 
+      const apps = data.apps.filter(inView);
+      const has = slug => apps.some(a => a.category === slug);
+      // The QA home skips categories with nothing in development
       const cats = cfg.category
         ? data.categories.filter(c => c.slug === cfg.category)
-        : data.categories;
+        : data.categories.filter(c => !cfg.qa || has(c.slug));
 
-      target.innerHTML = cats.map(cat => {
-        const apps = data.apps.filter(a => a.category === cat.slug);
-        return sectionHTML(cat, apps, !cfg.category);
-      }).join('');
+      target.innerHTML = cats.map(cat =>
+        sectionHTML(cat, apps.filter(a => a.category === cat.slug), !cfg.category)
+      ).join('');
 
       // Category nav pills on the home page
       const pills = document.getElementById('cat-pills');
       if (pills && !cfg.category) {
-        pills.innerHTML = data.categories.map(c =>
-          `<a class="cat-pill" style="--pill-color:${c.color}" href="${base}${c.slug}/">${c.name}</a>`
+        pills.innerHTML = cats.map(c =>
+          `<a class="cat-pill" style="--pill-color:${c.color}" href="${catRoot}${c.slug}/">${c.name}</a>`
         ).join('');
       }
 

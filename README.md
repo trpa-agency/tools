@@ -6,28 +6,59 @@ Official maps, apps, and tools of TRPA, to be served at **tools.trpa.gov** via G
 
 ```
 tools/
-├── index.html          # Main gallery, all apps grouped by category
-├── apps.json           # Single source of truth for the app registry
+├── index.html          # Production gallery: apps without "beta": true
+├── apps.json           # Single source of truth for the app registry (production and QA)
 ├── 404.html            # Branded not-found page
 ├── assets/
 │   ├── site.css        # Shared styles (TRPA brand)
-│   ├── gallery.js      # Shared gallery renderer
-│   ├── trpa-tokens.css # Shared design tokens (see general/design-system.html)
+│   ├── gallery.js      # Shared gallery renderer (production or QA mode)
+│   ├── trpa-tokens.css # Shared design tokens (see qa/general/design-system.html)
 │   ├── fonts/          # Self-hosted Open Sans and Lexend Deca
 │   └── thumbs/         # App thumbnails
 ├── planning/           # Planning apps (zoning, housing, shoreline)
 ├── transportation/     # Transportation apps (transit, active transportation, Transportation Tracker)
-├── permitting/         # Permitting apps (parcels, permits, public notice, completeness review)
+├── permitting/         # Permitting apps (parcels, permits)
 ├── eip/                # Environmental Improvement Program apps (stormwater, forest health, SEZ)
-├── general/            # General viewers, galleries, and the Design System reference
-├── monitoring/         # Threshold, climate, lake clarity, wildfire, and smoke dashboards (smoke-map.html + purpleair-tahoe.json)
-├── storymaps/          # Story Map Gallery, live from ArcGIS Online
-├── surveys/            # Survey Gallery, live from ArcGIS Online; surveys.json groups, describes, and hides forms
-├── data/               # Open data, the Tahoe Data Inventory, and the Open Data Policy
+├── general/            # General viewers
+├── monitoring/         # Threshold, climate, lake clarity, wildfire, and smoke dashboards
+├── data/               # Open data and developer resources
+├── qa/                 # Apps in development and review, same category structure as the root
+│   ├── index.html      # QA gallery: apps with "beta": true
+│   ├── planning/ ... data/   # QA category pages and the beta apps hosted in this repo
+│   ├── storymaps/      # Story Map Gallery, live from ArcGIS Online
+│   └── surveys/        # Survey Gallery, live from ArcGIS Online; surveys.json groups, describes, and hides forms
 └── docs/               # Planning documents
 ```
 
-Each category folder has an `index.html` landing page that lists only its apps. Apps built here live inside their category, as a single file (`permitting/public-notice.html`) or a subfolder for multi-file apps (`planning/localplans/` to `tools.trpa.gov/planning/localplans/`). There is no top-level `tools/` folder; on tools.trpa.gov that path would read twice.
+Each category folder has an `index.html` landing page that lists only its apps. Apps built here live inside their category, as a single file (`qa/permitting/public-notice.html`) or a subfolder for multi-file apps (`planning/localplans/` to `tools.trpa.gov/planning/localplans/`). There is no top-level `tools/` folder; on tools.trpa.gov that path would read twice.
+
+## Production and QA
+
+The site has two galleries built from the same `apps.json`:
+
+| | Production | QA |
+|---|---|---|
+| URL | tools.trpa.gov | tools.trpa.gov/qa/ |
+| Lists | apps without `"beta": true` | apps with `"beta": true` |
+| App files | `<category>/` | `qa/<category>/` |
+| Pages | indexed | `noindex`, orange "In development" banner |
+
+The root holds production apps only. Everything still in development or review lives under `qa/`, which repeats the root's category structure (`qa/planning/`, `qa/eip/`, and so on). The production home links to QA from its footer ("Apps in development"), and every QA page links back to production. Apps hosted elsewhere (github.io pages, vendor sites) have no files here; their `beta` flag alone decides which gallery lists them.
+
+`gallery.js` handles both: each page sets `window.GALLERY_CONFIG = { base, category, qa }`. `base` always points at the repo root (where `apps.json` and `assets/` live), so QA category pages use `base: '../..'` and `qa: true`.
+
+### Review process
+
+1. **Build in QA.** Put a new app in `qa/<category>/` and add it to `apps.json` with `"beta": true` and a `url` starting `qa/`. Shared files are two levels up: `../../assets/`.
+2. **Review.** Share the `/qa/` link with reviewers. Run the `trpa-dashboard-qa` checklist against it. Collect fixes in issues or PR comments.
+3. **Promote.** When the app is approved, in one PR:
+   - `git mv qa/<category>/<app> <category>/<app>` (keeps history).
+   - Change `../../assets/` to `../assets/` in the moved files, and fix any links to other QA apps.
+   - In `apps.json`, drop the `qa/` prefix from `url` and remove `"beta": true`.
+   - If the app writes data from a script or workflow, update its output path.
+4. **Verify.** Serve locally, confirm the app shows on the production gallery and is gone from QA, then merge.
+
+To pull an app back for rework, run the same steps in reverse.
 
 ## Adding or updating an app
 
@@ -58,8 +89,8 @@ Edit `apps.json`, every page reads from it, so no HTML changes are needed:
 
 ## Data inventory refresh
 
-The Tahoe Data Inventory ([data/data-inventory.html](data/data-inventory.html)) reads its rows
-from `data/data-inventory.json`, which is rebuilt by `scripts/build_inventory.py` (stdlib-only
+The Tahoe Data Inventory ([qa/data/data-inventory.html](qa/data/data-inventory.html)) reads its rows
+from `qa/data/data-inventory.json`, which is rebuilt by `scripts/build_inventory.py` (stdlib-only
 Python). The script crawls the Tahoe Open Data DCAT feed, the maps.trpa.org REST directory, and
 eight partner agency directories; the LT Info rows come from the static seed
 `scripts/inventory_seed.json` (no crawlable directory exists, edit that file to change them).
@@ -78,7 +109,7 @@ Serve the repo root (fetch of `apps.json` requires http, not file://):
 python -m http.server 8000
 ```
 
-Then open http://localhost:8000.
+Then open http://localhost:8000 (production) or http://localhost:8000/qa/ (QA).
 
 ## Deployment
 

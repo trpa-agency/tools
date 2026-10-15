@@ -61,13 +61,13 @@ jobs:
 
       - name: Commit if the readings changed
         run: |
-          if git diff --quiet monitoring/purpleair-tahoe.json; then
+          if git diff --quiet qa/monitoring/purpleair-tahoe.json; then
             echo "No change, either the gates skipped the fetch or readings are identical."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add monitoring/purpleair-tahoe.json
+          git add qa/monitoring/purpleair-tahoe.json
           git commit -m "Refresh PurpleAir sensors ($(date -u '+%Y-%m-%d %H:%M') UTC)"
           # Rebase rather than force: a concurrent commit to main must not be lost.
           git pull --rebase --autostash origin main

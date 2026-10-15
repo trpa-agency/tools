@@ -242,3 +242,14 @@ a { color: var(--trpa-blue); }
   .site-header { padding: 1rem 1.25rem; }
   .toolbar, .gallery, .breadcrumb { padding-left: 1.25rem; padding-right: 1.25rem; }
 }
+
+/* QA banner: shown on every page under qa/ */
+.qa-banner {
+  background: var(--trpa-orange);
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.5rem;
+  text-align: center;
+}
+.qa-banner b { letter-spacing: 0.06em; text-transform: uppercase; margin-right: 0.4rem; }
+.qa-banner a { color: #fff; text-decoration: underline; }

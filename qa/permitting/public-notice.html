@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Public Notice List - TRPA Tools</title>
   <meta name="description" content="Build a public notice mailing list: pick the subject parcels, set a notice distance, review the owners within it, and export a CSV, Avery mailing labels, and a notice map." />
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
 
   <!-- Calcite Design System -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
@@ -21,12 +22,12 @@
   <script src="https://js.arcgis.com/4.31/"></script>
 
   <!-- Brand fonts, self-hosted (shared with the locator) -->
-  <link href="../assets/fonts/fonts.css" rel="stylesheet" />
+  <link href="../../assets/fonts/fonts.css" rel="stylesheet" />
 
-  <link rel="stylesheet" href="../assets/trpa-tokens.css" />
+  <link rel="stylesheet" href="../../assets/trpa-tokens.css" />
   <style>
     :root {
-      /* Palette, neutrals, and the Calcite mapping come from ../assets/trpa-tokens.css */
+      /* Palette, neutrals, and the Calcite mapping come from ../../assets/trpa-tokens.css */
       --shadow: var(--brand-shadow);
       --font: var(--brand-font);
     }
@@ -201,7 +202,7 @@
 
   <header id="appHeader">
     <div class="hdr-brand">
-      <img src="../assets/TRPALogo_COLOR.png" alt="Tahoe Regional Planning Agency" />
+      <img src="../../assets/TRPALogo_COLOR.png" alt="Tahoe Regional Planning Agency" />
       <a href="index.html" class="hdr-back">&larr; Permitting</a>
       <div class="htitle">
         <span class="hagency">Tahoe Regional Planning Agency</span>
@@ -953,7 +954,7 @@
         await new Promise(r => setTimeout(r, 900));   // let tiles settle
         const W = Math.round(view.width * 2), H = Math.round(view.height * 2);
         const shot = await view.takeScreenshot({ format: "png", width: W, height: H });
-        const img = await loadImage(shot.dataUrl), logo = await loadImage("../assets/TRPALogo_COLOR.png");
+        const img = await loadImage(shot.dataUrl), logo = await loadImage("../../assets/TRPALogo_COLOR.png");
         const cap = 150, cv = document.createElement("canvas"); cv.width = W; cv.height = H + cap;
         const ctx = cv.getContext("2d");
         ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H + cap); ctx.drawImage(img, 0, 0);

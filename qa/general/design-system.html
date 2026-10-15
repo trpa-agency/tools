@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TRPA Design System</title>
   <meta name="description" content="Colors, type, components, and page patterns for TRPA web tools. One system, three brands: agency, Environmental Improvement Program, and Tahoe Living." />
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
 
   <!-- Fonts: Open Sans (agency), Lexend Deca (EIP), Montserrat (Tahoe Living) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +18,7 @@
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
 
   <!-- Design tokens: the file this page documents -->
-  <link rel="stylesheet" href="../assets/trpa-tokens.css" />
+  <link rel="stylesheet" href="../../assets/trpa-tokens.css" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -290,7 +291,7 @@
 
 <header id="appHeader">
   <div class="hdr-brand">
-    <a href="https://www.trpa.gov" title="Tahoe Regional Planning Agency"><img src="../assets/TRPALogo_COLOR.png" alt="Tahoe Regional Planning Agency logo" /></a>
+    <a href="https://www.trpa.gov" title="Tahoe Regional Planning Agency"><img src="../../assets/TRPALogo_COLOR.png" alt="Tahoe Regional Planning Agency logo" /></a>
     <div class="htitle">
       <span class="hagency">Tahoe Regional Planning Agency</span>
       <h1 class="hname">Design System</h1>
@@ -299,7 +300,7 @@
   </div>
   <div class="hdr-links">
     <span class="beta-chip" title="Living document. Components are documented from the tools that ship on this site.">Beta</span>
-    <calcite-button appearance="outline" kind="brand" scale="s" icon-start="file-code" href="../assets/trpa-tokens.css" target="_blank" rel="noopener" title="Open the shared tokens stylesheet">trpa-tokens.css</calcite-button>
+    <calcite-button appearance="outline" kind="brand" scale="s" icon-start="file-code" href="../../assets/trpa-tokens.css" target="_blank" rel="noopener" title="Open the shared tokens stylesheet">trpa-tokens.css</calcite-button>
     <calcite-button appearance="outline" kind="neutral" scale="s" icon-start="code" href="https://github.com/trpa-agency/maps" target="_blank" rel="noopener" title="GitHub repository trpa-agency/maps"><span class="lbl">Source</span></calcite-button>
   </div>
 </header>
@@ -514,10 +515,10 @@
       <h2><span class="num">06</span>Logos</h2>
       <p>Two logo systems. The TRPA agency logo is the lake silhouette with stacked text, and it appears on every tool. The EIP logo is the mountain and water mark, added beside the TRPA logo on EIP tools. Tahoe Living carries its own wordmark in the header and puts the TRPA logo in the footer.</p>
       <div class="logo-grid">
-        <div><div class="logo-tile"><img src="../assets/TRPALogo_COLOR.png" alt="TRPA color logo" /></div><div class="logo-cap"><b>TRPA color</b> on white or light backgrounds. <code>assets/TRPALogo_COLOR.png</code></div></div>
-        <div><div class="logo-tile dark"><img src="../assets/TRPALogo_WHITE.png" alt="TRPA white logo" /></div><div class="logo-cap"><b>TRPA white</b> on navy or blue. <code>assets/TRPALogo_WHITE.png</code></div></div>
-        <div><div class="logo-tile"><img src="../assets/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program logo" /></div><div class="logo-cap"><b>EIP primary</b> horizontal, full color. <code>assets/eip-logo.png</code></div></div>
-        <div><div class="logo-tile blue"><img src="../assets/TRPALogo_WHITE.png" alt="TRPA white logo on TRPA Blue" /></div><div class="logo-cap"><b>On TRPA Blue</b> always use the white variant.</div></div>
+        <div><div class="logo-tile"><img src="../../assets/TRPALogo_COLOR.png" alt="TRPA color logo" /></div><div class="logo-cap"><b>TRPA color</b> on white or light backgrounds. <code>assets/TRPALogo_COLOR.png</code></div></div>
+        <div><div class="logo-tile dark"><img src="../../assets/TRPALogo_WHITE.png" alt="TRPA white logo" /></div><div class="logo-cap"><b>TRPA white</b> on navy or blue. <code>assets/TRPALogo_WHITE.png</code></div></div>
+        <div><div class="logo-tile"><img src="../../assets/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program logo" /></div><div class="logo-cap"><b>EIP primary</b> horizontal, full color. <code>assets/eip-logo.png</code></div></div>
+        <div><div class="logo-tile blue"><img src="../../assets/TRPALogo_WHITE.png" alt="TRPA white logo on TRPA Blue" /></div><div class="logo-cap"><b>On TRPA Blue</b> always use the white variant.</div></div>
       </div>
       <h3>Rules</h3>
       <ul>
@@ -917,7 +918,7 @@ const PLOT_CONFIG = { displayModeBar: false, responsive: true };</code></pre>
         <tr><td><b>Map tool</b></td><td>The app shell above. Full viewport, no page scroll.</td><td>14px</td><td><a href="../permitting/public-notice.html">Public Notice List</a>, <a href="../permitting/parcel-explorer.html">Parcel Change Explorer</a>, <a href="../eip/locator.html">Project Locator</a></td></tr>
         <tr><td><b>Table tool</b></td><td>Navy header band with title and an updated pill, filter pill rows, a tall AG Grid, notes below.</td><td>15px</td><td><a href="../data/data-inventory.html">Tahoe Data Inventory</a></td></tr>
         <tr><td><b>Document</b></td><td>Navy header with overline, title, subtitle, and a meta line. One 880px column. Blue uppercase section bands, h2 rules in ice, dark code blocks with copy buttons, callouts, striped tables.</td><td>15px</td><td><a href="../data/open-data-policy.html">Open Data Policy</a></td></tr>
-        <tr><td><b>Gallery</b></td><td>Navy site header with 56px logo, 5px blue accent bar, search and category pills, card grid in sections, navy footer. Driven by <code>apps.json</code>.</td><td>15px</td><td><a href="../">tools.trpa.gov</a>, <a href="./">General</a></td></tr>
+        <tr><td><b>Gallery</b></td><td>Navy site header with 56px logo, 5px blue accent bar, search and category pills, card grid in sections, navy footer. Driven by <code>apps.json</code>.</td><td>15px</td><td><a href="../../">tools.trpa.gov</a>, <a href="./">General</a></td></tr>
         <tr><td><b>Reference</b></td><td>This page: app header, sticky section nav, white section cards on the gray page.</td><td>15px</td><td>Design System</td></tr>
       </table>
       <h3>Every page has</h3>
@@ -1068,7 +1069,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
 &lt;body data-brand="eip"&gt;</code></pre>
       <div class="row" style="margin:0.6rem 0 0.2rem">
         <calcite-button appearance="solid" kind="brand" scale="s" icon-start="copy-to-clipboard" id="copyTokens">Copy trpa-tokens.css</calcite-button>
-        <calcite-button appearance="outline" kind="brand" scale="s" icon-start="file-code" href="../assets/trpa-tokens.css" target="_blank" rel="noopener">Open the file</calcite-button>
+        <calcite-button appearance="outline" kind="brand" scale="s" icon-start="file-code" href="../../assets/trpa-tokens.css" target="_blank" rel="noopener">Open the file</calcite-button>
         <span class="note" id="copyTokensNote"></span>
       </div>
       <h3>Semantic tokens</h3>
@@ -1254,7 +1255,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     pre.appendChild(b);
   });
   $('copyTokens').addEventListener('click', async () => {
-    try { const css = await (await fetch('../assets/trpa-tokens.css')).text(); await navigator.clipboard.writeText(css); $('copyTokensNote').textContent = `Copied ${css.split('\n').length} lines.`; }
+    try { const css = await (await fetch('../../assets/trpa-tokens.css')).text(); await navigator.clipboard.writeText(css); $('copyTokensNote').textContent = `Copied ${css.split('\n').length} lines.`; }
     catch (err) { $('copyTokensNote').textContent = 'Copy failed. Open the file and copy it from there.'; }
   });
 
@@ -1282,7 +1283,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
 
   /* ── Site categories and app grid from apps.json ── */
   let gridApi = null, allApps = [];
-  fetch('../apps.json').then(r => r.json()).then(reg => {
+  fetch('../../apps.json').then(r => r.json()).then(reg => {
     const cats = reg.categories || [];
     $('catRow').innerHTML = cats.map(c => `<span class="cat-pill" style="--c:${c.color}">${c.name}<code>${c.color}</code></span>`).join('');
     const catName = Object.fromEntries(cats.map(c => [c.slug, c.name]));

@@ -247,7 +247,7 @@
       "id": "eippriorities",
       "title": "EIP Funding Priorities",
       "category": "eip",
-      "url": "eip/funding-priorities.html",
+      "url": "qa/eip/funding-priorities.html",
       "thumbnail": "assets/thumbs/eip-priorities.svg",
       "description": "Build the EIP priority lists together: working groups mark projects Priority 1, 2, or 3 with a funding request on a Lake Tahoe Restoration Act (LTRA) list and an Other list, picks combine across reviewers, and the result exports in the master sheet layout.",
       "tags": [
@@ -338,7 +338,7 @@
       "id": "smokemap-next",
       "title": "Smoke Forecast and Air Quality",
       "category": "monitoring",
-      "url": "monitoring/smoke-map.html",
+      "url": "qa/monitoring/smoke-map.html",
       "thumbnail": "assets/thumbs/smokemap-beta.svg",
       "description": "Prototype replacement for the 48-hour smoke forecast, rebuilt on the current ArcGIS Maps SDK with live standalone layers in place of a stored web map. Adds evacuation zones, satellite hot spots and smoke plumes, and the hourly AirNow air quality surface alongside monitors and low-cost sensors.",
       "tags": [
@@ -353,7 +353,7 @@
       "id": "parcelexplorer",
       "title": "Parcel Change Explorer",
       "category": "permitting",
-      "url": "permitting/parcel-explorer.html",
+      "url": "qa/permitting/parcel-explorer.html",
       "thumbnail": "assets/thumbs/parcel-explorer.svg",
       "description": "Follow any parcel from 2012 to today: residential units, tourist accommodation units, commercial floor area, zoning, and land use by year, with the current assessor record. Compare two years to build and download a parcel-level change table.",
       "tags": [
@@ -367,7 +367,7 @@
       "id": "publicnotice",
       "title": "Public Notice List",
       "category": "permitting",
-      "url": "permitting/public-notice.html",
+      "url": "qa/permitting/public-notice.html",
       "thumbnail": "assets/thumbs/public-notice.svg",
       "description": "Build the owner mailing list for a public notice. Pick the subject parcels, set a notice distance, review who is inside it, and export a CSV, Avery mailing labels, and a map of the notice area.",
       "tags": [
@@ -381,7 +381,7 @@
       "id": "eiplocator",
       "title": "Project Locator",
       "category": "eip",
-      "url": "eip/locator.html",
+      "url": "qa/eip/locator.html",
       "thumbnail": "assets/thumbs/eip-locator.png",
       "description": "Make consistent, branded locator maps for presentations and reports. Search an address, APN, or EIP project, pick a style and layout, and export a PowerPoint slide or PNG.",
       "tags": [
@@ -405,7 +405,7 @@
       "id": "storymaps",
       "title": "Story Map Gallery",
       "category": "general",
-      "url": "storymaps/",
+      "url": "qa/storymaps/",
       "thumbnail": "assets/thumbs/storymaps.png",
       "description": "Gallery of narrative story maps published by TRPA on ArcGIS Online. Loads live from TRPA's organization, newest first.",
       "tags": [
@@ -417,7 +417,7 @@
       "id": "surveys",
       "title": "Survey Gallery",
       "category": "general",
-      "url": "surveys/",
+      "url": "qa/surveys/",
       "thumbnail": "assets/thumbs/surveys.svg",
       "description": "Public surveys and feedback forms published by TRPA with ArcGIS Survey123. Loads live from TRPA's organization, open surveys first.",
       "tags": [
@@ -441,7 +441,7 @@
       "id": "designsystem",
       "title": "Design System",
       "category": "general",
-      "url": "general/design-system.html",
+      "url": "qa/general/design-system.html",
       "thumbnail": "assets/thumbs/design-system.svg",
       "description": "Colors, type, components, and page patterns behind TRPA web tools, with live specimens that switch between the agency, Environmental Improvement Program (EIP), and Tahoe Living brands. Includes the shared token stylesheet.",
       "tags": [
@@ -455,7 +455,7 @@
       "id": "datainventory",
       "title": "Tahoe Data Inventory",
       "category": "data",
-      "url": "data/data-inventory.html",
+      "url": "qa/data/data-inventory.html",
       "thumbnail": "assets/thumbs/data-inventory.png",
       "description": "Searchable inventory of every data asset across Tahoe Open Data, LT Info, TRPA REST services, and eight partner agencies. Rebuilt automatically each month.",
       "tags": [
@@ -468,7 +468,7 @@
       "id": "opendatapolicy",
       "title": "Open Data Policy and Developer Guide",
       "category": "data",
-      "url": "data/open-data-policy.html",
+      "url": "qa/data/open-data-policy.html",
       "thumbnail": "assets/thumbs/open-data-policy.png",
       "description": "How to use and access data published on tahoeopendata.org, including attribution, delivery channels, and developer examples.",
       "tags": [

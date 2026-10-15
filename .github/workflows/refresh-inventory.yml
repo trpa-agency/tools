@@ -27,16 +27,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # -I ignores the generated-timestamp line: no PR when only the date moved
-          if git diff -I '^{"generated' --quiet data/data-inventory.json; then
+          if git diff -I '^{"generated' --quiet qa/data/data-inventory.json; then
             echo "Inventory unchanged, nothing to do."
-            git checkout -- data/data-inventory.json
+            git checkout -- qa/data/data-inventory.json
             exit 0
           fi
           BRANCH="inventory-refresh-$(date -u +%Y-%m)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B "$BRANCH"
-          git add data/data-inventory.json
+          git add qa/data/data-inventory.json
           git commit -m "Refresh data inventory ($(date -u '+%Y-%m-%d'))"
           git push -u origin "$BRANCH" --force
           # One PR per month; if this month's PR is already open, the push above updated it.
