@@ -9,7 +9,7 @@
      2. Semantic tokens  --brand-*, --gray-*, --status-* (what components read)
      3. Calcite mapping  --calcite-*                 (so Calcite components follow the brand)
 
-   Reference page: /qa/general/design-system.html
+   Reference page: /qa/data/design-system.html
    Skill counterparts: trpa-brand, trpa-eip-brand, tahoe-living-brand, trpa-dashboard-stack */
 
 :root {

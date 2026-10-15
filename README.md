@@ -12,7 +12,7 @@ tools/
 ├── assets/
 │   ├── site.css        # Shared styles (TRPA brand)
 │   ├── gallery.js      # Shared gallery renderer (production or QA mode)
-│   ├── trpa-tokens.css # Shared design tokens (see qa/general/design-system.html)
+│   ├── trpa-tokens.css # Shared design tokens (see qa/data/design-system.html)
 │   ├── fonts/          # Self-hosted Open Sans and Lexend Deca
 │   └── thumbs/         # App thumbnails
 ├── planning/           # Planning apps (zoning, housing, shoreline)

@@ -153,34 +153,6 @@
       "beta": true
     },
     {
-      "id": "cccbeis",
-      "title": "CCCB EIS Cumulative Projects",
-      "category": "planning",
-      "url": "https://trpa-agency.github.io/Planning/LongRange/html/CCCB_EIS_Webmap_trpabrand.html",
-      "thumbnail": "assets/thumbs/cccb-eis.svg",
-      "description": "Cumulative project parcels and the five focal scenic viewpoints from the visual analysis in the Cultivating Community, Conserving the Basin (CCCB) Environmental Impact Statement.",
-      "tags": [
-        "Housing",
-        "EIS",
-        "Scenic"
-      ],
-      "beta": true
-    },
-    {
-      "id": "cccbeis-tl",
-      "title": "CCCB EIS Cumulative Projects (Tahoe Living)",
-      "category": "planning",
-      "url": "https://trpa-agency.github.io/Planning/LongRange/html/CCCB_EIS_Webmap_tahoelivingbrand.html",
-      "thumbnail": "assets/thumbs/cccb-eis-tl.svg",
-      "description": "The same cumulative project parcels and focal viewpoints, styled in the Tahoe Living brand for housing and community engagement contexts.",
-      "tags": [
-        "Housing",
-        "EIS",
-        "Tahoe Living"
-      ],
-      "beta": true
-    },
-    {
       "id": "shoreline",
       "title": "Shoreline Plan Map",
       "category": "planning",
@@ -394,8 +366,8 @@
     {
       "id": "eiplocator",
       "title": "Project Locator",
-      "category": "eip",
-      "url": "qa/eip/locator.html",
+      "category": "general",
+      "url": "qa/general/locator.html",
       "thumbnail": "assets/thumbs/eip-locator.png",
       "description": "Make consistent, branded locator maps for presentations and reports. Search an address, APN, or EIP project, pick a style and layout, and export a PowerPoint slide or PNG.",
       "tags": [
@@ -452,20 +424,6 @@
       "external": true
     },
     {
-      "id": "designsystem",
-      "title": "Design System",
-      "category": "general",
-      "url": "qa/general/design-system.html",
-      "thumbnail": "assets/thumbs/design-system.svg",
-      "description": "Colors, type, components, and page patterns behind TRPA web tools, with live specimens that switch between the agency, Environmental Improvement Program (EIP), and Tahoe Living brands. Includes the shared token stylesheet.",
-      "tags": [
-        "Design",
-        "Branding",
-        "Developers"
-      ],
-      "beta": true
-    },
-    {
       "id": "datainventory",
       "title": "Tahoe Data Inventory",
       "category": "data",
@@ -487,6 +445,20 @@
       "description": "How to use and access data published on tahoeopendata.org, including attribution, delivery channels, and developer examples.",
       "tags": [
         "Open Data",
+        "Developers"
+      ],
+      "beta": true
+    },
+    {
+      "id": "designsystem",
+      "title": "Design System",
+      "category": "data",
+      "url": "qa/data/design-system.html",
+      "thumbnail": "assets/thumbs/design-system.svg",
+      "description": "Colors, type, components, and page patterns behind TRPA web tools, with live specimens that switch between the agency, Environmental Improvement Program (EIP), and Tahoe Living brands. Includes the shared token stylesheet.",
+      "tags": [
+        "Design",
+        "Branding",
         "Developers"
       ],
       "beta": true
