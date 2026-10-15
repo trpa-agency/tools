@@ -350,6 +350,20 @@
       "beta": true
     },
     {
+      "id": "currents",
+      "title": "Lake Tahoe Currents",
+      "category": "monitoring",
+      "url": "https://trpa-agency.github.io/Monitoring/Currents/",
+      "thumbnail": "assets/thumbs/currents.png",
+      "description": "Surface currents and water temperature across Lake Tahoe, animated from the UC Davis Tahoe Environmental Research Center (TERC) lake model. Scrub a three-week archive and forecast refreshed daily, pin a probe to follow one spot, and compare with Lake Tahoe Airport winds.",
+      "tags": [
+        "Lake Tahoe",
+        "Currents",
+        "Water Temperature"
+      ],
+      "beta": true
+    },
+    {
       "id": "parcelexplorer",
       "title": "Parcel Change Explorer",
       "category": "permitting",
