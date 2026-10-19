@@ -580,8 +580,8 @@
       <div id="sendLists"></div>
       <div id="sendModeWrap" hidden style="margin:0.4rem 0 0.6rem">
         <div class="send-h">You have sent picks before</div>
-        <label class="toggle" style="margin-bottom:0.25rem"><input type="radio" name="sendMode" value="replace" checked /> <span>Replace what I sent before with the picks above</span></label>
-        <label class="toggle"><input type="radio" name="sendMode" value="add" /> <span id="sendAddLabel">Add the picks above to what I sent before</span></label>
+        <label class="toggle" style="margin-bottom:0.25rem"><input type="radio" name="sendMode" value="add" checked /> <span id="sendAddLabel">Add the picks above to what I sent before</span></label>
+        <label class="toggle"><input type="radio" name="sendMode" value="replace" /> <span>Replace what I sent before with the picks above</span></label>
       </div>
       <p class="fine" id="sendNote"></p>
       <p class="send-err" id="sendErr" hidden></p>
@@ -607,8 +607,8 @@
           Sending again with the same email replaces what you sent before, or, if you choose <em>Add</em> in the confirmation, brings the earlier
           picks along with the new ones. <em>Load them</em> under your email pulls your earlier picks into the browser to edit first.</li>
         <li><strong>Picks received.</strong> Everyone whose picks have arrived is listed in the panel. Click a name to see only that reviewer's
-          picks on the current list, with their priority, request, and note in a <em>Their pick</em> column; click again, or <em>Show All Projects</em>, to go back.</li>
-        <li><strong>How picks combine.</strong> For each project the tool counts how many reviewers called it Priority 1, Priority 2, and
+          picks on the current list, with their priority, request, and note in a <em>Picks Received</em> column; click again, or <em>Show All Projects</em>, to go back.</li>
+        <li id="aboutCombine"><strong>How picks combine.</strong> For each project the tool counts how many reviewers called it Priority 1, Priority 2, and
           Priority 3. The ranking is by Priority 1 votes, then Priority 2, then Priority 3, then name. <em>Group priority</em> is the priority most
           reviewers gave (ties go to the higher priority); <em>Group request</em> is the median of their requests; <em>Working group</em> lists
           every group whose reviewers picked it. Projects nobody picked have no rank. The
@@ -693,8 +693,11 @@
     const CRIT_BY_S = Object.fromEntries(CRITERIA.map(c => [c.s.toLowerCase(), c.k]));
     // Names used in notes sent before the rename still map to the current criterion
     Object.assign(CRIT_BY_S, { "federal interest": "federal", "justification of federal interest": "federal" });
-    // Features switched off for the FY28 cycle; flip to true to bring them back. Pins were dropped in the Oct. 2026 review.
-    const FEATURES = { pins: false };
+    // Features switched off for the FY28 cycle; flip to true to bring them back (Oct. 2026 review).
+    // pins: fund-first pins. voting: combining lists across reviewers into Votes, Group priority, Group request, and a vote rank.
+    // With voting off, each working group ranks together in its own meeting and sends one list; the table shows each group's
+    // own priority side by side (Group picks) and orders by working group, then that group's priority.
+    const FEATURES = { pins: false, voting: false };
     const LS_REVIEW = "eipPriorities.review", LS_IMPORTS = "eipPriorities.imports";
     // Survey123 round trip. Send posts a record straight to the survey's public submission layer (the same place
     // the form writes); the form stays as a fallback. Refresh reads everyone's latest submission back from a view
@@ -892,7 +895,11 @@
     function tally(id, l) {
       const t = tallyRows(picksFor(id, l));
       const wgs = [...new Set(t.rows.map(r => r.wg).filter(Boolean))].sort((a, b) => wgRank(a) - wgRank(b) || a.localeCompare(b));
-      return { ...t, wgs, wg: wgs[0] || "" };
+      // Each working group's own priority and request for this project (no blending across groups); rows with no group last
+      const keys = [...wgs, ...(t.rows.some(r => !r.wg) ? [""] : [])];
+      const groups = keys.map(wg => ({ wg, ...tallyRows(t.rows.filter(r => (r.wg || "") === wg)) }));
+      const best = groups.length ? Math.min(...groups.map(g => g.tier)) : null;
+      return { ...t, wgs, wg: wgs[0] || "", groups, best };
     }
     const pickLine = (x) => `${x.who}${x.wg ? ` (${x.wg})` : ""}: Priority ${x.t}${x.req != null ? `, ${fmtUSD(x.req)}` : ""}${x.n ? `. ${x.n}` : ""}`;
     // Normalize raw pick entries from a submission or CSV: one per project, list defaulting to the Tracker hint
@@ -929,7 +936,10 @@
 
     // ───────────────────────── Ranking ─────────────────────────
     // Pinned first, then Priority 1 votes, Priority 2, Priority 3, then name. Projects nobody picked follow, unranked.
-    const rankSort = (a, b) => (pins.has(b.id) - pins.has(a.id)) || (b.tl.v[1] - a.tl.v[1]) || (b.tl.v[2] - a.tl.v[2]) || (b.tl.v[3] - a.tl.v[3]) || a.name.localeCompare(b.name);
+    // With voting off there is no vote count to rank by: picked projects go by the highest priority any group gave them, then name.
+    const rankSort = FEATURES.voting
+      ? (a, b) => (pins.has(b.id) - pins.has(a.id)) || (b.tl.v[1] - a.tl.v[1]) || (b.tl.v[2] - a.tl.v[2]) || (b.tl.v[3] - a.tl.v[3]) || a.name.localeCompare(b.name)
+      : (a, b) => (pins.has(b.id) - pins.has(a.id)) || ((a.tl.best || 9) - (b.tl.best || 9)) || a.name.localeCompare(b.name);
     function recompute() {
       if (!projects.length) return;
       for (const p of projects) p.tl = tally(p.id, listKey);
@@ -1009,10 +1019,11 @@
       "Funding": "Whether the available funding entered in the panel covers this project's request, going down the group ranking. Shown when an amount is set or a project is excluded.",
       "My priority": "Your working group's priority for this project on the list you are viewing: 1 (highest), 2, or 3. Click to set or change; blank removes it. A project can be on one of your two lists, not both.",
       "Request": "Your funding request for this project from this list, in dollars. An orange mark means it differs from what the Tracker shows; one of the two should be updated.",
-      "Their pick": "What the working group selected under Picks received gave this project: priority, request, and note. Click Show All Projects above the table to go back to the full list.",
+      "Picks Received": "What the working group selected under Picks received in the panel gave this project: priority, request, and note. Click Show All Projects above the table to go back to the full list.",
       "Votes": "How many reviewers gave this project Priority 1, 2, and 3 on this list, from everyone whose picks have been sent or imported. Your own count once you send them. Hover for names, requests, and notes.",
       "Group priority": "The priority most reviewers gave this project on this list (ties go to the higher priority), with the number of reviewers who picked it.",
       "Group request": "The median of reviewers' funding requests for this project on this list. Hover for each reviewer's figure.",
+      "Group picks": "Each working group's own priority and request for this project, side by side and in roster order. Groups rank together in their meetings and send one list each; the tool does not combine them into a vote.",
       "Note": "Your note on the project: how the criteria were considered, what changed from last year. Sent with your picks. Tick criteria in the detail card.",
       "Criteria": `How many of the ${CRITERIA.length} LTRA criteria you ticked for this pick. Click the row to tick them.`,
       "Thresholds": "Threshold categories the project reports against on the Tracker.",
@@ -1050,7 +1061,7 @@
           // then the group tallies; Tracker detail follows, most of it hidden until "All columns" (applyColumnVisibility).
           // Default order is the master sheet's: by working group (roster order, projects nobody picked last), then rank within the group.
           // Clicking # alone restores the plain ranking; shift-click adds a second sort.
-          { headerName: "#", field: "rank", width: 54, type: "rightAligned", pinned: pinL, valueFormatter: (p) => p.value ?? "", comparator: (a, b) => (a ?? 1e9) - (b ?? 1e9), sort: "asc", sortIndex: 1, sortingOrder: ["asc", null] },
+          { headerName: "#", field: "rank", width: 54, type: "rightAligned", pinned: pinL, valueFormatter: (p) => p.value ?? "", comparator: (a, b) => (a ?? 1e9) - (b ?? 1e9), sortingOrder: ["asc", null] },
           { headerName: "My priority", colId: "myTier", width: 118, pinned: pinL, sortingOrder: bestFirst,
             valueGetter: (p) => { const pk = myPick(p.data.id); return pk && pk.l === listKey && pk.t ? pk.t : null; },
             valueFormatter: (p) => p.value ? `Priority ${p.value}` : "",
@@ -1071,7 +1082,7 @@
             valueSetter: (p) => setMyPick(p.data.id, { n: String(p.newValue || "") }), cellStyle: mineStyle },
           { headerName: "Project", field: "name", flex: 2, minWidth: 220 },
           { headerName: "Project #", field: "id", width: 112, cellRenderer: (p) => `<a href="${escHtml(p.data.factUrl || p.data.url)}" target="_blank" rel="noopener noreferrer" title="Fact sheet on the EIP Project Tracker">${escHtml(p.value)}</a>` },
-          { headerName: "Their pick", colId: "theirs", width: 190, sortingOrder: bestFirst, valueGetter: (p) => { const fp = focusPicks(); return fp && fp[p.data.id] ? fp[p.data.id].t : null; }, comparator: (a, b) => (a || 9) - (b || 9),
+          { headerName: "Picks Received", colId: "theirs", width: 190, sortingOrder: bestFirst, valueGetter: (p) => { const fp = focusPicks(); return fp && fp[p.data.id] ? fp[p.data.id].t : null; }, comparator: (a, b) => (a || 9) - (b || 9),
             cellRenderer: (p) => { const fp = focusPicks(), pk = fp && fp[p.data.id]; if (!pk) return ""; return `${tierBadge(pk.t)} ${pk.req != null ? fmtFull(pk.req) : '<span class="cov">no request</span>'}${pk.n ? ` <span class="cov" title="${escHtml(pk.n)}">${escHtml(pk.n.length > 40 ? pk.n.slice(0, 38) + "…" : pk.n)}</span>` : ""}`; },
             tooltipValueGetter: (p) => { const fp = focusPicks(), pk = fp && fp[p.data.id]; return pk ? `Priority ${pk.t}${pk.req != null ? ", " + fmtFull(pk.req) : ""}${pk.c && pk.c.length ? "\nCriteria: " + critText(pk.c) : ""}${pk.n ? "\n" + pk.n : ""}` : ""; } },
           { headerName: "Votes", colId: "votes", width: 96, sortingOrder: bigFirst, valueGetter: (p) => p.data.tl.v[1] * 10000 + p.data.tl.v[2] * 100 + p.data.tl.v[3],
@@ -1081,8 +1092,11 @@
             tooltipValueGetter: (p) => p.data.tl.n ? `${p.data.tl.n} reviewer${p.data.tl.n === 1 ? "" : "s"}: ${p.data.tl.v[1]} said Priority 1, ${p.data.tl.v[2]} Priority 2, ${p.data.tl.v[3]} Priority 3` : "" },
           { headerName: "Group request", colId: "gReq", width: 112, type: "rightAligned", sortingOrder: bigFirst, valueGetter: (p) => p.data.tl.med, valueFormatter: (p) => p.value == null ? "" : fmtFull(p.value),
             comparator: (a, b) => (a ?? -1) - (b ?? -1), tooltipValueGetter: (p) => p.data.tl.rows.filter(r => r.req != null).map(r => `${r.who}: ${fmtFull(r.req)}`).join("\n") || "" },
+          { headerName: "Group picks", colId: "gpicks", width: 240, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.groups[0] ? p.data.tl.groups[0].tier : null, comparator: (a, b) => (a || 9) - (b || 9),
+            cellRenderer: (p) => p.data.tl.groups.map(g => `<span style="white-space:nowrap">${escHtml(g.wg ? wgShort(g.wg) : "No group")} ${tierBadge(g.tier)}${g.med != null ? ` ${fmtUSD(g.med)}` : ""}</span>`).join(" &nbsp;"),
+            tooltipValueGetter: (p) => p.data.tl.groups.map(g => `${g.wg || "No working group given"}: Priority ${g.tier}${g.med != null ? ", " + fmtFull(g.med) : ", no request"}`).join("\n") || "No working group has picked this project on this list yet" },
           { headerName: "Working group", colId: "wg", width: 140, valueGetter: (p) => p.data.tl.wg, valueFormatter: (p) => p.data.tl.wgs.map(wgShort).join(", "),
-            tooltipValueGetter: (p) => p.data.tl.wgs.join("; ") || "", sort: "asc", sortIndex: 0, sortingOrder: ["asc", "desc", null], comparator: (a, b) => wgRank(a) - wgRank(b) || String(a).localeCompare(String(b)) },
+            tooltipValueGetter: (p) => p.data.tl.wgs.join("; ") || "", sortingOrder: ["asc", "desc", null], comparator: (a, b) => wgRank(a) - wgRank(b) || String(a).localeCompare(String(b)) },
           { headerName: "Lead implementer", field: "lead", flex: 1.2, minWidth: 160 },
           { headerName: "Tracker LTRA", colId: "tltra", width: 170, valueGetter: (p) => trackerLtra(p.data) },
           { headerName: "Est. cost", field: "cost", ...money },
@@ -1116,7 +1130,8 @@
         onCellValueChanged: (e) => { const col = e.column.getColId(); if (col === "note") gridApi.refreshCells({ rowNodes: [e.node], force: true }); else recompute(); },
         onFilterChanged: () => renderDrawerCount(),
         // Clicking # off the default two-column sort would clear every sort; fall back to plain rank order with the indicator showing
-        onSortChanged: () => { if (!gridApi.getColumnState().some(c => c.sort)) gridApi.applyColumnState({ state: [{ colId: "rank", sort: "asc" }], defaultState: { sort: null } }); },
+        // Clearing every sort falls back to plain rank order (voting) or the default working group order (no voting)
+        onSortChanged: () => { if (!gridApi.getColumnState().some(c => c.sort)) { if (FEATURES.voting) gridApi.applyColumnState({ state: [{ colId: "rank", sort: "asc" }], defaultState: { sort: null } }); else applyDefaultSort(); } },
       });
       $("quickFilter").addEventListener("input", () => gridApi.setGridOption("quickFilterText", $("quickFilter").value));
       $("colsBtn").addEventListener("click", () => { fullView = !fullView; $("colsBtn").classList.toggle("on", fullView); $("colsBtn").textContent = fullView ? "Fewer columns" : "All columns"; applyColumnVisibility(); });
@@ -1143,11 +1158,25 @@
       document.querySelectorAll(".seg[role=radiogroup] button").forEach(b => b.setAttribute("aria-checked", String(b.classList.contains("active"))));
       document.querySelectorAll(".dtabs button").forEach(b => b.setAttribute("aria-selected", String(b.classList.contains("active"))));
     }
+    // Master sheet order: working group in roster order, then rank within it (voting) or that group's own priority (no voting), then name
+    function applyDefaultSort() {
+      if (!gridApi) return;
+      const state = FEATURES.voting
+        ? [{ colId: "wg", sort: "asc", sortIndex: 0 }, { colId: "rank", sort: "asc", sortIndex: 1 }]
+        : [{ colId: "wg", sort: "asc", sortIndex: 0 }, { colId: "gpicks", sort: "asc", sortIndex: 1 }, { colId: "name", sort: "asc", sortIndex: 2 }];
+      gridApi.applyColumnState({ state, defaultState: { sort: null } });
+    }
+    const VOTING_COLS = ["votes", "gTier", "gReq", "rank"];
+    const ABOUT_NO_VOTING = `<strong>How lists come together.</strong> Each working group reviews its projects together in its own meeting and sends one
+      list. The tool does not combine lists into a vote: the <em>Group picks</em> column shows each group's own priority and request side by side,
+      and a project two groups both picked appears under each. The table opens in master sheet order: working group in roster order, then that
+      group's priority, then name, with projects no group has picked after them.`;
     function applyColumnVisibility() {
       if (!gridApi) return;
       const all = gridApi.getAllGridColumns().map(c => c.getColId());
       const show = new Set(fullView ? all : REVIEWER_COLS);
-      if (fullView || reviewerCount() > 0) { show.add("votes"); show.add("gTier"); show.add("gReq"); show.add("wg"); }
+      if (fullView || reviewerCount() > 0) { show.add("votes"); show.add("gTier"); show.add("gReq"); show.add("wg"); show.add("gpicks"); }
+      if (FEATURES.voting) show.delete("gpicks"); else VOTING_COLS.forEach(c => show.delete(c));
       if (focusPicks()) show.add("theirs"); else show.delete("theirs");
       if (fullView || envelope() > 0 || pins.size || excluded.size) { show.add("fund"); show.add("flags"); }
       if (fullView || listKey === "ltra") show.add("tltra");
@@ -1167,7 +1196,7 @@
       recompute(); renderReviewers();
       if (!gridApi) return;
       if (focusWho) gridApi.applyColumnState({ state: [{ colId: "theirs", sort: "asc" }], defaultState: { sort: null } });
-      else gridApi.applyColumnState({ state: [{ colId: "wg", sort: "asc", sortIndex: 0 }, { colId: "rank", sort: "asc", sortIndex: 1 }], defaultState: { sort: null } });
+      else applyDefaultSort();
     }
     function renderFocusBar() {
       const fp = focusPicks(); $("focusBar").hidden = !fp;
@@ -1288,9 +1317,10 @@
             <textarea id="dcNote" class="plain" rows="2" placeholder="How the criteria were considered, what changed from last year">${escHtml(mine.n || "")}</textarea>
           </label>
         </div>
-        <div class="dc-score">${p.rank ? `<b>#${p.rank}</b><span>in the ${LISTS[listKey].long} group ranking</span>` : `<span>${p.excluded ? "Excluded from the list" : "No sent picks on this list yet"}</span>`}
+        <div class="dc-score"><span>${p.excluded ? "Excluded from the list" : p.tl.n ? "" : "No sent picks on this list yet"}</span>
           <span style="margin-left:auto">${fundBadge(p.fund, p.pinned)}</span></div>
-        ${tl.n ? `<div class="dc-group">${tierBadge(tl.tier)} <b>${tl.n}</b> reviewer${tl.n === 1 ? "" : "s"} on the ${LISTS[listKey].long}${tl.med != null ? `, group request ${fmtFull(tl.med)}` : ""}<br>${tl.rows.slice(0, 3).map(s => `${escHtml(s.who)}${s.wg ? ` (${escHtml(wgShort(s.wg))})` : ""} Priority ${s.t}${s.req != null ? ` ${fmtUSD(s.req)}` : ""}${s.note ? ` <span style="color:var(--gray-text)">${escHtml(s.note)}</span>` : ""}`).join("<br>")}${tl.rows.length > 3 ? `<br><span class="cov">and ${tl.rows.length - 3} more; hover Votes in the table for all</span>` : ""}</div>` : ""}
+        ${tl.n && !FEATURES.voting ? `<div class="dc-group"><b>On ${tl.groups.length} working group list${tl.groups.length === 1 ? "" : "s"}</b><br>${tl.groups.map(g => `${escHtml(g.wg || "No working group given")}: ${tierBadge(g.tier)}${g.med != null ? ` ${fmtFull(g.med)}` : " no request"}${g.rows.filter(r => r.note).map(r => ` <span style="color:var(--gray-text)">${escHtml(r.note)}</span>`).join("")}`).join("<br>")}</div>` : ""}
+        ${tl.n && FEATURES.voting ? `<div class="dc-group">${tierBadge(tl.tier)} <b>${tl.n}</b> reviewer${tl.n === 1 ? "" : "s"} on the ${LISTS[listKey].long}${tl.med != null ? `, group request ${fmtFull(tl.med)}` : ""}<br>${tl.rows.slice(0, 3).map(s => `${escHtml(s.who)}${s.wg ? ` (${escHtml(wgShort(s.wg))})` : ""} Priority ${s.t}${s.req != null ? ` ${fmtUSD(s.req)}` : ""}${s.note ? ` <span style="color:var(--gray-text)">${escHtml(s.note)}</span>` : ""}`).join("<br>")}${tl.rows.length > 3 ? `<br><span class="cov">and ${tl.rows.length - 3} more; hover Votes in the table for all</span>` : ""}</div>` : ""}
         <details class="more"><summary>Project details from the Tracker</summary>
         <div class="dc-sub">${escHtml(f.short)} · ${escHtml(p.program)}${p.action ? `<br>${escHtml(p.action)}` : ""}</div>
         <dl class="dc-grid">
@@ -1337,7 +1367,7 @@
       const picked = active.filter(p => p.rank), withReq = picked.filter(p => p.tl.med != null);
       const total = withReq.reduce((a, p) => a + p.tl.med, 0), p1 = picked.filter(p => p.tl.tier === 1), p1Total = p1.filter(p => p.tl.med != null).reduce((a, p) => a + p.tl.med, 0);
       const funded = active.filter(p => p.fund === "funded"), fundedAmt = funded.reduce((a, p) => a + p.amt, 0);
-      const t = [[picked.length, `with sent picks, ${LISTS[listKey].long}`], [p1.length, "group Priority 1"], [fmtAmt(total), "requested, all priorities"], [fmtAmt(p1Total), "requested, Priority 1"],
+      const t = [[picked.length, `with sent picks, ${LISTS[listKey].long}`], [p1.length, FEATURES.voting ? "group Priority 1" : "Priority 1 on a group list"], [fmtAmt(total), "requested, all priorities"], [fmtAmt(p1Total), "requested, Priority 1"],
         [picked.length - withReq.length, "picked without a request"]];
       if (envelope() > 0) t.push([fmtAmt(envelope() * 1e6), "available"], [funded.length, "projects funded", "hi"], [fmtAmt(fundedAmt), "committed", "hi"], [fmtAmt(Math.max(allocate.left, 0)), "left over"]);
       $("tiles").innerHTML = t.map(([v, l, cls]) => `<div class="tile ${cls || ""}"><b>${typeof v === "number" ? v.toLocaleString() : v}</b><span>${l}</span></div>`).join("");
@@ -1462,10 +1492,11 @@
         m.groups.map(g => `<tr><td>${escHtml(g.wg)}</td><td class="r">${fmtFull(g.all)}</td><td class="r">${fmtFull(g.p1)}</td><td class="r">${g.items.length}</td></tr>`).join("") +
         `<tr class="tot"><td>Total</td><td class="r">${fmtFull(m.all)}</td><td class="r">${fmtFull(m.p1)}</td><td class="r">${m.n}${m.n !== m.distinct ? ` <small>(${m.distinct} distinct)</small>` : ""}</td></tr></tbody></table>`;
       const sections = m.groups.map(g => `<section><h2>${escHtml(g.wg)} <small>${g.items.length} project${g.items.length === 1 ? "" : "s"} · ${fmtFull(g.all)} requested, ${fmtFull(g.p1)} in Priority 1</small></h2>
-        <table><thead><tr><th>Priority</th><th>Project</th><th>Implementer</th><th>EIP #</th><th class="r">${SURVEY.round} request</th><th>Reviewers</th><th>Notes</th></tr></thead><tbody>` +
+        <table><thead><tr><th>Priority</th><th>Project</th><th>Implementer</th><th>EIP #</th><th class="r">${SURVEY.round} request</th><th>${FEATURES.voting ? "Reviewers" : "Sent by"}</th><th>Notes</th></tr></thead><tbody>` +
         g.items.map(({ p, tl }) => `<tr><td>${tier(tl.tier)}</td><td><b>${escHtml(p.name.trim())}</b>${p.active ? "" : `<br><em class="warn">${escHtml(p.stage)} on the Tracker, not in planning or implementation</em>`}${critUnion(tl.rows) ? `<br><small>Criteria: ${escHtml(critUnion(tl.rows))}</small>` : ""}${tl.also.length ? `<br><small>Also ${tl.also.map(w => w === "No working group given" ? "picked by a reviewer with no working group" : `on the ${escHtml(wgShort(w))} list`).join(" and ")}</small>` : ""}</td><td>${escHtml(p.lead)}</td><td class="mono">${escHtml(p.id)}</td>` +
           `<td class="r">${tl.med != null ? fmtFull(tl.med) : "<em>none given</em>"}${p.ltraAsk > 0 && listKey === "ltra" ? `<br><small>Tracker: ${fmtFull(p.ltraAsk)}</small>` : ""}</td>` +
-          `<td>${tl.n} <small>(${[1, 2, 3].filter(t => tl.v[t]).map(t => `${tl.v[t]} at Priority ${t}`).join(", ")})</small><br><small>${tl.rows.map(who).join("; ")}</small></td>` +
+          (FEATURES.voting ? `<td>${tl.n} <small>(${[1, 2, 3].filter(t => tl.v[t]).map(t => `${tl.v[t]} at Priority ${t}`).join(", ")})</small><br><small>${tl.rows.map(who).join("; ")}</small></td>`
+            : `<td><small>${tl.rows.map(who).join("; ")}</small></td>`) +
           `<td class="notes">${tl.rows.filter(r => r.note).map(r => `<div><b>${who(r)}:</b> ${escHtml(r.note)}</div>`).join("") || "<em>none</em>"}</td></tr>`).join("") +
         `<tr class="tot"><td colspan="4">Total of all priorities</td><td class="r">${fmtFull(g.all)}</td><td colspan="2"></td></tr>` +
         `<tr class="tot"><td colspan="4">Total of Priority 1 projects</td><td class="r">${fmtFull(g.p1)}</td><td colspan="2"></td></tr></tbody></table></section>`).join("");
@@ -1492,9 +1523,11 @@
 </style></head><body>
 <div class="toolbar"><button onclick="window.print()">Print or save as PDF</button></div>
 <header><h1>${escHtml(title)}</h1><small>Environmental Improvement Program · ${escHtml(when)}</small></header>
-<p class="note">Combined from ${nRev} reviewer list${nRev === 1 ? "" : "s"} with picks on this list, sent through EIP Funding Priorities. Each section is one working group's list: the projects its own reviewers picked, combined across
+<p class="note">${FEATURES.voting ? `Combined from ${nRev} reviewer list${nRev === 1 ? "" : "s"} with picks on this list, sent through EIP Funding Priorities. Each section is one working group's list: the projects its own reviewers picked, combined across
   those reviewers. A project picked by two groups appears in both sections and is marked. Priority is the one most of the group's reviewers gave (ties go to the higher priority); the request is the middle value of their requests,
-  and totals add those values. The Reviewers column shows how many picked the project and at which priority. Criteria are the Lake Tahoe Restoration Act criteria any of them ticked. Working group leads settle the final priority
+  and totals add those values. The Reviewers column shows how many picked the project and at which priority.`
+  : `Built from ${nRev} working group list${nRev === 1 ? "" : "s"} sent through EIP Funding Priorities. Each section is one working group's list, ranked together by the group in its own meeting. A project two groups both picked
+  appears in both sections and is marked. Totals add each group's requests.`} Criteria are the Lake Tahoe Restoration Act criteria ticked for the project. Working group leads settle the final priority
   and dollar figure. Federal agency and project type are not in the Tracker and are to be added by the leads.</p>
 ${summary}${sections}
 <p class="note">EIP Funding Priorities, ${escHtml(location.origin + location.pathname)} · project records from the EIP Project Tracker (eip.laketahoeinfo.org) · ${escHtml(SURVEY.roundLabel)}</p>
@@ -1650,8 +1683,9 @@ ${summary}${sections}
       const extras = earlierExtras(), before = !!myRemote();
       $("sendModeWrap").hidden = !before;
       if (before) {
-        const r = document.querySelector('input[name="sendMode"][value="replace"]'); r.checked = true;
-        const addOpt = document.querySelector('input[name="sendMode"][value="add"]'); addOpt.disabled = !extras.length;
+        // Add is the default (Oct. 2026 review): it keeps everything sent before, so a lead never loses criteria by resending.
+        // With nothing new to bring along it sends the same list as Replace, so it stays selectable.
+        const addOpt = document.querySelector('input[name="sendMode"][value="add"]'); addOpt.disabled = false; addOpt.checked = true;
         $("sendAddLabel").textContent = extras.length ? `Add the picks above to what I sent before (brings along ${extras.length} earlier pick${extras.length === 1 ? "" : "s"} not shown here)` : "Add to what I sent before (everything you sent before is already above)";
       }
       $("sendNote").textContent = (before ? "Only what you send last counts, so either choice becomes your list of record. " : "Only what you send last counts, so you can send again later. ")
@@ -1883,7 +1917,8 @@ ${summary}${sections}
       $("surveyRow").hidden = !surveyOn();
       renderReviewers();
       $("gridLoading").hidden = true; $("grid").hidden = false;
-      initGrid();
+      initGrid(); applyDefaultSort();
+      if (!FEATURES.voting) $("aboutCombine").innerHTML = ABOUT_NO_VOTING;
       const sc = readHash();
       if (sc) applyScenario(sc); else setList("ltra");
       if (SURVEY.viewUrl) loadRemote(false);
