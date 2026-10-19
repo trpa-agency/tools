@@ -1416,19 +1416,33 @@
       $("footStatus").textContent = s;
     }
     $("csvBtn").addEventListener("click", () => {
-      const head = ["List", "Rank", "Project #", "Project", "Group priority", "Priority 1 votes", "Priority 2 votes", "Priority 3 votes", "Reviewers", "Group request (median)", "Working group", "Picked by",
-        "Focus area", "Program", "Action priority", "Lead implementer", "Stage", "Implementation start", "End", "Estimated cost", "Secured funding", "Unfunded need", "Need basis",
-        "Tracker LTRA request", "Tracker LTRA secured", "Requested not secured", "Funding status", "On 5-Year List", "Expenditures to date", "Funding test", "Pinned", "Excluded",
-        "My list", "My priority", "My request", "My criteria", "My note", "Threshold categories", "Funding sources", "Funding requests", "Tags", "Jurisdictions", "Fact sheet"];
-      const lines = [head.map(csvCell).join(",")];
-      for (const p of pool) {
-        const mine = myPick(p.id) || {}, tl = p.tl;
-        lines.push([LISTS[listKey].label, p.rank ?? "", p.id, p.name, tl.tier ?? "", tl.v[1], tl.v[2], tl.v[3], tl.n, tl.med ?? "", tl.wg, tl.rows.map(x => `${x.who} P${x.t}${x.req != null ? " " + fmtUSD(x.req) : ""}`).join("; "),
-          p.focus, p.program, p.action, p.lead, p.stage, p.implStart ?? "", p.end ?? "", p.cost ?? "", p.secured ?? "", p.need ?? "", p.needBasis ?? "",
-          p.ltraAsk ?? "", p.ltraSecured ?? "", p.targeted ?? "", p.fstatus, p.fiveYear ? "yes" : "", p.spent ?? "", p.fund, p.pinned ? "yes" : "", p.excluded ? "yes" : "",
-          mine.t ? LISTS[mine.l].label : "", mine.t ?? "", mine.req != null ? Math.round(mine.req) : "", critText(mine.c), mine.n ?? "", p.thresholds.join(", "), p.funding.join("; "), p.requests, p.tags.join("; "), p.jurisdictions.join("; "), p.factUrl || p.url].map(csvCell).join(","));
-      }
-      const meta = csvQuote(`# EIP Funding Priorities ${todayLocal()} · ${LISTS[listKey].long} · ${SURVEY.roundLabel} · available ${envelope() > 0 ? fmtM(envelope() * 1e6) : "none"} · ${listReviewerCount(listKey)} reviewer lists with picks on this list · ranked by Priority 1, 2, and 3 votes`);
+      // Columns as [header, value(p, tl, mine), shown?]; vote columns follow FEATURES.voting, Pinned follows FEATURES.pins
+      const V = FEATURES.voting, cols = [
+        ["List", () => LISTS[listKey].label, true],
+        ["Rank", (p) => p.rank ?? "", V],
+        ["Project #", (p) => p.id, true], ["Project", (p) => p.name, true],
+        ["Group priority", (p, tl) => tl.tier ?? "", V],
+        ["Priority 1 votes", (p, tl) => tl.v[1], V], ["Priority 2 votes", (p, tl) => tl.v[2], V], ["Priority 3 votes", (p, tl) => tl.v[3], V],
+        ["Reviewers", (p, tl) => tl.n, V], ["Group request (median)", (p, tl) => tl.med ?? "", V],
+        ["Group picks", (p, tl) => tl.groups.map(g => `${g.wg || "No working group given"}: Priority ${g.tier}${g.med != null ? ", " + Math.round(g.med) : ", no request"}`).join("; "), !V],
+        ["Working group", (p, tl) => V ? tl.wg : tl.wgs.join("; "), true],
+        ["Picked by", (p, tl) => tl.rows.map(x => `${x.who} P${x.t}${x.req != null ? " " + fmtUSD(x.req) : ""}`).join("; "), true],
+        ["Focus area", (p) => p.focus, true], ["Program", (p) => p.program, true], ["Action priority", (p) => p.action, true], ["Lead implementer", (p) => p.lead, true],
+        ["Stage", (p) => p.stage, true], ["Implementation start", (p) => p.implStart ?? "", true], ["End", (p) => p.end ?? "", true],
+        ["Estimated cost", (p) => p.cost ?? "", true], ["Secured funding", (p) => p.secured ?? "", true], ["Unfunded need", (p) => p.need ?? "", true], ["Need basis", (p) => p.needBasis ?? "", true],
+        ["Tracker LTRA request", (p) => p.ltraAsk ?? "", true], ["Tracker LTRA secured", (p) => p.ltraSecured ?? "", true], ["Requested not secured", (p) => p.targeted ?? "", true],
+        ["Funding status", (p) => p.fstatus, true], ["On 5-Year List", (p) => p.fiveYear ? "yes" : "", true], ["Expenditures to date", (p) => p.spent ?? "", true],
+        ["Funding test", (p) => p.fund, true], ["Pinned", (p) => p.pinned ? "yes" : "", FEATURES.pins], ["Excluded", (p) => p.excluded ? "yes" : "", true],
+        ["My list", (p, tl, m) => m.t ? LISTS[m.l].label : "", true], ["My priority", (p, tl, m) => m.t ?? "", true], ["My request", (p, tl, m) => m.req != null ? Math.round(m.req) : "", true],
+        ["My criteria", (p, tl, m) => critText(m.c), true], ["My note", (p, tl, m) => m.n ?? "", true],
+        ["Threshold categories", (p) => p.thresholds.join(", "), true], ["Funding sources", (p) => p.funding.join("; "), true], ["Funding requests", (p) => p.requests, true],
+        ["Tags", (p) => p.tags.join("; "), true], ["Jurisdictions", (p) => p.jurisdictions.join("; "), true], ["Fact sheet", (p) => p.factUrl || p.url, true],
+      ].filter(c => c[2]);
+      const lines = [cols.map(c => csvCell(c[0])).join(",")];
+      // Rows in the table's default order: by vote rank (voting) or working group, then that group's priority, then name (no voting)
+      const rows = V ? pool : [...pool].sort((a, b) => wgRank(a.tl.wg) - wgRank(b.tl.wg) || ((a.tl.groups[0] || {}).tier || 9) - ((b.tl.groups[0] || {}).tier || 9) || a.name.localeCompare(b.name));
+      for (const p of rows) { const mine = myPick(p.id) || {}; lines.push(cols.map(c => csvCell(c[1](p, p.tl, mine))).join(",")); }
+      const meta = csvQuote(`# EIP Funding Priorities ${todayLocal()} · ${LISTS[listKey].long} · ${SURVEY.roundLabel} · available ${envelope() > 0 ? fmtM(envelope() * 1e6) : "none"} · ${listReviewerCount(listKey)} ${V ? "reviewer" : "working group"} lists with picks on this list · ${V ? "ranked by Priority 1, 2, and 3 votes" : "ordered by working group, then that group's priority, then name"}`);
       download(`eip-priorities-${listKey}-${todayLocal()}.csv`, "﻿" + lines.join("\r\n") + "\r\n" + meta + "\r\n");
     });
     // The combined list for one of the two lists, grouped by working group as the master sheet is: groups in roster order
