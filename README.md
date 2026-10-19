@@ -25,6 +25,7 @@ tools/
 ├── qa/                 # Apps in development and review, same category structure as the root
 │   ├── index.html      # QA gallery: apps with "beta": true
 │   ├── planning/ ... data/   # QA category pages and the beta apps hosted in this repo
+│   ├── general/mention-monitor/  # TRPA Mention Monitor: app plus its Python collector (trpa_monitor/), see its README
 │   ├── storymaps/      # Story Map Gallery, live from ArcGIS Online
 │   └── surveys/        # Survey Gallery, live from ArcGIS Online; surveys.json groups, describes, and hides forms
 └── docs/               # Planning documents
