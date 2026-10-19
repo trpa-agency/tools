@@ -1365,7 +1365,8 @@
 
     // ───────────────────────── Charts ─────────────────────────
     const PL = { font: { family: "Lexend Deca, system-ui, sans-serif", size: 11, color: C.navy }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
-      margin: { l: 8, r: 8, t: 8, b: 30 }, hoverlabel: { font: { family: "Lexend Deca, system-ui, sans-serif", size: 11 } }, showlegend: false };
+      // Unified hover boxes take the paper color unless told otherwise, and the paper is transparent: give them a white box
+      margin: { l: 8, r: 8, t: 8, b: 30 }, hoverlabel: { bgcolor: "#FFFFFF", bordercolor: "#E1E5EC", font: { family: "Lexend Deca, system-ui, sans-serif", size: 11, color: C.navy } }, showlegend: false };
     const PLC = { displayModeBar: false, responsive: true };
     function renderTiles(active) {
       const picked = active.filter(p => p.rank), withReq = picked.filter(p => p.tl.med != null);
