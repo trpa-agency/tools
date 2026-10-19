@@ -218,7 +218,11 @@
     .start-hint button { margin-left: auto; border: none; background: transparent; cursor: pointer; color: var(--gray-text); font-size: 1.1rem; line-height: 1; padding: 0.2rem 0.5rem; min-width: 28px; min-height: 28px; border-radius: 999px; }
     .start-hint button:hover { color: var(--blue-text); background: #fff; }
     .load-wrap { display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 2rem 1rem; color: var(--gray-text); font-size: 0.8rem; }
-    .charts-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 0.6rem; min-height: 260px; }
+    .charts-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; gap: 0.6rem; min-height: 260px; align-items: start; }
+    .tier-key { display: flex; flex-wrap: wrap; gap: 0.2rem 0.8rem; padding: 0.2rem 0.3rem 0; font-size: 0.68rem; color: var(--gray-text); }
+    .tier-key span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .tier-key i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+    .tier-key .k1 { background: var(--t1); } .tier-key .k2 { background: var(--t2); } .tier-key .k3 { background: var(--t3); }
     .chart-card { background: #fff; border: 1px solid var(--gray-border); border-radius: 10px; padding: 0.4rem 0.5rem 0.2rem; display: flex; flex-direction: column; min-width: 0; }
     .chart-card h3 { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-text); padding: 0 0.3rem; }
     .chart-card .plot { flex: 1 1 auto; min-height: 220px; }
@@ -565,8 +569,8 @@
             <div class="tiles" id="tiles"></div>
             <div class="charts-grid">
               <div class="chart-card"><h3>Where the funding runs out</h3><div class="plot" id="chartCum"></div></div>
-              <div class="chart-card"><h3>Requests by working group and priority</h3><div class="plot" id="chartWg"></div></div>
-              <div class="chart-card"><h3>Requests by lead implementer and priority</h3><div class="plot" id="chartLead"></div></div>
+              <div class="chart-card"><h3>Requests by working group and priority</h3><div class="tier-key" aria-hidden="true"><span><i class="k1"></i>Priority 1</span><span><i class="k2"></i>Priority 2</span><span><i class="k3"></i>Priority 3</span></div><div class="plot" id="chartWg"></div></div>
+              <div class="chart-card"><h3>Requests by lead implementer and priority</h3><div class="tier-key" aria-hidden="true"><span><i class="k1"></i>Priority 1</span><span><i class="k2"></i>Priority 2</span><span><i class="k3"></i>Priority 3</span></div><div class="plot" id="chartLead"></div></div>
             </div>
           </div>
         </div>
@@ -1379,30 +1383,42 @@
       const env = envelope();
       const ranked = active.filter(p => p.rank && p.amt > 0);
       let cum = 0; const xs = [], ys = [], cols = [], txt = [];
-      ranked.forEach((p) => { cum += p.amt; xs.push(p.rank); ys.push(cum / 1e6); cols.push(p.fund === "funded" ? C.green : env > 0 ? "#C9CFD8" : (TIER_COLOR[p.tl.tier] || C.blue));
-        txt.push(`<b>${escHtml(p.name)}</b><br>rank ${p.rank} · Priority ${p.tl.tier} by ${p.tl.n} · ${fmtUSD(p.amt)}${p.tl.med != null ? " requested" : " unfunded need"}<br>cumulative ${fmtM(cum)}`); });
+      const picksText = (tl) => FEATURES.voting ? `Priority ${tl.tier} by ${tl.n}` : tl.groups.map(g => `${escHtml(g.wg ? wgShort(g.wg) : "No group")} P${g.tier}`).join(", ");
+      ranked.forEach((p) => { cum += p.amt; xs.push(p.rank); ys.push(cum / 1e6); cols.push(p.fund === "funded" ? C.green : env > 0 ? "#C9CFD8" : (TIER_COLOR[FEATURES.voting ? p.tl.tier : p.tl.best] || C.blue));
+        txt.push(`<b>${escHtml(p.name.length > 48 ? p.name.slice(0, 46) + "…" : p.name)}</b><br>${picksText(p.tl)} · ${fmtUSD(p.amt)}${p.tl.med != null ? " requested" : " unfunded need"}<br>Running total ${fmtM(cum)}`); });
       const total = ys.length ? ys[ys.length - 1] : 0;
       const cap = env > 0 ? Math.min(total, Math.max(env * 2.5, ys[Math.min(11, ys.length - 1)] || 0)) : total;
       const clipped = total > cap * 1.02;
       const shapes = env > 0 ? [{ type: "line", xref: "paper", x0: 0, x1: 1, y0: env, y1: env, line: { color: C.orange, width: 2, dash: "dash" } }] : [];
       const ann = env > 0 ? [{ xref: "paper", x: 1, y: env, text: `available ${fmtM(env * 1e6)}`, showarrow: false, xanchor: "right", yanchor: "bottom", font: { color: C.orange, size: 10 } }] : [];
       if (clipped) ann.push({ xref: "paper", yref: "paper", x: 0.02, y: 0.98, text: `axis capped; the full ranking reaches ${fmtM(total * 1e6)}`, showarrow: false, xanchor: "left", yanchor: "top", font: { size: 10, color: "#5F6B7E" } });
-      Plotly.react("chartCum", [{ type: "bar", x: xs, y: ys, marker: { color: cols }, hovertext: txt, hoverinfo: "text", textposition: "none" }],
-        { ...PL, shapes, annotations: ann, bargap: 0.1, xaxis: { title: { text: ranked.length ? "picked projects, in group order" : "no picked projects yet", font: { size: 10, color: "#5F6B7E" } }, showgrid: false, zeroline: false },
+      Plotly.react("chartCum", [{ type: "bar", x: xs, y: ys, marker: { color: cols }, hovertext: txt, hovertemplate: "%{hovertext}<extra></extra>", textposition: "none", name: "" }],
+        { ...PL, hovermode: "x unified", shapes, annotations: ann, bargap: 0.1,
+          xaxis: { title: { text: ranked.length ? (FEATURES.voting ? "picked projects, in rank order" : "picked projects, highest priority first") : "no picked projects yet", font: { size: 10, color: "#5F6B7E" } }, showgrid: false, zeroline: false, hoverformat: "d" },
           yaxis: { ticksuffix: "M", tickprefix: "$", gridcolor: "#EEF1F5", zeroline: false, automargin: true, range: [0, (cap || 1) * 1.08] } }, PLC);
-      const picked = active.filter(p => p.rank && p.tl.med != null);
+      const picked = active.filter(p => p.rank);
+      // Each stack adds requests at their priority. With voting off, every working group's own pick counts under that group's priority
+      // (the same way the master sheet totals add group lists); with voting on, the blended group priority and median.
+      const parts = (p) => FEATURES.voting ? (p.tl.med != null ? [{ wg: p.tl.wg, t: p.tl.tier, amt: p.tl.med }] : [])
+        : p.tl.groups.filter(g => g.med != null).map(g => ({ wg: g.wg, t: g.tier, amt: g.med }));
       const stackBy = (keyFn, labelFn, top) => {
         const agg = {};
-        for (const p of picked) { const k = keyFn(p); agg[k] = agg[k] || { 1: 0, 2: 0, 3: 0 }; agg[k][p.tl.tier] += p.tl.med; }
+        for (const p of picked) for (const x of parts(p)) { const k = keyFn(p, x); agg[k] = agg[k] || { 1: 0, 2: 0, 3: 0 }; agg[k][x.t] += x.amt; }
         let keys = Object.keys(agg).sort((a, b) => (agg[b][1] + agg[b][2] + agg[b][3]) - (agg[a][1] + agg[a][2] + agg[a][3])); if (top) keys = keys.slice(0, top);
         keys.reverse(); const lab = keys.map(labelFn);
-        return [1, 2, 3].map(t => ({ type: "bar", orientation: "h", y: lab, x: keys.map(k => agg[k][t] / 1e6), name: `Priority ${t}`, marker: { color: TIER_COLOR[t] }, hovertemplate: `Priority ${t}: $%{x:.1f}M<extra>%{y}</extra>` }));
+        return [1, 2, 3].map(t => ({ type: "bar", orientation: "h", y: lab, x: keys.map(k => agg[k][t] / 1e6), name: `Priority ${t}`, marker: { color: TIER_COLOR[t] },
+          hovertemplate: `$%{x:.2f}M<extra></extra>` }));
       };
-      // Legend on, so the stacks are not color-only
-      const ax = { ...PL, barmode: "stack", showlegend: true, legend: { orientation: "h", y: 1.08, x: 0, font: { size: 10 } }, margin: { ...PL.margin, t: 26 },
-        xaxis: { ticksuffix: "M", tickprefix: "$", gridcolor: "#EEF1F5", zeroline: false }, yaxis: { automargin: true, tickfont: { size: 10 } } };
-      Plotly.react("chartWg", stackBy(p => p.tl.wg || "No working group given", k => wgShort(k)), ax, PLC);
-      Plotly.react("chartLead", stackBy(p => p.lead, k => k.length > 28 ? k.slice(0, 26) + "…" : k, 12), ax, PLC);
+      // Horizontal bars: the unified hover runs along y, so one tooltip lists all three priorities for the hovered bar.
+      // The priority key is HTML in each card header (.tier-key), so Plotly's legend stays off and can never sit on the bars.
+      const ax = (h) => ({ ...PL, barmode: "stack", hovermode: "y unified", showlegend: false, height: h,
+        margin: { ...PL.margin, t: 6 },
+        xaxis: { ticksuffix: "M", tickprefix: "$", gridcolor: "#EEF1F5", zeroline: false, automargin: true }, yaxis: { automargin: true, tickfont: { size: 10 } } });
+      const wgTraces = stackBy((p, x) => x.wg || "No working group given", k => wgShort(k));
+      const leadTraces = stackBy((p) => p.lead, k => k.length > 24 ? k.slice(0, 22) + "…" : k, 12);
+      const hFor = (traces) => Math.max(220, 50 + 22 * (traces[0] ? traces[0].y.length : 0));   // about 22 px a bar, so 12 implementers are not squeezed
+      Plotly.react("chartWg", wgTraces, ax(hFor(wgTraces)), PLC);
+      Plotly.react("chartLead", leadTraces, ax(hFor(leadTraces)), PLC);
     }
 
     // ───────────────────────── Status + exports ─────────────────────────
