@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="eip">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMP Mapping Tool | Lake Tahoe BMPs</title>
+  <meta name="description" content="Map of BMP certificate status, area-wide stormwater treatments, TMDL catchments, and APN labels for the Lake Tahoe Region. Find a parcel by APN, address, or catchment; select parcels by catchment, area-wide project, or a drawn area; export the selection." />
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+  <link rel="stylesheet" href="assets/fonts/fonts.css" />
+  <link rel="stylesheet" href="assets/trpa-tokens.css" />
+
+  <!-- Calcite Design System 5.0 -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+  <!-- AG Grid before the ArcGIS SDK: once Dojo defines an AMD loader, UMD bundles register as anonymous modules -->
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
+  <!-- ArcGIS Maps SDK, last -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.31/"></script>
+  <!-- Shared helpers: BMP.query() (fetch with the JSONP fallback for the office network), BMP.config -->
+  <script src="assets/site.js" defer></script>
+
+  <style>
+    :root {
+      --gray-text: #5B6677;
+      --panel-w: clamp(300px, 26vw, 380px);
+      --shadow: 0 2px 10px rgba(11,31,65,0.18);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+    html, body { height: 100%; font-family: var(--brand-font); color: var(--brand-dark); background: var(--gray-bg); overflow: hidden; }
+    body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+    a { color: var(--brand-primary-text); }
+    :focus-visible { outline: 3px solid var(--brand-accent); outline-offset: 2px; }
+
+    /* ── Header ── */
+    #appHeader {
+      flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0.45rem 1rem; background: var(--brand-dark); color: #fff; z-index: 20;
+      box-shadow: 0 2px 8px rgba(11,31,65,0.3);
+    }
+    .hdr-brand { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: #fff; min-width: 0; }
+    .hdr-brand img { height: 30px; width: auto; filter: brightness(0) invert(1); }
+    .htitle { display: flex; flex-direction: column; line-height: 1.1; border-left: 1px solid rgba(255,255,255,0.25); padding-left: 0.8rem; }
+    .hagency { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--eip-green); }
+    .hname { font-size: 1rem; font-weight: 700; }
+    .hdr-links { display: flex; align-items: center; gap: 0.15rem; }
+    .hdr-links calcite-button { --calcite-color-text-1: #fff; --calcite-color-text-3: #fff; }
+    .hdr-links .lbl { display: none; }
+    @media (min-width: 900px) { .hdr-links .lbl { display: inline; } }
+    .accent-bar { flex: 0 0 4px; background: linear-gradient(90deg, var(--eip-blue) 0 60%, var(--eip-green) 60% 85%, var(--eip-orange) 85%); }
+
+    /* ── Body: panel + map ── */
+    #appBody { flex: 1 1 auto; display: flex; min-height: 0; position: relative; }
+    #sidePanel {
+      flex: 0 0 var(--panel-w); background: var(--white); border-right: 1px solid var(--gray-border);
+      display: flex; flex-direction: column; min-height: 0; overflow: hidden;
+    }
+    #panelScroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 0.9rem 1rem 1.2rem; display: flex; flex-direction: column; gap: 1.1rem; }
+    body.panel-collapsed #sidePanel { display: none; }
+    #panelToggle {
+      flex: 0 0 18px; border: none; border-right: 1px solid var(--gray-border); background: var(--white);
+      cursor: pointer; color: var(--gray-text); padding: 0;
+    }
+    #panelToggle:hover { background: var(--gray-bg); color: var(--brand-primary); }
+    #mapWrap { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; min-height: 0; position: relative; }
+    #viewDiv { flex: 1 1 auto; min-height: 0; }
+
+    .panel-sec { display: flex; flex-direction: column; gap: 0.55rem; }
+    .sec-title { display: flex; align-items: center; gap: 0.45rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray-text); }
+    .sec-help { margin: -0.25rem 0 0; font-size: 0.74rem; line-height: 1.45; color: var(--gray-text); }
+    .row { display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap; }
+    .row > calcite-combobox, .row > calcite-select { flex: 1 1 160px; }
+    .layer-list { display: flex; flex-direction: column; gap: 0.35rem; }
+    .layer-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.86rem; }
+    .layer-row .sw { margin-left: auto; }
+    .swatch { width: 18px; height: 12px; border-radius: 2px; flex: none; border: 1px solid rgba(0,0,0,0.15); }
+    #legendHost { font-size: 0.8rem; }
+    #legendHost .esri-legend { background: transparent; padding: 0; }
+    #legendHost .esri-legend__service { padding: 0.25rem 0; }
+
+    /* ── Search box with suggestions ── */
+    .search-wrap { position: relative; }
+    .search-box { display: flex; align-items: center; gap: 0.5rem; background: var(--gray-bg); border: 1.5px solid var(--gray-border); border-radius: 999px; padding: 0.3rem 0.8rem; }
+    .search-box:focus-within { border-color: var(--brand-primary); background: #fff; }
+    .search-box calcite-icon { color: var(--brand-primary); flex-shrink: 0; }
+    .search-box input { flex: 1; border: none; outline: none; background: transparent; font-family: var(--brand-font); font-size: 0.92rem; color: var(--brand-dark); padding: 0.25rem 0; min-width: 0; }
+    .search-box input::placeholder { color: var(--gray-text); }
+    .search-clear { border: none; background: transparent; cursor: pointer; color: var(--gray-text); padding: 0.2rem; border-radius: 999px; display: none; line-height: 0; }
+    .search-clear:hover { background: var(--gray-border); }
+    .suggest-list { position: absolute; top: calc(100% + 5px); left: 0; right: 0; z-index: 60; background: #fff; border-radius: 10px; box-shadow: var(--shadow); max-height: 320px; overflow-y: auto; display: none; }
+    .suggest-list.open { display: block; }
+    .suggest-group { padding: 0.4rem 0.85rem 0.15rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray-text); border-bottom: 1px solid #eef1f5; }
+    .suggest-item { padding: 0.5rem 0.85rem; cursor: pointer; border-bottom: 1px solid #eef1f5; display: flex; flex-direction: column; gap: 1px; }
+    .suggest-item:last-child { border-bottom: none; }
+    .suggest-item:hover, .suggest-item.active { background: var(--gray-bg); }
+    .s-primary { font-size: 0.86rem; font-weight: 600; }
+    .s-secondary { font-size: 0.72rem; color: var(--gray-text); }
+    .suggest-empty, .suggest-warn { padding: 0.6rem 0.85rem; font-size: 0.78rem; color: var(--gray-text); }
+    .suggest-warn { color: #9C3E27; background: #fdf3ea; }
+
+    /* ── Selection summary ── */
+    .sel-summary { display: none; flex-direction: column; gap: 0.45rem; padding: 0.7rem 0.85rem; border-radius: 10px; background: var(--brand-primary-light); font-size: 0.84rem; }
+    .sel-summary.show { display: flex; }
+    .sel-summary strong { font-size: 1rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.1rem 0.55rem; border-radius: 999px; font-size: 0.74rem; font-weight: 600; border: 1px solid transparent; white-space: nowrap; }
+    .chip-cert { background: var(--eip-green-light); color: #2F6B13; border-color: #CDE8BD; }
+    .chip-source { background: #FFF4CC; color: #735A00; border-color: #F0E1A0; }
+    .chip-none { background: var(--gray-bg); color: var(--gray-text); border-color: var(--gray-border); }
+    .chip-info { background: var(--eip-blue-light); color: var(--eip-blue-text); border-color: #BFE0F3; }
+    .sel-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .status-line { font-size: 0.74rem; color: var(--gray-text); min-height: 1em; }
+
+    /* ── Table drawer under the map ── */
+    #drawer { flex: 0 0 auto; height: 0; background: var(--white); border-top: 1px solid var(--gray-border); display: flex; flex-direction: column; transition: height 0.2s; overflow: hidden; }
+    #drawer.open { height: min(42vh, 360px); }
+    .drawer-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.8rem; border-bottom: 1px solid var(--gray-border); font-size: 0.84rem; }
+    .drawer-head strong { font-size: 0.9rem; }
+    .drawer-head .spacer { flex: 1; }
+    #grid { flex: 1 1 auto; min-height: 0; width: 100%; }
+    .ag-chip-cell { display: flex; align-items: center; height: 100%; }
+
+    /* ── Map overlays ── */
+    .map-note { position: absolute; left: 50%; transform: translateX(-50%); top: 0.6rem; z-index: 5; background: rgba(255,255,255,0.95); border-radius: 999px; padding: 0.3rem 0.9rem; font-size: 0.78rem; box-shadow: var(--shadow); color: var(--brand-dark); display: none; }
+    .map-note.show { display: block; }
+    .esri-view .esri-view-surface--touch-none:focus::after { outline: none; }
+    .esri-ui .esri-component { border-radius: 8px; }
+
+    /* ── Phone: panel above the map, shorter ── */
+    @media (max-width: 760px) {
+      :root { --panel-w: 100%; }
+      #appBody { flex-direction: column; }
+      #sidePanel { flex: 0 0 auto; max-height: 44vh; border-right: 0; border-bottom: 1px solid var(--gray-border); }
+      #panelToggle { flex: 0 0 22px; border-right: 0; border-bottom: 1px solid var(--gray-border); }
+      #panelToggle calcite-icon { transform: rotate(-90deg); }
+      body.panel-collapsed #panelToggle calcite-icon { transform: rotate(90deg); }
+      #drawer.open { height: 40vh; }
+      .hdr-links calcite-button:not(#infoBtn):not(#homeLink) { display: none; }
+    }
+    @media print {
+      #appHeader, #sidePanel, #panelToggle, #drawer, .esri-ui { display: none !important; }
+      body, #appBody, #mapWrap, #viewDiv { height: 100% !important; }
+    }
+  </style>
+</head>
+<body>
+  <header id="appHeader">
+    <a class="hdr-brand" href="./" title="Lake Tahoe BMPs home">
+      <img src="assets/img/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program" />
+      <span class="htitle">
+        <span class="hagency">Lake Tahoe BMPs</span>
+        <span class="hname">BMP Mapping Tool</span>
+      </span>
+    </a>
+    <div class="hdr-links">
+      <calcite-button id="searchLink" href="search.html" icon-start="search" appearance="transparent" kind="neutral" scale="s" title="Property BMP Status Search"><span class="lbl">Property search</span></calcite-button>
+      <calcite-button id="ltinfoLink" href="https://parcels.laketahoeinfo.org" target="_blank" rel="noopener" icon-start="parcel" appearance="transparent" kind="neutral" scale="s" title="Parcel details on Lake Tahoe Info"><span class="lbl">LT Info</span></calcite-button>
+      <calcite-button id="shareBtn" icon-start="link" appearance="transparent" kind="neutral" scale="s" title="Copy a link to this map view" label="Copy link to this map"></calcite-button>
+      <calcite-button id="infoBtn" icon-start="information" appearance="transparent" kind="neutral" scale="s" title="About this tool" label="About this tool"></calcite-button>
+      <calcite-button id="homeLink" href="./" icon-start="home" appearance="transparent" kind="neutral" scale="s" title="Lake Tahoe BMPs home" label="Lake Tahoe BMPs home"></calcite-button>
+    </div>
+  </header>
+  <div class="accent-bar"></div>
+
+  <div id="appBody">
+    <aside id="sidePanel" aria-label="Map controls">
+      <div id="panelScroll">
+
+        <section class="panel-sec">
+          <div class="sec-title">Find a parcel or catchment</div>
+          <div class="search-wrap">
+            <div class="search-box">
+              <calcite-icon icon="search" scale="s" aria-hidden="true"></calcite-icon>
+              <input id="searchInput" type="search" placeholder="APN, street address, or catchment name" aria-label="Find a parcel by APN or address, or a catchment by name" autocomplete="off" />
+              <button class="search-clear" id="searchClear" type="button" aria-label="Clear search"><calcite-icon icon="x" scale="s"></calcite-icon></button>
+            </div>
+            <div class="suggest-list" id="suggestList" role="listbox"></div>
+          </div>
+          <p class="sec-help">Type part of an APN (with or without dashes), a street number and name, or a catchment name such as W01. Pick a match to zoom there.</p>
+        </section>
+
+        <section class="panel-sec">
+          <div class="sec-title">Select parcels</div>
+          <calcite-segmented-control id="selMode" scale="s" width="full" aria-label="Selection method">
+            <calcite-segmented-control-item value="catchment" checked>Catchment</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="areawide">Area-wide</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="draw">Draw</calcite-segmented-control-item>
+          </calcite-segmented-control>
+          <div id="modeCatchment" class="row">
+            <calcite-combobox id="catchmentPick" label="Catchment" placeholder="Choose a catchment" selection-mode="single" scale="s" clear-disabled="false"></calcite-combobox>
+            <calcite-button id="runCatchment" scale="s" icon-start="selection">Select</calcite-button>
+          </div>
+          <div id="modeAreawide" class="row" hidden>
+            <calcite-select id="areawidePick" label="Area-wide treatment" scale="s"></calcite-select>
+            <calcite-button id="runAreawide" scale="s" icon-start="selection">Select</calcite-button>
+          </div>
+          <div id="modeDraw" class="row" hidden>
+            <calcite-button id="drawRect" scale="s" icon-start="rectangle" appearance="outline">Rectangle</calcite-button>
+            <calcite-button id="drawPoly" scale="s" icon-start="polygon" appearance="outline">Polygon</calcite-button>
+            <span class="sec-help" style="margin:0">Draw on the map; double-click to finish a polygon.</span>
+          </div>
+          <div class="status-line" id="selStatus"></div>
+          <div class="sel-summary" id="selSummary">
+            <div><strong id="selCount">0 parcels</strong> <span id="selLabel"></span></div>
+            <div class="chips" id="selChips"></div>
+            <div class="sel-actions">
+              <calcite-button id="showTable" scale="s" icon-start="table" appearance="outline">Table</calcite-button>
+              <calcite-button id="exportCsv" scale="s" icon-start="download" appearance="outline">CSV</calcite-button>
+              <calcite-button id="zoomSel" scale="s" icon-start="zoom-to-object" appearance="outline">Zoom</calcite-button>
+              <calcite-button id="clearSel" scale="s" icon-start="x" appearance="outline" kind="neutral">Clear</calcite-button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-sec">
+          <div class="sec-title">Layers</div>
+          <div class="layer-list" id="layerList"></div>
+          <div class="row" style="margin-top:0.3rem">
+            <calcite-select id="basemapPick" label="Basemap" scale="s">
+              <calcite-option value="gray-vector" selected>Light gray</calcite-option>
+              <calcite-option value="satellite">Imagery</calcite-option>
+              <calcite-option value="hybrid">Imagery with labels</calcite-option>
+              <calcite-option value="streets-vector">Streets</calcite-option>
+              <calcite-option value="topo-vector">Topographic</calcite-option>
+            </calcite-select>
+          </div>
+        </section>
+
+        <section class="panel-sec">
+          <div class="sec-title">Legend</div>
+          <div id="legendHost"></div>
+        </section>
+
+        <section class="panel-sec">
+          <div class="sec-title">Export</div>
+          <div class="row">
+            <calcite-button id="exportPng" scale="s" icon-start="image" appearance="outline">Map image</calcite-button>
+            <calcite-button id="printBtn" scale="s" icon-start="print" appearance="outline">Print</calcite-button>
+          </div>
+          <p class="sec-help">Map image saves a PNG of the current view with a title and date. Print uses the browser's print dialog, where Save as PDF is an option.</p>
+        </section>
+
+        <p class="sec-help">Data: TRPA BMP Database (BMP_Status), TMDL catchments, and area-wide treatment projects from maps.trpa.org. Questions: BMP Hotline (775) 589-5202, <a href="mailto:bmp@trpa.gov">bmp@trpa.gov</a>.</p>
+      </div>
+    </aside>
+    <button id="panelToggle" type="button" title="Show or hide the control panel" aria-label="Show or hide the control panel" aria-expanded="true">
+      <calcite-icon icon="chevron-left" scale="s" id="panelToggleIcon"></calcite-icon>
+    </button>
+
+    <div id="mapWrap">
+      <div class="map-note" id="mapNote"></div>
+      <div id="viewDiv" aria-label="Map"></div>
+      <div id="drawer">
+        <div class="drawer-head">
+          <strong id="drawerTitle">Selected parcels</strong>
+          <span class="status-line" id="drawerCount"></span>
+          <span class="spacer"></span>
+          <calcite-button id="drawerCsv" scale="s" icon-start="download" appearance="outline">Download CSV</calcite-button>
+          <calcite-button id="drawerClose" scale="s" icon-start="chevron-down" appearance="transparent" kind="neutral" label="Hide table"></calcite-button>
+        </div>
+        <div id="grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <calcite-dialog id="infoDialog" heading="About the BMP Mapping Tool" width-scale="s" modal>
+    <p style="margin-bottom:0.7rem">The map shows every parcel in the Tahoe Region colored by BMP status, the area-wide water quality treatment projects, TMDL catchments, and APN labels when you zoom in.</p>
+    <ul style="padding-left:1.2rem; display:grid; gap:0.35rem; font-size:0.92rem">
+      <li>Find a parcel by APN or street address, or a catchment by name, and zoom to it.</li>
+      <li>Select parcels by catchment, by area-wide project, or by drawing a rectangle or polygon.</li>
+      <li>Open the selection as a table and download it as CSV (opens in Excel).</li>
+      <li>Click any parcel for its BMP record and a link to print its certificate on Lake Tahoe Info.</li>
+      <li>Turn layers on and off, change the basemap, and save the map as an image or print it.</li>
+    </ul>
+    <p style="margin-top:0.8rem; font-size:0.86rem; color:var(--gray-text)">Replaces the Experience Builder BMP Mapping Tool on gis.trpa.org. Shapefile upload from the old tool is not carried over; contact the BMP Hotline if you need to overlay your own data.</p>
+    <calcite-button slot="footer-end" id="infoClose" scale="s">Close</calcite-button>
+  </calcite-dialog>
+
+  <script>
+  (function () {
+    "use strict";
+    const SVC = "https://maps.trpa.org/server/rest/services/";
+    const PARCELS = SVC + "BMP_Status/MapServer/5";
+    const AREAWIDE = SVC + "BMP_Status/MapServer/6";
+    const BOUNDARY = SVC + "BMP_Status/MapServer/0";
+    const CATCHMENTS = SVC + "Catchments/MapServer/0";
+    const APN_LABELS = SVC + "APN_Labels/MapServer/0";
+    const LAND_CAP = SVC + "DataDownloader_SoilsandHydro/MapServer/9";
+    const PARCEL_FIELDS = ["OBJECTID", "APN", "JURISDICTION", "ParcelStreet", "LandUse", "BMPStatus", "CertNo", "CertDate", "CertReissuedDate",
+      "SourceCertNo", "SourceCertDate", "SiteConstraint", "AreaWide", "AreaWidePlanName", "Catchment", "EvaluationComplete", "Rvkd"];
+    const JURIS = { WA: "Washoe County", CC: "Carson City", DG: "Douglas County", EL: "El Dorado County", PL: "Placer County", CSLT: "City of South Lake Tahoe" };
+    const MAX_SELECT = 2000;
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const sqlEsc = (s) => String(s).replace(/'/g, "''");
+    const MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+    const fmtDate = (s) => { const m = String(s || "").match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/); return m ? `${MONTHS[+m[2] - 1]} ${+m[3]}, ${m[1]}` : (s || ""); };
+    const truthy = (v) => v === 1 || v === "1" || v === "True" || v === true;
+    const addressOf = (a) => (a.ParcelStreet && a.ParcelStreet.trim().toUpperCase() !== "NONE" ? a.ParcelStreet.trim() : "");
+    function statusOf(a) {
+      if (truthy(a.Rvkd)) return { key: "revoked", label: "Revoked", cls: "chip-none" };
+      if (a.BMPStatus === "BMP") return { key: "bmp", label: "BMP Certificate", cls: "chip-cert" };
+      if (a.BMPStatus === "SCO") return { key: "sco", label: "Source Control Certificate", cls: "chip-source" };
+      if (truthy(a.EvaluationComplete)) return { key: "eval", label: "Evaluation on file", cls: "chip-info" };
+      return { key: "none", label: "No certificate", cls: "chip-none" };
+    }
+    // Shared REST helper from site.js (fetch, then JSONP when the office network drops CORS)
+    const query = (url, params) => window.BMP.query(url, params);
+
+    // ── APN patterns: dashed forms for the four county formats
+    function apnPatterns(raw) {
+      const typed = raw.trim().toUpperCase();
+      const digits = typed.replace(/\D/g, "");
+      const out = new Set([typed]);
+      if (digits.length >= 3) {
+        for (const groups of [[3, 3, 2], [3, 3, 3], [4, 2, 3, 3]]) {
+          let s = "", i = 0;
+          for (const g of groups) { if (i >= digits.length) break; s += (s ? "-" : "") + digits.slice(i, i + g); i += g; }
+          out.add(s);
+        }
+      }
+      return [...out].filter(Boolean);
+    }
+
+    let view, parcelsLayer, selLayer, sketch, sketchLayer, gridApi = null;
+    let selection = [];          // attributes of selected parcels
+    let selGraphics = [];        // graphics with geometry (3857)
+    let selExtent = null;
+    let modules = {};
+
+    require([
+      "esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/Graphic",
+      "esri/geometry/Extent", "esri/geometry/Polygon", "esri/widgets/Legend", "esri/widgets/Home", "esri/widgets/ScaleBar",
+      "esri/widgets/Sketch", "esri/widgets/Expand", "esri/core/reactiveUtils"
+    ], function (Map, MapView, FeatureLayer, GraphicsLayer, Graphic, Extent, Polygon, Legend, Home, ScaleBar, Sketch, Expand, reactiveUtils) {
+      modules = { FeatureLayer, Graphic, Extent, Polygon };
+
+      // ── Layers (bottom to top)
+      const boundary = new FeatureLayer({ url: BOUNDARY, title: "TRPA boundary", popupEnabled: false, legendEnabled: false,
+        renderer: { type: "simple", symbol: { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: [11, 31, 65, 0.9], width: 2.5, style: "dash-dot" } } } });
+
+      const landCap = new FeatureLayer({ url: LAND_CAP, title: "Land capability (Bailey)", visible: false, opacity: 0.6, outFields: ["CAPABILITY", "SEZ", "PERCENT_COVERAGE_ALLOWED"],
+        popupTemplate: { title: "Land capability {CAPABILITY}", content: "Allowed coverage: {PERCENT_COVERAGE_ALLOWED} percent. SEZ: {SEZ}." } });
+
+      // Catchment outlines colored by jurisdiction, like the service renderer, labeled at 1:50,000 and closer
+      const jurisColors = { CC: [168, 0, 132], CSLT: [38, 115, 0], DG: [0, 38, 115], EL: [115, 0, 0], PL: [115, 76, 0], WA: [0, 92, 115] };
+      const catchments = new FeatureLayer({ url: CATCHMENTS, title: "TMDL catchments", outFields: ["Name", "JURISDICTION", "PROJECT_NAME"],
+        renderer: { type: "unique-value", field: "JURISDICTION",
+          defaultSymbol: { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: [90, 90, 90, 1], width: 1.5 } },
+          uniqueValueInfos: Object.entries(jurisColors).map(([v, c]) => ({ value: v, label: JURIS[v] || v, symbol: { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: [...c, 1], width: 1.6 } } })) },
+        labelingInfo: [{ labelExpressionInfo: { expression: "$feature.Name" }, minScale: 50000, labelPlacement: "always-horizontal",
+          symbol: { type: "text", color: [120, 0, 0, 1], haloColor: [255, 255, 255, 0.9], haloSize: 1.5, font: { family: "Lexend Deca, Arial", size: 9, weight: "bold" } } }],
+        popupTemplate: { title: "Catchment {Name}", content: "Jurisdiction: {JURISDICTION}. {PROJECT_NAME}" } });
+
+      const areawide = new FeatureLayer({ url: AREAWIDE, title: "Area-wide treatments", opacity: 0.8, outFields: ["Drainage_Area_Name", "Status", "Year_Completed"],
+        renderer: { type: "simple", symbol: { type: "simple-fill", color: [230, 0, 0, 0.08], outline: { color: [200, 0, 0, 1], width: 1.8 } } },
+        labelingInfo: [{ labelExpressionInfo: { expression: "$feature.Drainage_Area_Name" }, minScale: 80000, labelPlacement: "always-horizontal",
+          symbol: { type: "text", color: [160, 0, 0, 1], haloColor: [255, 255, 255, 0.9], haloSize: 1.5, font: { family: "Lexend Deca, Arial", size: 9, weight: "bold" } } }],
+        popupTemplate: { title: "{Drainage_Area_Name}", content: "Area-wide water quality treatment. Status: {Status}. Year completed: {Year_Completed}." } });
+
+      parcelsLayer = new FeatureLayer({ url: PARCELS, title: "Parcels by BMP status", minScale: 36112, outFields: PARCEL_FIELDS,
+        renderer: { type: "unique-value", field: "BMPStatus",
+          defaultSymbol: { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: [110, 110, 110, 0.9], width: 0.5 } },
+          uniqueValueInfos: [
+            { value: "BMP", label: "BMP Certificate", symbol: { type: "simple-fill", color: [0, 132, 168, 0.55], outline: { color: [0, 90, 120, 0.9], width: 0.5 } } },
+            { value: "SCO", label: "Source Control Certificate", symbol: { type: "simple-fill", color: [255, 190, 190, 0.7], outline: { color: [145, 145, 145, 0.9], width: 0.5 } } },
+            { value: "NOBMP", label: "No certificate", symbol: { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: [110, 110, 110, 0.9], width: 0.5 } } }
+          ] },
+        popupTemplate: { title: "APN {APN}", outFields: PARCEL_FIELDS, content: popupContent } });
+
+      const apnLabels = new FeatureLayer({ url: APN_LABELS, title: "APN labels", minScale: 4000, legendEnabled: false, popupEnabled: false, outFields: ["APN"],
+        renderer: { type: "simple", symbol: { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: [0, 0, 0, 0], width: 0 } } },
+        labelingInfo: [{ labelExpressionInfo: { expression: "$feature.APN" }, labelPlacement: "always-horizontal", deconflictionStrategy: "none",
+          symbol: { type: "text", color: [60, 60, 60, 1], haloColor: [255, 255, 255, 0.9], haloSize: 1.2, font: { family: "Lexend Deca, Arial", size: 8 } } }] });
+
+      selLayer = new GraphicsLayer({ title: "Selection", listMode: "hide" });
+      sketchLayer = new GraphicsLayer({ title: "Drawing", listMode: "hide" });
+
+      const map = new Map({ basemap: "gray-vector", layers: [boundary, landCap, catchments, areawide, parcelsLayer, apnLabels, selLayer, sketchLayer] });
+      const basinExtent = new Extent({ xmin: -13400380, ymin: 4689702, xmax: -13315382, ymax: 4768891, spatialReference: { wkid: 3857 } });
+      view = new MapView({ container: "viewDiv", map, extent: basinExtent, popup: { dockEnabled: true, dockOptions: { buttonEnabled: false, breakpoint: false, position: "bottom-right" } }, ui: { components: ["attribution"] } });
+      view.ui.add(["zoom", new Home({ view, viewpoint: { targetGeometry: basinExtent } })], "top-left");
+      view.ui.add(new ScaleBar({ view, unit: "dual" }), "bottom-left");
+      new Legend({ view, container: "legendHost", layerInfos: [{ layer: parcelsLayer }, { layer: areawide }, { layer: catchments }, { layer: landCap }] });
+
+      sketch = new Sketch({ view, layer: sketchLayer, creationMode: "single", availableCreateTools: ["rectangle", "polygon"], visibleElements: { createTools: { point: false, polyline: false, circle: false }, selectionTools: { "lasso-selection": false, "rectangle-selection": false }, settingsMenu: false, undoRedoMenu: false } });
+      sketch.on("create", async (e) => {
+        if (e.state !== "complete") return;
+        const geom = e.graphic.geometry;
+        sketchLayer.removeAll();
+        await selectByGeometry(geom);
+      });
+
+      // Scale hint: parcels draw at 1:36,000 and closer
+      const note = $("mapNote");
+      reactiveUtils.watch(() => view.scale, (s) => {
+        const far = s > 36112;
+        note.textContent = far ? "Zoom in to see parcels and BMP status" : "";
+        note.classList.toggle("show", far && parcelsLayer.visible);
+      }, { initial: true });
+
+      // ── Layer switches
+      const switches = [
+        { layer: parcelsLayer, label: "Parcels by BMP status", swatch: "linear-gradient(90deg,#0084A8 50%,#FFBEBE 50%)" },
+        { layer: apnLabels, label: "APN labels (zoomed in)", swatch: "#fff; border-color:#999" },
+        { layer: areawide, label: "Area-wide treatments", swatch: "#fde0e0; border-color:#c80000" },
+        { layer: catchments, label: "TMDL catchments", swatch: "#fff; border-color:#005C73" },
+        { layer: landCap, label: "Land capability (Bailey)", swatch: "#d9d78c" },
+        { layer: boundary, label: "TRPA boundary", swatch: "#fff; border-color:#0B1F41" }
+      ];
+      $("layerList").innerHTML = switches.map((s, i) => `<label class="layer-row"><span class="swatch" style="background:${s.swatch}"></span><span>${esc(s.label)}</span><calcite-switch class="sw" scale="s" data-i="${i}" ${s.layer.visible ? "checked" : ""} label="${esc(s.label)}"></calcite-switch></label>`).join("");
+      $("layerList").addEventListener("calciteSwitchChange", (e) => { const s = switches[+e.target.dataset.i]; s.layer.visible = e.target.checked; if (s.layer === parcelsLayer) note.classList.toggle("show", view.scale > 36112 && parcelsLayer.visible); });
+      $("basemapPick").addEventListener("calciteSelectChange", (e) => { map.basemap = e.target.selectedOption.value; });
+
+      // ── Popup content: status chips plus links
+      function popupContent(f) {
+        const a = f.graphic.attributes, st = statusOf(a);
+        const rows = [];
+        if (addressOf(a)) rows.push(["Address", addressOf(a)]);
+        rows.push(["Jurisdiction", JURIS[a.JURISDICTION] || a.JURISDICTION || ""]);
+        if (a.LandUse) rows.push(["Land use", a.LandUse]);
+        if (a.CertNo) rows.push(["BMP Certificate no.", String(Math.round(a.CertNo))]);
+        if (a.CertDate) rows.push(["Issued", fmtDate(a.CertDate)]);
+        if (a.CertReissuedDate) rows.push(["Reissued", fmtDate(a.CertReissuedDate)]);
+        if (a.SourceCertNo) rows.push(["Source Control Certificate no.", String(Math.round(a.SourceCertNo))]);
+        if (a.SourceCertDate) rows.push(["Source certificate issued", fmtDate(a.SourceCertDate)]);
+        if (a.Catchment) rows.push(["Catchment", a.Catchment]);
+        if (a.AreaWidePlanName && !/^(unknown)?$/i.test(a.AreaWidePlanName)) rows.push(["Area-wide treatment", a.AreaWidePlanName]);
+        if (a.SiteConstraint === "True") rows.push(["Site constraint", "Yes"]);
+        rows.push(["Evaluation on file", truthy(a.EvaluationComplete) ? "Yes" : "No"]);
+        const div = document.createElement("div");
+        div.innerHTML = `<div class="chips" style="margin-bottom:0.5rem"><span class="chip ${st.cls}">${esc(st.label)}</span></div>
+          <table style="border-collapse:collapse;font-size:0.84rem">${rows.map(([k, v]) => `<tr><td style="color:#5B6677;padding:0.12rem 0.6rem 0.12rem 0">${esc(k)}</td><td style="padding:0.12rem 0">${esc(v)}</td></tr>`).join("")}</table>
+          <p style="margin:0.6rem 0 0;font-size:0.84rem"><a href="https://parcels.laketahoeinfo.org/parcels/${encodeURIComponent(a.APN)}" target="_blank" rel="noopener">${st.key === "bmp" || st.key === "sco" ? "Print certificate on LT Info" : "View parcel on LT Info"}</a> &middot; <a href="search.html?apn=${encodeURIComponent(a.APN)}">Property search</a></p>`;
+        return div;
+      }
+
+      // ── Selection
+      const selSymbol = { type: "simple-fill", color: [241, 96, 34, 0.18], outline: { color: [241, 96, 34, 1], width: 2 } };
+      function setStatus(t) { $("selStatus").textContent = t || ""; }
+      function graphicsFromEsriJson(r) {
+        return (r.features || []).filter((f) => f.geometry && f.geometry.rings).map((f) => new Graphic({ geometry: new Polygon({ rings: f.geometry.rings, spatialReference: { wkid: 3857 } }), attributes: f.attributes }));
+      }
+      async function queryParcelFeatures(params) {
+        // SDK first; on failure (office CORS) the same query as JSONP through BMP.query
+        try {
+          const r = await parcelsLayer.queryFeatures({ ...params, outFields: PARCEL_FIELDS, returnGeometry: true, outSpatialReference: { wkid: 3857 }, maxAllowableOffset: 2, num: MAX_SELECT });
+          return { features: r.features, exceeded: r.exceededTransferLimit };
+        } catch (err) {
+          console.warn("Parcel query failed, retrying as JSONP:", err && err.message);
+          const p = { outFields: PARCEL_FIELDS.join(","), returnGeometry: "true", outSR: "3857", maxAllowableOffset: "2", resultRecordCount: String(MAX_SELECT) };
+          if (params.where) p.where = params.where;
+          if (params.geometry) { p.geometry = JSON.stringify(params.geometry.toJSON()); p.geometryType = "esriGeometryPolygon"; p.inSR = "3857"; p.spatialRel = "esriSpatialRelIntersects"; }
+          const r = await query(PARCELS, p);
+          return { features: graphicsFromEsriJson(r), exceeded: !!r.exceededTransferLimit };
+        }
+      }
+      async function applySelection(features, label, exceeded) {
+        selLayer.removeAll();
+        selGraphics = features.map((f) => new Graphic({ geometry: f.geometry, attributes: f.attributes, symbol: selSymbol }));
+        selLayer.addMany(selGraphics);
+        selection = features.map((f) => f.attributes);
+        selExtent = null;
+        selGraphics.forEach((g) => { const e = g.geometry && g.geometry.extent; if (e) selExtent = selExtent ? selExtent.union(e) : e.clone(); });
+        const counts = { bmp: 0, sco: 0, eval: 0, none: 0, revoked: 0 };
+        selection.forEach((a) => { counts[statusOf(a).key]++; });
+        $("selCount").textContent = `${selection.length.toLocaleString()} parcel${selection.length === 1 ? "" : "s"}`;
+        $("selLabel").textContent = label;
+        $("selChips").innerHTML = [
+          counts.bmp ? `<span class="chip chip-cert">${counts.bmp.toLocaleString()} BMP Certificate</span>` : "",
+          counts.sco ? `<span class="chip chip-source">${counts.sco.toLocaleString()} Source Control</span>` : "",
+          counts.eval ? `<span class="chip chip-info">${counts.eval.toLocaleString()} Evaluation on file</span>` : "",
+          counts.none ? `<span class="chip chip-none">${counts.none.toLocaleString()} No certificate</span>` : "",
+          counts.revoked ? `<span class="chip chip-none">${counts.revoked} Revoked</span>` : ""
+        ].join("");
+        $("selSummary").classList.toggle("show", selection.length > 0);
+        setStatus(exceeded ? `Showing the first ${MAX_SELECT.toLocaleString()} parcels. Narrow the area to see them all.` : (selection.length ? "" : "No parcels in that selection."));
+        if (selExtent) view.goTo(selExtent.clone().expand(1.15), { duration: 500 }).catch(() => {});
+        if (gridApi) { gridApi.setGridOption("rowData", selection); $("drawerCount").textContent = `${selection.length.toLocaleString()} rows`; }
+        if (!selection.length) $("drawer").classList.remove("open");
+      }
+      async function selectWhere(where, label) {
+        setStatus("Selecting parcels...");
+        try { const r = await queryParcelFeatures({ where }); await applySelection(r.features, label, r.exceeded); }
+        catch (err) { console.error(err); setStatus("The parcel service did not respond. Try again in a moment."); }
+      }
+      async function selectByGeometry(geom) {
+        setStatus("Selecting parcels...");
+        try { const r = await queryParcelFeatures({ geometry: geom, spatialRelationship: "intersects" }); await applySelection(r.features, "in the drawn area", r.exceeded); }
+        catch (err) { console.error(err); setStatus("The parcel service did not respond. Try again in a moment."); }
+      }
+      window.__bmpSelectWhere = selectWhere;   // used by the suggestion picker for catchments
+
+      $("runCatchment").addEventListener("click", () => {
+        const v = $("catchmentPick").value;
+        if (!v) { setStatus("Choose a catchment first."); return; }
+        selectWhere(`Catchment = '${sqlEsc(v)}'`, `in catchment ${v}`);
+      });
+      $("runAreawide").addEventListener("click", () => {
+        const v = $("areawidePick").value;
+        if (!v) { setStatus("Choose an area-wide treatment first."); return; }
+        selectWhere(`AreaWidePlanName = '${sqlEsc(v)}'`, `in ${v}`);
+      });
+      $("drawRect").addEventListener("click", () => { sketchLayer.removeAll(); sketch.create("rectangle"); setStatus("Drag a rectangle on the map."); });
+      $("drawPoly").addEventListener("click", () => { sketchLayer.removeAll(); sketch.create("polygon"); setStatus("Click corners on the map; double-click to finish."); });
+      $("selMode").addEventListener("calciteSegmentedControlChange", (e) => {
+        const m = e.target.selectedItem.value;
+        $("modeCatchment").hidden = m !== "catchment"; $("modeAreawide").hidden = m !== "areawide"; $("modeDraw").hidden = m !== "draw";
+        if (m !== "draw") sketch.cancel();
+      });
+      $("clearSel").addEventListener("click", () => { selLayer.removeAll(); sketchLayer.removeAll(); selection = []; selGraphics = []; $("selSummary").classList.remove("show"); $("drawer").classList.remove("open"); setStatus(""); if (gridApi) gridApi.setGridOption("rowData", []); });
+      $("zoomSel").addEventListener("click", () => { if (selExtent) view.goTo(selExtent.clone().expand(1.15)); });
+      $("showTable").addEventListener("click", () => { openDrawer(); });
+      $("drawerClose").addEventListener("click", () => $("drawer").classList.remove("open"));
+      $("exportCsv").addEventListener("click", () => { ensureGrid(); gridApi.exportDataAsCsv({ fileName: "bmp-parcel-selection.csv", allColumns: true }); });
+      $("drawerCsv").addEventListener("click", () => { ensureGrid(); gridApi.exportDataAsCsv({ fileName: "bmp-parcel-selection.csv", allColumns: true }); });
+
+      // ── Table (AG Grid)
+      function ensureGrid() {
+        if (gridApi) return;
+        const theme = agGrid.themeQuartz.withParams({ accentColor: "#007DC3", fontFamily: "Lexend Deca, system-ui, sans-serif", fontSize: 12, headerBackgroundColor: "#F5F7FA", headerFontWeight: 600, borderColor: "#E2E6EC", rowHoverColor: "#E0F0FA" });
+        gridApi = agGrid.createGrid($("grid"), {
+          theme, rowData: selection,
+          columnDefs: [
+            { field: "APN", width: 130 },
+            { colId: "address", headerName: "Address", flex: 1, minWidth: 150, valueGetter: (p) => addressOf(p.data) },
+            { field: "JURISDICTION", headerName: "Jurisdiction", width: 140, valueFormatter: (p) => JURIS[p.value] || p.value || "" },
+            { field: "LandUse", headerName: "Land use", width: 160 },
+            { colId: "status", headerName: "BMP status", width: 180, valueGetter: (p) => statusOf(p.data).label, cellRenderer: (p) => { const s = statusOf(p.data); return `<span class="ag-chip-cell"><span class="chip ${s.cls}">${esc(s.label)}</span></span>`; } },
+            { colId: "certno", headerName: "Cert. no.", width: 100, valueGetter: (p) => p.data.CertNo || p.data.SourceCertNo ? String(Math.round(p.data.CertNo || p.data.SourceCertNo)) : "" },
+            { colId: "issued", headerName: "Issued", width: 120, valueGetter: (p) => fmtDate(p.data.CertDate || p.data.SourceCertDate) },
+            { field: "Catchment", width: 110 },
+            { field: "AreaWidePlanName", headerName: "Area-wide", width: 150, valueFormatter: (p) => /^(unknown)?$/i.test(p.value || "") ? "" : p.value },
+            { colId: "constraint", headerName: "Site constraint", width: 120, valueGetter: (p) => p.data.SiteConstraint === "True" ? "Yes" : "" }
+          ],
+          defaultColDef: { sortable: true, filter: true, resizable: true },
+          rowSelection: { mode: "singleRow", checkboxes: false, enableClickSelection: true },
+          ensureDomOrder: true,
+          getRowId: (p) => String(p.data.OBJECTID),
+          onSelectionChanged: () => { const r = gridApi.getSelectedRows()[0]; if (!r) return; const g = selGraphics.find((x) => x.attributes.OBJECTID === r.OBJECTID); if (g) view.goTo({ target: g.geometry, scale: 2500 }).catch(() => {}); }
+        });
+        $("drawerCount").textContent = `${selection.length.toLocaleString()} rows`;
+      }
+      function openDrawer() { ensureGrid(); $("drawer").classList.add("open"); setTimeout(() => gridApi.sizeColumnsToFit(), 250); }
+
+      // ── Pick lists: catchments (592) and area-wide projects (21)
+      (async () => {
+        try {
+          const r = await query(CATCHMENTS, { where: "1=1", outFields: "Name,JURISDICTION", returnGeometry: "false", orderByFields: "Name", resultRecordCount: "2000" });
+          const seen = new Set();
+          const items = (r.features || []).map((f) => f.attributes).filter((a) => a.Name && !seen.has(a.Name) && seen.add(a.Name));
+          $("catchmentPick").innerHTML = items.map((a) => `<calcite-combobox-item value="${esc(a.Name)}" heading="${esc(a.Name)}" description="${esc(JURIS[a.JURISDICTION] || a.JURISDICTION || "")}"></calcite-combobox-item>`).join("");
+          window.__catchmentNames = items.map((a) => a.Name);
+        } catch (err) { console.warn("catchment list failed", err); }
+        try {
+          const r = await query(AREAWIDE, { where: "1=1", outFields: "Drainage_Area_Name,Status", returnGeometry: "false", orderByFields: "Drainage_Area_Name" });
+          $("areawidePick").innerHTML = `<calcite-option value="">Choose a project</calcite-option>` + (r.features || []).map((f) => f.attributes).map((a) => `<calcite-option value="${esc(a.Drainage_Area_Name)}">${esc(a.Drainage_Area_Name)} (${esc(a.Status || "")})</calcite-option>`).join("");
+        } catch (err) { console.warn("area-wide list failed", err); }
+      })();
+
+      // ── Find: suggestions from parcels (APN or address) and catchments (name)
+      const input = $("searchInput"), list = $("suggestList"), clearBtn = $("searchClear");
+      let suggestTimer = null, activeIdx = -1, items = [];
+      function closeList() { list.classList.remove("open"); list.innerHTML = ""; items = []; activeIdx = -1; }
+      function renderList(groups, warn) {
+        items = [];
+        let html = warn ? `<div class="suggest-warn">${esc(warn)}</div>` : "";
+        groups.forEach((g) => {
+          if (!g.items.length) return;
+          html += `<div class="suggest-group">${esc(g.label)}</div>`;
+          g.items.forEach((it) => { const idx = items.push(it) - 1; html += `<div class="suggest-item" role="option" data-i="${idx}"><span class="s-primary">${esc(it.primary)}</span><span class="s-secondary">${esc(it.secondary)}</span></div>`; });
+        });
+        if (!items.length && !warn) html += `<div class="suggest-empty">No matches. Try fewer words, or the number and street name only.</div>`;
+        list.innerHTML = html; list.classList.add("open");
+      }
+      async function suggest(q) {
+        const t = q.trim();
+        if (t.length < 2) { closeList(); return; }
+        const groups = [];
+        let warn = "";
+        try {
+          const digits = t.replace(/\D/g, "");
+          const isApnLike = digits.length >= 3 && /^[\d-]+$/.test(t);
+          const where = isApnLike
+            ? apnPatterns(t).map((p) => `APN LIKE '${sqlEsc(p)}%'`).join(" OR ")
+            : `UPPER(ParcelStreet) LIKE '%${sqlEsc(t.toUpperCase().replace(/[.,#]/g, ""))}%'`;
+          const r = await query(PARCELS, { where, outFields: "OBJECTID,APN,ParcelStreet,JURISDICTION,BMPStatus", returnGeometry: "false", orderByFields: isApnLike ? "APN" : "ParcelStreet", resultRecordCount: "6" });
+          groups.push({ label: "Parcels", items: (r.features || []).map((f) => ({ kind: "parcel", oid: f.attributes.OBJECTID, primary: f.attributes.APN, secondary: `${addressOf(f.attributes) || "No situs address"} · ${JURIS[f.attributes.JURISDICTION] || ""} · ${statusOf(f.attributes).label}` })) });
+        } catch (err) { warn = "The parcel service is not answering (on the office network this is the known CORS issue)."; }
+        const names = (window.__catchmentNames || []).filter((n) => n.toUpperCase().includes(t.toUpperCase())).slice(0, 5);
+        groups.push({ label: "Catchments", items: names.map((n) => ({ kind: "catchment", name: n, primary: n, secondary: "TMDL catchment, zoom to it or select its parcels" })) });
+        renderList(groups, warn);
+      }
+      async function pick(it) {
+        closeList();
+        if (it.kind === "parcel") {
+          input.value = it.primary;
+          try {
+            const r = await queryParcelFeatures({ where: `OBJECTID = ${Number(it.oid)}` });
+            const f = r.features[0];
+            if (!f) return;
+            selLayer.removeAll(); sketchLayer.removeAll();
+            await applySelection([f], `APN ${it.primary}`);
+            await view.goTo({ target: f.geometry, scale: 2000 }, { duration: 600 });
+            view.openPopup({ features: [new Graphic({ geometry: f.geometry, attributes: f.attributes, layer: parcelsLayer })], location: f.geometry.extent.center });
+          } catch (err) { setStatus("Could not load that parcel."); }
+        } else if (it.kind === "catchment") {
+          input.value = it.name;
+          try {
+            const r = await query(CATCHMENTS, { where: `Name = '${sqlEsc(it.name)}'`, outFields: "Name", returnGeometry: "true", outSR: "3857" });
+            const g = graphicsFromEsriJson(r)[0];
+            if (g) await view.goTo(g.geometry.extent.clone().expand(1.2), { duration: 600 });
+            $("catchmentPick").value = it.name;
+            $("selMode").querySelectorAll("calcite-segmented-control-item").forEach((i) => { i.checked = i.value === "catchment"; });
+            $("modeCatchment").hidden = false; $("modeAreawide").hidden = true; $("modeDraw").hidden = true;
+            setStatus(`Catchment ${it.name}. Press Select to list its parcels.`);
+          } catch (err) { setStatus("Could not load that catchment."); }
+        }
+      }
+      input.addEventListener("input", () => { clearBtn.style.display = input.value ? "block" : "none"; clearTimeout(suggestTimer); suggestTimer = setTimeout(() => suggest(input.value), 220); });
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          if (!items.length) return; e.preventDefault();
+          activeIdx = (activeIdx + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+          list.querySelectorAll(".suggest-item").forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+        } else if (e.key === "Enter") { e.preventDefault(); if (items.length) pick(items[activeIdx >= 0 ? activeIdx : 0]); else suggest(input.value); }
+        else if (e.key === "Escape") closeList();
+      });
+      list.addEventListener("mousedown", (e) => { const el = e.target.closest(".suggest-item"); if (el) { e.preventDefault(); pick(items[+el.dataset.i]); } });
+      input.addEventListener("blur", () => setTimeout(closeList, 150));
+      clearBtn.addEventListener("click", () => { input.value = ""; clearBtn.style.display = "none"; closeList(); input.focus(); });
+
+      // ── Export: map image (view screenshot with a title strip) and print
+      $("exportPng").addEventListener("click", async () => {
+        try {
+          const shot = await view.takeScreenshot({ format: "png", quality: 100 });
+          const img = new Image(); img.src = shot.dataUrl; await img.decode();
+          const pad = 56, c = document.createElement("canvas"); c.width = img.width; c.height = img.height + pad;
+          const ctx = c.getContext("2d");
+          ctx.fillStyle = "#0B1F41"; ctx.fillRect(0, 0, c.width, pad);
+          ctx.fillStyle = "#fff"; ctx.font = "bold 20px 'Lexend Deca', Arial"; ctx.fillText("BMP Mapping Tool", 16, 26);
+          ctx.font = "13px 'Lexend Deca', Arial"; ctx.fillStyle = "#B4CBE8";
+          ctx.fillText(`TRPA Stormwater Management Program · ${new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} · 1:${Math.round(view.scale).toLocaleString()}` + (selection.length ? ` · ${selection.length.toLocaleString()} parcels selected` : ""), 16, 46);
+          ctx.drawImage(img, 0, pad);
+          const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = "bmp-map.png"; a.click();
+        } catch (err) { console.error(err); setStatus("Could not capture the map image."); }
+      });
+      $("printBtn").addEventListener("click", () => window.print());
+
+      // ── Share link: ?apn=, ?catchment=, or the view center and scale
+      $("shareBtn").addEventListener("click", async () => {
+        const c = view.center; const url = `${location.origin}${location.pathname}?x=${c.longitude.toFixed(5)}&y=${c.latitude.toFixed(5)}&scale=${Math.round(view.scale)}`;
+        try { await navigator.clipboard.writeText(url); setStatus("Link copied."); } catch (e) { prompt("Copy this link", url); }
+      });
+
+      // ── Deep links
+      view.when(async () => {
+        const p = new URLSearchParams(location.search);
+        if (p.get("apn")) {
+          input.value = p.get("apn");
+          const where = apnPatterns(p.get("apn")).map((x) => `APN = '${sqlEsc(x)}'`).join(" OR ");
+          try {
+            const r = await queryParcelFeatures({ where });
+            if (r.features[0]) { await applySelection([r.features[0]], `APN ${r.features[0].attributes.APN}`); await view.goTo({ target: r.features[0].geometry, scale: 2000 }); }
+          } catch (e) { setStatus("Could not find that APN."); }
+        } else if (p.get("catchment")) {
+          input.value = p.get("catchment");
+          selectWhere(`Catchment = '${sqlEsc(p.get("catchment"))}'`, `in catchment ${p.get("catchment")}`);
+        } else if (p.get("x") && p.get("y")) {
+          view.goTo({ center: [+p.get("x"), +p.get("y")], scale: +p.get("scale") || 20000 });
+        }
+      });
+    });
+
+    // ── Shell behavior (no SDK dependency)
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggle = $("panelToggle");
+      toggle.addEventListener("click", () => {
+        const collapsed = document.body.classList.toggle("panel-collapsed");
+        toggle.setAttribute("aria-expanded", String(!collapsed));
+        $("panelToggleIcon").icon = collapsed ? "chevron-right" : "chevron-left";
+      });
+      $("infoBtn").addEventListener("click", () => { $("infoDialog").open = true; });
+      $("infoClose").addEventListener("click", () => { $("infoDialog").open = false; });
+      if (window.innerWidth < 760) { /* phone: start with the panel open but short; nothing else */ }
+    });
+  })();
+  </script>
+</body>
+</html>
