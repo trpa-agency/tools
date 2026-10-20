@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 266" width="400" height="266" role="img"
+     aria-label="Mention monitor: an agenda page with TRPA highlighted, an upcoming meeting date, and a news clipping">
+  <!-- Background -->
+  <rect width="400" height="266" fill="#EEF1F5"/>
+
+  <!-- Agenda page -->
+  <rect x="24" y="20" width="200" height="232" rx="6" fill="#FFFFFF" stroke="#DCE2EA"/>
+  <rect x="24" y="20" width="200" height="34" rx="6" fill="#003B71"/>
+  <rect x="24" y="44" width="200" height="10" fill="#003B71"/>
+  <text x="38" y="43" font-family="Open Sans, Arial, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">AGENDA</text>
+  <g fill="#B4CBE8">
+    <rect x="38" y="68"  width="24" height="7" rx="2"/><rect x="68" y="68"  width="120" height="7" rx="2"/>
+    <rect x="68" y="81"  width="96" height="5" rx="2"/>
+    <rect x="38" y="140" width="24" height="7" rx="2"/><rect x="68" y="140" width="110" height="7" rx="2"/>
+    <rect x="68" y="153" width="132" height="5" rx="2"/><rect x="68" y="162" width="84" height="5" rx="2"/>
+    <rect x="38" y="190" width="24" height="7" rx="2"/><rect x="68" y="190" width="100" height="7" rx="2"/>
+    <rect x="68" y="203" width="120" height="5" rx="2"/><rect x="68" y="212" width="70" height="5" rx="2"/>
+  </g>
+  <!-- Highlighted mention -->
+  <rect x="30" y="98" width="188" height="32" rx="4" fill="#FDF3EA" stroke="#E87722" stroke-width="2"/>
+  <rect x="38" y="106" width="24" height="7" rx="2" fill="#B4CBE8"/>
+  <rect x="68" y="104" width="38" height="12" rx="2" fill="#E87722"/>
+  <text x="72" y="114" font-family="Open Sans, Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">TRPA</text>
+  <rect x="112" y="106" width="86" height="7" rx="2" fill="#B4CBE8"/>
+  <rect x="68" y="120" width="104" height="5" rx="2" fill="#B4CBE8"/>
+
+  <!-- Upcoming meeting date -->
+  <rect x="244" y="20" width="132" height="96" rx="6" fill="#FFFFFF" stroke="#DCE2EA"/>
+  <rect x="244" y="20" width="132" height="26" rx="6" fill="#0072CE"/>
+  <rect x="244" y="38" width="132" height="8" fill="#0072CE"/>
+  <text x="310" y="38" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">COMING UP</text>
+  <text x="310" y="88" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="34" font-weight="700" fill="#003B71">22</text>
+  <text x="310" y="106" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="10" font-weight="600" fill="#5A6578">OCT</text>
+
+  <!-- News clipping -->
+  <rect x="244" y="132" width="132" height="120" rx="6" fill="#FFFFFF" stroke="#DCE2EA"/>
+  <text x="256" y="152" font-family="Open Sans, Arial, sans-serif" font-size="10" font-weight="700" fill="#9C3E27">PRESS</text>
+  <rect x="256" y="162" width="108" height="8" rx="2" fill="#003B71"/>
+  <rect x="256" y="175" width="84" height="8" rx="2" fill="#003B71"/>
+  <rect x="256" y="192" width="40" height="34" rx="3" fill="#DCE2EA"/>
+  <g fill="#B4CBE8">
+    <rect x="302" y="192" width="62" height="5" rx="2"/><rect x="302" y="202" width="54" height="5" rx="2"/>
+    <rect x="302" y="212" width="60" height="5" rx="2"/><rect x="302" y="222" width="40" height="5" rx="2"/>
+    <rect x="256" y="234" width="96" height="5" rx="2"/>
+  </g>
+</svg>

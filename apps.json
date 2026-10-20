@@ -412,6 +412,20 @@
       "beta": true
     },
     {
+      "id": "mentionmonitor",
+      "title": "TRPA Mention Monitor",
+      "category": "general",
+      "url": "qa/general/mention-monitor/",
+      "thumbnail": "assets/thumbs/mention-monitor.svg",
+      "description": "Where the Tahoe Regional Planning Agency (TRPA) comes up in Lake Tahoe Region public meetings and press: posted agendas for upcoming meetings, recent agendas and minutes, and news coverage, with department keyword views and a printable summary.",
+      "tags": [
+        "Meetings",
+        "Press",
+        "Agendas"
+      ],
+      "beta": true
+    },
+    {
       "id": "nearmap",
       "title": "Nearmap Imagery",
       "category": "general",
