@@ -6,28 +6,27 @@ Target: `https://bmp.trpa.gov`, replacing `https://www.tahoebmp.org` (ASP.NET on
 
 The site is developed as a beta app in the TRPA Tools repo at `qa/bmp/` and reviewed at `https://trpa-agency.github.io/tools/qa/bmp/` (listed on the QA gallery under Environmental Improvement). Every link inside the site is relative, so the folder can be served from any root.
 
-GitHub Pages allows one custom domain per repository, and the Tools repo's domain is `tools.trpa.gov`. So `bmp.trpa.gov` needs one of:
+**Recommended production home: `https://tools.trpa.gov/bmp/`** (decided Oct. 20, 2026). The site stays in this repo and moves from `qa/bmp/` to `bmp/` at the top level when it is ready, like the other production apps. GitHub Pages allows one custom domain per repository, so `bmp.trpa.gov` becomes a redirect to `tools.trpa.gov/bmp/` rather than a second Pages site. Reasons: one repo and one deploy to maintain, the shared tokens and gallery registry stay in sync, and the domain verification and DNS work already planned for tools.trpa.gov covers it. The trade-off is that the short URL on brochures and the hotline recording will always be a redirect; that is acceptable.
 
-- **Its own repository** (`trpa-agency/bmp`): move the `qa/bmp/` folder there, add a `CNAME` file containing `bmp.trpa.gov`, and a root `404.html` that maps the legacy `.aspx` paths (table in section 3). This is the clean option and the one the rest of this document assumes.
-- **A path under tools.trpa.gov** (`tools.trpa.gov/bmp/`) with `bmp.trpa.gov` redirecting to it from the old server or a redirect service. Simpler to host, but the short URL on brochures would be a redirect forever.
+The alternative, a separate `trpa-agency/bmp` repo with `bmp.trpa.gov` as its own Pages domain, remains possible later because every link inside the folder is relative. Only the footer's TRPA Tools link (`../../`) would need to become absolute.
 
-## 1. Repository and Pages (own-repo option)
+## 1. Promote from qa to production
 
-1. Create `trpa-agency/bmp` (public) and push the `qa/bmp/` contents to `main`, plus `CNAME` and the legacy-path `404.html`.
-2. Settings, Pages: Source "Deploy from a branch", branch `main`, folder `/ (root)`.
-3. The `CNAME` file names `bmp.trpa.gov`; GitHub fills the custom domain field from it.
-4. Once DNS resolves (next section), check "Enforce HTTPS". The certificate issues within an hour of DNS propagating.
-5. Interim URL while DNS is pending: `https://trpa-agency.github.io/bmp/`.
+1. Finish the must-fix items in `IMPROVEMENTS.md` (documents, redirects, agent workflow, owner search, content review).
+2. Move the folder: `git mv qa/bmp bmp` on `mtb-edits`, update the two `apps.json` entries (`bmpsite`, `bmpsearch`, plus `bmpmap` if present) from `qa/bmp/...` to `bmp/...` and drop `"beta": true`, then merge to `main`. Pages publishes within about a minute.
+3. The site is then at `https://trpa-agency.github.io/tools/bmp/` and, once the tools.trpa.gov DNS exists, `https://tools.trpa.gov/bmp/`.
 
-## 2. DNS (DTS request)
+## 2. DNS and the short URL (DTS request)
 
-Ask DTS to add:
+`tools.trpa.gov` first: the CNAME to `trpa-agency.github.io.` and the `CNAME` file in this repo, as described in the TRPA Tools notes. Verify `trpa.gov` for the `trpa-agency` organization while DTS is in the DNS (Organization settings, Pages, Verified domains; GitHub gives a TXT record `_github-pages-challenge-trpa-agency.trpa.gov`), so no one outside the org can claim a `*.trpa.gov` Pages site.
 
-| Record | Host | Value | TTL |
-|---|---|---|---|
-| CNAME | `bmp.trpa.gov` | `trpa-agency.github.io.` | 3600 |
+Then `bmp.trpa.gov` as a redirect. Options, in order of preference:
 
-Recommended first: verify `trpa.gov` for the `trpa-agency` organization (Organization settings, Pages, Verified domains). GitHub gives a TXT record (`_github-pages-challenge-trpa-agency.trpa.gov`) that DTS adds once; after that no one outside the org can claim a `*.trpa.gov` Pages site. The same verification covers `tools.trpa.gov` and `data.trpa.gov`.
+| Option | How |
+|---|---|
+| Redirect on the old tahoebmp.org server | Point `bmp.trpa.gov` (A or CNAME) at the IIS server that hosts tahoebmp.org and add a site binding plus a rewrite rule that 301s every path to `https://tools.trpa.gov/bmp/<mapped path>` (table in section 3). Reuses the server that must redirect tahoebmp.org anyway. |
+| Redirect at the DNS or CDN provider | If TRPA's DNS host offers HTTP redirect records (many do), `bmp.trpa.gov -> https://tools.trpa.gov/bmp/` with no server involved. Path mapping is lost, so the old `.aspx` URLs land on the home page. |
+| A tiny Pages repo | `trpa-agency/bmp` with `CNAME` and a one-file `index.html` plus `404.html` that JavaScript-redirects to `tools.trpa.gov/bmp/` with the legacy path map. Free and path-aware, but one more repo. |
 
 ## 3. Redirect the old site
 
@@ -35,9 +34,11 @@ Keep `tahoebmp.org` alive long enough to redirect. Two parts:
 
 **Pages** (301 to the new site). IIS `web.config` rewrite rules for the old server, or the equivalent on whatever fronts it:
 
+New paths below are relative to `https://tools.trpa.gov/bmp/` (while in QA, `https://trpa-agency.github.io/tools/qa/bmp/`).
+
 | Old | New |
 |---|---|
-| `/`, `/Default.aspx` | `https://bmp.trpa.gov/` |
+| `/`, `/Default.aspx` | `/` |
 | `/BMPs.aspx`, `/BMPS.aspx` | `/get-certified.html` |
 | `/SmallBMPRetro.aspx` | `/small-retrofit-plan.html` |
 | `/BMPProblem.aspx`, `/WhatAreBMPs.aspx`, `/PrescribedBMPs.aspx`, `/*Ex.aspx` | `/about-bmps.html` |
@@ -51,7 +52,7 @@ Keep `tahoebmp.org` alive long enough to redirect. Two parts:
 | `/Contact.aspx` | `/contact.html` |
 | `/bmptoolkit/searchBMP.asp` | `/search.html` (query string `?apn=` is honored) |
 
-A root `404.html` on the new site that maps these paths (a small lookup table in JavaScript keyed on the lowercase legacy path) means a blanket redirect of `tahoebmp.org/* -> bmp.trpa.gov/*` lands users on the right page.
+The Tools repo's root `404.html` can carry the same lookup table (keyed on the lowercase legacy path under `/bmp/`), so a blanket redirect of `tahoebmp.org/* -> tools.trpa.gov/bmp/*` still lands users on the right page.
 
 **Files.** `data/documents.json` has `"docBase": "https://www.tahoebmp.org/"`, so every PDF, DWG, DOC, and XLSX still comes from the old server's `Documents/`, `NRCSDocuments/`, and `documents/` folders. Do not redirect those paths until the files have moved.
 
@@ -81,6 +82,6 @@ Either way the site only changes in one place, `docBase`, plus the `data-doc` li
 
 - Run the `trpa-dashboard-qa` checklist on `search.html` (the only app page).
 - Confirm `BMP_Status/MapServer/5` field names have not changed (`APN`, `ParcelStreet`, `BMPStatus`, `CertNo`, `CertDate`, `SourceCertNo`, `SiteConstraint`, `AreaWide`, `EvaluationComplete`, `Rvkd`).
-- Flip the `bmpsite` and `bmpsearch` entries in `apps.json` from beta to production URLs (category `eip`, alongside the BMP Mapping Tool card).
-- Ask the LT Info product manager to have the Parcel Tracker's "View this Parcel in the BMP Database" link point at `bmp.trpa.gov/search.html?apn=<APN>`.
+- Flip the `bmpsite`, `bmpsearch`, and `bmpmap` entries in `apps.json` from beta to production URLs (category `eip`); retire the gis.trpa.org BMP Mapping Tool card once the new map page replaces it.
+- Ask the LT Info product manager to have the Parcel Tracker's "View this Parcel in the BMP Database" link point at `tools.trpa.gov/bmp/search.html?apn=<APN>`.
 - Update trpa.gov links that point at tahoebmp.org.

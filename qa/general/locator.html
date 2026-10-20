@@ -916,42 +916,61 @@
         return graphicsFromEsriJson(r);
       }
     }
-    // A basin layer rebuilt client-side from a JSONP pull (when the SDK layer can't load)
-    async function clientLayerFromJsonp(FeatureLayer, url, renderer) {
-      const r = await jsonp(url + "/query", { where: "1=1", outFields: "OBJECTID", returnGeometry: "true",
-        outSR: "3857", maxAllowableOffset: "15" });
-      if (r.error) throw new Error(r.error.message || "layer query error");
-      const source = graphicsFromEsriJson(r);
+    // Polygon graphics (3857) → a client-side FeatureLayer that draws from memory.
+    // OBJECTIDs are reassigned so the layer never depends on the service's OID field.
+    function clientPolygonLayer(FeatureLayer, graphics, renderer) {
+      const source = graphics.map((g, i) => new window._Graphic({ geometry: g.geometry, attributes: { OBJECTID: i + 1 } }));
       const lyr = new FeatureLayer({ source, objectIdField: "OBJECTID", fields: [{ name: "OBJECTID", type: "oid" }],
         geometryType: "polygon", spatialReference: { wkid: 3857 }, renderer,
         legendEnabled: false, popupEnabled: false, listMode: "hide" });
       let ext = null;
       source.forEach(g => { const e = g.geometry.extent; if (e) ext = ext ? ext.union(e) : e.clone(); });
-      lyr._jsonpExtent = ext;
+      lyr._extent = ext;
       return lyr;
     }
-
-    // Build the styled locator feature layers (used only by the offscreen basin view)
-    function basinLayers(FeatureLayer) {
-      const S = BASIN_STYLE;
-      const mk = (url, sym) => new FeatureLayer({ url, renderer: { type: "simple", symbol: sym },
-        legendEnabled: false, popupEnabled: false, listMode: "hide" });
+    // Pull every feature of a small service layer once (SDK query first, JSONP
+    // when the office network drops CORS) and return it as a client-side layer.
+    // A service FeatureLayer in the basin view would instead fetch one query per
+    // 512 px tile at draw time: 16+ round trips to maps.trpa.org at export size,
+    // and when the server is slow (3 s a query, Oct. 2026) the draw outruns the
+    // settle cap and the capture ships with tiles missing (white rectangles).
+    async function basinClientLayer(FeatureLayer, url, renderer) {
+      let graphics;
+      try {
+        const svc = new FeatureLayer({ url });
+        const r = await svc.queryFeatures({ where: "1=1", outFields: ["OBJECTID"], returnGeometry: true,
+          maxAllowableOffset: 15, outSpatialReference: { wkid: 3857 } });
+        graphics = r.features; svc.destroy();
+      } catch (e) {
+        console.warn(`Basin layer ${url} query failed, retrying as JSONP:`, e && e.message);
+        const r = await jsonp(url + "/query", { where: "1=1", outFields: "OBJECTID", returnGeometry: "true",
+          outSR: "3857", maxAllowableOffset: "15" });
+        if (r.error) throw new Error(r.error.message || "layer query error");
+        graphics = graphicsFromEsriJson(r);
+      }
+      if (!graphics.length) throw new Error(`Basin layer ${url} returned no features`);
+      return clientPolygonLayer(FeatureLayer, graphics, renderer);
+    }
+    // Build the styled locator layers (used only by the offscreen basin view),
+    // bottom to top. All client-side: the lake from the embedded shoreline, the
+    // boundaries from one query each, and the outside mask cut locally from the
+    // TRPA boundary (a wide rectangle minus the basin) so it always covers the
+    // frame at any export aspect.
+    async function basinLayers(FeatureLayer) {
+      const S = BASIN_STYLE, GE = window._geometryEngine, Polygon = window._Polygon;
       const fill = (color, ow, oc) => ({ type: "simple-fill", color, outline: { width: ow, color: oc || [0,0,0,0] } });
-      // Client-side lake from the embedded shoreline (see LAKE_RINGS)
-      const lake = new FeatureLayer({
-        source: [new window._Graphic({ attributes: { OBJECTID: 1 },
-          geometry: new window._Polygon({ rings: LAKE_RINGS, spatialReference: { wkid: 3857 } }) })],
-        objectIdField: "OBJECTID", fields: [{ name: "OBJECTID", type: "oid" }],
-        geometryType: "polygon", spatialReference: { wkid: 3857 },
-        renderer: { type: "simple", symbol: fill(S.lake, 0) },
-        legendEnabled: false, popupEnabled: false, listMode: "hide" });
-      return {
-        mask:  mk(SVC+"Boundaries/MapServer/15",            fill(S.outside, 0)),
-        lake,
-        juris: mk(SVC+"Boundaries/MapServer/16",            fill([0,0,0,0], 1, S.stateln)),
-        cslt:  mk(SVC+"Boundaries/MapServer/2",             fill([0,0,0,0], 0.7, S.cslt)),
-        bnd:   mk(SVC+"Boundaries/MapServer/4",             fill([0,0,0,0], 3.5, S.outline)),
-      };
+      const sym = (symbol) => ({ type: "simple", symbol });
+      const [juris, cslt, bnd] = await Promise.all([
+        basinClientLayer(FeatureLayer, SVC+"Boundaries/MapServer/16", sym(fill([0,0,0,0], 1, S.stateln))),
+        basinClientLayer(FeatureLayer, SVC+"Boundaries/MapServer/2",  sym(fill([0,0,0,0], 0.7, S.cslt))),
+        basinClientLayer(FeatureLayer, SVC+"Boundaries/MapServer/4",  sym(fill([0,0,0,0], 3.5, S.outline))),
+      ]);
+      const basin = GE.union(bnd.source.map(g => g.geometry).toArray());
+      const maskGeom = GE.difference(Polygon.fromExtent(bnd._extent.clone().expand(8)), basin);
+      const mask = clientPolygonLayer(FeatureLayer, [{ geometry: maskGeom }], sym(fill(S.outside, 0)));
+      const lake = clientPolygonLayer(FeatureLayer,
+        [{ geometry: new Polygon({ rings: LAKE_RINGS, spatialReference: { wkid: 3857 } }) }], sym(fill(S.lake, 0)));
+      return { layers: [mask, lake, juris, cslt, bnd], basinExtent: bnd._extent.clone() };
     }
 
     require([
@@ -962,13 +981,15 @@
       "esri/geometry/Point", "esri/geometry/Multipoint", "esri/geometry/Polyline",
       "esri/geometry/Polygon", "esri/geometry/support/webMercatorUtils",
       "esri/layers/WMSLayer", "esri/layers/MapImageLayer", "esri/layers/TileLayer", "esri/layers/VectorTileLayer",
+      "esri/geometry/geometryEngine",
     ], (Map, MapView, FeatureLayer, GraphicsLayer, Graphic, ScaleBar, Home, Sketch, Expand, reactiveUtils, Basemap, Extent, Point, Multipoint, Polyline, Polygon, wmUtils,
-        WMSLayer, MapImageLayer, TileLayer, VectorTileLayer) => {
+        WMSLayer, MapImageLayer, TileLayer, VectorTileLayer, geometryEngine) => {
       window._Graphic = Graphic; window._reactiveUtils = reactiveUtils; window._Basemap = Basemap;
       window._Extent = Extent; window._Point = Point; window._wm = wmUtils;
       window._Multipoint = Multipoint; window._Polyline = Polyline; window._Polygon = Polygon;
       window._WMSLayer = WMSLayer; window._MapImageLayer = MapImageLayer;
       window._TileLayer = TileLayer; window._VectorTileLayer = VectorTileLayer;
+      window._geometryEngine = geometryEngine;
 
       // The interactive map carries a real basemap (used by the split detail
       // panel). The styled locator layers live only on the offscreen basin view.
@@ -1037,27 +1058,13 @@
       if (basinInitPromise) return basinInitPromise;
       basinInitPromise = (async () => {
         const { Map, MapView, FeatureLayer } = basinCtors;
-        const s = basinLayers(FeatureLayer);
-        const order = ["mask", "lake", "juris", "cslt", "bnd"];
-        // Load every locator layer up front (all small: the heavy lake polygon is
-        // embedded). A service layer that can't load (office-network CORS) is
-        // rebuilt client-side from a JSONP pull of the same layer.
-        await Promise.all(order.map(async (k) => {
-          try { await s[k].load(); }
-          catch (e) {
-            if (!s[k].url) throw e;
-            console.warn(`Basin layer ${k} failed to load, rebuilding via JSONP:`, e && e.message);
-            // the SDK splits ".../MapServer/15" into url + layerId; put it back together
-            const layerUrl = s[k].layerId != null ? `${s[k].url}/${s[k].layerId}` : s[k].url;
-            s[k] = await clientLayerFromJsonp(FeatureLayer, layerUrl, s[k].renderer);
-          }
-        }));
-        const bmap = new Map({ basemap: null, layers: order.map(k => s[k]) });
+        const { layers, basinExtent } = await basinLayers(FeatureLayer);
+        const bmap = new Map({ basemap: null, layers });
         basinView = new MapView({ container: "basinDiv", map: bmap, background: { color: [255,255,255,1] },
           constraints: { snapToZoom: false, rotationEnabled: false }, ui: { components: [] } });
         await basinView.when();
-        await Promise.all(order.map(k => s[k].when()));
-        basinView._basinExtent = (s.bnd._jsonpExtent || s.bnd.fullExtent).clone().expand(1.06);
+        await Promise.all(layers.map(l => basinView.whenLayerView(l)));
+        basinView._basinExtent = basinExtent.expand(1.06);
         await basinView.goTo(basinView._basinExtent, { animate: false });
       })().catch((e) => {
         basinInitPromise = null;

@@ -14,7 +14,7 @@
   BMP.config = {
     bmpStatusLayer: "https://maps.trpa.org/server/rest/services/BMP_Status/MapServer/5",
     parcelTracker: "https://parcels.laketahoeinfo.org/parcels/",
-    mapTool: "https://gis.trpa.org/bmpmappingtool",
+    mapTool: "map.html",
     hotline: "(775) 589-5202",
     email: "bmp@trpa.gov"
   };

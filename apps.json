@@ -297,6 +297,20 @@
       "beta": true
     },
     {
+      "id": "bmpmap",
+      "title": "BMP Mapping Tool (new)",
+      "category": "eip",
+      "url": "qa/bmp/map.html",
+      "thumbnail": "assets/thumbs/bmp-map.png",
+      "description": "Rebuild of the gis.trpa.org BMP Mapping Tool in the design system: BMP status, area-wide treatments, catchments, and APN labels. Find a parcel by APN, address, or catchment; select parcels by catchment, area-wide project, or a drawn area; export the selection to CSV or the map to an image.",
+      "tags": [
+        "Stormwater",
+        "BMP",
+        "Map"
+      ],
+      "beta": true
+    },
+    {
       "id": "sezviewer",
       "title": "Tahoe SEZ Viewer",
       "category": "eip",
