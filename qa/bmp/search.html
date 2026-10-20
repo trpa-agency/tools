@@ -307,7 +307,7 @@
           <dl class="kv">${kv.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
           <div class="detail-actions">
             <a class="btn btn-blue btn-sm" href="${cfg().parcelTracker}${encodeURIComponent(apn)}" target="_blank" rel="noopener">${st.key === "bmp" || st.key === "sco" ? "Print certificate on LT Info" : "View parcel on LT Info"}</a>
-            <a class="btn btn-outline btn-sm" href="${cfg().mapTool}" target="_blank" rel="noopener">BMP Mapping Tool</a>
+            <a class="btn btn-outline btn-sm" href="${cfg().mapTool}?apn=${encodeURIComponent(apn)}">View on the BMP map</a>
             ${st.key === "none" || st.key === "eval" ? `<a class="btn btn-outline btn-sm" href="${mail}">Request an evaluation</a>` : ""}
           </div>`;
         zoomTo(r);
