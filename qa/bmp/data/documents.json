@@ -135,7 +135,7 @@
       "items": [
         { "title": "TRPA BMP Action Plan (adopted Feb. 25, 2015)", "href": "https://www.trpa.gov/wp-content/uploads/documents/archive/FINAL-TRPA-BMP-Action-Plan_02-25-2015-4.pdf", "type": "pdf" },
         { "title": "Tahoe Regional Planning Compact (1980 Bi-State Compact)", "href": "https://www.trpa.gov/wp-content/uploads/documents/archive/2/Bistate_Compact.pdf", "type": "pdf" },
-        { "title": "TRPA Code of Ordinances", "href": "https://www.trpa.gov/code-of-ordinances/", "type": "link", "note": "Chapter 60.4 covers the BMP Retrofit Program" },
+        { "title": "TRPA Code of Ordinances", "href": "https://www.trpa.gov/regional-plan/#code", "type": "link", "note": "Chapter 60.4 covers the BMP Retrofit Program" },
         { "title": "Environmental Improvement Program", "href": "https://www.trpa.gov/programs/environmental-improvement-program/", "type": "link" }
       ]
     },
@@ -146,7 +146,7 @@
       "items": [
         { "title": "Tahoe Living with Fire", "href": "https://www.tahoelivingwithfire.com/", "type": "link" },
         { "title": "Trees and Defensible Space (TRPA)", "href": "https://www.trpa.gov/trees-and-defensible-space/", "type": "link" },
-        { "title": "Fire Adapted Communities (UNR Extension)", "href": "https://www.unce.unr.edu/publications/files/nr/2014/sp1405.pdf", "type": "pdf" },
+        { "title": "Fire Adapted Communities (UNR Extension)", "href": "https://naes.unr.edu/publication.aspx?PubID=2370", "type": "link" },
         { "title": "Fire Safe Council", "href": "http://www.firesafecouncil.org/", "type": "link" }
       ]
     },
@@ -155,10 +155,10 @@
       "name": "Fire districts",
       "description": "Local fire protection districts around the lake.",
       "items": [
-        { "title": "Meeks Bay Fire Protection District", "href": "http://www.meeksbayfire.com/", "type": "link" },
+        { "title": "Meeks Bay Fire Protection District", "href": "https://www.meeksbayfire.com/", "type": "link" },
         { "title": "Tahoe Douglas Fire Protection District", "href": "http://www.tahoefire.com/", "type": "link" },
         { "title": "North Tahoe Fire Protection District", "href": "http://www.ntfire.net/", "type": "link" },
-        { "title": "North Lake Tahoe Fire Protection District", "href": "http://www.nltfpd.net/", "type": "link" },
+        { "title": "North Lake Tahoe Fire Protection District", "href": "https://www.nltfpd.org/", "type": "link" },
         { "title": "South Lake Tahoe Fire Rescue", "href": "https://www.cityofslt.us/384/Fire", "type": "link" },
         { "title": "Lake Valley Fire Protection District", "href": "http://www.lakevalleyfire.org/", "type": "link" }
       ]

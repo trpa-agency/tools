@@ -234,6 +234,7 @@
           theme, columnDefs: cols, rowData: [],
           defaultColDef: { sortable: true, filter: true, resizable: true },
           rowSelection: { mode: "singleRow", checkboxes: false, enableClickSelection: true },
+          ensureDomOrder: true,   // keeps row and column DOM order for screen readers
           pagination: true, paginationPageSize: 25, paginationPageSizeSelector: [25, 50, 100],
           getRowId: (p) => String(p.data.OBJECTID),
           onSelectionChanged: () => { const sel = gridApi.getSelectedRows(); if (sel[0]) showDetail(sel[0]); },
@@ -416,7 +417,7 @@
           <li><a href="https://parcels.laketahoeinfo.org">LT Info Parcel Tracker</a></li>
           <li><a href="https://www.trpa.gov/programs/environmental-improvement-program/">Environmental Improvement Program</a></li>
           <li><a href="https://www.trpa.gov">trpa.gov</a></li>
-          <li><a href="https://tools.trpa.gov">TRPA Tools</a></li>
+          <li><a href="../../">TRPA Tools</a></li>
         </ul>
       </div>
     </div>

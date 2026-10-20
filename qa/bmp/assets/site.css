@@ -5,6 +5,7 @@
 @import url("trpa-tokens.css");
 
 :root {
+  --gray-text: #5B6677;   /* overrides the token: 5.4:1 on the #F5F7FA page background (the shared value fails AA there) */
   --content-max: 1160px;
   --prose-max: 760px;
   --gutter: 1.25rem;
@@ -150,7 +151,7 @@ hr { border: 0; border-top: 1px solid var(--gray-border); margin: 2rem 0; }
 }
 .btn-primary { background: var(--eip-green); color: var(--brand-dark); }
 .btn-primary:hover { background: #8ad062; color: var(--brand-dark); }
-.btn-blue { background: var(--brand-primary); color: #fff; }
+.btn-blue { background: var(--brand-primary-text); color: #fff; }
 .btn-blue:hover { background: var(--brand-primary-hover); color: #fff; }
 .btn-outline { background: transparent; color: var(--brand-dark); border-color: var(--brand-dark); }
 .btn-outline:hover { background: var(--brand-dark); color: #fff; }
@@ -216,7 +217,8 @@ hr { border: 0; border-top: 1px solid var(--gray-border); margin: 2rem 0; }
 }
 .callout.warn { border-color: var(--brand-accent); background: var(--brand-accent-light); }
 .callout.success { border-color: var(--eip-green); background: var(--eip-green-light); }
-.callout h3, .callout h4 { margin-top: 0; }
+.callout h2, .callout h3, .callout h4 { margin-top: 0; }
+.callout h2 { font-size: 1.15rem; }
 .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
 .hotline {
   display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem;
