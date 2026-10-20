@@ -1,0 +1,226 @@
+{
+  "_comment": "TRPA BMP Handbook: chapters and the Chapter 4 BMP Toolkit (fact sheets and standard drawings). Relative hrefs resolve against docBase in documents.json. Each toolkit section lists fact sheets (the handbook pages) and drawings (PDF and DWG pairs) separately because they are not one-to-one.",
+  "complete": { "title": "Complete BMP Handbook", "href": "Documents/BMPHandbook/BMP_Handbook.pdf", "note": "58 MB" },
+  "chapters": [
+    { "title": "Preface", "href": "Documents/BMPHandbook/Preface.pdf" },
+    { "title": "Introduction", "href": "Documents/BMPHandbook/Introduction.pdf" },
+    { "title": "Chapter 1: Urban Hydrology", "href": "Documents/BMPHandbook/Ch1_UrbanHydrology.pdf" },
+    { "title": "Chapter 2: Site Analysis", "href": "Documents/BMPHandbook/Ch2_SiteAnalysis.pdf" },
+    { "title": "Chapter 3: BMP Planning and Selection", "href": "Documents/BMPHandbook/Ch3_PermanentBMPPlanningandSelection.pdf" },
+    { "title": "Chapter 4: BMP Toolkit", "href": "#toolkit", "note": "Fact sheets and drawings, below" },
+    {
+      "title": "Chapter 5: Soil and Vegetation Management",
+      "href": "Documents/BMPHandbook/Ch5_SoilandVegetationManagement.pdf",
+      "supplements": [
+        { "title": "Revegetation Plan Template", "href": "Documents/BMPHandbook/Ch5_1_RevPlnTem.pdf" },
+        { "title": "Revegetation Plan Example", "href": "Documents/BMPHandbook/Ch5_2_RevPlnEx.pdf" },
+        { "title": "Fertilizer Management Plan Template", "href": "Documents/BMPHandbook/Ch5_3_FertManPlnTem.pdf" },
+        { "title": "Description of Revegetation Site Types", "href": "Documents/BMPHandbook/Ch5_5_DescSiteTyp.pdf" },
+        { "title": "Site Type Recommended Species List", "href": "Documents/BMPHandbook/Ch5_6_SitTypSpeLst.pdf" },
+        { "title": "Site Type Recommended Seed Mixes", "href": "Documents/BMPHandbook/Ch5_7_SitTypSeed.pdf" },
+        { "title": "TRPA Approved Plant Species Attributes Table", "href": "Documents/BMPHandbook/Ch5_8_TRPAattable.pdf" }
+      ]
+    },
+    {
+      "title": "Chapter 6: Inspection, Maintenance, and Monitoring",
+      "href": "Documents/BMPHandbook/Ch6_InspectionMaintenanceandMonitoring.pdf",
+      "supplements": [
+        { "title": "Small Residential Inspection, Maintenance, and Monitoring Checklist", "href": "Documents/BMPHandbook/Ch6_2_Sm_Residential_Insepct,_Maint_Mont_Checklist.pdf" },
+        { "title": "Inspection Maintenance Log Template", "href": "Documents/BMPHandbook/Maintenance_Log_static_form.pdf" },
+        { "title": "Example Inspection Maintenance Log", "href": "Documents/128_Market_Street_ Log_Example.pdf" },
+        { "title": "Monitoring Plan Template", "href": "Documents/BMPHandbook/Ch6_4_Monitoring_Plan_Template.pdf" },
+        { "title": "Monitoring Report Template", "href": "Documents/BMPHandbook/Ch6_5_Monitoring_Report_Template.pdf" },
+        { "title": "Sample Monitoring Report", "href": "Documents/BMPHandbook/Ch6_6_Sample_Monitoring_Report_Template.pdf" }
+      ]
+    },
+    { "title": "Chapter 7: Permitting", "href": "Documents/BMPHandbook/Ch7_Permitting.pdf" },
+    {
+      "title": "Chapter 8: Shorezone BMPs and Protective Structures",
+      "href": "Documents/BMPHandbook/Ch8_ShorezoneProtectiveStructuresandBMPs.pdf",
+      "supplements": [
+        { "title": "Jetty and Breakwater Repair (exempt activity infosheet)", "href": "Documents/BMPHandbook/Jetty_Breakwater_Repair.pdf" },
+        { "title": "Maintenance of Overwater Structures (exempt activity infosheet)", "href": "Documents/BMPHandbook/Maintenance_of_Shorezone_Structures.pdf" },
+        { "title": "Painting, Sanding, and Staining Overwater Structures (exempt activity infosheet)", "href": "Documents/BMPHandbook/Painting_Sanding_Staining_Overwater_Structures.pdf" },
+        { "title": "Buoy Repair and Replacement (exempt activity infosheet)", "href": "Documents/BMPHandbook/Buoy_Repair_Replacement.pdf" },
+        { "title": "Pile Replacement, Six or Fewer (exempt activity infosheet)", "href": "Documents/BMPHandbook/Pile_Replacement_Six_Less.pdf" }
+      ]
+    },
+    { "title": "Glossary", "href": "Documents/BMPHandbook/Glossary.pdf" },
+    { "title": "List of Acronyms", "href": "Documents/BMPHandbook/Acronymns.pdf" },
+    { "title": "Acknowledgements", "href": "Documents/BMPHandbook/Acknowledgements/Acknowle.pdf" }
+  ],
+  "toolkit": [
+    {
+      "number": "4.1",
+      "name": "Hydrologic Source Control",
+      "intro": "Documents/BMPHandbook/Chapter 4/4.1/4.1_Hyrdro_SC_intro.pdf",
+      "factSheets": [
+        { "name": "Pervious Pavement", "href": "Documents/BMPHandbook/Chapter 4/4.1/a_PervPav.pdf" },
+        { "name": "Infiltration Basin", "href": "Documents/BMPHandbook/Chapter 4/4.1/b_InfBas.pdf" },
+        { "name": "Infiltration Trench", "href": "Documents/BMPHandbook/Chapter 4/4.1/c_InfTrc.pdf" },
+        { "name": "Subsurface Infiltration System", "href": "Documents/BMPHandbook/Chapter 4/4.1/d_SubSur.pdf" },
+        { "name": "Rain Barrel and Cistern", "href": "Documents/BMPHandbook/Chapter 4/4.1/e_RainBar.pdf" },
+        { "name": "Rain Garden", "href": "Documents/BMPHandbook/Chapter 4/4.1/f_RainGar.pdf" },
+        { "name": "Filter Strip", "href": "Documents/BMPHandbook/Chapter 4/4.1/g_FiltStrp.pdf" }
+      ],
+      "drawings": [
+        { "id": "BMP-101", "name": "Pervious Concrete", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-101IMPERVIOUSCONCRETE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-101IMPERVIOUSCONCRETE.dwg" },
+        { "id": "BMP-102", "name": "Infiltration Basin", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-102INFILTRATIONBASIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-102INFILTRATIONBASIN.dwg" },
+        { "id": "BMP-103", "name": "Infiltration Trench", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-103INFILTRATIONTRENCH.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-103INFILTRATIONTRENCH.dwg" },
+        { "id": "BMP-104", "name": "Armored Dripline", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-104ARMOREDDRIPLINE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-104ARMOREDDRIPLINE.dwg" },
+        { "id": "BMP-105", "name": "Planter Bed Dripline", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-105RAISEDPLANTERBEDS.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-105RAISEDPLANTERBEDS.dwg" },
+        { "id": "BMP-106", "name": "Infiltration Facility", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-106INFILTRATIONFACILITY.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-106INFILTRATIONFACILITY.dwg" },
+        { "id": "BMP-107", "name": "Vegetated Filter Strip", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-107VEGETATEDFILTERSTRIP.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-107VEGETATEDFILTERSTRIP.dwg" },
+        { "id": "BMP-108", "name": "Level Spreader", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-108LEVELSPREADER.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-108LEVELSPREADER.dwg" }
+      ]
+    },
+    {
+      "number": "4.2",
+      "name": "Pollutant Source Controls",
+      "intro": "Documents/BMPHandbook/Chapter 4/4.2/4.2_Pollutant_SC_intro.pdf",
+      "factSheets": [
+        { "name": "Roadway and Parking Lot Pollution Prevention (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.2/4.2_Rdwy-Prking_Intro.pdf", "heading": true },
+        { "name": "Abrasive and Deicer Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/a_AbrDeic.pdf" },
+        { "name": "Street Sweeping", "href": "Documents/BMPHandbook/Chapter 4/4.2/b_StrtSwp.pdf" },
+        { "name": "Snow Storage", "href": "Documents/BMPHandbook/Chapter 4/4.2/c_SnwStrg.pdf" },
+        { "name": "Soil Stabilization (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.2/4.2_Soil_Stabil_Intro.pdf", "heading": true },
+        { "name": "Vegetated Slope Stabilization", "href": "Documents/BMPHandbook/Chapter 4/4.2/d_VegSlop.pdf" },
+        { "name": "Terracing", "href": "Documents/BMPHandbook/Chapter 4/4.2/e_Terrac.pdf" },
+        { "name": "Retaining Wall", "href": "Documents/BMPHandbook/Chapter 4/4.2/f_RetWal.pdf" },
+        { "name": "Riprap", "href": "Documents/BMPHandbook/Chapter 4/4.2/g_Riprap.pdf" },
+        { "name": "Slope Shaping", "href": "Documents/BMPHandbook/Chapter 4/4.2/h_SlopShp.pdf" },
+        { "name": "Soil Stabilization, Non-Vegetative (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.2/4.2_Soil_Stabil_non_veg_intro.pdf", "heading": true },
+        { "name": "Paving Parking Areas and Roads", "href": "Documents/BMPHandbook/Chapter 4/4.2/i_PavPark.pdf" },
+        { "name": "Bare Soil Protection", "href": "Documents/BMPHandbook/Chapter 4/4.2/j_BarSoil.pdf" },
+        { "name": "Deck Armor", "href": "Documents/BMPHandbook/Chapter 4/4.2/k_DeckArm.pdf" },
+        { "name": "Parking and Vehicle Barriers", "href": "Documents/BMPHandbook/Chapter 4/4.2/l_ParkVeh.pdf" },
+        { "name": "Waste Management and Materials Pollution Prevention (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.2/4.2_Waste_Mgmt_intro.pdf", "heading": true },
+        { "name": "Dumpster Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf" },
+        { "name": "Hazardous Material Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/n_Hazmat.pdf" },
+        { "name": "Nursery Facility Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/o_NurFacMng.pdf" },
+        { "name": "Pet Waste Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/p_PetWast.pdf" },
+        { "name": "Livestock Facility Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/q_LivFacMan.pdf" },
+        { "name": "Pool and Hot Tub Management", "href": "Documents/BMPHandbook/Chapter 4/4.2/r_PoolHt.pdf" },
+        { "name": "Vehicle Washing", "href": "Documents/BMPHandbook/Chapter 4/4.2/s_VecWash.pdf" }
+      ],
+      "drawings": [
+        { "id": "BMP-201", "name": "Slope Protection", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-201SLOPEPROTECTION.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-201SLOPEPROTECTION.dwg" },
+        { "id": "BMP-202", "name": "Willow Wattle", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-202WILLOWWATTLE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-202WILLOWWATTLE.dwg" },
+        { "id": "BMP-203", "name": "Terrace Walls", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-203TERRACERETAININGWALLS.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-203TERRACERETAININGWALLS.dwg" },
+        { "id": "BMP-204", "name": "Timber Retaining Wall", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-204TIMBERRETAININGWALL.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-204TIMBERRETAININGWALL.dwg" },
+        { "id": "BMP-205", "name": "Stacked Rock Wall", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-205STACKEDROCKWALL.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-205STACKEDROCKWALL.dwg" },
+        { "id": "BMP-206", "name": "Riprap Slope Protection", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-206RIPRAPSLOPEPROTECTION.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-206RIPRAPSLOPEPROTECTION.dwg" },
+        { "id": "BMP-207", "name": "Slope Bottom Bench", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-207SLOPEBOTTOMBENCH.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-207SLOPEBOTTOMBENCH.dwg" },
+        { "id": "BMP-208", "name": "Serrations", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-208SERRATIONS.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-208SERRATIONS.dwg" },
+        { "id": "BMP-209", "name": "Contour Furrow", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-209CONTOURFLOW.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-209CONTOURFLOW.dwg" },
+        { "id": "BMP-210", "name": "Grading for Sheet Flow", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-210GRADINGFORSHEETFLOW.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-210GRADINGFORSHEETFLOW.dwg" },
+        { "id": "BMP-211", "name": "Rock Armor, Elevated Structure", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-211ROCKARMOR-ELEVATEDSTRUCTURE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-211ROCKARMOR-ELEVATEDSTRUCTURE.dwg" },
+        { "id": "BMP-212", "name": "Parking Barriers", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-212PARKINGBARRIERSGRADINGFORSHEETFLOW.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-212PARKINGBARRIERS.dwg" }
+      ]
+    },
+    {
+      "number": "4.3",
+      "name": "Stormwater Collection and Conveyance",
+      "intro": "Documents/BMPHandbook/Chapter 4/4.3/4.3_C&C_Intro.pdf",
+      "factSheets": [
+        { "name": "Culvert", "href": "Documents/BMPHandbook/Chapter 4/4.3/a_Culv.pdf" },
+        { "name": "Curb and Gutter", "href": "Documents/BMPHandbook/Chapter 4/4.3/b_CuGu.pdf" },
+        { "name": "Storm Drain", "href": "Documents/BMPHandbook/Chapter 4/4.3/c_StormDrn.pdf" },
+        { "name": "Outlet Protection", "href": "Documents/BMPHandbook/Chapter 4/4.3/d_OutPro.pdf" },
+        { "name": "Drain Inlet", "href": "Documents/BMPHandbook/Chapter 4/4.3/e_DrainIn.pdf" },
+        { "name": "Flow Splitter", "href": "Documents/BMPHandbook/Chapter 4/4.3/f_FloSplt.pdf" },
+        { "name": "Slotted Channel Drain", "href": "Documents/BMPHandbook/Chapter 4/4.3/g_SltChnDrn.pdf" },
+        { "name": "Asphalt and Concrete Swale", "href": "Documents/BMPHandbook/Chapter 4/4.3/h_ACswle.pdf" },
+        { "name": "Subsurface Drain", "href": "Documents/BMPHandbook/Chapter 4/4.3/i_SubSurfDrn.pdf" },
+        { "name": "Rock-Lined and Vegetated Swale", "href": "Documents/BMPHandbook/Chapter 4/4.3/j_RckVegSwl.pdf" },
+        { "name": "Check Dams", "href": "Documents/BMPHandbook/Chapter 4/4.3/k_ChckDam.pdf" }
+      ],
+      "drawings": [
+        { "id": "BMP-301", "name": "Rolled Curb", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-301ROLLEDCURB.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-301ROLLEDCURB.dwg" },
+        { "id": "BMP-302", "name": "Curb Break", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-302CURBBREAK.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-302CURBBREAK.dwg" },
+        { "id": "BMP-303", "name": "Outlet Protection (energy dissipater)", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-303OUTLETPROTECTION-ENERGYDISSIPATER.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-303OUTLETPROTECTION-ENERGYDISSIPATER.dwg" },
+        { "id": "BMP-304", "name": "Flow Splitter", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-304FLOWSPLITTER.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-304FLOWSPLITTER.dwg" },
+        { "id": "BMP-305", "name": "Slotted Channel Drain", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-305SlottedChannelDrain.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-305SlottedChannelDrain.dwg" },
+        { "id": "BMP-306", "name": "Pavement Swale", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-306PavementSwale.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-306PavementSwale.dwg" },
+        { "id": "BMP-307", "name": "Subsurface Drain", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-307SUBSURFACEDRAIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-307SUBSURFACEDRAIN.dwg" },
+        { "id": "BMP-308", "name": "Rock-Lined Swale", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-308ROCKLINEDSWALE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-308ROCKLINEDSWALE.dwg" },
+        { "id": "BMP-309", "name": "Vegetated Swale", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-309VEGETATIONSWALE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-309VEGETATIONSWALE.dwg" },
+        { "id": "BMP-310", "name": "Check Dam", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-310CHECKDAM.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-310CHECKDAM.dwg" }
+      ]
+    },
+    {
+      "number": "4.4",
+      "name": "Stormwater Treatment",
+      "intro": "Documents/BMPHandbook/Chapter 4/4.4/4.4_Strmwtr_Treat_intro.pdf",
+      "factSheets": [
+        { "name": "Biofiltration and Detention (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.4/4.4_Biofilter_intro.pdf", "heading": true },
+        { "name": "Wet Basin", "href": "Documents/BMPHandbook/Chapter 4/4.4/a_WetBsn.pdf" },
+        { "name": "Bioswale", "href": "Documents/BMPHandbook/Chapter 4/4.4/b_Bioswle.pdf" },
+        { "name": "Dry Basin", "href": "Documents/BMPHandbook/Chapter 4/4.4/c_DryBsn.pdf" },
+        { "name": "Flow Through Treatment (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.4/4.4_Flow_thru_intro.pdf", "heading": true },
+        { "name": "Drop Inlet Insert", "href": "Documents/BMPHandbook/Chapter 4/4.4/d_DropIns.pdf" },
+        { "name": "Trash Rack", "href": "Documents/BMPHandbook/Chapter 4/4.4/e_TrashRck.pdf" },
+        { "name": "Baffled Vault", "href": "Documents/BMPHandbook/Chapter 4/4.4/f_BafVlt.pdf" },
+        { "name": "Hydrodynamic Separator", "href": "Documents/BMPHandbook/Chapter 4/4.4/g_HydDySep.pdf" },
+        { "name": "Media Filter", "href": "Documents/BMPHandbook/Chapter 4/4.4/h_MedFilt.pdf" },
+        { "name": "Sediment Trap", "href": "Documents/BMPHandbook/Chapter 4/4.4/i_SedTrp.pdf" }
+      ],
+      "drawings": [
+        { "id": "BMP-401", "name": "Wet Basin", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-401WETBASIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-401WETBASIN.dwg" },
+        { "id": "BMP-402", "name": "Bioswale", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-402BIOSWALEVEGETATIONSWALE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-402BIOSWALE.dwg" },
+        { "id": "BMP-403", "name": "Dry Basin", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-403DRYBASIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-403DRYBASIN.dwg" },
+        { "id": "BMP-404", "name": "Catch Basin Insert", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-404CATCHBASININSERT.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-404CATCHBASININSERT.dwg" },
+        { "id": "BMP-405", "name": "Sediment Trap, Small Scale", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-405SEDIMENTTRAP-SMALLSCALE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-405SEDIMENTTRAP-SMALLSCALE.dwg" },
+        { "id": "BMP-406", "name": "Sediment Trap, Large Scale", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-406SedimentTrap-LARGESCALEVEGETATIONSWALE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-406SedimentTrap-LARGESCALE.dwg" }
+      ]
+    },
+    {
+      "number": "4.5",
+      "name": "Temporary BMPs for Construction",
+      "intro": "Documents/BMPHandbook/Chapter 4/4.5/4.5_Temp_BMPs_intro.pdf",
+      "factSheets": [
+        { "name": "Site Preparation and Practices (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.5/4.5_Site_Prep_intro.pdf", "heading": true },
+        { "name": "Construction Planning and Scheduling", "href": "Documents/BMPHandbook/Chapter 4/4.5/a_ConstPln.pdf" },
+        { "name": "Construction Boundary Fencing", "href": "Documents/BMPHandbook/Chapter 4/4.5/b_ConstBdFen.pdf" },
+        { "name": "Dewatering", "href": "Documents/BMPHandbook/Chapter 4/4.5/c_Dew.pdf" },
+        { "name": "Clean Water Diversion", "href": "Documents/BMPHandbook/Chapter 4/4.5/d_ClnWatDiv.pdf" },
+        { "name": "Vegetation Protection", "href": "Documents/BMPHandbook/Chapter 4/4.5/e_VegProt.pdf" },
+        { "name": "Temporary Sanitation Facility", "href": "Documents/BMPHandbook/Chapter 4/4.5/f_TempSanFac.pdf" },
+        { "name": "Dust Control", "href": "Documents/BMPHandbook/Chapter 4/4.5/g_DustCont.pdf" },
+        { "name": "Vehicle Ingress and Egress Management", "href": "Documents/BMPHandbook/Chapter 4/4.5/h_VegIngEg.pdf" },
+        { "name": "Winterization", "href": "Documents/BMPHandbook/Chapter 4/4.5/i_Wint.pdf" },
+        { "name": "Construction Staging", "href": "Documents/BMPHandbook/Chapter 4/4.5/j_ConstStag.pdf" },
+        { "name": "Material Handling, Storage, and Safety", "href": "Documents/BMPHandbook/Chapter 4/4.5/k_MaHanStort.pdf" },
+        { "name": "Topsoil Salvage", "href": "Documents/BMPHandbook/Chapter 4/4.5/l_Topsoil.pdf" },
+        { "name": "Concrete and Bentonite Management", "href": "Documents/BMPHandbook/Chapter 4/4.5/m_ConcBent.pdf" },
+        { "name": "Stockpile Management", "href": "Documents/BMPHandbook/Chapter 4/4.5/n_Stockpile.pdf" },
+        { "name": "Erosion and Sediment Control (introduction)", "href": "Documents/BMPHandbook/Chapter 4/4.5/4.5_Eros_Sed_intro.pdf", "heading": true },
+        { "name": "Sweeping", "href": "Documents/BMPHandbook/Chapter 4/4.5/o_Sweep.pdf" },
+        { "name": "Drain Inlet Protection", "href": "Documents/BMPHandbook/Chapter 4/4.5/p_DIprot.pdf" },
+        { "name": "Fiber Roll", "href": "Documents/BMPHandbook/Chapter 4/4.5/q_FibRol.pdf" },
+        { "name": "Silt Fence", "href": "Documents/BMPHandbook/Chapter 4/4.5/r_SiltFenc.pdf" },
+        { "name": "Erosion Control Blanket System", "href": "Documents/BMPHandbook/Chapter 4/4.5/s_ErosCntBln.pdf" },
+        { "name": "Hydromulch, Tackifier, and Soil Binder", "href": "Documents/BMPHandbook/Chapter 4/4.5/t_Hydromul.pdf" }
+      ],
+      "drawings": [
+        { "id": "BMP-501", "name": "Temporary Boundary Construction Fencing", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-501TemporaryBoundaryConstructionFencing.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-501TemporaryBoundaryConstructionFencing.dwg" },
+        { "id": "BMP-502", "name": "Dewatering", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-502Dewatering.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-502Dewatering.dwg" },
+        { "id": "BMP-503", "name": "Chute or Flume", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/503_Chut.pdf", "dwg": null },
+        { "id": "BMP-504", "name": "Flexible Downdrain", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-504FLEXIBLEDOWNDRAIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-504FLEXIBLEDOWNDRAIN.dwg" },
+        { "id": "BMP-505", "name": "Pipe Slope Drain", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-505PIPESLOPEDRAIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-505PIPESLOPEDRAIN.dwg" },
+        { "id": "BMP-506", "name": "Water Diversion", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-506WATERDIVERSION.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-506WATERDIVERSION.dwg" },
+        { "id": "BMP-507", "name": "Vegetation Protection", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-507VEGETATIONPROTECTION.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-507VEGETATIONPROTECTION.dwg" },
+        { "id": "BMP-508", "name": "Vehicle Tracking Control", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-508VEHICLETRACKINGCONTROLINFILTRATIONBASIN.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-508VEHICLETRACKINGCONTROL.dwg" },
+        { "id": "BMP-509", "name": "Concrete Washout Station", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/509_ConcrWsh.pdf", "dwg": null },
+        { "id": "BMP-510", "name": "Stockpile Management", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-510STOCKPILEMANAGEMENT.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-510STOCKPILEMANAGEMENT.dwg" },
+        { "id": "BMP-511", "name": "Drain Inlet Protection", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-511DRAININLETPROTECTION.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-511DRAININLETPROTECTION.dwg" },
+        { "id": "BMP-512", "name": "Fiber Rolls", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-512FIBERROLLS.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-512FIBERROLLS.dwg" },
+        { "id": "BMP-513", "name": "Silt Fence", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-513SILTFENCE.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-513SILTFENCE.dwg" },
+        { "id": "BMP-514", "name": "Silt Fence Placement", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-514SILTFENCEPLACEMENT.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-514SILTFENCEPLACEMENT.dwg" },
+        { "id": "BMP-515", "name": "Erosion Control Blanket", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-515EROSIONCONTROLBLANKET.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-515EROSIONCONTROLBLANKET.dwg" },
+        { "id": "BMP-516", "name": "Anchoring Geotextiles in Channels", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-516ANCHORINGGEOTEXTILESINCHANNELS.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-516ANCHORINGGEO-TEXTILESINCHANNELS.dwg" },
+        { "id": "BMP-517", "name": "Fiber Roll Silt Barrier", "pdf": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-517FIBERROLLSILTBARRIER.pdf", "dwg": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-517FIBERROLLSILTBARRIER.dwg" }
+      ]
+    }
+  ]
+}

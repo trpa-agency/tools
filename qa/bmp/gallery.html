@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="eip">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMP Photo Gallery | Lake Tahoe BMPs</title>
+  <meta name="description" content="Photos of installed BMPs around Lake Tahoe: rain gardens, infiltration trenches and basins, swales, slotted channel drains, driveway armor, parking barriers, retaining walls, borders, and maintained systems. Plus the rock types and sizes TRPA accepts." />
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+  <link rel="stylesheet" href="assets/fonts/fonts.css" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <!-- Calcite Design System 5.0 (the module script alone; it injects its own styles) -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" title="Lake Tahoe BMPs home">
+        <img class="brand-logo" src="assets/img/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program" />
+        <span class="brand-text">
+          <span class="brand-title">Lake Tahoe BMPs</span>
+          <span class="brand-sub">TRPA Stormwater Management Program</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <a href="get-certified.html">Get a Certificate</a>
+        <a href="about-bmps.html">About BMPs</a>
+        <a href="maintenance.html">Maintenance</a>
+        <a href="handbook.html">Handbook</a>
+        <a href="resources.html">Resources</a>
+        <a href="gallery.html" aria-current="page">Gallery</a>
+        <a class="nav-cta" href="search.html">Property Search</a>
+      </nav>
+    </div>
+  </header>
+  <div class="accent-bar"></div>
+
+  <main id="main">
+<section class="page-banner" style="background-image: url('assets/img/banner-gallery.jpg')">
+      <div class="wrap">
+        <span class="eyebrow">See it built</span>
+        <h1>BMP Photo Gallery</h1>
+        <p>Real installations on Tahoe properties. Select a photo to view it larger, then use the arrow keys to move through the set.</p>
+      </div>
+    </section>
+
+    <div class="wrap section">
+      <nav class="small" aria-label="Gallery sections" style="margin: 0 0 1.5rem; display:flex; flex-wrap:wrap; gap:0.4rem 1rem">
+        <a href="#infiltration">Infiltration</a>
+        <a href="#conveyance">Collection and conveyance</a>
+        <a href="#source-control">Source control</a>
+        <a href="#borders">Borders</a>
+        <a href="#maintenance">Maintenance</a>
+        <a href="#rock">Rock types and sizes</a>
+      </nav>
+
+      <div data-gallery><calcite-loader label="Loading photos" inline></calcite-loader></div>
+
+      <section id="rock" class="gallery-group">
+        <h2>Rock types and sizes</h2>
+        <p class="muted prose">What TRPA accepts for each use. Angular rock locks together; rounded rock rolls.</p>
+        <table class="ref-table" style="max-width: 760px">
+          <thead><tr><th>Use</th><th>Specification</th></tr></thead>
+          <tbody>
+            <tr><td>Infiltration</td><td>3/4 to 1.5-inch diameter washed, clean drain rock</td></tr>
+            <tr><td>Cobble</td><td>6 to 8-inch diameter</td></tr>
+            <tr><td>Stone, medium</td><td>9 to 12-inch diameter</td></tr>
+            <tr><td>Stone, large</td><td>12-inch diameter and up, depending on purpose and location</td></tr>
+            <tr><td>Riprap</td><td>9 to 24-inch diameter, depending on purpose and location</td></tr>
+            <tr><td>Parking barriers</td><td>Boulders larger than 3 feet in diameter, set one-third to one-half of their diameter below finished grade. Post bollards 2 feet tall with 12 inches below ground.</td></tr>
+            <tr><td>Slopes and basins</td><td>Angular rock only</td></tr>
+            <tr><td>Pea gravel</td><td>Not permitted under roof driplines, in infiltration BMPs, or on sloped areas</td></tr>
+            <tr><td>Lava rock</td><td>Not permitted</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <img class="footer-logo" src="assets/img/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program" />
+        <strong>TRPA Stormwater Management Program</strong>
+        <p>BMP Hotline <a href="tel:+17755895202">(775) 589-5202</a><br />
+        <a href="mailto:bmp@trpa.gov">bmp@trpa.gov</a></p>
+        <p>Tahoe Regional Planning Agency<br />128 Market Street, Stateline, NV 89449</p>
+      </div>
+      <div class="footer-col">
+        <strong>BMP program</strong>
+        <ul>
+          <li><a href="get-certified.html">Get a BMP Certificate</a></li>
+          <li><a href="small-retrofit-plan.html">Small BMP Retrofit Plan</a></li>
+          <li><a href="about-bmps.html">About BMPs</a></li>
+          <li><a href="maintenance.html">Maintenance</a></li>
+          <li><a href="handbook.html">BMP Handbook</a></li>
+          <li><a href="resources.html">Resources and forms</a></li>
+          <li><a href="gallery.html">Photo gallery</a></li>
+          <li><a href="realtors.html">Realtors and new owners</a></li>
+          <li><a href="fertilizer.html">Fertilizer</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <strong>Tools and partners</strong>
+        <ul>
+          <li><a href="search.html">Property BMP Status Search</a></li>
+          <li><a href="https://gis.trpa.org/bmpmappingtool">BMP Mapping Tool</a></li>
+          <li><a href="https://parcels.laketahoeinfo.org">LT Info Parcel Tracker</a></li>
+          <li><a href="https://www.trpa.gov/programs/environmental-improvement-program/">Environmental Improvement Program</a></li>
+          <li><a href="https://www.trpa.gov">trpa.gov</a></li>
+          <li><a href="https://tools.trpa.gov">TRPA Tools</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="wrap">
+        <span>&copy; 2026 Tahoe Regional Planning Agency</span>
+        <span>Part of the Lake Tahoe Environmental Improvement Program</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

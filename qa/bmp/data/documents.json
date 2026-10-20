@@ -1,0 +1,167 @@
+{
+  "_comment": "Every downloadable document and external link the site offers, grouped by section. href values that start with http are used as-is; everything else resolves against docBase. Today docBase points at the legacy tahoebmp.org file store; to move the files onto bmp.trpa.gov, copy them into a documents/ folder in this repo with the same relative paths and set docBase to 'documents/'. type drives the icon and the (PDF) style suffix: pdf, doc, xlsx, dwg, video, link, page.",
+  "docBase": "https://www.tahoebmp.org/",
+  "sections": [
+    {
+      "slug": "brochures",
+      "name": "BMP brochures",
+      "description": "Plain-language guides to BMP requirements for residential and commercial properties.",
+      "items": [
+        { "title": "A Homeowner's Guide to BMPs in the Lake Tahoe Basin", "href": "Documents/BMP_residential_Trifold_2015.pdf", "type": "pdf", "note": "Residential trifold brochure" },
+        { "title": "Single Family Residential BMP Mailer", "href": "Documents/BMP_SFR_Mailer.pdf", "type": "pdf" },
+        { "title": "Clean Water is Everyone's Business", "href": "Documents/CommercialBrochure.pdf", "type": "pdf", "note": "Commercial and multi-family brochure" },
+        { "title": "Tahoe Keys POA Conservation Idea Book", "href": "Documents/TKPOA_ConsvIdeaBook.pdf", "type": "pdf" }
+      ]
+    },
+    {
+      "slug": "videos",
+      "name": "BMP videos",
+      "description": "Short videos on installing and maintaining the BMPs most often prescribed for homes.",
+      "items": [
+        { "title": "Installing Homeowner BMPs", "href": "https://vimeo.com/116916876", "type": "video" },
+        { "title": "Sweeping and Pervious Pavement", "href": "https://vimeo.com/115585695", "type": "video", "note": "Maintenance" },
+        { "title": "Driveway Conveyances", "href": "https://vimeo.com/114913399", "type": "video", "note": "Maintenance" },
+        { "title": "Infiltration Systems", "href": "https://vimeo.com/114913398", "type": "video", "note": "Maintenance" },
+        { "title": "Open Systems", "href": "https://vimeo.com/114913397", "type": "video", "note": "Maintenance" },
+        { "title": "Subsurface Infiltration", "href": "https://vimeo.com/115585694", "type": "video", "note": "Maintenance" },
+        { "title": "Bare Soil Protection", "href": "https://vimeo.com/114913396", "type": "video", "note": "Maintenance" },
+        { "title": "Snow Storage", "href": "https://vimeo.com/115585693", "type": "video", "note": "Maintenance" },
+        { "title": "Parking, Dumpsters, and Hazmat", "href": "https://vimeo.com/115585692", "type": "video", "note": "Maintenance" }
+      ]
+    },
+    {
+      "slug": "forms",
+      "name": "Forms and applications",
+      "description": "What to submit for a Small BMP Retrofit Plan, a BMP Retrofit Permit, a real estate transfer, or winterization.",
+      "items": [
+        { "title": "Small BMP Retrofit Plan instructions", "href": "Documents/Small_BMP_Application.pdf", "type": "pdf", "note": "Projects disturbing less than 10 cubic yards" },
+        { "title": "Small BMP Treatments Form", "href": "documents/Small_BMP_Treatments_Form.pdf", "type": "pdf" },
+        { "title": "BMP Calculation Spreadsheet", "href": "Documents/BMP_Calc.xlsx", "type": "xlsx", "note": "Sizes infiltration systems for the 20-year, one-hour storm" },
+        { "title": "Small BMP Retrofit Plan example 1", "href": "Documents/Example_1.pdf", "type": "pdf" },
+        { "title": "Small BMP Retrofit Plan example 2", "href": "Documents/Example_2.pdf", "type": "pdf" },
+        { "title": "BMP Retrofit Permit application", "href": "Documents/BMP_Retrofit_Application.pdf", "type": "pdf", "note": "Most commercial and multi-family properties" },
+        { "title": "TRPA BMP Real Estate Disclosure Form (fillable)", "href": "Documents/BMP_Real_Estate_Disclaimer.pdf", "type": "pdf", "note": "Submit within 30 days of sale" },
+        { "title": "TRPA BMP Real Estate Disclosure Form (print)", "href": "Documents/BMP_Real_Estate_Disclaimer_static.pdf", "type": "pdf" },
+        { "title": "Wood Heater Retrofit Form", "href": "https://www.trpa.gov/wp-content/uploads/documents/archive/Wood_Heater_Statement_of_Compliance__Fact-Sheet.pdf", "type": "pdf", "note": "Required before transferring ownership of any building" },
+        { "title": "Tahoe Region Winterization Guidelines", "href": "Documents/Tahoe%20Region%20Winterization%20Guidelines%202009.pdf", "type": "pdf" }
+      ]
+    },
+    {
+      "slug": "sizing",
+      "name": "BMP sizing worksheets",
+      "description": "The calculation spreadsheet and its instructions, used to size infiltration systems on a retrofit plan.",
+      "items": [
+        { "title": "Calculation Worksheet", "href": "Documents/BMP_Calc.xlsx", "type": "xlsx" },
+        { "title": "Calc Sheet General Information", "href": "Documents/CalcSheetGeneralInfo.doc", "type": "doc" },
+        { "title": "Calc Sheet General Instructions", "href": "Documents/CalcSheetInstructions.doc", "type": "doc" },
+        { "title": "Calculation Spreadsheet Info Sheet", "href": "Documents/Calculation_Spreadsheet_InfoSheet.pdf", "type": "pdf" }
+      ]
+    },
+    {
+      "slug": "workshop",
+      "name": "2021 BMP Workshop webinar",
+      "description": "Presentation and reference sheets from the 2021 BMP Contractors Workshop.",
+      "items": [
+        { "title": "BMP Workshop webinar presentation (video)", "href": "Documents/Videos/BMP_Workshop_Presentation.mp4", "type": "video" },
+        { "title": "BMP Workshop webinar questions and answers", "href": "Documents/BMP_WorkshopQ&A.pdf", "type": "pdf" },
+        { "title": "Coverage Exemption Process Info Sheet", "href": "Documents/Coverage_Exemption_InfoSheet.pdf", "type": "pdf" },
+        { "title": "Site Constraint Definitions (2021)", "href": "Documents/Site_Constraint_Definitions.pdf", "type": "pdf" },
+        { "title": "Source Control BMPs (revised 2021)", "href": "Documents/Source_Control_BMPs.pdf", "type": "pdf" },
+        { "title": "Calculation Spreadsheet Info Sheet", "href": "Documents/Calculation_Spreadsheet_InfoSheet.pdf", "type": "pdf" },
+        { "title": "BMP Cost Documentation Requirements Info Sheet", "href": "Documents/BMP_Cost_DocReq.pdf", "type": "pdf" }
+      ]
+    },
+    {
+      "slug": "providers",
+      "name": "Materials and service providers",
+      "description": "Where to buy BMP materials and who has attended the BMP Contractors Workshop.",
+      "items": [
+        { "title": "BMP Installation Service Providers List", "href": "Documents/ContractorsList.pdf", "type": "pdf", "note": "Engineers and contractors who attended the BMP Contractors Workshop" },
+        { "title": "Resource list of BMP materials", "href": "Documents/BMP_Mat_Resource_List.pdf", "type": "pdf" },
+        { "title": "BMP Installation Guidance (Contractors BMP Manual)", "href": "Documents/Contractors BMP Manual sml.pdf", "type": "pdf" },
+        { "title": "Manual de BMP para Contratistas (en Español)", "href": "Documents/SP%20Contr%20Manual%20FINAL%2006%2009%202011.pdf", "type": "pdf", "lang": "es" }
+      ]
+    },
+    {
+      "slug": "nrcs",
+      "name": "NRCS standard BMP drawings",
+      "description": "Natural Resources Conservation Service standard drawings for residential BMPs, in English and Spanish.",
+      "items": [
+        { "title": "Index of NRCS drawings", "href": "NRCSDocuments/Index-Eng.pdf", "type": "pdf" },
+        { "title": "BMP-001 Drip Line Infiltration Trench", "href": "NRCSDocuments/BMP-001 Drip Line Infiltration Trench.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-001 Spanish-Drip Line Infiltration Trench.pdf" },
+        { "title": "BMP-002 Roof Valley Drip Line Treatment", "href": "NRCSDocuments/BMP-002 Roof Valley Drip Line Treatment.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-002 Spanish-Roof Valley Drip Line Treatment.pdf" },
+        { "title": "BMP-003 Conveyance and Infiltration Components", "href": "NRCSDocuments/BMP-003 Conveyance and Infiltration Components.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-003 Spanish-Conveyance and Infiltration Components.pdf" },
+        { "title": "BMP-004 Drip Line Conveyance Swale", "href": "NRCSDocuments/BMP-004 Drip Line Conveyance Swale.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-004 Spanish-Drip Line Conveyance Swale.pdf" },
+        { "title": "BMP-005 Subsurface Conveyance System", "href": "NRCSDocuments/BMP-005 Subsurface Conveyance System.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-005 Spanish-Subsurface Conveyance System.pdf" },
+        { "title": "BMP-006 Infiltration System Components", "href": "NRCSDocuments/BMP-006 Infiltration System Components.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-006 Spanish-Infiltration System Components.pdf" },
+        { "title": "BMP-007 Infiltration System", "href": "NRCSDocuments/BMP-007 Infiltration System.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-007 Spanish-Infiltration System.pdf" },
+        { "title": "BMP-008 Infiltration Basin", "href": "NRCSDocuments/BMP-008 Infiltration Basin.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-008 Spanish-Infiltration Basin.pdf" },
+        { "title": "BMP-009 Armored Drip Line", "href": "NRCSDocuments/BMP-009 Armored Drip Line.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-009 Spanish-Armored Drip Line.pdf" },
+        { "title": "BMP-010 Erosion Control for Elevated Structures", "href": "NRCSDocuments/BMP-010 Erosion Control for Elevated Structures.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-010 Spanish-Elevated Structures.pdf" },
+        { "title": "BMP-011 Erosion Control for Low Elevated Structures", "href": "NRCSDocuments/BMP-011 Erosion Control for Low Elevated Structures.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-011 Spanish-Erosion Control for Low Elevated Structures.pdf" },
+        { "title": "BMP-020 Slotted Channel Drain", "href": "NRCSDocuments/BMP-020 Slotted Channel Drain.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-020 Spanish-Slotted Channel Drain.pdf" },
+        { "title": "BMP-021 Slotted Channel Drain Reverse Flow", "href": "NRCSDocuments/BMP-021 Slotted Channel Drain Reverse Flow.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-021 Spanish Slotted Channel Drain Reverse Flow.pdf" },
+        { "title": "BMP-022 Driveway Conveyance Swale", "href": "NRCSDocuments/BMP-022 Driveway Conveyance Swale.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-022 Spanish-Driveway Conveyance Swale.pdf" },
+        { "title": "BMP-023 Driveway Infiltration Trench", "href": "NRCSDocuments/BMP-023 Driveway Infiltration Trench.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-023 Spanish-Driveway Infiltration Trench.pdf" },
+        { "title": "BMP-024 Driveway Edge Armor", "href": "NRCSDocuments/BMP-024 Driveway Edge Armor.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-024 Spanish-Driveway Edge Armor.pdf" },
+        { "title": "BMP-026 Parking Barriers", "href": "NRCSDocuments/BMP-026 Parking Barriers.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-026 Spanish-Parking Barriers.pdf" },
+        { "title": "BMP-030 Sediment Trap", "href": "NRCSDocuments/BMP-030 Sediment Trap.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-030 Spanish-Sediment Trap.pdf" },
+        { "title": "BMP-030A Sediment Trap Sizing", "href": "NRCSDocuments/BMP-030A Sed Trap Size.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-030A Spanish_Sed Trap Size.pdf" },
+        { "title": "BMP-040 Rock Slope Protection (no fabric)", "href": "NRCSDocuments/BMP-040 Rock Slope Protection no fabric.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-040 Spanish-Rock Slope Protection no fabric.pdf" },
+        { "title": "BMP-041 Rock Slope Protection", "href": "NRCSDocuments/BMP-041 Rock Slope Protection.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-041 Spanish-Rock Slope Protection.pdf" },
+        { "title": "BMP-042 Stacked Rock Wall", "href": "NRCSDocuments/BMP-042 Stacked Rock Wall.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-042 Spanish-Stacked Rock Wall.pdf" },
+        { "title": "BMP-043 Timber Wall", "href": "NRCSDocuments/BMP-043 Timber Wall.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-043 Spanish-Timber Wall.pdf" },
+        { "title": "BMP-060 Filter Fabric for Infiltration Systems", "href": "NRCSDocuments/BMP-060 Filter Fabric for Infiltration Systems.pdf", "type": "pdf", "es": "NRCSDocuments/BMP-060 Spanish-Filter Fabric for Infiltration Systems.pdf" }
+      ]
+    },
+    {
+      "slug": "maintenance",
+      "name": "Maintenance logs and checklists",
+      "description": "Templates for the inspection and maintenance records that keep a BMP Certificate active.",
+      "items": [
+        { "title": "BMP Maintenance Log template (fillable)", "href": "Documents/BMPHandbook/Maintenance_Log_interactive_form.pdf", "type": "pdf" },
+        { "title": "BMP Maintenance Log template (print)", "href": "Documents/BMPHandbook/Maintenance_Log_static_form.pdf", "type": "pdf" },
+        { "title": "BMP Maintenance Log example", "href": "Documents/128_Market_Street_ Log_Example.pdf", "type": "pdf" },
+        { "title": "Small residential inspection, maintenance, and monitoring checklist", "href": "Documents/BMPHandbook/Ch6_2_Sm_Residential_Insepct,_Maint_Mont_Checklist.pdf", "type": "pdf" },
+        { "title": "Inspection and maintenance for projects over 1 acre", "href": "Documents/BMPHandbook/Ch6_3_1to5.pdf", "type": "pdf" },
+        { "title": "Inspection and maintenance for projects over 5 acres", "href": "Documents/BMPHandbook/Ch6_4_over5.pdf", "type": "pdf" },
+        { "title": "Handbook Chapter 6: Inspection, Maintenance, and Monitoring", "href": "Documents/BMPHandbook/Ch6_InspectionMaintenanceandMonitoring.pdf", "type": "pdf" }
+      ]
+    },
+    {
+      "slug": "policy",
+      "name": "Policy and code",
+      "description": "The documents behind the BMP Retrofit Program and its disclosure requirement.",
+      "items": [
+        { "title": "TRPA BMP Action Plan (adopted Feb. 25, 2015)", "href": "https://www.trpa.gov/wp-content/uploads/documents/archive/FINAL-TRPA-BMP-Action-Plan_02-25-2015-4.pdf", "type": "pdf" },
+        { "title": "Tahoe Regional Planning Compact (1980 Bi-State Compact)", "href": "https://www.trpa.gov/wp-content/uploads/documents/archive/2/Bistate_Compact.pdf", "type": "pdf" },
+        { "title": "TRPA Code of Ordinances", "href": "https://www.trpa.gov/code-of-ordinances/", "type": "link", "note": "Chapter 60.4 covers the BMP Retrofit Program" },
+        { "title": "Environmental Improvement Program", "href": "https://www.trpa.gov/programs/environmental-improvement-program/", "type": "link" }
+      ]
+    },
+    {
+      "slug": "fire",
+      "name": "Fire and defensible space",
+      "description": "BMPs are designed to work with fire defensible space. These partners cover the fire side.",
+      "items": [
+        { "title": "Tahoe Living with Fire", "href": "https://www.tahoelivingwithfire.com/", "type": "link" },
+        { "title": "Trees and Defensible Space (TRPA)", "href": "https://www.trpa.gov/trees-and-defensible-space/", "type": "link" },
+        { "title": "Fire Adapted Communities (UNR Extension)", "href": "https://www.unce.unr.edu/publications/files/nr/2014/sp1405.pdf", "type": "pdf" },
+        { "title": "Fire Safe Council", "href": "http://www.firesafecouncil.org/", "type": "link" }
+      ]
+    },
+    {
+      "slug": "fire-districts",
+      "name": "Fire districts",
+      "description": "Local fire protection districts around the lake.",
+      "items": [
+        { "title": "Meeks Bay Fire Protection District", "href": "http://www.meeksbayfire.com/", "type": "link" },
+        { "title": "Tahoe Douglas Fire Protection District", "href": "http://www.tahoefire.com/", "type": "link" },
+        { "title": "North Tahoe Fire Protection District", "href": "http://www.ntfire.net/", "type": "link" },
+        { "title": "North Lake Tahoe Fire Protection District", "href": "http://www.nltfpd.net/", "type": "link" },
+        { "title": "South Lake Tahoe Fire Rescue", "href": "https://www.cityofslt.us/384/Fire", "type": "link" },
+        { "title": "Lake Valley Fire Protection District", "href": "http://www.lakevalleyfire.org/", "type": "link" }
+      ]
+    }
+  ]
+}
