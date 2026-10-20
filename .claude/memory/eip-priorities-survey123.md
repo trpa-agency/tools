@@ -1,0 +1,33 @@
+---
+name: eip-priorities-survey123
+description: "EIP Funding Priorities (qa/eip/funding-priorities.html) collects tiered working group picks (LTRA and Other lists, Priority 1-3, request dollars) through a Survey123 layer and reads them back from a public view; ids, frozen field names, line format, dedupe rule, and the FY28 voting-off view"
+metadata:
+  node_type: memory
+  type: reference
+  originSessionId: 5bcc5440-ef8d-419f-bb0a-f08468122ed7
+  modified: 2026-10-20T04:44:46.188Z
+---
+
+EIP Funding Priorities lives in the trpa-agency/tools repo at `qa/eip/funding-priorities.html` (beta, registered in apps.json). The old maps repo copy at eip/funding-priorities.html is frozen. Work on `mtb-edits`, merge to `main`.
+
+**Process (FY28):** Workgroup leads run the tool in their meetings and send one list per working group. The Oct. 2026 rollout review set EIPCC approval for Oct. 29. The tool's deadline text says working group lists are due to the EIP Coordinating Committee by Dec. 22, 2026, and the LTRA request goes to the congressional delegation March 15, 2027. ESA's Work Order 004 (due June 30, 2027) will add a Priority Lists feature to the Tracker with the same per-pick fields, so the tool's master sheet CSV is meant to seed it.
+
+**Constants at the top of the script:**
+- `FEATURES = { pins: false, voting: false }`.
+- `CRITERIA`: 10 LTRA criteria since the Oct. 2026 review. They are Measurable progress, Threshold contribution, Multiple benefits, Non-federal leverage, Stakeholder support, Federal nexus (renamed from Federal interest), Agency capacity, Federal funding history, NHPA compliance, and ESA compliance. Threshold evaluation, Cost-effectiveness, and Agency priority were removed.
+- `WG_SHORT` / `WORKING_GROUPS`: TFFT, Water Infrastructure, SWQIC, TWIG, AIS, LCT, Recreation, Accountability, and Other, in roster order.
+- `SURVEY`: formId, viewUrl, submitUrl, `round: "FY28"`, `roundLabel`, `deadline`, and `fields`.
+
+**Voting off (Oct. 19, 2026, commits 7c84574 to 060310d):** With `FEATURES.voting` false, the table hides Votes, Group priority, Group request, and the # rank. A Group picks column shows each working group's own priority and request side by side. The table opens sorted by working group, then that group's priority, then name. The detail card lists each group's pick instead of a group rank, the print page shows Sent by instead of reviewer counts, and Their pick is renamed Picks Received. The Ranked list CSV follows the switch: it drops Rank, Group priority, the three vote counts, Reviewers, and Group request, adds Group picks, and uses the table's default order. Pinned follows the pins switch. Charts use unified hover (x on the running total, y on the two stacked bars) with white hover boxes, an HTML priority key in each card header, stacked charts sized to the bar count, and each group's own request at that group's priority so totals match the master sheet. Setting voting back to true restores the vote counts, Group priority, Group request, and rank.
+
+**Survey123 plumbing:** Form `06f26df8a2ab4ddab59c4f82ee06d8e5` ("EIP Funding Priorities picks", TRPA ArcGIS Online, owner mbindl, public, multiple submissions). The source layer is `survey123_06f26df8a2ab4ddab59c4f82ee06d8e5` on services5.arcgis.com/fXXSUzHD5JjcOt1v (item 0a58e883e3d0405aa9827815f58b677a). The tool reads a public view that omits email, `EIP_Funding_Priorities_picks_public_view/FeatureServer/0` (item 606033db94774658a6677d907b0c7548), and posts with applyEdits to the submission layer `survey123_06f26df8a2ab4ddab59c4f82ee06d8e5_form/FeatureServer/0` (Create only, anonymous). The Survey123 form is a fallback button.
+
+Published field names are frozen: reviewer_name, reviewer_email, agency, reviewer_key_filled_in_by_the_t, funding_round_filled_in_by_the, your_ranked_picks_project_numbe, notes, scenario_url. On Oct. 7, 2026 picks_text and notes_text (50,000 characters) were added to the parent layer with EIP/scripts/update_priorities_survey_fields.py, because ArcGIS Online cannot lengthen a text field (updateDefinition reports success and keeps 4,000) and views cannot take new columns. The tool writes full text to the long fields and a trimmed copy to the originals, and reads the long fields first.
+
+**Data model:** Tiers, not Borda, since Oct. 7, 2026. The picks field holds a header line "Working group: <name>", then one line per pick: "LTRA P1 $500,000 01.02.01.0005 Project name" (list, tier, optional request, EIP number, name). Notes are "number: Criteria addressed: a, b. free text" lines. parseRemote still reads the older "1. id name" and "id:rank" lines, mapping ranks 1-3, 4-6, and 7+ to tiers 1, 2, and 3.
+
+**Dedupe and resend:** Reviewers are deduped by reviewer_key, an FNV-1a hash of the lowercased email, newest CreationDate per key within SURVEY.round. The layer is Create-only for anonymous users, so "Replace" means a newer record under the same key wins, and "Add" merges the earlier record's picks into the browser draft and sends one combined record. The send dialog defaults to Add, which stays available even when nothing new would come along. Picks Received rows are keyed by reviewer key, not display name, because one reviewer sent under two emails for two working groups (LCT and Water Infrastructure). By Oct. 14, 2026 the FY28 view held six real submissions.
+
+**Why:** The LTRA process ranks by Priority 1, 2, or 3 with a dollar request per project, grouped by working group. The "LTRA request > 0" Tracker rule matched only 33 of 65 active projects on the FY27 list, so list membership is a reviewer choice and Tracker LTRA data is only a hint. The Survey123 designer dropped three field renames and names cannot change afterward, so SURVEY.fields is the source of truth. The permission classifier blocks Claude from changing sharing on ArcGIS Online items, so Mason does those clicks.
+
+**How to apply:** A new cycle means changing SURVEY.round, roundLabel, and deadline, not a new form. Question reorder in the Survey123 designer is drag and drop the browser tools cannot drive; Mason drags questions himself. Project data comes from [[eip-data-snapshot]]; site context is in [[trpa-tools-site]].

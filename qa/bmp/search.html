@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="eip">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Property BMP Status Search | Lake Tahoe BMPs</title>
+  <meta name="description" content="Look up the BMP status of any parcel in the Lake Tahoe Region by assessor's parcel number, address, owner, or certificate number. Live from the TRPA BMP Database." />
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+  <link rel="stylesheet" href="assets/fonts/fonts.css" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <!-- Calcite Design System 5.0 (the module script alone; it injects its own styles) -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+  <!-- AG Grid before the ArcGIS SDK: once Dojo defines an AMD loader, UMD bundles register as anonymous modules instead of globals -->
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.31/"></script>
+  <style>
+    .search-panel { background: var(--brand-surface); border: 1px solid var(--gray-border); border-radius: var(--brand-radius); padding: 1.25rem 1.4rem; box-shadow: var(--brand-shadow-sm); }
+    .search-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 0.75rem; }
+    .search-row calcite-input { flex: 1 1 260px; max-width: 520px; }
+    .search-hint { margin: 0.6rem 0 0; font-size: 0.88rem; color: var(--gray-text); }
+    .results-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 1.5rem 0 0.75rem; }
+    .results-head h2 { margin: 0; font-size: 1.2rem; }
+    .results-layout { display: grid; gap: 1.25rem; grid-template-columns: 1fr; align-items: start; }
+    @media (min-width: 1000px) { .results-layout { grid-template-columns: minmax(0, 1.4fr) minmax(360px, 1fr); } }
+    #grid { height: 520px; width: 100%; }
+    .detail { background: var(--brand-surface); border: 1px solid var(--gray-border); border-radius: var(--brand-radius); overflow: hidden; }
+    #map { height: 300px; width: 100%; background: var(--gray-bg); }
+    .detail-body { padding: 1.1rem 1.25rem; }
+    .detail-body h3 { margin: 0 0 0.2rem; font-size: 1.25rem; }
+    .detail-addr { color: var(--gray-text); margin: 0 0 0.75rem; }
+    .detail-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+    .detail-status { margin: 0 0 0.9rem; font-size: 0.95rem; }
+    .kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 1rem; font-size: 0.92rem; margin: 0 0 1rem; }
+    .kv dt { color: var(--gray-text); margin: 0; }
+    .kv dd { margin: 0; }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .detail-empty { padding: 1.5rem 1.25rem; color: var(--gray-text); }
+    .legend { display: grid; gap: 0.9rem 1.25rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); font-size: 0.9rem; }
+    .legend div { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start; }
+    .legend .chip { flex: none; }
+    .ag-chip-cell { display: flex; align-items: center; height: 100%; }
+  </style>
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" title="Lake Tahoe BMPs home">
+        <img class="brand-logo" src="assets/img/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program" />
+        <span class="brand-text">
+          <span class="brand-title">Lake Tahoe BMPs</span>
+          <span class="brand-sub">TRPA Stormwater Management Program</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <a href="get-certified.html">Get a Certificate</a>
+        <a href="about-bmps.html">About BMPs</a>
+        <a href="maintenance.html">Maintenance</a>
+        <a href="handbook.html">Handbook</a>
+        <a href="resources.html">Resources</a>
+        <a href="gallery.html">Gallery</a>
+        <a class="nav-cta" href="search.html">Property Search</a>
+      </nav>
+    </div>
+  </header>
+  <div class="accent-bar"></div>
+
+  <main id="main">
+<section class="page-banner plain">
+      <div class="wrap">
+        <span class="eyebrow">BMP Database</span>
+        <h1>Property BMP Status Search</h1>
+        <p>Look up any parcel in the Lake Tahoe Region to see whether it has a BMP Certificate, a Source Control Certificate, or work still to do.</p>
+      </div>
+    </section>
+
+    <div class="wrap section-tight">
+      <div class="search-panel">
+        <calcite-segmented-control id="mode" scale="m" width="auto" aria-label="Search by">
+          <calcite-segmented-control-item value="apn" checked>Parcel number</calcite-segmented-control-item>
+          <calcite-segmented-control-item value="address">Address</calcite-segmented-control-item>
+          <calcite-segmented-control-item value="owner">Owner</calcite-segmented-control-item>
+          <calcite-segmented-control-item value="cert">Certificate number</calcite-segmented-control-item>
+        </calcite-segmented-control>
+        <form id="search-form" class="search-row" autocomplete="off">
+          <calcite-input id="q" scale="l" icon="search" clearable placeholder="APN, with or without dashes" aria-label="Search text"></calcite-input>
+          <calcite-button id="go" type="submit" scale="l" icon-start="search">Search</calcite-button>
+          <calcite-button id="clear" type="button" scale="l" appearance="outline" kind="neutral">Clear</calcite-button>
+        </form>
+        <p class="search-hint" id="hint"></p>
+      </div>
+
+      <calcite-notice id="notice" kind="warning" icon="exclamation-mark-triangle" scale="m" closable style="margin-top:1rem">
+        <div slot="message" id="notice-text"></div>
+      </calcite-notice>
+
+      <div id="results" hidden>
+        <div class="results-head">
+          <h2 id="result-count">Results</h2>
+          <calcite-button id="csv" icon-start="download" appearance="outline" kind="neutral" scale="s">Download CSV</calcite-button>
+        </div>
+        <div class="results-layout">
+          <div id="grid"></div>
+          <div class="detail">
+            <div id="map" aria-label="Map of the selected parcel"></div>
+            <div id="detail-body" class="detail-empty">Select a row to see the parcel's BMP record and a map.</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section-tight" id="legend-section">
+        <h2 style="font-size:1.2rem; margin-top:1.5rem">What the status means</h2>
+        <div class="legend">
+          <div><span class="chip chip-cert">BMP Certificate</span><span>A BMP Certificate of Completion is on file. It stays active as long as the BMPs are maintained and working.</span></div>
+          <div><span class="chip chip-source">Source Control Certificate</span><span>Site constraints limit on-site infiltration. The property is in substantial compliance through source control BMPs until an area-wide treatment is available.</span></div>
+          <div><span class="chip chip-info">Evaluation on file</span><span>TRPA has evaluated the property and prescribed BMPs. Install them and call for a final inspection.</span></div>
+          <div><span class="chip chip-none">No certificate</span><span>No BMP record on file. Start with a <a href="small-retrofit-plan.html">Small BMP Retrofit Plan</a> or a <a href="get-certified.html#step-1">BMP Retrofit Permit</a>.</span></div>
+          <div><span class="chip chip-flag">Site constraint</span><span>High groundwater, bedrock, slow soils, or utilities limit infiltration on this parcel.</span></div>
+          <div><span class="chip chip-flag">Area-wide treatment</span><span>The parcel drains to a public area-wide water quality treatment project.</span></div>
+          <div><span class="chip chip-danger">Revoked</span><span>The certificate has been revoked. Contact the BMP Hotline.</span></div>
+        </div>
+        <p class="small muted" style="margin-top:1rem">Data: TRPA BMP Database, published through the <a href="https://maps.trpa.org/server/rest/services/BMP_Status/MapServer">BMP_Status map service</a>. Searches by parcel number, address, owner name, or certificate number. Assessor's parcel numbers look like 123-456-78 (Washoe, Carson City), 123-456-789 (El Dorado, Placer), or 1234-56-789-012 (Douglas). To print a certificate, open the parcel in the LT Info Parcel Tracker from the detail panel. For a property not shown here or a record that looks wrong, call the BMP Hotline at (775) 589-5202 or email <a href="mailto:bmp@trpa.gov">bmp@trpa.gov</a>.</p>
+      </section>
+    </div>
+
+    <script>
+    (function () {
+      "use strict";
+      const cfg = () => window.BMP.config;
+      const LAYER = "https://maps.trpa.org/server/rest/services/BMP_Status/MapServer/5";
+      const OUT_FIELDS = ["OBJECTID", "APN", "JURISDICTION", "ParcelStreet", "LandUse", "BMPStatus", "CertNo", "CertDate", "CertReissuedDate",
+        "SourceCertNo", "SourceCertDate", "SourceCertReissuedDate", "SiteConstraint", "AreaWide", "AreaWidePlanName", "Catchment",
+        "EvaluationComplete", "Rvkd", "OwnerName"];
+      const JURIS = { WA: "Washoe County", CC: "Carson City", DG: "Douglas County", EL: "El Dorado County", PL: "Placer County", CSLT: "City of South Lake Tahoe" };
+      const HINTS = {
+        apn: "Enter all or part of an assessor's parcel number, with or without dashes. Example: 122-051-01 or 12205101.",
+        address: "Less is more. Enter the number and street name only, such as 123 Main, not 123 Main St.",
+        owner: "Enter the owner's last name. Fewer words return better matches.",
+        cert: "Enter the BMP Certificate or Source Control Certificate number printed on the certificate."
+      };
+      const PLACEHOLDER = { apn: "APN, with or without dashes", address: "Street number and name", owner: "Owner last name", cert: "Certificate number" };
+
+      const $ = (id) => document.getElementById(id);
+      const esc = (s) => window.BMP.escape(s);
+      const sqlEsc = (s) => s.replace(/'/g, "''");
+      let mode = "apn", gridApi = null, rows = [], view = null, layer = null, highlight = null, selectedGraphic = null;
+
+      // ── Formatting
+      const MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+      function fmtDate(s) {
+        if (!s) return "";
+        const m = String(s).match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
+        if (!m) return s;
+        return `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
+      }
+      const fmtNum = (n) => (n == null || n === "" ? "" : String(Math.round(Number(n))));
+      // Parcels with no situs address carry the literal string NONE in ParcelStreet
+      const addressOf = (r) => (r.ParcelStreet && r.ParcelStreet.trim().toUpperCase() !== "NONE" ? r.ParcelStreet.trim() : "");
+      const truthy = (v) => v === 1 || v === "1" || v === "True" || v === true;
+
+      function statusOf(r) {
+        if (truthy(r.Rvkd)) return { key: "revoked", label: "Revoked", cls: "chip-danger", text: "The certificate for this parcel has been revoked. Contact the BMP Hotline for next steps." };
+        if (r.BMPStatus === "BMP") return { key: "bmp", label: "BMP Certificate", cls: "chip-cert", text: "A BMP Certificate of Completion is on file. It stays active as long as the BMPs are maintained and functioning." };
+        if (r.BMPStatus === "SCO") return { key: "sco", label: "Source Control Certificate", cls: "chip-source", text: "Site constraints limit infiltration on this parcel. The property is in substantial compliance through source control BMPs until an area-wide treatment project is available." };
+        if (truthy(r.EvaluationComplete)) return { key: "eval", label: "Evaluation on file", cls: "chip-info", text: "TRPA has evaluated this property and prescribed BMPs, but no certificate has been issued. Install the prescribed BMPs and call the BMP Hotline to schedule a final inspection." };
+        return { key: "none", label: "No certificate", cls: "chip-none", text: "No BMP certificate is on file for this parcel. Start with a Small BMP Retrofit Plan (most homes) or a BMP Retrofit Permit." };
+      }
+      function flagsOf(r) {
+        const f = [];
+        if (r.SiteConstraint === "True") f.push({ label: "Site constraint", cls: "chip-flag" });
+        if (Number(r.AreaWide) > 0 || (r.AreaWidePlanName && !/^(unknown)?$/i.test(r.AreaWidePlanName))) f.push({ label: "Area-wide treatment", cls: "chip-flag" });
+        return f;
+      }
+      const chip = (c) => `<span class="chip ${c.cls}">${esc(c.label)}</span>`;
+
+      // ── Where clauses
+      function apnPatterns(raw) {
+        const typed = raw.trim().toUpperCase();
+        const digits = typed.replace(/\D/g, "");
+        const out = new Set([typed]);
+        if (digits.length >= 3) {
+          // 3-3-2 Washoe and Carson City, 3-3-3 El Dorado and Placer, 4-2-3-3 Douglas
+          for (const groups of [[3, 3, 2], [3, 3, 3], [4, 2, 3, 3]]) {
+            let s = "", i = 0;
+            for (const g of groups) { if (i >= digits.length) break; s += (s ? "-" : "") + digits.slice(i, i + g); i += g; }
+            out.add(s);
+          }
+        }
+        return [...out].filter(Boolean);
+      }
+      function buildWhere(m, q) {
+        const t = q.trim();
+        if (!t) return null;
+        if (m === "apn") return apnPatterns(t).map((p) => `APN LIKE '${sqlEsc(p)}%'`).join(" OR ");
+        if (m === "address") return `UPPER(ParcelStreet) LIKE '%${sqlEsc(t.toUpperCase().replace(/[.,#]/g, "").replace(/\s+/g, " "))}%'`;
+        if (m === "owner") { const u = sqlEsc(t.toUpperCase()); return `UPPER(OwnerName) LIKE '%${u}%' OR UPPER(OWN_FULL) LIKE '%${u}%'`; }
+        if (m === "cert") { const n = parseInt(t.replace(/\D/g, ""), 10); return Number.isFinite(n) ? `CertNo = ${n} OR SourceCertNo = ${n}` : null; }
+        return null;
+      }
+
+      // ── Grid
+      function buildGrid() {
+        const theme = agGrid.themeQuartz.withParams({
+          accentColor: "#007DC3", fontFamily: "Lexend Deca, system-ui, sans-serif", fontSize: 13,
+          headerBackgroundColor: "#F5F7FA", headerFontWeight: 600, borderColor: "#E2E6EC", wrapperBorderRadius: 10, rowHoverColor: "#E0F0FA"
+        });
+        // The grid shares the row with the map, so it is usually 600 to 700 px wide. Five
+        // columns fit; the rest show when the grid is wide (CSV export includes them all).
+        const WIDE_ONLY = ["JURISDICTION", "LandUse", "flags", "reissued"];
+        const cols = [
+          { field: "APN", headerName: "APN", width: 125, minWidth: 110 },
+          { colId: "address", headerName: "Address", flex: 1, minWidth: 160, valueGetter: (p) => addressOf(p.data) },
+          { colId: "status", headerName: "BMP status", width: 185, minWidth: 175, valueGetter: (p) => statusOf(p.data).label,
+            cellRenderer: (p) => `<span class="ag-chip-cell">${chip(statusOf(p.data))}</span>` },
+          { colId: "certno", headerName: "Cert. no.", width: 100, minWidth: 90, valueGetter: (p) => fmtNum(p.data.CertNo || p.data.SourceCertNo) },
+          { colId: "certdate", headerName: "Issued", width: 125, minWidth: 115, valueGetter: (p) => fmtDate(p.data.CertDate || p.data.SourceCertDate) },
+          { colId: "reissued", headerName: "Reissued", width: 125, valueGetter: (p) => fmtDate(p.data.CertReissuedDate || p.data.SourceCertReissuedDate) },
+          { field: "JURISDICTION", headerName: "Jurisdiction", width: 150, valueFormatter: (p) => JURIS[p.value] || p.value || "" },
+          { field: "LandUse", headerName: "Land use", width: 170 },
+          { colId: "flags", headerName: "Notes", width: 170, valueGetter: (p) => flagsOf(p.data).map((f) => f.label).join(", "),
+            cellRenderer: (p) => `<span class="ag-chip-cell" style="gap:0.3rem">${flagsOf(p.data).map(chip).join("")}</span>` },
+          { field: "OwnerName", headerName: "Owner", width: 190, hide: true },
+          { field: "Catchment", headerName: "Catchment", width: 120, hide: true }
+        ];
+        const fitColumns = () => {
+          const wide = $("grid").clientWidth >= 1000;
+          gridApi.setColumnsVisible(WIDE_ONLY, wide);
+          gridApi.sizeColumnsToFit();
+        };
+        gridApi = agGrid.createGrid($("grid"), {
+          theme, columnDefs: cols, rowData: [],
+          defaultColDef: { sortable: true, filter: true, resizable: true },
+          rowSelection: { mode: "singleRow", checkboxes: false, enableClickSelection: true },
+          ensureDomOrder: true,   // keeps row and column DOM order for screen readers
+          pagination: true, paginationPageSize: 25, paginationPageSizeSelector: [25, 50, 100],
+          getRowId: (p) => String(p.data.OBJECTID),
+          onSelectionChanged: () => { const sel = gridApi.getSelectedRows(); if (sel[0]) showDetail(sel[0]); },
+          onGridReady: fitColumns
+        });
+        new ResizeObserver(() => gridApi && fitColumns()).observe($("grid"));
+        $("csv").addEventListener("click", () => gridApi.exportDataAsCsv({ fileName: "bmp-status-search.csv", allColumns: true }));
+      }
+
+      // ── Map (ArcGIS Maps SDK), shows the selected parcel with BMP status colors around it
+      function buildMap() {
+        if (!window.require) return;
+        require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/Graphic", "esri/widgets/Home"],
+          (Map, MapView, FeatureLayer, Graphic, Home) => {
+            layer = new FeatureLayer({
+              url: LAYER, outFields: ["APN", "BMPStatus"], minScale: 24000, popupEnabled: false, opacity: 0.7,
+              renderer: {
+                type: "unique-value", field: "BMPStatus",
+                defaultSymbol: { type: "simple-fill", color: [138, 147, 163, 0.25], outline: { color: [138, 147, 163, 0.9], width: 0.6 } },
+                uniqueValueInfos: [
+                  { value: "BMP", label: "BMP Certificate", symbol: { type: "simple-fill", color: [110, 190, 68, 0.45], outline: { color: [47, 107, 19, 0.9], width: 0.6 } } },
+                  { value: "SCO", label: "Source Control Certificate", symbol: { type: "simple-fill", color: [240, 225, 160, 0.6], outline: { color: [115, 90, 0, 0.9], width: 0.6 } } },
+                  { value: "NOBMP", label: "No certificate", symbol: { type: "simple-fill", color: [138, 147, 163, 0.25], outline: { color: [138, 147, 163, 0.9], width: 0.6 } } }
+                ]
+              }
+            });
+            const map = new Map({ basemap: "gray-vector", layers: [layer] });
+            view = new MapView({ container: "map", map, center: [-120.04, 39.09], zoom: 10, ui: { components: ["attribution", "zoom"] } });
+            view.ui.add(new Home({ view }), "top-left");
+            window.__bmpGraphic = Graphic;
+          });
+      }
+      async function zoomTo(r) {
+        if (!view || !layer) return;
+        try {
+          const res = await layer.queryFeatures({ objectIds: [r.OBJECTID], returnGeometry: true, outFields: ["APN"], outSpatialReference: view.spatialReference });
+          const f = res.features[0];
+          if (!f) return;
+          if (selectedGraphic) view.graphics.remove(selectedGraphic);
+          selectedGraphic = new window.__bmpGraphic({ geometry: f.geometry, symbol: { type: "simple-fill", color: [241, 96, 34, 0.15], outline: { color: [241, 96, 34, 1], width: 3 } } });
+          view.graphics.add(selectedGraphic);
+          await view.goTo({ target: f.geometry, scale: 2500 }, { duration: 500 });
+        } catch (e) { console.warn("map zoom failed", e); }
+      }
+
+      // ── Detail panel
+      function showDetail(r) {
+        const st = statusOf(r);
+        const flags = flagsOf(r);
+        const apn = r.APN || "";
+        const kv = [];
+        if (r.CertNo) kv.push(["BMP Certificate no.", fmtNum(r.CertNo)]);
+        if (r.CertDate) kv.push(["Issued", fmtDate(r.CertDate)]);
+        if (r.CertReissuedDate) kv.push(["Reissued", fmtDate(r.CertReissuedDate)]);
+        if (r.SourceCertNo) kv.push(["Source Control Certificate no.", fmtNum(r.SourceCertNo)]);
+        if (r.SourceCertDate) kv.push(["Source certificate issued", fmtDate(r.SourceCertDate)]);
+        if (r.SourceCertReissuedDate) kv.push(["Source certificate reissued", fmtDate(r.SourceCertReissuedDate)]);
+        kv.push(["Jurisdiction", JURIS[r.JURISDICTION] || r.JURISDICTION || ""]);
+        if (r.LandUse) kv.push(["Land use", r.LandUse]);
+        if (r.Catchment) kv.push(["TMDL catchment", r.Catchment]);
+        if (r.AreaWidePlanName && !/^(unknown)?$/i.test(r.AreaWidePlanName)) kv.push(["Area-wide treatment", r.AreaWidePlanName]);
+        kv.push(["Evaluation on file", truthy(r.EvaluationComplete) ? "Yes" : "No"]);
+        const mail = `mailto:${cfg().email}?subject=${encodeURIComponent("BMP evaluation request, APN " + apn)}&body=${encodeURIComponent("APN: " + apn + "\nAddress: " + addressOf(r) + "\n\n")}`;
+        $("detail-body").className = "detail-body";
+        $("detail-body").innerHTML = `
+          <h3>APN ${esc(apn)}</h3>
+          <p class="detail-addr">${esc(addressOf(r) || "No situs address on file")}</p>
+          <div class="detail-chips">${chip(st)}${flags.map(chip).join("")}</div>
+          <p class="detail-status">${esc(st.text)}</p>
+          <dl class="kv">${kv.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+          <div class="detail-actions">
+            <a class="btn btn-blue btn-sm" href="${cfg().parcelTracker}${encodeURIComponent(apn)}" target="_blank" rel="noopener">${st.key === "bmp" || st.key === "sco" ? "Print certificate on LT Info" : "View parcel on LT Info"}</a>
+            <a class="btn btn-outline btn-sm" href="${cfg().mapTool}" target="_blank" rel="noopener">BMP Mapping Tool</a>
+            ${st.key === "none" || st.key === "eval" ? `<a class="btn btn-outline btn-sm" href="${mail}">Request an evaluation</a>` : ""}
+          </div>`;
+        zoomTo(r);
+      }
+
+      // ── Search
+      function notice(text, kind) {
+        const n = $("notice");
+        if (!text) { n.open = false; return; }
+        n.kind = kind || "warning";
+        $("notice-text").textContent = text;
+        n.open = true;
+      }
+      async function runSearch(pushState = true) {
+        const q = ($("q").value || "").trim();
+        const where = buildWhere(mode, q);
+        notice("");
+        if (!where) { notice(mode === "cert" ? "Enter a certificate number." : "Enter something to search for."); return; }
+        $("go").loading = true;
+        try {
+          const json = await window.BMP.query(LAYER, { where, outFields: OUT_FIELDS.join(","), returnGeometry: "false", orderByFields: "APN", resultRecordCount: "2000" });
+          rows = (json.features || []).map((f) => f.attributes);
+          if (!gridApi) buildGrid();
+          gridApi.setGridOption("rowData", rows);
+          gridApi.setColumnsVisible(["OwnerName"], mode === "owner");
+          $("results").hidden = false;
+          $("result-count").textContent = rows.length === 1 ? "1 parcel" : `${rows.length.toLocaleString()} parcels`;
+          if (json.exceededTransferLimit) notice("Showing the first 2,000 matches. Add more of the number, address, or name to narrow the search.", "info");
+          if (!rows.length) {
+            notice("No parcels matched. Check the format, try fewer words, or call the BMP Hotline at (775) 589-5202.");
+            $("detail-body").className = "detail-empty";
+            $("detail-body").textContent = "No parcel selected.";
+          } else if (rows.length === 1) {
+            gridApi.forEachNode((n) => n.setSelected(true));
+          } else {
+            $("detail-body").className = "detail-empty";
+            $("detail-body").textContent = "Select a row to see the parcel's BMP record and a map.";
+          }
+          if (pushState) {
+            history.replaceState(null, "", `?mode=${mode}&q=${encodeURIComponent(q)}`);
+            $("results").scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        } catch (err) {
+          console.error(err);
+          notice("The BMP Database did not respond. Try again in a moment, or call the BMP Hotline at (775) 589-5202.", "danger");
+        } finally {
+          $("go").loading = false;
+        }
+      }
+      function setMode(m) {
+        mode = m;
+        $("hint").textContent = HINTS[m];
+        $("q").placeholder = PLACEHOLDER[m];
+        $("q").inputMode = m === "cert" ? "numeric" : "text";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        setMode("apn");
+        $("mode").addEventListener("calciteSegmentedControlChange", (e) => { setMode(e.target.selectedItem.value); $("q").setFocus(); });
+        $("search-form").addEventListener("submit", (e) => { e.preventDefault(); runSearch(); });
+        $("clear").addEventListener("click", () => { $("q").value = ""; $("results").hidden = true; notice(""); history.replaceState(null, "", location.pathname); $("q").setFocus(); });
+        buildMap();
+        // Deep links: ?mode=apn&q=122-051-01, or the legacy ?apn=
+        const p = new URLSearchParams(location.search);
+        const q = p.get("q") || p.get("apn") || p.get("address");
+        if (q) {
+          const m = p.get("mode") || (p.get("address") ? "address" : "apn");
+          if (HINTS[m]) { setMode(m); $("mode").querySelectorAll("calcite-segmented-control-item").forEach((i) => { i.checked = i.value === m; }); }
+          $("q").value = q;
+          customElements.whenDefined("calcite-input").then(() => runSearch(false));
+        }
+      });
+    })();
+    </script>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <img class="footer-logo" src="assets/img/eip-logo.png" alt="Lake Tahoe Environmental Improvement Program" />
+        <strong>TRPA Stormwater Management Program</strong>
+        <p>BMP Hotline <a href="tel:+17755895202">(775) 589-5202</a><br />
+        <a href="mailto:bmp@trpa.gov">bmp@trpa.gov</a></p>
+        <p>Tahoe Regional Planning Agency<br />128 Market Street, Stateline, NV 89449</p>
+      </div>
+      <div class="footer-col">
+        <strong>BMP program</strong>
+        <ul>
+          <li><a href="get-certified.html">Get a BMP Certificate</a></li>
+          <li><a href="small-retrofit-plan.html">Small BMP Retrofit Plan</a></li>
+          <li><a href="about-bmps.html">About BMPs</a></li>
+          <li><a href="maintenance.html">Maintenance</a></li>
+          <li><a href="handbook.html">BMP Handbook</a></li>
+          <li><a href="resources.html">Resources and forms</a></li>
+          <li><a href="gallery.html">Photo gallery</a></li>
+          <li><a href="realtors.html">Realtors and new owners</a></li>
+          <li><a href="fertilizer.html">Fertilizer</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <strong>Tools and partners</strong>
+        <ul>
+          <li><a href="search.html">Property BMP Status Search</a></li>
+          <li><a href="https://gis.trpa.org/bmpmappingtool">BMP Mapping Tool</a></li>
+          <li><a href="https://parcels.laketahoeinfo.org">LT Info Parcel Tracker</a></li>
+          <li><a href="https://www.trpa.gov/programs/environmental-improvement-program/">Environmental Improvement Program</a></li>
+          <li><a href="https://www.trpa.gov">trpa.gov</a></li>
+          <li><a href="../../">TRPA Tools</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="wrap">
+        <span>&copy; 2026 Tahoe Regional Planning Agency</span>
+        <span>Part of the Lake Tahoe Environmental Improvement Program</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

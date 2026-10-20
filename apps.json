@@ -269,6 +269,34 @@
       ]
     },
     {
+      "id": "bmpsite",
+      "title": "Lake Tahoe BMPs",
+      "category": "eip",
+      "url": "qa/bmp/",
+      "thumbnail": "assets/thumbs/bmp-site.png",
+      "description": "Rebuild of tahoebmp.org for the TRPA Stormwater Management Program: how to get a BMP Certificate, Small BMP Retrofit Plans, maintenance, the BMP Handbook and toolkit drawings, forms, and the photo gallery. Planned home: bmp.trpa.gov.",
+      "tags": [
+        "Stormwater",
+        "BMP",
+        "Website"
+      ],
+      "beta": true
+    },
+    {
+      "id": "bmpsearch",
+      "title": "Property BMP Status Search",
+      "category": "eip",
+      "url": "qa/bmp/search.html",
+      "thumbnail": "assets/thumbs/bmp-search.png",
+      "description": "Look up any Tahoe parcel by APN, address, owner, or certificate number to see its BMP Certificate or Source Control Certificate status, with a map and a link to print the certificate on LT Info. Replaces the tahoebmp.org BMP Database search.",
+      "tags": [
+        "Stormwater",
+        "BMP",
+        "Parcels"
+      ],
+      "beta": true
+    },
+    {
       "id": "sezviewer",
       "title": "Tahoe SEZ Viewer",
       "category": "eip",
