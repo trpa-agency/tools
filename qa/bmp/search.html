@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Property BMP Status Search | Lake Tahoe BMPs</title>
-  <meta name="description" content="Look up the BMP status of any parcel in the Lake Tahoe Region by assessor's parcel number, address, owner, or certificate number. Live from the TRPA BMP Database." />
+  <meta name="description" content="Look up the BMP status of any parcel in the Lake Tahoe Region. One search box for assessor's parcel numbers, street addresses, owner names, and certificate numbers, joined live from the TRPA parcel database and the BMP database." />
   <link rel="icon" type="image/png" href="assets/img/favicon.png" />
   <link rel="stylesheet" href="assets/fonts/fonts.css" />
   <link rel="stylesheet" href="assets/site.css" />
@@ -16,9 +16,27 @@
   <script src="https://js.arcgis.com/4.31/"></script>
   <style>
     .search-panel { background: var(--brand-surface); border: 1px solid var(--gray-border); border-radius: var(--brand-radius); padding: 1.25rem 1.4rem; box-shadow: var(--brand-shadow-sm); }
-    .search-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 0.75rem; }
-    .search-row calcite-input { flex: 1 1 260px; max-width: 520px; }
-    .search-hint { margin: 0.6rem 0 0; font-size: 0.88rem; color: var(--gray-text); }
+    .search-wrap { position: relative; }
+    .search-box { display: flex; align-items: center; gap: 0.6rem; background: var(--gray-bg); border: 2px solid var(--gray-border); border-radius: 999px; padding: 0.35rem 0.6rem 0.35rem 1rem; }
+    .search-box:focus-within { border-color: var(--brand-primary); background: #fff; }
+    .search-box calcite-icon { color: var(--brand-primary); flex-shrink: 0; }
+    .search-box input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: var(--brand-font); font-size: 1.1rem; color: var(--brand-dark); padding: 0.3rem 0; }
+    .search-box input::placeholder { color: var(--gray-text); }
+    .search-clear { border: none; background: transparent; cursor: pointer; color: var(--gray-text); padding: 0.3rem; border-radius: 999px; display: none; line-height: 0; }
+    .search-clear:hover { background: var(--gray-border); }
+    .suggest-list { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 60; background: #fff; border-radius: 12px; box-shadow: var(--brand-shadow); max-height: 380px; overflow-y: auto; display: none; border: 1px solid var(--gray-border); }
+    .suggest-list.open { display: block; }
+    .suggest-group { padding: 0.45rem 0.9rem 0.2rem; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray-text); border-bottom: 1px solid #eef1f5; }
+    .suggest-item { padding: 0.5rem 0.9rem; cursor: pointer; border-bottom: 1px solid #eef1f5; display: flex; align-items: center; gap: 0.6rem; }
+    .suggest-item:last-child { border-bottom: none; }
+    .suggest-item:hover, .suggest-item.active { background: var(--gray-bg); }
+    .suggest-item .s-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+    .s-primary { font-size: 0.95rem; font-weight: 600; }
+    .s-secondary { font-size: 0.78rem; color: var(--gray-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .suggest-empty, .suggest-warn { padding: 0.7rem 0.9rem; font-size: 0.85rem; color: var(--gray-text); }
+    .suggest-warn { color: #9C3E27; background: #fdf3ea; }
+    .search-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-top: 0.7rem; }
+    .search-hint { margin: 0; font-size: 0.88rem; color: var(--gray-text); flex: 1 1 260px; }
     .results-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 1.5rem 0 0.75rem; }
     .results-head h2 { margin: 0; font-size: 1.2rem; }
     .results-layout { display: grid; gap: 1.25rem; grid-template-columns: 1fr; align-items: start; }
@@ -31,15 +49,17 @@
     .detail-addr { color: var(--gray-text); margin: 0 0 0.75rem; }
     .detail-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
     .detail-status { margin: 0 0 0.9rem; font-size: 0.95rem; }
-    .kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 1rem; font-size: 0.92rem; margin: 0 0 1rem; }
+    .detail-body h4 { margin: 0.9rem 0 0.35rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-text); }
+    .kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; font-size: 0.92rem; margin: 0; }
     .kv dt { color: var(--gray-text); margin: 0; }
     .kv dd { margin: 0; }
-    .detail-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
     .detail-empty { padding: 1.5rem 1.25rem; color: var(--gray-text); }
     .legend { display: grid; gap: 0.9rem 1.25rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); font-size: 0.9rem; }
     .legend div { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start; }
     .legend .chip { flex: none; }
     .ag-chip-cell { display: flex; align-items: center; height: 100%; }
+    kbd { font: inherit; font-size: 0.8em; padding: 0 0.3em; border: 1px solid var(--gray-border); border-radius: 4px; background: #fff; }
   </style>
   <script src="assets/site.js" defer></script>
 </head>
@@ -73,24 +93,33 @@
       <div class="wrap">
         <span class="eyebrow">BMP Database</span>
         <h1>Property BMP Status Search</h1>
-        <p>Look up any parcel in the Lake Tahoe Region to see whether it has a BMP Certificate, a Source Control Certificate, or work still to do.</p>
+        <p>One box for parcel numbers, street addresses, owner names, and certificate numbers. Results join the TRPA parcel database with the BMP database, so you get the property and its certificate together.</p>
       </div>
     </section>
 
     <div class="wrap section-tight">
       <div class="search-panel">
-        <calcite-segmented-control id="mode" scale="m" width="auto" aria-label="Search by">
-          <calcite-segmented-control-item value="apn" checked>Parcel number</calcite-segmented-control-item>
-          <calcite-segmented-control-item value="address">Address</calcite-segmented-control-item>
-          <calcite-segmented-control-item value="owner">Owner</calcite-segmented-control-item>
-          <calcite-segmented-control-item value="cert">Certificate number</calcite-segmented-control-item>
-        </calcite-segmented-control>
-        <form id="search-form" class="search-row" autocomplete="off">
-          <calcite-input id="q" scale="l" icon="search" clearable placeholder="APN, with or without dashes" aria-label="Search text"></calcite-input>
-          <calcite-button id="go" type="submit" scale="l" icon-start="search">Search</calcite-button>
-          <calcite-button id="clear" type="button" scale="l" appearance="outline" kind="neutral">Clear</calcite-button>
+        <form id="search-form" autocomplete="off">
+          <div class="search-wrap">
+            <div class="search-box">
+              <calcite-icon icon="search" scale="m" aria-hidden="true"></calcite-icon>
+              <input id="q" type="search" placeholder="Try 640 Woodridge, 122-051-02, 12205102, Smith, or certificate 10119" aria-label="Search by parcel number, address, owner, or certificate number" autocomplete="off" spellcheck="false" />
+              <button class="search-clear" id="clear" type="button" aria-label="Clear search"><calcite-icon icon="x" scale="s"></calcite-icon></button>
+              <calcite-button id="go" type="submit" scale="m" icon-start="search" round>Search</calcite-button>
+            </div>
+            <div class="suggest-list" id="suggestList" role="listbox" aria-label="Suggestions"></div>
+          </div>
+          <div class="search-meta">
+            <p class="search-hint" id="hint">Start typing. Matches appear as you type; press <kbd>Enter</kbd> to list everything that fits.</p>
+            <calcite-segmented-control id="mode" scale="s" aria-label="Limit the search to">
+              <calcite-segmented-control-item value="auto" checked>Auto</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="apn">APN</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="address">Address</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="owner">Owner</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="cert">Certificate</calcite-segmented-control-item>
+            </calcite-segmented-control>
+          </div>
         </form>
-        <p class="search-hint" id="hint"></p>
       </div>
 
       <calcite-notice id="notice" kind="warning" icon="exclamation-mark-triangle" scale="m" closable style="margin-top:1rem">
@@ -106,7 +135,7 @@
           <div id="grid"></div>
           <div class="detail">
             <div id="map" aria-label="Map of the selected parcel"></div>
-            <div id="detail-body" class="detail-empty">Select a row to see the parcel's BMP record and a map.</div>
+            <div id="detail-body" class="detail-empty">Select a row to see the parcel and its BMP record.</div>
           </div>
         </div>
       </div>
@@ -122,7 +151,7 @@
           <div><span class="chip chip-flag">Area-wide treatment</span><span>The parcel drains to a public area-wide water quality treatment project.</span></div>
           <div><span class="chip chip-danger">Revoked</span><span>The certificate has been revoked. Contact the BMP Hotline.</span></div>
         </div>
-        <p class="small muted" style="margin-top:1rem">Data: TRPA BMP Database, published through the <a href="https://maps.trpa.org/server/rest/services/BMP_Status/MapServer">BMP_Status map service</a>. Searches by parcel number, address, owner name, or certificate number. Assessor's parcel numbers look like 123-456-78 (Washoe, Carson City), 123-456-789 (El Dorado, Placer), or 1234-56-789-012 (Douglas). To print a certificate, open the parcel in the LT Info Parcel Tracker from the detail panel. For a property not shown here or a record that looks wrong, call the BMP Hotline at (775) 589-5202 or email <a href="mailto:bmp@trpa.gov">bmp@trpa.gov</a>.</p>
+        <p class="small muted" style="margin-top:1rem">Data: the <a href="https://maps.trpa.org/server/rest/services/Parcels/FeatureServer/0">TRPA parcel database</a> (addresses, land use, parcel facts) joined live with the <a href="https://maps.trpa.org/server/rest/services/BMP_Status/MapServer/5">BMP Database</a> (certificates and status). Parcel numbers can be typed with or without dashes in any county format. Addresses match on house number and street name, so 640 Woodridge finds 640 WOODRIDGE CIR. Owner search uses the name on the BMP record. To print a certificate, open the parcel on the LT Info Parcel Tracker from the detail panel. For a property not shown here or a record that looks wrong, call the BMP Hotline at (775) 589-5202 or email <a href="mailto:bmp@trpa.gov">bmp@trpa.gov</a>.</p>
       </section>
     </div>
 
@@ -130,42 +159,35 @@
     (function () {
       "use strict";
       const cfg = () => window.BMP.config;
-      const LAYER = "https://maps.trpa.org/server/rest/services/BMP_Status/MapServer/5";
-      const OUT_FIELDS = ["OBJECTID", "APN", "JURISDICTION", "ParcelStreet", "LandUse", "BMPStatus", "CertNo", "CertDate", "CertReissuedDate",
-        "SourceCertNo", "SourceCertDate", "SourceCertReissuedDate", "SiteConstraint", "AreaWide", "AreaWidePlanName", "Catchment",
-        "EvaluationComplete", "Rvkd", "OwnerName"];
+      const PARCELS = "https://maps.trpa.org/server/rest/services/Parcels/FeatureServer/0";
+      const BMP_LAYER = "https://maps.trpa.org/server/rest/services/BMP_Status/MapServer/5";
+      const PARCEL_FIELDS = ["APN", "PPNO", "APO_ADDRESS", "PSTL_TOWN", "JURISDICTION", "EXISTING_LANDUSE", "YEAR_BUILT", "UNITS", "PARCEL_ACRES",
+        "CATCHMENT", "WATERSHED_NAME", "FIREPD", "PLAN_NAME", "ZONING_DESCRIPTION", "LTINFO_HYPERLINK", "OWNERSHIP_TYPE"];
+      const BMP_FIELDS = ["OBJECTID", "APN", "ParcelStreet", "LandUse", "BMPStatus", "CertNo", "CertDate", "CertReissuedDate", "SourceCertNo", "SourceCertDate",
+        "SourceCertReissuedDate", "SiteConstraint", "AreaWide", "AreaWidePlanName", "Catchment", "EvaluationComplete", "Rvkd", "OwnerName"];
       const JURIS = { WA: "Washoe County", CC: "Carson City", DG: "Douglas County", EL: "El Dorado County", PL: "Placer County", CSLT: "City of South Lake Tahoe" };
-      const HINTS = {
-        apn: "Enter all or part of an assessor's parcel number, with or without dashes. Example: 122-051-01 or 12205101.",
-        address: "Less is more. Enter the number and street name only, such as 123 Main, not 123 Main St.",
-        owner: "Enter the owner's last name. Fewer words return better matches.",
-        cert: "Enter the BMP Certificate or Source Control Certificate number printed on the certificate."
-      };
-      const PLACEHOLDER = { apn: "APN, with or without dashes", address: "Street number and name", owner: "Owner last name", cert: "Certificate number" };
-
+      const SUFFIXES = new Set(["ST", "STREET", "DR", "DRIVE", "CIR", "CI", "CIRCLE", "WAY", "WY", "AVE", "AV", "AVENUE", "BLVD", "BL", "BOULEVARD", "LN", "LANE", "CT", "COURT",
+        "RD", "ROAD", "PL", "PLACE", "HWY", "HIGHWAY", "TRL", "TR", "TRAIL", "TER", "TE", "TERRACE", "LOOP", "LP", "PKWY", "PKY", "PARKWAY", "ALY", "ALLEY"]);
+      const MAX_ROWS = 500;
       const $ = (id) => document.getElementById(id);
       const esc = (s) => window.BMP.escape(s);
-      const sqlEsc = (s) => s.replace(/'/g, "''");
-      let mode = "apn", gridApi = null, rows = [], view = null, layer = null, highlight = null, selectedGraphic = null;
+      const sqlEsc = (s) => String(s).replace(/'/g, "''");
+      const query = (url, params) => window.BMP.query(url, params);
+      let mode = "auto", gridApi = null, rows = [], view = null, Polygon = null, Graphic = null, selectedGraphic = null, suggestSeq = 0, suggestItems = [], activeIdx = -1;
 
       // ── Formatting
       const MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
-      function fmtDate(s) {
-        if (!s) return "";
-        const m = String(s).match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
-        if (!m) return s;
-        return `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
-      }
+      function fmtDate(s) { const m = String(s || "").match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/); return m ? `${MONTHS[+m[2] - 1]} ${+m[3]}, ${m[1]}` : (s || ""); }
       const fmtNum = (n) => (n == null || n === "" ? "" : String(Math.round(Number(n))));
-      // Parcels with no situs address carry the literal string NONE in ParcelStreet
-      const addressOf = (r) => (r.ParcelStreet && r.ParcelStreet.trim().toUpperCase() !== "NONE" ? r.ParcelStreet.trim() : "");
       const truthy = (v) => v === 1 || v === "1" || v === "True" || v === true;
-
+      const clean = (s) => (s && String(s).trim().toUpperCase() !== "NONE" ? String(s).trim() : "");
+      const titleCase = (s) => String(s || "").toLowerCase().replace(/\b([a-z])/g, (c) => c.toUpperCase()).replace(/\b(\d+)(St|Nd|Rd|Th)\b/g, (m, n, suf) => n + suf.toLowerCase());
       function statusOf(r) {
         if (truthy(r.Rvkd)) return { key: "revoked", label: "Revoked", cls: "chip-danger", text: "The certificate for this parcel has been revoked. Contact the BMP Hotline for next steps." };
         if (r.BMPStatus === "BMP") return { key: "bmp", label: "BMP Certificate", cls: "chip-cert", text: "A BMP Certificate of Completion is on file. It stays active as long as the BMPs are maintained and functioning." };
         if (r.BMPStatus === "SCO") return { key: "sco", label: "Source Control Certificate", cls: "chip-source", text: "Site constraints limit infiltration on this parcel. The property is in substantial compliance through source control BMPs until an area-wide treatment project is available." };
         if (truthy(r.EvaluationComplete)) return { key: "eval", label: "Evaluation on file", cls: "chip-info", text: "TRPA has evaluated this property and prescribed BMPs, but no certificate has been issued. Install the prescribed BMPs and call the BMP Hotline to schedule a final inspection." };
+        if (!r.BMPStatus && !r._bmpLoaded) return { key: "unknown", label: "No BMP record", cls: "chip-none", text: "This parcel is in the TRPA parcel database but has no row in the BMP database." };
         return { key: "none", label: "No certificate", cls: "chip-none", text: "No BMP certificate is on file for this parcel. Start with a Small BMP Retrofit Plan (most homes) or a BMP Retrofit Permit." };
       }
       function flagsOf(r) {
@@ -175,68 +197,151 @@
         return f;
       }
       const chip = (c) => `<span class="chip ${c.cls}">${esc(c.label)}</span>`;
+      // A house number of 0 in the parcel database means "no number assigned"
+      const addressOf = (r) => { const a = (clean(r.APO_ADDRESS) || clean(r.ParcelStreet)).replace(/^0\s+/, ""); return a ? titleCase(a) : ""; };
+      const placeOf = (r) => [addressOf(r), r.PSTL_TOWN].filter(Boolean).join(", ");
 
-      // ── Where clauses
-      function apnPatterns(raw) {
-        const typed = raw.trim().toUpperCase();
-        const digits = typed.replace(/\D/g, "");
-        const out = new Set([typed]);
-        if (digits.length >= 3) {
-          // 3-3-2 Washoe and Carson City, 3-3-3 El Dorado and Placer, 4-2-3-3 Douglas
-          for (const groups of [[3, 3, 2], [3, 3, 3], [4, 2, 3, 3]]) {
-            let s = "", i = 0;
-            for (const g of groups) { if (i >= digits.length) break; s += (s ? "-" : "") + digits.slice(i, i + g); i += g; }
-            out.add(s);
-          }
+      // ── Understanding the input. Returns the clauses to run for each source and a one-line description.
+      // APNs: PPNO is the APN as a number, so a typed prefix becomes a numeric range for each county format
+      // (8 digits 3-3-2, 9 digits 3-3-3, 13 digits 4-2-3-3); dashes in the input are ignored.
+      function apnClauses(digits, typed) {
+        const parts = [];
+        for (const L of [8, 9, 13]) {
+          if (digits.length > L) continue;
+          const scale = 10 ** (L - digits.length);
+          const lo = Number(digits) * scale, hi = (Number(digits) + 1) * scale;
+          parts.push(`(PPNO >= ${lo} AND PPNO < ${hi})`);
         }
-        return [...out].filter(Boolean);
+        if (/-/.test(typed)) parts.push(`APN LIKE '${sqlEsc(typed)}%'`);
+        return parts.join(" OR ");
       }
-      function buildWhere(m, q) {
-        const t = q.trim();
-        if (!t) return null;
-        if (m === "apn") return apnPatterns(t).map((p) => `APN LIKE '${sqlEsc(p)}%'`).join(" OR ");
-        if (m === "address") return `UPPER(ParcelStreet) LIKE '%${sqlEsc(t.toUpperCase().replace(/[.,#]/g, "").replace(/\s+/g, " "))}%'`;
-        if (m === "owner") { const u = sqlEsc(t.toUpperCase()); return `UPPER(OwnerName) LIKE '%${u}%' OR UPPER(OWN_FULL) LIKE '%${u}%'`; }
-        if (m === "cert") { const n = parseInt(t.replace(/\D/g, ""), 10); return Number.isFinite(n) ? `CertNo = ${n} OR SourceCertNo = ${n}` : null; }
-        return null;
+      function addressClauses(text) {
+        const t = text.toUpperCase().replace(/[.,#]/g, " ").replace(/\s+/g, " ").trim();
+        const m = t.match(/^(\d+[A-Z]?)\s+(.+)$/);
+        const parts = [];
+        if (m) {
+          const num = m[1].replace(/[A-Z]$/, "");
+          let street = m[2].split(" ");
+          if (street.length > 1 && SUFFIXES.has(street[street.length - 1])) street = street.slice(0, -1);
+          const s = street.join(" ");
+          parts.push(`(HSE_NUMBR = '${sqlEsc(num)}' AND UPPER(STR_NAME) LIKE '${sqlEsc(s)}%')`);
+          parts.push(`UPPER(APO_ADDRESS) LIKE '${sqlEsc(num + " " + s)}%'`);
+        } else {
+          let street = t.split(" ");
+          if (street.length > 1 && SUFFIXES.has(street[street.length - 1])) street = street.slice(0, -1);
+          parts.push(`UPPER(STR_NAME) LIKE '${sqlEsc(street.join(" "))}%'`);
+          parts.push(`UPPER(APO_ADDRESS) LIKE '%${sqlEsc(t)}%'`);
+        }
+        return parts.join(" OR ");
+      }
+      function ownerClause(text) { const u = sqlEsc(text.toUpperCase().replace(/[.,]/g, "").replace(/\s+/g, " ").trim()); return `UPPER(OwnerName) LIKE '%${u}%' OR UPPER(OWN_FULL) LIKE '%${u}%'`; }
+      function certClause(digits) { const n = parseInt(digits, 10); return Number.isFinite(n) ? `CertNo = ${n} OR SourceCertNo = ${n}` : null; }
+
+      function plan(text, forced) {
+        const t = text.trim().replace(/\s+/g, " ");
+        const digits = t.replace(/\D/g, "");
+        const numericish = /^[\d\s-]+$/.test(t) && digits.length >= 2;
+        const startsNum = /^\d/.test(t) && /[A-Za-z]/.test(t);
+        const p = { parcelWhere: null, ownerWhere: null, certWhere: null, desc: "", kinds: [] };
+        const m = forced || "auto";
+        if (m === "apn" || (m === "auto" && numericish)) {
+          if (digits.length >= 2) { p.parcelWhere = apnClauses(digits, t); p.kinds.push("apn"); }
+          if (m === "auto" && digits.length <= 6 && !/-/.test(t)) { p.certWhere = certClause(digits); p.kinds.push("cert"); }
+        } else if (m === "cert") {
+          p.certWhere = certClause(digits); p.kinds.push("cert");
+        } else if (m === "address" || (m === "auto" && startsNum)) {
+          if (t.length >= 2) { p.parcelWhere = addressClauses(t); p.kinds.push("address"); }
+        } else if (m === "owner") {
+          if (t.length >= 2) { p.ownerWhere = ownerClause(t); p.kinds.push("owner"); }
+        } else if (m === "auto" && t.length >= 2) {
+          p.parcelWhere = addressClauses(t); p.ownerWhere = ownerClause(t); p.kinds.push("address", "owner");
+        }
+        const d = [];
+        if (p.kinds.includes("apn")) d.push(`parcel numbers starting ${digits.replace(/^(\d{3})(\d{1,3})?(\d{1,3})?/, (x, a, b, c) => [a, b, c].filter(Boolean).join("-"))}`);
+        if (p.kinds.includes("cert")) d.push(`certificate ${digits}`);
+        if (p.kinds.includes("address")) d.push(startsNum || m === "address" ? "street addresses" : "street names");
+        if (p.kinds.includes("owner")) d.push("owner names");
+        p.desc = d.length ? "Searching " + d.join(" and ") : "";
+        return p;
+      }
+
+      // ── Queries. Everything goes through BMP.query (fetch, then JSONP on the office network).
+      async function parcelsWhere(where, num, geometry, orderBy) {
+        const r = await query(PARCELS, { where, outFields: PARCEL_FIELDS.join(","), returnGeometry: geometry ? "true" : "false", outSR: "3857", orderByFields: orderBy || "APO_ADDRESS,APN", resultRecordCount: String(num) });
+        return { features: r.features || [], exceeded: !!r.exceededTransferLimit };
+      }
+      async function bmpWhere(where, num) {
+        const r = await query(BMP_LAYER, { where, outFields: BMP_FIELDS.join(","), returnGeometry: "false", orderByFields: "APN", resultRecordCount: String(num) });
+        return { features: r.features || [], exceeded: !!r.exceededTransferLimit };
+      }
+      const chunk = (arr, n) => arr.reduce((acc, x, i) => (i % n ? acc[acc.length - 1].push(x) : acc.push([x]), acc), []);
+      async function bmpByApns(apns) {
+        const out = new Map();
+        await Promise.all(chunk(apns, 150).map(async (c) => {
+          const r = await bmpWhere(`APN IN (${c.map((a) => `'${sqlEsc(a)}'`).join(",")})`, 2000);
+          r.features.forEach((f) => out.set(f.attributes.APN, f.attributes));
+        }));
+        return out;
+      }
+      async function parcelsByApns(apns) {
+        const out = new Map();
+        await Promise.all(chunk(apns, 150).map(async (c) => {
+          const r = await parcelsWhere(`APN IN (${c.map((a) => `'${sqlEsc(a)}'`).join(",")})`, 2000, false);
+          r.features.forEach((f) => out.set(f.attributes.APN, f.attributes));
+        }));
+        return out;
+      }
+      // Merge a parcel row and a BMP row for one APN
+      function mergeRow(apn, parcel, bmp) {
+        return Object.assign({ APN: apn, _bmpLoaded: !!bmp }, parcel || {}, bmp || {}, { APN: apn });
+      }
+      // Full search: parcels from the parcel database, owners and certificates from the BMP database, then the other half for each
+      async function runPlan(p) {
+        const tasks = [];
+        if (p.parcelWhere) tasks.push(parcelsWhere(p.parcelWhere, MAX_ROWS, false, p.kinds.includes("apn") ? "APN" : null).then((r) => ({ kind: "parcel", ...r })));
+        if (p.ownerWhere) tasks.push(bmpWhere(p.ownerWhere, MAX_ROWS).then((r) => ({ kind: "bmp", ...r })));
+        if (p.certWhere) tasks.push(bmpWhere(p.certWhere, 50).then((r) => ({ kind: "bmp", ...r })));
+        const results = await Promise.all(tasks);
+        const parcels = new Map(), bmps = new Map();
+        let exceeded = false;
+        results.forEach((r) => { exceeded = exceeded || r.exceeded; r.features.forEach((f) => (r.kind === "parcel" ? parcels : bmps).set(f.attributes.APN, f.attributes)); });
+        const needBmp = [...parcels.keys()].filter((a) => !bmps.has(a));
+        const needParcel = [...bmps.keys()].filter((a) => !parcels.has(a));
+        const [moreBmp, moreParcel] = await Promise.all([needBmp.length ? bmpByApns(needBmp) : new Map(), needParcel.length ? parcelsByApns(needParcel) : new Map()]);
+        moreBmp.forEach((v, k) => bmps.set(k, v)); moreParcel.forEach((v, k) => parcels.set(k, v));
+        const apns = [...new Set([...parcels.keys(), ...bmps.keys()])];
+        const merged = apns.map((a) => mergeRow(a, parcels.get(a), bmps.get(a)));
+        merged.sort((a, b) => (addressOf(a) || "~").localeCompare(addressOf(b) || "~") || a.APN.localeCompare(b.APN));
+        return { rows: merged, exceeded };
       }
 
       // ── Grid
+      const WIDE_ONLY = ["JURISDICTION", "EXISTING_LANDUSE", "flags", "reissued", "CATCHMENT", "YEAR_BUILT", "acres"];
       function buildGrid() {
-        const theme = agGrid.themeQuartz.withParams({
-          accentColor: "#007DC3", fontFamily: "Lexend Deca, system-ui, sans-serif", fontSize: 13,
-          headerBackgroundColor: "#F5F7FA", headerFontWeight: 600, borderColor: "#E2E6EC", wrapperBorderRadius: 10, rowHoverColor: "#E0F0FA"
-        });
-        // The grid shares the row with the map, so it is usually 600 to 700 px wide. Five
-        // columns fit; the rest show when the grid is wide (CSV export includes them all).
-        const WIDE_ONLY = ["JURISDICTION", "LandUse", "flags", "reissued"];
+        const theme = agGrid.themeQuartz.withParams({ accentColor: "#007DC3", fontFamily: "Lexend Deca, system-ui, sans-serif", fontSize: 13, headerBackgroundColor: "#F5F7FA", headerFontWeight: 600, borderColor: "#E2E6EC", wrapperBorderRadius: 10, rowHoverColor: "#E0F0FA" });
         const cols = [
           { field: "APN", headerName: "APN", width: 125, minWidth: 110 },
-          { colId: "address", headerName: "Address", flex: 1, minWidth: 160, valueGetter: (p) => addressOf(p.data) },
-          { colId: "status", headerName: "BMP status", width: 185, minWidth: 175, valueGetter: (p) => statusOf(p.data).label,
-            cellRenderer: (p) => `<span class="ag-chip-cell">${chip(statusOf(p.data))}</span>` },
+          { colId: "address", headerName: "Address", flex: 1, minWidth: 170, valueGetter: (p) => placeOf(p.data) },
+          { colId: "status", headerName: "BMP status", width: 185, minWidth: 175, valueGetter: (p) => statusOf(p.data).label, cellRenderer: (p) => `<span class="ag-chip-cell">${chip(statusOf(p.data))}</span>` },
           { colId: "certno", headerName: "Cert. no.", width: 100, minWidth: 90, valueGetter: (p) => fmtNum(p.data.CertNo || p.data.SourceCertNo) },
           { colId: "certdate", headerName: "Issued", width: 125, minWidth: 115, valueGetter: (p) => fmtDate(p.data.CertDate || p.data.SourceCertDate) },
           { colId: "reissued", headerName: "Reissued", width: 125, valueGetter: (p) => fmtDate(p.data.CertReissuedDate || p.data.SourceCertReissuedDate) },
           { field: "JURISDICTION", headerName: "Jurisdiction", width: 150, valueFormatter: (p) => JURIS[p.value] || p.value || "" },
-          { field: "LandUse", headerName: "Land use", width: 170 },
-          { colId: "flags", headerName: "Notes", width: 170, valueGetter: (p) => flagsOf(p.data).map((f) => f.label).join(", "),
-            cellRenderer: (p) => `<span class="ag-chip-cell" style="gap:0.3rem">${flagsOf(p.data).map(chip).join("")}</span>` },
-          { field: "OwnerName", headerName: "Owner", width: 190, hide: true },
-          { field: "Catchment", headerName: "Catchment", width: 120, hide: true }
+          { field: "EXISTING_LANDUSE", headerName: "Land use", width: 170, valueGetter: (p) => p.data.EXISTING_LANDUSE || p.data.LandUse || "" },
+          { colId: "flags", headerName: "Notes", width: 170, valueGetter: (p) => flagsOf(p.data).map((f) => f.label).join(", "), cellRenderer: (p) => `<span class="ag-chip-cell" style="gap:0.3rem">${flagsOf(p.data).map(chip).join("")}</span>` },
+          { field: "OwnerName", headerName: "Owner (BMP record)", width: 200, hide: true },
+          { field: "CATCHMENT", headerName: "Catchment", width: 115, valueGetter: (p) => p.data.CATCHMENT || p.data.Catchment || "" },
+          { field: "YEAR_BUILT", headerName: "Year built", width: 110, valueFormatter: (p) => p.value || "" },
+          { colId: "acres", headerName: "Acres", width: 100, valueGetter: (p) => p.data.PARCEL_ACRES != null ? Number(p.data.PARCEL_ACRES).toFixed(2) : "" }
         ];
-        const fitColumns = () => {
-          const wide = $("grid").clientWidth >= 1000;
-          gridApi.setColumnsVisible(WIDE_ONLY, wide);
-          gridApi.sizeColumnsToFit();
-        };
+        const fitColumns = () => { const wide = $("grid").clientWidth >= 1000; gridApi.setColumnsVisible(WIDE_ONLY, wide); gridApi.sizeColumnsToFit(); };
         gridApi = agGrid.createGrid($("grid"), {
           theme, columnDefs: cols, rowData: [],
           defaultColDef: { sortable: true, filter: true, resizable: true },
           rowSelection: { mode: "singleRow", checkboxes: false, enableClickSelection: true },
-          ensureDomOrder: true,   // keeps row and column DOM order for screen readers
+          ensureDomOrder: true,
           pagination: true, paginationPageSize: 25, paginationPageSizeSelector: [25, 50, 100],
-          getRowId: (p) => String(p.data.OBJECTID),
+          getRowId: (p) => String(p.data.APN),
           onSelectionChanged: () => { const sel = gridApi.getSelectedRows(); if (sel[0]) showDetail(sel[0]); },
           onGridReady: fitColumns
         });
@@ -244,140 +349,209 @@
         $("csv").addEventListener("click", () => gridApi.exportDataAsCsv({ fileName: "bmp-status-search.csv", allColumns: true }));
       }
 
-      // ── Map (ArcGIS Maps SDK), shows the selected parcel with BMP status colors around it
+      // ── Map: BMP status coloring from the BMP layer, parcel outline from the parcel database
       function buildMap() {
         if (!window.require) return;
-        require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/Graphic", "esri/widgets/Home"],
-          (Map, MapView, FeatureLayer, Graphic, Home) => {
-            layer = new FeatureLayer({
-              url: LAYER, outFields: ["APN", "BMPStatus"], minScale: 24000, popupEnabled: false, opacity: 0.7,
-              renderer: {
-                type: "unique-value", field: "BMPStatus",
+        require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/Graphic", "esri/geometry/Polygon", "esri/widgets/Home", "esri/widgets/Legend", "esri/widgets/Expand"],
+          (Map, MapView, FeatureLayer, GraphicCls, PolygonCls, Home, Legend, Expand) => {
+            Graphic = GraphicCls; Polygon = PolygonCls;
+            const layer = new FeatureLayer({
+              url: BMP_LAYER, title: "Parcels by BMP status", outFields: ["APN", "BMPStatus"], minScale: 24000, popupEnabled: false, opacity: 0.7,
+              renderer: { type: "unique-value", field: "BMPStatus",
                 defaultSymbol: { type: "simple-fill", color: [138, 147, 163, 0.25], outline: { color: [138, 147, 163, 0.9], width: 0.6 } },
                 uniqueValueInfos: [
                   { value: "BMP", label: "BMP Certificate", symbol: { type: "simple-fill", color: [110, 190, 68, 0.45], outline: { color: [47, 107, 19, 0.9], width: 0.6 } } },
                   { value: "SCO", label: "Source Control Certificate", symbol: { type: "simple-fill", color: [240, 225, 160, 0.6], outline: { color: [115, 90, 0, 0.9], width: 0.6 } } },
                   { value: "NOBMP", label: "No certificate", symbol: { type: "simple-fill", color: [138, 147, 163, 0.25], outline: { color: [138, 147, 163, 0.9], width: 0.6 } } }
-                ]
-              }
+                ] }
             });
             const map = new Map({ basemap: "gray-vector", layers: [layer] });
             view = new MapView({ container: "map", map, center: [-120.04, 39.09], zoom: 10, ui: { components: ["attribution", "zoom"] } });
             view.ui.add(new Home({ view }), "top-left");
-            window.__bmpGraphic = Graphic;
+            view.ui.add(new Expand({ view, content: new Legend({ view, layerInfos: [{ layer }] }), expandIcon: "legend", expanded: false, group: "top-right" }), "top-right");
           });
       }
       async function zoomTo(r) {
-        if (!view || !layer) return;
+        if (!view || !Polygon) return;
         try {
-          const res = await layer.queryFeatures({ objectIds: [r.OBJECTID], returnGeometry: true, outFields: ["APN"], outSpatialReference: view.spatialReference });
-          const f = res.features[0];
-          if (!f) return;
+          const res = await query(PARCELS, { where: `APN = '${sqlEsc(r.APN)}'`, outFields: "APN", returnGeometry: "true", outSR: "3857", resultRecordCount: "1" });
+          const f = res.features && res.features[0];
+          if (!f || !f.geometry) return;
           if (selectedGraphic) view.graphics.remove(selectedGraphic);
-          selectedGraphic = new window.__bmpGraphic({ geometry: f.geometry, symbol: { type: "simple-fill", color: [241, 96, 34, 0.15], outline: { color: [241, 96, 34, 1], width: 3 } } });
+          const geom = new Polygon({ rings: f.geometry.rings, spatialReference: { wkid: 3857 } });
+          selectedGraphic = new Graphic({ geometry: geom, symbol: { type: "simple-fill", color: [241, 96, 34, 0.15], outline: { color: [241, 96, 34, 1], width: 3 } } });
           view.graphics.add(selectedGraphic);
-          await view.goTo({ target: f.geometry, scale: 2500 }, { duration: 500 });
+          await view.goTo({ target: geom, scale: 2500 }, { duration: 500 });
         } catch (e) { console.warn("map zoom failed", e); }
       }
 
-      // ── Detail panel
+      // ── Detail panel: BMP record plus parcel facts
       function showDetail(r) {
-        const st = statusOf(r);
-        const flags = flagsOf(r);
-        const apn = r.APN || "";
-        const kv = [];
-        if (r.CertNo) kv.push(["BMP Certificate no.", fmtNum(r.CertNo)]);
-        if (r.CertDate) kv.push(["Issued", fmtDate(r.CertDate)]);
-        if (r.CertReissuedDate) kv.push(["Reissued", fmtDate(r.CertReissuedDate)]);
-        if (r.SourceCertNo) kv.push(["Source Control Certificate no.", fmtNum(r.SourceCertNo)]);
-        if (r.SourceCertDate) kv.push(["Source certificate issued", fmtDate(r.SourceCertDate)]);
-        if (r.SourceCertReissuedDate) kv.push(["Source certificate reissued", fmtDate(r.SourceCertReissuedDate)]);
-        kv.push(["Jurisdiction", JURIS[r.JURISDICTION] || r.JURISDICTION || ""]);
-        if (r.LandUse) kv.push(["Land use", r.LandUse]);
-        if (r.Catchment) kv.push(["TMDL catchment", r.Catchment]);
-        if (r.AreaWidePlanName && !/^(unknown)?$/i.test(r.AreaWidePlanName)) kv.push(["Area-wide treatment", r.AreaWidePlanName]);
-        kv.push(["Evaluation on file", truthy(r.EvaluationComplete) ? "Yes" : "No"]);
-        const mail = `mailto:${cfg().email}?subject=${encodeURIComponent("BMP evaluation request, APN " + apn)}&body=${encodeURIComponent("APN: " + apn + "\nAddress: " + addressOf(r) + "\n\n")}`;
+        const st = statusOf(r), flags = flagsOf(r), apn = r.APN || "";
+        const bmp = [];
+        if (r.CertNo) bmp.push(["BMP Certificate no.", fmtNum(r.CertNo)]);
+        if (r.CertDate) bmp.push(["Issued", fmtDate(r.CertDate)]);
+        if (r.CertReissuedDate) bmp.push(["Reissued", fmtDate(r.CertReissuedDate)]);
+        if (r.SourceCertNo) bmp.push(["Source Control Certificate no.", fmtNum(r.SourceCertNo)]);
+        if (r.SourceCertDate) bmp.push(["Source certificate issued", fmtDate(r.SourceCertDate)]);
+        if (r.SourceCertReissuedDate) bmp.push(["Source certificate reissued", fmtDate(r.SourceCertReissuedDate)]);
+        if (r.AreaWidePlanName && !/^(unknown)?$/i.test(r.AreaWidePlanName)) bmp.push(["Area-wide treatment", r.AreaWidePlanName]);
+        if (r.OwnerName && (mode === "owner" || lastKinds.includes("owner"))) bmp.push(["Owner on BMP record", r.OwnerName]);
+        bmp.push(["Evaluation on file", truthy(r.EvaluationComplete) ? "Yes" : "No"]);
+        const parcel = [];
+        parcel.push(["Jurisdiction", JURIS[r.JURISDICTION] || r.JURISDICTION || ""]);
+        if (r.EXISTING_LANDUSE || r.LandUse) parcel.push(["Land use", r.EXISTING_LANDUSE || r.LandUse]);
+        if (r.YEAR_BUILT) parcel.push(["Year built", String(r.YEAR_BUILT)]);
+        if (r.UNITS && r.UNITS !== "0") parcel.push(["Units", String(r.UNITS)]);
+        if (r.PARCEL_ACRES != null) parcel.push(["Parcel size", `${Number(r.PARCEL_ACRES).toFixed(2)} acres`]);
+        if (r.CATCHMENT || r.Catchment) parcel.push(["TMDL catchment", r.CATCHMENT || r.Catchment]);
+        if (r.WATERSHED_NAME) parcel.push(["Watershed", titleCase(r.WATERSHED_NAME)]);
+        if (r.FIREPD) parcel.push(["Fire district", titleCase(r.FIREPD)]);
+        if (r.PLAN_NAME) parcel.push(["Plan area", titleCase(r.PLAN_NAME)]);
+        if (r.ZONING_DESCRIPTION) parcel.push(["Zoning", r.ZONING_DESCRIPTION]);
+        const mail = `mailto:${cfg().email}?subject=${encodeURIComponent("BMP evaluation request, APN " + apn)}&body=${encodeURIComponent("APN: " + apn + "\nAddress: " + placeOf(r) + "\n\n")}`;
+        const kv = (rowsIn) => `<dl class="kv">${rowsIn.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`;
         $("detail-body").className = "detail-body";
         $("detail-body").innerHTML = `
           <h3>APN ${esc(apn)}</h3>
-          <p class="detail-addr">${esc(addressOf(r) || "No situs address on file")}</p>
+          <p class="detail-addr">${esc(placeOf(r) || "No situs address on file")}</p>
           <div class="detail-chips">${chip(st)}${flags.map(chip).join("")}</div>
           <p class="detail-status">${esc(st.text)}</p>
-          <dl class="kv">${kv.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+          <h4>BMP record</h4>${kv(bmp)}
+          <h4>Parcel</h4>${kv(parcel)}
           <div class="detail-actions">
             <a class="btn btn-blue btn-sm" href="${cfg().parcelTracker}${encodeURIComponent(apn)}" target="_blank" rel="noopener">${st.key === "bmp" || st.key === "sco" ? "Print certificate on LT Info" : "View parcel on LT Info"}</a>
-            <a class="btn btn-outline btn-sm" href="${cfg().mapTool}" target="_blank" rel="noopener">BMP Mapping Tool</a>
-            ${st.key === "none" || st.key === "eval" ? `<a class="btn btn-outline btn-sm" href="${mail}">Request an evaluation</a>` : ""}
+            <a class="btn btn-outline btn-sm" href="${cfg().mapTool}?apn=${encodeURIComponent(apn)}">View on the BMP map</a>
+            ${st.key === "none" || st.key === "eval" || st.key === "unknown" ? `<a class="btn btn-outline btn-sm" href="${mail}">Request an evaluation</a>` : ""}
           </div>`;
         zoomTo(r);
       }
 
-      // ── Search
-      function notice(text, kind) {
-        const n = $("notice");
-        if (!text) { n.open = false; return; }
-        n.kind = kind || "warning";
-        $("notice-text").textContent = text;
-        n.open = true;
+      // ── Suggestions
+      const input = $("q"), list = $("suggestList"), clearBtn = $("clear");
+      let suggestTimer = null, lastKinds = [];
+      function closeList() { list.classList.remove("open"); list.innerHTML = ""; suggestItems = []; activeIdx = -1; }
+      function renderList(groups, warn) {
+        suggestItems = [];
+        let html = warn ? `<div class="suggest-warn">${esc(warn)}</div>` : "";
+        groups.forEach((g) => {
+          if (!g.items.length) return;
+          html += `<div class="suggest-group">${esc(g.label)}</div>`;
+          g.items.forEach((it) => { const i = suggestItems.push(it) - 1; html += `<div class="suggest-item" role="option" data-i="${i}"><calcite-icon icon="${it.icon}" scale="s" style="color:var(--brand-primary-text)"></calcite-icon><span class="s-text"><span class="s-primary">${esc(it.primary)}</span><span class="s-secondary">${esc(it.secondary)}</span></span>${it.chip ? chip(it.chip) : ""}</div>`; });
+        });
+        if (!suggestItems.length && !warn) html += `<div class="suggest-empty">Nothing yet. Press Enter to search everything, or try fewer words.</div>`;
+        list.innerHTML = html; list.classList.add("open");
       }
-      async function runSearch(pushState = true) {
-        const q = ($("q").value || "").trim();
-        const where = buildWhere(mode, q);
+      async function suggest(text) {
+        const p = plan(text, mode === "auto" ? null : mode);
+        $("hint").textContent = p.desc || "Start typing. Matches appear as you type; press Enter to list everything that fits.";
+        if (!p.kinds.length) { closeList(); return; }
+        const seq = ++suggestSeq;
+        const groups = [];
+        let warn = "";
+        const tasks = [];
+        if (p.parcelWhere) tasks.push(parcelsWhere(p.parcelWhere, 8, false, p.kinds.includes("apn") ? "APN" : null).then((r) => ({ kind: "parcel", r })).catch((e) => ({ kind: "parcel", err: e })));
+        if (p.ownerWhere) tasks.push(bmpWhere(p.ownerWhere, 6).then((r) => ({ kind: "owner", r })).catch((e) => ({ kind: "owner", err: e })));
+        if (p.certWhere) tasks.push(bmpWhere(p.certWhere, 5).then((r) => ({ kind: "cert", r })).catch((e) => ({ kind: "cert", err: e })));
+        const results = await Promise.all(tasks);
+        if (seq !== suggestSeq) return;
+        results.forEach((res) => {
+          if (res.err) { warn = "The TRPA map server is not answering (on the office network this is the known CORS issue). Try again in a moment."; return; }
+          const feats = res.r.features.map((f) => f.attributes);
+          if (res.kind === "parcel") groups.push({ label: p.kinds.includes("apn") ? "Parcel numbers" : "Addresses", items: feats.map((a) => ({ kind: "parcel", apn: a.APN, icon: "parcel", primary: p.kinds.includes("apn") ? a.APN : (placeOf(a) || a.APN), secondary: p.kinds.includes("apn") ? (placeOf(a) || "No situs address") : `APN ${a.APN} · ${JURIS[a.JURISDICTION] || ""}` })) });
+          if (res.kind === "owner") {
+            const seen = new Set();
+            groups.push({ label: "Owners on BMP records", items: feats.filter((a) => a.OwnerName && !seen.has(a.OwnerName) && seen.add(a.OwnerName)).map((a) => ({ kind: "owner", name: a.OwnerName, icon: "user", primary: titleCase(a.OwnerName), secondary: `${clean(a.ParcelStreet) ? titleCase(clean(a.ParcelStreet)) + " · " : ""}APN ${a.APN}. Enter lists every parcel for this owner.` })) });
+          }
+          if (res.kind === "cert") groups.push({ label: "Certificates", items: feats.map((a) => ({ kind: "parcel", apn: a.APN, icon: "certificate", primary: `Certificate ${fmtNum(a.CertNo || a.SourceCertNo)}`, secondary: `APN ${a.APN}${clean(a.ParcelStreet) ? " · " + titleCase(clean(a.ParcelStreet)) : ""}`, chip: statusOf(a) })) });
+        });
+        renderList(groups, warn);
+      }
+      async function pick(it) {
+        closeList();
+        if (it.kind === "parcel") { input.value = it.apn; await searchExact(`APN = '${sqlEsc(it.apn)}'`, `APN ${it.apn}`); }
+        else if (it.kind === "owner") { input.value = titleCase(it.name); await runSearch({ parcelWhere: null, ownerWhere: `OwnerName = '${sqlEsc(it.name)}'`, certWhere: null, kinds: ["owner"], desc: "" }, true); }
+      }
+      input.addEventListener("input", () => { clearBtn.style.display = input.value ? "block" : "none"; clearTimeout(suggestTimer); suggestTimer = setTimeout(() => suggest(input.value), 250); });
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          if (!suggestItems.length) return; e.preventDefault();
+          activeIdx = (activeIdx + (e.key === "ArrowDown" ? 1 : -1) + suggestItems.length) % suggestItems.length;
+          list.querySelectorAll(".suggest-item").forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+        } else if (e.key === "Escape") closeList();
+        else if (e.key === "Enter" && activeIdx >= 0) { e.preventDefault(); pick(suggestItems[activeIdx]); }
+      });
+      list.addEventListener("mousedown", (e) => { const el = e.target.closest(".suggest-item"); if (el) { e.preventDefault(); pick(suggestItems[+el.dataset.i]); } });
+      input.addEventListener("blur", () => setTimeout(closeList, 150));
+      clearBtn.addEventListener("click", () => { input.value = ""; clearBtn.style.display = "none"; closeList(); $("results").hidden = true; notice(""); history.replaceState(null, "", location.pathname); $("hint").textContent = "Start typing. Matches appear as you type; press Enter to list everything that fits."; input.focus(); });
+
+      // ── Running a search
+      function notice(text, kind) { const n = $("notice"); if (!text) { n.open = false; return; } n.kind = kind || "warning"; $("notice-text").textContent = text; n.open = true; }
+      function showRows(list2, label, exceeded) {
+        rows = list2;
+        if (!gridApi) buildGrid();
+        gridApi.setGridOption("rowData", rows);
+        gridApi.setColumnsVisible(["OwnerName"], lastKinds.includes("owner"));
+        $("results").hidden = false;
+        $("result-count").textContent = (rows.length === 1 ? "1 parcel" : `${rows.length.toLocaleString()} parcels`) + (label ? ` ${label}` : "");
+        if (exceeded) notice(`Showing the first ${MAX_ROWS} matches. Add more of the number, address, or name to narrow the search.`, "info");
+        if (!rows.length) { notice("No parcels matched. Check the spelling, try fewer words, or call the BMP Hotline at (775) 589-5202."); $("detail-body").className = "detail-empty"; $("detail-body").textContent = "No parcel selected."; }
+        else if (rows.length === 1) gridApi.forEachNode((n) => n.setSelected(true));
+        else { $("detail-body").className = "detail-empty"; $("detail-body").textContent = "Select a row to see the parcel and its BMP record."; }
+      }
+      async function runSearch(p, fromPick) {
+        closeList();
         notice("");
-        if (!where) { notice(mode === "cert" ? "Enter a certificate number." : "Enter something to search for."); return; }
+        if (!p.kinds.length) { notice("Type a parcel number, an address, an owner name, or a certificate number."); return; }
+        lastKinds = p.kinds;
         $("go").loading = true;
         try {
-          const json = await window.BMP.query(LAYER, { where, outFields: OUT_FIELDS.join(","), returnGeometry: "false", orderByFields: "APN", resultRecordCount: "2000" });
-          rows = (json.features || []).map((f) => f.attributes);
-          if (!gridApi) buildGrid();
-          gridApi.setGridOption("rowData", rows);
-          gridApi.setColumnsVisible(["OwnerName"], mode === "owner");
-          $("results").hidden = false;
-          $("result-count").textContent = rows.length === 1 ? "1 parcel" : `${rows.length.toLocaleString()} parcels`;
-          if (json.exceededTransferLimit) notice("Showing the first 2,000 matches. Add more of the number, address, or name to narrow the search.", "info");
-          if (!rows.length) {
-            notice("No parcels matched. Check the format, try fewer words, or call the BMP Hotline at (775) 589-5202.");
-            $("detail-body").className = "detail-empty";
-            $("detail-body").textContent = "No parcel selected.";
-          } else if (rows.length === 1) {
-            gridApi.forEachNode((n) => n.setSelected(true));
-          } else {
-            $("detail-body").className = "detail-empty";
-            $("detail-body").textContent = "Select a row to see the parcel's BMP record and a map.";
-          }
-          if (pushState) {
-            history.replaceState(null, "", `?mode=${mode}&q=${encodeURIComponent(q)}`);
-            $("results").scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+          const r = await runPlan(p);
+          showRows(r.rows, "", r.exceeded);
+          if (!fromPick) history.replaceState(null, "", `?q=${encodeURIComponent(input.value.trim())}${mode !== "auto" ? "&mode=" + mode : ""}`);
+          $("results").scrollIntoView({ behavior: "smooth", block: "start" });
         } catch (err) {
           console.error(err);
-          notice("The BMP Database did not respond. Try again in a moment, or call the BMP Hotline at (775) 589-5202.", "danger");
-        } finally {
-          $("go").loading = false;
-        }
+          notice("The TRPA map server did not respond. Try again in a moment, or call the BMP Hotline at (775) 589-5202.", "danger");
+        } finally { $("go").loading = false; }
       }
-      function setMode(m) {
-        mode = m;
-        $("hint").textContent = HINTS[m];
-        $("q").placeholder = PLACEHOLDER[m];
-        $("q").inputMode = m === "cert" ? "numeric" : "text";
+      async function searchExact(parcelWhere, label) {
+        lastKinds = ["apn"];
+        $("go").loading = true;
+        try {
+          const pr = await parcelsWhere(parcelWhere, 5, false);
+          let merged;
+          if (pr.features.length) {
+            const apns = pr.features.map((f) => f.attributes.APN);
+            const bmps = await bmpByApns(apns);
+            merged = apns.map((a) => mergeRow(a, pr.features.find((f) => f.attributes.APN === a).attributes, bmps.get(a)));
+          } else {
+            // Not in the parcel database (retired APN?): fall back to the BMP record alone
+            const br = await bmpWhere(parcelWhere, 5);
+            merged = br.features.map((f) => mergeRow(f.attributes.APN, null, f.attributes));
+          }
+          showRows(merged, "", false);
+          history.replaceState(null, "", `?apn=${encodeURIComponent(merged[0] ? merged[0].APN : input.value.trim())}`);
+        } catch (err) { console.error(err); notice("The TRPA map server did not respond. Try again in a moment.", "danger"); }
+        finally { $("go").loading = false; }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        setMode("apn");
-        $("mode").addEventListener("calciteSegmentedControlChange", (e) => { setMode(e.target.selectedItem.value); $("q").setFocus(); });
-        $("search-form").addEventListener("submit", (e) => { e.preventDefault(); runSearch(); });
-        $("clear").addEventListener("click", () => { $("q").value = ""; $("results").hidden = true; notice(""); history.replaceState(null, "", location.pathname); $("q").setFocus(); });
+        $("mode").addEventListener("calciteSegmentedControlChange", (e) => { mode = e.target.selectedItem.value; if (input.value.trim()) suggest(input.value); input.focus(); });
+        $("search-form").addEventListener("submit", (e) => { e.preventDefault(); runSearch(plan(input.value, mode === "auto" ? null : mode)); });
         buildMap();
-        // Deep links: ?mode=apn&q=122-051-01, or the legacy ?apn=
+        // Deep links: ?apn=122-051-01 (exact), ?q=640 woodridge[&mode=address] (search), legacy ?address=
         const p = new URLSearchParams(location.search);
-        const q = p.get("q") || p.get("apn") || p.get("address");
-        if (q) {
-          const m = p.get("mode") || (p.get("address") ? "address" : "apn");
-          if (HINTS[m]) { setMode(m); $("mode").querySelectorAll("calcite-segmented-control-item").forEach((i) => { i.checked = i.value === m; }); }
-          $("q").value = q;
-          customElements.whenDefined("calcite-input").then(() => runSearch(false));
+        if (p.get("apn")) {
+          input.value = p.get("apn");
+          const digits = p.get("apn").replace(/\D/g, "");
+          customElements.whenDefined("calcite-button").then(() => searchExact(`APN = '${sqlEsc(p.get("apn"))}' OR PPNO = ${Number(digits) || 0}`, ""));
+        } else if (p.get("q") || p.get("address")) {
+          const q = p.get("q") || p.get("address");
+          const m = p.get("mode") || (p.get("address") ? "address" : "auto");
+          if (["auto", "apn", "address", "owner", "cert"].includes(m)) { mode = m; $("mode").querySelectorAll("calcite-segmented-control-item").forEach((i) => { i.checked = i.value === m; }); }
+          input.value = q; clearBtn.style.display = "block";
+          customElements.whenDefined("calcite-button").then(() => runSearch(plan(q, mode === "auto" ? null : mode)));
         }
       });
     })();
