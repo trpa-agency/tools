@@ -103,7 +103,7 @@ Options, cheapest first:
 
 1. **GIS maintains the site; Communications and the program send edits.** Zero setup. Fine while edits are occasional.
 2. **A Git-backed editor over this repo.** Pages CMS or Decap CMS put a form-style editor in front of the HTML and JSON files, with GitHub login and a commit per save. One afternoon to configure; Communications edits text and lists in a browser without seeing code. No server, nothing to host.
-3. **Prose on trpa.gov, tools here.** Communications owns the words in WordPress; the search, map, handbook, resources, and gallery stay at tools.trpa.gov/bmp and the WordPress pages link to them. This is the April plan in a smaller form, and it is what "too massive to integrate" argues against.
+3. **Prose on trpa.gov, tools here.** Communications owns the words in WordPress; the search, map, handbook, resources, and gallery stay on the BMP site at bmp.trpa.gov and the WordPress pages link to them. This is the April plan in a smaller form, and it is what "too massive to integrate" argues against.
 
 Recommendation: 1 now, trial 2 before the site leaves qa.
 
