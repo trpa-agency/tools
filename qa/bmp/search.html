@@ -77,11 +77,12 @@
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Main">
         <a href="get-certified.html">Get a Certificate</a>
-        <a href="about-bmps.html">About BMPs</a>
+        <a href="about-bmps.html">BMP Requirements</a>
         <a href="maintenance.html">Maintenance</a>
         <a href="handbook.html">Handbook</a>
         <a href="resources.html">Resources</a>
         <a href="gallery.html">Gallery</a>
+        <a href="faq.html">FAQ</a>
         <a class="nav-cta" href="search.html">Property Search</a>
       </nav>
     </div>
@@ -422,7 +423,7 @@
           <div class="detail-actions">
             <a class="btn btn-blue btn-sm" href="${cfg().parcelTracker}${encodeURIComponent(apn)}" target="_blank" rel="noopener">${st.key === "bmp" || st.key === "sco" ? "Print certificate on LT Info" : "View parcel on LT Info"}</a>
             <a class="btn btn-outline btn-sm" href="${cfg().mapTool}?apn=${encodeURIComponent(apn)}">View on the BMP map</a>
-            ${st.key === "none" || st.key === "eval" || st.key === "unknown" ? `<a class="btn btn-outline btn-sm" href="${mail}">Request an evaluation</a>` : ""}
+            ${st.key === "none" || st.key === "eval" || st.key === "unknown" ? `<a class="btn btn-outline btn-sm" href="${cfg().evaluationForm ? esc(cfg().evaluationForm) : mail}"${cfg().evaluationForm ? ' target="_blank" rel="noopener"' : ""}>Request an evaluation</a>` : ""}
           </div>`;
         zoomTo(r);
       }
@@ -573,14 +574,14 @@
         <ul>
           <li><a href="get-certified.html">Get a BMP Certificate</a></li>
           <li><a href="small-retrofit-plan.html">Small BMP Retrofit Plan</a></li>
-          <li><a href="about-bmps.html">About BMPs</a></li>
+          <li><a href="about-bmps.html">BMP requirements</a></li>
           <li><a href="maintenance.html">Maintenance</a></li>
           <li><a href="handbook.html">BMP Handbook</a></li>
           <li><a href="resources.html">Resources and forms</a></li>
           <li><a href="gallery.html">Photo gallery</a></li>
-          <li><a href="realtors.html">Realtors and new owners</a></li>
+          <li><a href="faq.html">Questions and answers</a></li>
           <li><a href="fertilizer.html">Fertilizer</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="get-certified.html#disclosure">Buying or selling a property</a></li>
         </ul>
       </div>
       <div class="footer-col">

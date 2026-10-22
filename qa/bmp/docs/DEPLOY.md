@@ -41,15 +41,16 @@ New paths below are relative to `https://tools.trpa.gov/bmp/` (while in QA, `htt
 | `/`, `/Default.aspx` | `/` |
 | `/BMPs.aspx`, `/BMPS.aspx` | `/get-certified.html` |
 | `/SmallBMPRetro.aspx` | `/small-retrofit-plan.html` |
-| `/BMPProblem.aspx`, `/WhatAreBMPs.aspx`, `/PrescribedBMPs.aspx`, `/*Ex.aspx` | `/about-bmps.html` |
+| `/BMPProblem.aspx`, `/WhatAreBMPs.aspx`, `/PrescribedBMPs.aspx`, `/*Ex.aspx`, `/photogallery_rock.aspx` | `/about-bmps.html` |
 | `/Maintenance.aspx` | `/maintenance.html` |
 | `/BMPHandbook.aspx` | `/handbook.html` |
 | `/BMPHandbookCh4.aspx` | `/handbook.html#toolkit` |
-| `/BMPResources.aspx` | `/resources.html` |
+| `/BMPResources.aspx`, `/BMPProfessionals.aspx` | `/resources.html` |
 | `/photogallery.aspx`, `/Photogallery_*.aspx` | `/gallery.html` |
-| `/Realtors.aspx` | `/realtors.html` |
-| `/Fertilizer.aspx` | `/fertilizer.html` |
-| `/Contact.aspx` | `/contact.html` |
+| `/Realtors.aspx` | `/get-certified.html#disclosure` |
+| `/FAQs.aspx` | `/faq.html` |
+| `/Fertilizer*.aspx` | `/fertilizer.html` |
+| `/Contact.aspx`, `/WhoAreYou.aspx`, `/Residential.aspx`, `/MultiFamily.aspx`, `/News.aspx`, `/Reporting.aspx`, `/LivingWithFire.aspx`, `/BMPComments.aspx` | `/` |
 | `/bmptoolkit/searchBMP.asp` | `/search.html` (query string `?apn=` is honored) |
 
 The Tools repo's root `404.html` can carry the same lookup table (keyed on the lowercase legacy path under `/bmp/`), so a blanket redirect of `tahoebmp.org/* -> tools.trpa.gov/bmp/*` still lands users on the right page.

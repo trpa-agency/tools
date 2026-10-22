@@ -29,115 +29,604 @@
     }
   ],
   "images": [
-    { "group": "infiltration", "caption": "Rain garden", "src": "Images/Gallery/Infiltration/Raingarden/Raingarden1.jpg", "file": "infiltration-rain-garden-1.jpg" },
-    { "group": "infiltration", "caption": "Rain garden", "src": "Images/Gallery/Infiltration/Raingarden/Raingarden2.jpg", "file": "infiltration-rain-garden-2.jpg" },
-    { "group": "infiltration", "caption": "Rain garden", "src": "Images/Gallery/Infiltration/Raingarden/Raingarden3.jpg", "file": "infiltration-rain-garden-3.jpg" },
-    { "group": "infiltration", "caption": "Planter bed", "src": "Images/Gallery/Infiltration/Raingarden/planterbed1.jpg", "file": "infiltration-planter-bed-1.jpg" },
-    { "group": "infiltration", "caption": "Planter bed", "src": "Images/Gallery/Infiltration/Raingarden/planterbed2.jpg", "file": "infiltration-planter-bed-2.jpg" },
-    { "group": "infiltration", "caption": "Planter bed", "src": "Images/Gallery/Infiltration/Raingarden/Planterbed3.jpg", "file": "infiltration-planter-bed-3.jpg" },
-    { "group": "infiltration", "caption": "Vegetated filter strip", "src": "Images/Gallery/Infiltration/Vegetatedfilter/Vegetatedfilterstrip1.jpg", "file": "infiltration-filter-strip-1.jpg" },
-    { "group": "infiltration", "caption": "Vegetated filter strip", "src": "Images/Gallery/Infiltration/Vegetatedfilter/Vegetatedfilterstrip2.jpg", "file": "infiltration-filter-strip-2.jpg" },
-    { "group": "infiltration", "caption": "Vegetated filter strip", "src": "Images/Gallery/Infiltration/Vegetatedfilter/Vegetatedfilterstrip3.jpg", "file": "infiltration-filter-strip-3.jpg" },
-    { "group": "infiltration", "caption": "Dry creek bed drainage channel", "src": "Images/Gallery/Infiltration/Drainagechannel/DryCreekBed1.jpg", "file": "infiltration-dry-creek-bed-1.jpg" },
-    { "group": "infiltration", "caption": "Dry creek bed drainage channel", "src": "Images/Gallery/Infiltration/Drainagechannel/DryCreekBed2.jpg", "file": "infiltration-dry-creek-bed-2.jpg" },
-    { "group": "infiltration", "caption": "Rock-lined swale", "src": "Images/Gallery/Infiltration/Drainagechannel/RocklinedSwale1.jpg", "file": "infiltration-rock-lined-swale-1.jpg" },
-    { "group": "infiltration", "caption": "Rock-lined swale", "src": "Images/Gallery/Infiltration/rocklinedswale.jpg", "file": "infiltration-rock-lined-swale-2.jpg" },
-    { "group": "infiltration", "caption": "Vegetated and rock-lined swale", "src": "Images/Gallery/Infiltration/Drainagechannel/RocklinedVegSwale.jpeg", "file": "infiltration-rock-veg-swale.jpg" },
-    { "group": "infiltration", "caption": "Linear rock swale", "src": "Images/Gallery/Infiltration/linearrockswale.jpg", "file": "infiltration-linear-rock-swale.jpg" },
-    { "group": "infiltration", "caption": "Rock-lined infiltration basin with vegetation", "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklinebasinVeg.jpg", "file": "infiltration-basin-veg.jpg" },
-    { "group": "infiltration", "caption": "Rock-lined linear infiltration basin", "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklineLinearBasin1.jpg", "file": "infiltration-linear-basin-1.jpg" },
-    { "group": "infiltration", "caption": "Rock-lined linear infiltration basin", "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklineLinearBasin2.jpg", "file": "infiltration-linear-basin-2.jpg" },
-    { "group": "infiltration", "caption": "Open shallow linear basin", "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklineLinearBasin3.jpg", "file": "infiltration-linear-basin-3.jpg" },
-    { "group": "infiltration", "caption": "Open shallow rock-lined basin", "src": "Images/Gallery/Infiltration/Infiltrationbasin/Shallowrocklinebasin.jpg", "file": "infiltration-shallow-basin.jpg" },
-    { "group": "infiltration", "caption": "Mowable shallow basin", "src": "Images/Gallery/Infiltration/Infiltrationbasin/MowableShallowBasin.jpg", "file": "infiltration-mowable-basin.jpg" },
-    { "group": "infiltration", "caption": "Dripline infiltration trench", "src": "Images/Gallery/Infiltration/Infiltrationtrench/BaffledDriplineTrench1.jpg", "file": "infiltration-dripline-trench-1.jpg" },
-    { "group": "infiltration", "caption": "Baffled dripline trench", "src": "Images/Gallery/Infiltration/Infiltrationtrench/BaffledDriplineTrench2.jpg", "file": "infiltration-dripline-trench-2.jpg" },
-    { "group": "infiltration", "caption": "Dripline trench with cobble", "src": "Images/Gallery/Infiltration/Infiltrationtrench/DriplineTrenchCobble1.jpg", "file": "infiltration-dripline-cobble-1.jpg" },
-    { "group": "infiltration", "caption": "Dripline trench with cobble", "src": "Images/Gallery/Infiltration/Infiltrationtrench/DriplineTrenchCobble2.jpg", "file": "infiltration-dripline-cobble-2.jpg" },
-    { "group": "infiltration", "caption": "Perforated pipe for a subsurface drain", "src": "Images/Gallery/Infiltration/subsurfacedrain/PerforatedPipe.jpg", "file": "infiltration-perforated-pipe.jpg" },
-    { "group": "infiltration", "caption": "Sediment trap and drywell", "src": "Images/Gallery/Infiltration/subsurfacedrain/Sedimenttrapdrywell1.jpg", "file": "infiltration-sediment-trap-drywell-1.jpg" },
-    { "group": "infiltration", "caption": "Sediment trap and drywell", "src": "Images/Gallery/Infiltration/subsurfacedrain/Sedimenttrapdrywell2.jpg", "file": "infiltration-sediment-trap-drywell-2.jpg" },
-    { "group": "infiltration", "caption": "Slotted channel drain to sediment trap and basin", "src": "Images/Gallery/Infiltration/subsurfacedrain/SlottedChannelDrain_SedTrap_Basin1.jpg", "file": "infiltration-slotted-drain-basin-1.jpg" },
-    { "group": "infiltration", "caption": "Slotted channel drain to sediment trap and basin", "src": "Images/Gallery/Infiltration/subsurfacedrain/SlottedChannelDrain_SedTrap_Basin2.jpg", "file": "infiltration-slotted-drain-basin-2.jpg" },
-    { "group": "infiltration", "caption": "Subsurface infiltration system during installation", "src": "Images/Gallery/Infiltration/subsurfacedrain/SubsurfaceInstallation.jpg", "file": "infiltration-subsurface-installation.jpg" },
-
-    { "group": "conveyance", "caption": "Asphalt and concrete swale", "src": "Images/Gallery/Collection/Swale/ACSwale.jpg", "file": "conveyance-ac-swale.jpg" },
-    { "group": "conveyance", "caption": "Slotted channel drain", "src": "Images/Gallery/Collection/SlottedChannel/SlottedChannel.jpg", "file": "conveyance-slotted-channel.jpg" },
-    { "group": "conveyance", "caption": "Slotted channel drain detail", "src": "Images/Gallery/Collection/SlottedChannel/SlottedChannelDetail.jpg", "file": "conveyance-slotted-channel-detail.jpg" },
-    { "group": "conveyance", "caption": "Slotted channel drain to swale", "src": "Images/Gallery/Collection/Slottedchannel/slottedchanneldrainswale.jpg", "file": "conveyance-slotted-channel-swale.jpg" },
-    { "group": "conveyance", "caption": "Downspout armor with water spreader", "src": "Images/Gallery/Collection/Dripline/DownspoutArmorWaterSpread.jpg", "file": "conveyance-downspout-armor-spread.jpg" },
-    { "group": "conveyance", "caption": "Downspout armor", "src": "Images/Gallery/Collection/Dripline/DownspoutArmor.jpg", "file": "conveyance-downspout-armor.jpg" },
-    { "group": "conveyance", "caption": "Downspout to drywell", "src": "Images/Gallery/Collection/Dripline/DownspouttoDrywell1.jpg", "file": "conveyance-downspout-drywell-1.jpg" },
-    { "group": "conveyance", "caption": "Downspout to drywell", "src": "Images/Gallery/Collection/Dripline/DownspouttoDrywell2.jpg", "file": "conveyance-downspout-drywell-2.jpg" },
-
-    { "group": "source-control", "caption": "Restoration and revegetation", "src": "Images/Gallery/SourceControl/Restoration/Revegetation1.jpg", "file": "source-revegetation-1.jpg" },
-    { "group": "source-control", "caption": "Restoration and revegetation", "src": "Images/Gallery/SourceControl/Restoration/Revegetation2.jpg", "file": "source-revegetation-2.jpg" },
-    { "group": "source-control", "caption": "Armored driveway and parking area", "src": "Images/Gallery/SourceControl/Driveway/Drivewayarmor1.jpg", "file": "source-driveway-armor-1.jpg" },
-    { "group": "source-control", "caption": "Armored driveway and parking area", "src": "Images/Gallery/SourceControl/Driveway/Drivewayarmor2.jpg", "file": "source-driveway-armor-2.jpg" },
-    { "group": "source-control", "caption": "Armored driveway and parking area", "src": "Images/Gallery/SourceControl/Driveway/Drivewayarmor3.jpg", "file": "source-driveway-armor-3.jpg" },
-    { "group": "source-control", "caption": "Driveway armor with vegetation", "src": "Images/Gallery/SourceControl/Driveway/drivewayarmorwithveg.jpg", "file": "source-driveway-armor-veg.jpg" },
-    { "group": "source-control", "caption": "Parking barrier bollards", "src": "Images/Gallery/SourceControl/Protection/BarrierBollards1.jpg", "file": "source-barrier-bollards.jpg" },
-    { "group": "source-control", "caption": "Boulder parking barriers with edge armor", "src": "Images/Gallery/SourceControl/Protection/barrierbouldersedgearmor.jpg", "file": "source-barrier-boulders-armor.jpg" },
-    { "group": "source-control", "caption": "Boulder parking barriers with mulch", "src": "Images/Gallery/SourceControl/Protection/barrierbouldersmulch.jpg", "file": "source-barrier-boulders-mulch.jpg" },
-    { "group": "source-control", "caption": "Revegetated slope", "src": "Images/Gallery/SourceControl/Stabilization/RevegetatedSlopes/Revegetation1.jpg", "file": "source-revegetated-slope-1.jpg" },
-    { "group": "source-control", "caption": "Revegetated slope", "src": "Images/Gallery/SourceControl/Stabilization/RevegetatedSlopes/Revegetation2.jpg", "file": "source-revegetated-slope-2.jpg" },
-    { "group": "source-control", "caption": "Riprap slope", "src": "Images/Gallery/SourceControl/Stabilization/Riprapslopes/Riprapslopes1.jpg", "file": "source-riprap-slope-1.jpg" },
-    { "group": "source-control", "caption": "Riprap slope", "src": "Images/Gallery/SourceControl/Stabilization/Riprapslopes/Riprapslopes2.jpg", "file": "source-riprap-slope-2.jpg" },
-    { "group": "source-control", "caption": "Retaining wall", "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall1.jpg", "file": "source-retaining-wall-1.jpg" },
-    { "group": "source-control", "caption": "Retaining wall", "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall2.jpg", "file": "source-retaining-wall-2.jpg" },
-    { "group": "source-control", "caption": "Retaining wall", "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall3.jpg", "file": "source-retaining-wall-3.jpg" },
-    { "group": "source-control", "caption": "Retaining wall", "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall5.jpg", "file": "source-retaining-wall-5.jpg" },
-    { "group": "source-control", "caption": "Retaining wall", "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall6.jpg", "file": "source-retaining-wall-6.jpg" },
-    { "group": "source-control", "caption": "Armored roof dripline", "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline1.jpg", "file": "source-armored-dripline-1.jpg" },
-    { "group": "source-control", "caption": "Armored roof dripline", "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline2.jpg", "file": "source-armored-dripline-2.jpg" },
-    { "group": "source-control", "caption": "Armored roof dripline", "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline4.jpg", "file": "source-armored-dripline-4.jpg" },
-    { "group": "source-control", "caption": "Armored roof dripline", "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline5.jpg", "file": "source-armored-dripline-5.jpg" },
-    { "group": "source-control", "caption": "Armor under a pervious deck", "src": "Images/Gallery/SourceControl/Decks/deckarmor2.jpg", "file": "source-deck-armor-2.jpg" },
-    { "group": "source-control", "caption": "Armor under a pervious deck", "src": "Images/Gallery/SourceControl/Decks/deckarmor3.jpg", "file": "source-deck-armor-3.jpg" },
-    { "group": "source-control", "caption": "Armor under an elevated structure", "src": "Images/Gallery/SourceControl/Decks/deckarmor4.jpg", "file": "source-deck-armor-4.jpg" },
-    { "group": "source-control", "caption": "Armor under an elevated structure", "src": "Images/Gallery/SourceControl/Decks/deckarmor5.jpg", "file": "source-deck-armor-5.jpg" },
-    { "group": "source-control", "caption": "Armor under an elevated structure", "src": "Images/Gallery/SourceControl/Decks/deckarmor6.jpg", "file": "source-deck-armor-6.jpg" },
-    { "group": "source-control", "caption": "Stair armor", "src": "Images/Gallery/SourceControl/Decks/stairarmor1.jpg", "file": "source-stair-armor.jpg" },
-
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border1.jpg", "file": "border-1.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border2.jpg", "file": "border-2.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border4.jpg", "file": "border-4.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border5.jpg", "file": "border-5.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border6.jpg", "file": "border-6.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border7.jpg", "file": "border-7.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border8.jpg", "file": "border-8.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border9.jpg", "file": "border-9.jpg" },
-    { "group": "borders", "caption": "Border", "src": "Images/Gallery/Borders/border10.jpg", "file": "border-10.jpg" },
-
-    { "group": "maintenance", "caption": "Maintained infiltration rock", "src": "Images/Gallery/Maintenance/BMP Maintenance - Rock.jpg", "file": "maintenance-rock.jpg" }
+    {
+      "group": "infiltration",
+      "caption": "Rain garden",
+      "src": "Images/Gallery/Infiltration/Raingarden/Raingarden1.jpg",
+      "file": "infiltration-rain-garden-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rain garden",
+      "src": "Images/Gallery/Infiltration/Raingarden/Raingarden2.jpg",
+      "file": "infiltration-rain-garden-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rain garden",
+      "src": "Images/Gallery/Infiltration/Raingarden/Raingarden3.jpg",
+      "file": "infiltration-rain-garden-3.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Planter bed",
+      "src": "Images/Gallery/Infiltration/Raingarden/planterbed1.jpg",
+      "file": "infiltration-planter-bed-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Planter bed",
+      "src": "Images/Gallery/Infiltration/Raingarden/planterbed2.jpg",
+      "file": "infiltration-planter-bed-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Planter bed",
+      "src": "Images/Gallery/Infiltration/Raingarden/Planterbed3.jpg",
+      "file": "infiltration-planter-bed-3.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Vegetated filter strip",
+      "src": "Images/Gallery/Infiltration/Vegetatedfilter/Vegetatedfilterstrip1.jpg",
+      "file": "infiltration-filter-strip-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Vegetated filter strip",
+      "src": "Images/Gallery/Infiltration/Vegetatedfilter/Vegetatedfilterstrip2.jpg",
+      "file": "infiltration-filter-strip-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Vegetated filter strip",
+      "src": "Images/Gallery/Infiltration/Vegetatedfilter/Vegetatedfilterstrip3.jpg",
+      "file": "infiltration-filter-strip-3.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Dry creek bed drainage channel",
+      "src": "Images/Gallery/Infiltration/Drainagechannel/DryCreekBed1.jpg",
+      "file": "infiltration-dry-creek-bed-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Dry creek bed drainage channel",
+      "src": "Images/Gallery/Infiltration/Drainagechannel/DryCreekBed2.jpg",
+      "file": "infiltration-dry-creek-bed-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rock-lined swale",
+      "src": "Images/Gallery/Infiltration/Drainagechannel/RocklinedSwale1.jpg",
+      "file": "infiltration-rock-lined-swale-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rock-lined swale",
+      "src": "Images/Gallery/Infiltration/rocklinedswale.jpg",
+      "file": "infiltration-rock-lined-swale-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Vegetated and rock-lined swale",
+      "src": "Images/Gallery/Infiltration/Drainagechannel/RocklinedVegSwale.jpeg",
+      "file": "infiltration-rock-veg-swale.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Linear rock swale",
+      "src": "Images/Gallery/Infiltration/linearrockswale.jpg",
+      "file": "infiltration-linear-rock-swale.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rock-lined infiltration basin with vegetation",
+      "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklinebasinVeg.jpg",
+      "file": "infiltration-basin-veg.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rock-lined linear infiltration basin",
+      "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklineLinearBasin1.jpg",
+      "file": "infiltration-linear-basin-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Rock-lined linear infiltration basin",
+      "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklineLinearBasin2.jpg",
+      "file": "infiltration-linear-basin-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Open shallow linear basin",
+      "src": "Images/Gallery/Infiltration/Infiltrationbasin/RocklineLinearBasin3.jpg",
+      "file": "infiltration-linear-basin-3.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Open shallow rock-lined basin",
+      "src": "Images/Gallery/Infiltration/Infiltrationbasin/Shallowrocklinebasin.jpg",
+      "file": "infiltration-shallow-basin.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Mowable shallow basin",
+      "src": "Images/Gallery/Infiltration/Infiltrationbasin/MowableShallowBasin.jpg",
+      "file": "infiltration-mowable-basin.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Dripline infiltration trench",
+      "src": "Images/Gallery/Infiltration/Infiltrationtrench/BaffledDriplineTrench1.jpg",
+      "file": "infiltration-dripline-trench-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Baffled dripline trench",
+      "src": "Images/Gallery/Infiltration/Infiltrationtrench/BaffledDriplineTrench2.jpg",
+      "file": "infiltration-dripline-trench-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Dripline trench with cobble",
+      "src": "Images/Gallery/Infiltration/Infiltrationtrench/DriplineTrenchCobble1.jpg",
+      "file": "infiltration-dripline-cobble-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Dripline trench with cobble",
+      "src": "Images/Gallery/Infiltration/Infiltrationtrench/DriplineTrenchCobble2.jpg",
+      "file": "infiltration-dripline-cobble-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Perforated pipe for a subsurface drain",
+      "src": "Images/Gallery/Infiltration/subsurfacedrain/PerforatedPipe.jpg",
+      "file": "infiltration-perforated-pipe.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Sediment trap and drywell",
+      "src": "Images/Gallery/Infiltration/subsurfacedrain/Sedimenttrapdrywell1.jpg",
+      "file": "infiltration-sediment-trap-drywell-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Sediment trap and drywell",
+      "src": "Images/Gallery/Infiltration/subsurfacedrain/Sedimenttrapdrywell2.jpg",
+      "file": "infiltration-sediment-trap-drywell-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Slotted channel drain to sediment trap and basin",
+      "src": "Images/Gallery/Infiltration/subsurfacedrain/SlottedChannelDrain_SedTrap_Basin1.jpg",
+      "file": "infiltration-slotted-drain-basin-1.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Slotted channel drain to sediment trap and basin",
+      "src": "Images/Gallery/Infiltration/subsurfacedrain/SlottedChannelDrain_SedTrap_Basin2.jpg",
+      "file": "infiltration-slotted-drain-basin-2.jpg"
+    },
+    {
+      "group": "infiltration",
+      "caption": "Subsurface infiltration system during installation",
+      "src": "Images/Gallery/Infiltration/subsurfacedrain/SubsurfaceInstallation.jpg",
+      "file": "infiltration-subsurface-installation.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Asphalt and concrete swale",
+      "src": "Images/Gallery/Collection/Swale/ACSwale.jpg",
+      "file": "conveyance-ac-swale.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Slotted channel drain",
+      "src": "Images/Gallery/Collection/SlottedChannel/SlottedChannel.jpg",
+      "file": "conveyance-slotted-channel.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Slotted channel drain detail",
+      "src": "Images/Gallery/Collection/SlottedChannel/SlottedChannelDetail.jpg",
+      "file": "conveyance-slotted-channel-detail.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Slotted channel drain to swale",
+      "src": "Images/Gallery/Collection/Slottedchannel/slottedchanneldrainswale.jpg",
+      "file": "conveyance-slotted-channel-swale.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Downspout armor with water spreader",
+      "src": "Images/Gallery/Collection/Dripline/DownspoutArmorWaterSpread.jpg",
+      "file": "conveyance-downspout-armor-spread.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Downspout armor",
+      "src": "Images/Gallery/Collection/Dripline/DownspoutArmor.jpg",
+      "file": "conveyance-downspout-armor.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Downspout to drywell",
+      "src": "Images/Gallery/Collection/Dripline/DownspouttoDrywell1.jpg",
+      "file": "conveyance-downspout-drywell-1.jpg"
+    },
+    {
+      "group": "conveyance",
+      "caption": "Downspout to drywell",
+      "src": "Images/Gallery/Collection/Dripline/DownspouttoDrywell2.jpg",
+      "file": "conveyance-downspout-drywell-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Restoration and revegetation",
+      "src": "Images/Gallery/SourceControl/Restoration/Revegetation1.jpg",
+      "file": "source-revegetation-1.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Restoration and revegetation",
+      "src": "Images/Gallery/SourceControl/Restoration/Revegetation2.jpg",
+      "file": "source-revegetation-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored driveway and parking area",
+      "src": "Images/Gallery/SourceControl/Driveway/Drivewayarmor1.jpg",
+      "file": "source-driveway-armor-1.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored driveway and parking area",
+      "src": "Images/Gallery/SourceControl/Driveway/Drivewayarmor2.jpg",
+      "file": "source-driveway-armor-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored driveway and parking area",
+      "src": "Images/Gallery/SourceControl/Driveway/Drivewayarmor3.jpg",
+      "file": "source-driveway-armor-3.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Driveway armor with vegetation",
+      "src": "Images/Gallery/SourceControl/Driveway/drivewayarmorwithveg.jpg",
+      "file": "source-driveway-armor-veg.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Parking barrier bollards",
+      "src": "Images/Gallery/SourceControl/Protection/BarrierBollards1.jpg",
+      "file": "source-barrier-bollards.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Boulder parking barriers with edge armor",
+      "src": "Images/Gallery/SourceControl/Protection/barrierbouldersedgearmor.jpg",
+      "file": "source-barrier-boulders-armor.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Boulder parking barriers with mulch",
+      "src": "Images/Gallery/SourceControl/Protection/barrierbouldersmulch.jpg",
+      "file": "source-barrier-boulders-mulch.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Revegetated slope",
+      "src": "Images/Gallery/SourceControl/Stabilization/RevegetatedSlopes/Revegetation1.jpg",
+      "file": "source-revegetated-slope-1.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Revegetated slope",
+      "src": "Images/Gallery/SourceControl/Stabilization/RevegetatedSlopes/Revegetation2.jpg",
+      "file": "source-revegetated-slope-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Riprap slope",
+      "src": "Images/Gallery/SourceControl/Stabilization/Riprapslopes/Riprapslopes1.jpg",
+      "file": "source-riprap-slope-1.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Riprap slope",
+      "src": "Images/Gallery/SourceControl/Stabilization/Riprapslopes/Riprapslopes2.jpg",
+      "file": "source-riprap-slope-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Retaining wall",
+      "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall1.jpg",
+      "file": "source-retaining-wall-1.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Retaining wall",
+      "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall2.jpg",
+      "file": "source-retaining-wall-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Retaining wall",
+      "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall3.jpg",
+      "file": "source-retaining-wall-3.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Retaining wall",
+      "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall5.jpg",
+      "file": "source-retaining-wall-5.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Retaining wall",
+      "src": "Images/Gallery/SourceControl/Stabilization/RetainingWalls/RetainingWall6.jpg",
+      "file": "source-retaining-wall-6.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored roof dripline",
+      "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline1.jpg",
+      "file": "source-armored-dripline-1.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored roof dripline",
+      "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline2.jpg",
+      "file": "source-armored-dripline-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored roof dripline",
+      "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline4.jpg",
+      "file": "source-armored-dripline-4.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armored roof dripline",
+      "src": "Images/Gallery/SourceControl/Driplines/armoredroofdripline5.jpg",
+      "file": "source-armored-dripline-5.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armor under a pervious deck",
+      "src": "Images/Gallery/SourceControl/Decks/deckarmor2.jpg",
+      "file": "source-deck-armor-2.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armor under a pervious deck",
+      "src": "Images/Gallery/SourceControl/Decks/deckarmor3.jpg",
+      "file": "source-deck-armor-3.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armor under an elevated structure",
+      "src": "Images/Gallery/SourceControl/Decks/deckarmor4.jpg",
+      "file": "source-deck-armor-4.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armor under an elevated structure",
+      "src": "Images/Gallery/SourceControl/Decks/deckarmor5.jpg",
+      "file": "source-deck-armor-5.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Armor under an elevated structure",
+      "src": "Images/Gallery/SourceControl/Decks/deckarmor6.jpg",
+      "file": "source-deck-armor-6.jpg"
+    },
+    {
+      "group": "source-control",
+      "caption": "Stair armor",
+      "src": "Images/Gallery/SourceControl/Decks/stairarmor1.jpg",
+      "file": "source-stair-armor.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 1",
+      "src": "Images/Gallery/Borders/border1.jpg",
+      "file": "border-1.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 2",
+      "src": "Images/Gallery/Borders/border2.jpg",
+      "file": "border-2.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 4",
+      "src": "Images/Gallery/Borders/border4.jpg",
+      "file": "border-4.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 5",
+      "src": "Images/Gallery/Borders/border5.jpg",
+      "file": "border-5.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 6",
+      "src": "Images/Gallery/Borders/border6.jpg",
+      "file": "border-6.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 7",
+      "src": "Images/Gallery/Borders/border7.jpg",
+      "file": "border-7.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 8",
+      "src": "Images/Gallery/Borders/border8.jpg",
+      "file": "border-8.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 9",
+      "src": "Images/Gallery/Borders/border9.jpg",
+      "file": "border-9.jpg"
+    },
+    {
+      "group": "borders",
+      "caption": "Border 10",
+      "src": "Images/Gallery/Borders/border10.jpg",
+      "file": "border-10.jpg"
+    },
+    {
+      "group": "maintenance",
+      "caption": "Maintained infiltration rock",
+      "src": "Images/Gallery/Maintenance/BMP Maintenance - Rock.jpg",
+      "file": "maintenance-rock.jpg"
+    }
   ],
   "siteImages": [
-    { "src": "Images/Gallery/Infiltration/Raingarden/Raingarden1.jpg", "file": "hero.jpg", "note": "Home hero: rain garden in bloom" },
-    { "src": "header_images/Slider2.jpg", "file": "hero-dripline.jpg", "note": "Legacy home banner: armored dripline with downspout" },
-    { "src": "Images/header/dripline_FDS.JPG", "file": "banner-dripline-fds.jpg", "note": "About BMPs banner" },
-    { "src": "Images/header/SFR_Driveway.jpg", "file": "banner-driveway.jpg", "note": "Get certified banner" },
-    { "src": "Images/header/MaintenanceHeader.jpg", "file": "banner-maintenance.jpg", "note": "Maintenance banner" },
-    { "src": "Images/header/WhatAreBMPsBanner.jpg", "file": "banner-what-are-bmps.jpg", "note": "Certificates banner" },
-    { "src": "Images/header/gallery.jpg", "file": "banner-gallery.jpg", "note": "Gallery banner" },
-    { "src": "images/obliques/SingleFamily.jpg", "file": "oblique-single-family.jpg", "note": "Conceptual site design: single-family" },
-    { "src": "images/obliques/MultiFamily.jpg", "file": "oblique-multi-family.jpg", "note": "Conceptual site design: multi-family" },
-    { "src": "images/obliques/CommercialGood.jpg", "file": "oblique-commercial-with-bmps.jpg", "note": "Conceptual site design: commercial with BMPs" },
-    { "src": "images/obliques/CommercialBad.jpg", "file": "oblique-commercial-without-bmps.jpg", "note": "Conceptual site design: commercial without BMPs" },
-    { "src": "images/obliques/Community.jpg", "file": "oblique-regional.jpg", "note": "Conceptual site design: regional treatment" },
-    { "src": "images/obliques/Marina.jpg", "file": "oblique-marina.jpg", "note": "Conceptual site design: marina" },
-    { "src": "images/obliques/Winterization.jpg", "file": "oblique-winterization.jpg", "note": "Conceptual site design: winterization" },
-    { "src": "images/obliques/TemporaryConstruction.jpg", "file": "oblique-temporary-construction.jpg", "note": "Conceptual site design: temporary construction BMPs" },
-    { "src": "Images/BMPs/paving a.JPG", "file": "prescribed-paving-1.jpg", "note": "Commonly prescribed: pave dirt driveways" },
-    { "src": "Images/BMPs/paving b.JPG", "file": "prescribed-paving-2.jpg", "note": "Commonly prescribed: pave dirt driveways" },
-    { "src": "Images/BMPs/Parking barriers.JPG", "file": "prescribed-parking-barriers.jpg", "note": "Commonly prescribed: parking barriers" },
-    { "src": "Images/BMPs/conveyance slotted channel drain.jpg", "file": "prescribed-conveyance-drain.jpg", "note": "Commonly prescribed: conveyance" },
-    { "src": "Images/BMPs/conveyance swale.jpg", "file": "prescribed-conveyance-swale.jpg", "note": "Commonly prescribed: conveyance" },
-    { "src": "Images/BMPs/Sediment trap a.JPG", "file": "prescribed-sediment-trap-1.jpg", "note": "Commonly prescribed: sediment trap" },
-    { "src": "Images/BMPs/sediment trap b.JPG", "file": "prescribed-sediment-trap-2.jpg", "note": "Commonly prescribed: sediment trap" },
-    { "src": "Images/BMPs/SkiRunMarina 2.jpg", "file": "prescribed-infiltration.jpg", "note": "Commonly prescribed: infiltrate runoff" },
-    { "src": "Images/BMPs/dripline.jpg", "file": "prescribed-dripline.jpg", "note": "Commonly prescribed: infiltrate runoff" },
-    { "src": "Images/BMPs/slope stabilization.jpg", "file": "prescribed-slope-stabilization.jpg", "note": "Commonly prescribed: stabilize soil" },
-    { "src": "Images/BMPs/FDS.jpg", "file": "prescribed-defensible-space.jpg", "note": "Commonly prescribed: fire defensible space" },
-    { "src": "Images/BMPs/veg & mulch.jpg", "file": "prescribed-veg-mulch.jpg", "note": "Commonly prescribed: vegetation and mulch" }
+    {
+      "src": "Images/Gallery/Infiltration/Raingarden/Raingarden1.jpg",
+      "file": "hero.jpg",
+      "note": "Home hero: rain garden in bloom"
+    },
+    {
+      "src": "header_images/Slider2.jpg",
+      "file": "hero-dripline.jpg",
+      "note": "Legacy home banner: armored dripline with downspout"
+    },
+    {
+      "src": "Images/header/dripline_FDS.JPG",
+      "file": "banner-dripline-fds.jpg",
+      "note": "About BMPs banner"
+    },
+    {
+      "src": "Images/header/SFR_Driveway.jpg",
+      "file": "banner-driveway.jpg",
+      "note": "Get certified banner"
+    },
+    {
+      "src": "Images/header/MaintenanceHeader.jpg",
+      "file": "banner-maintenance.jpg",
+      "note": "Maintenance banner"
+    },
+    {
+      "src": "Images/header/WhatAreBMPsBanner.jpg",
+      "file": "banner-what-are-bmps.jpg",
+      "note": "Certificates banner"
+    },
+    {
+      "src": "Images/header/gallery.jpg",
+      "file": "banner-gallery.jpg",
+      "note": "Gallery banner"
+    },
+    {
+      "src": "images/obliques/SingleFamily.jpg",
+      "file": "oblique-single-family.jpg",
+      "note": "Conceptual site design: single-family"
+    },
+    {
+      "src": "images/obliques/MultiFamily.jpg",
+      "file": "oblique-multi-family.jpg",
+      "note": "Conceptual site design: multi-family"
+    },
+    {
+      "src": "images/obliques/CommercialGood.jpg",
+      "file": "oblique-commercial-with-bmps.jpg",
+      "note": "Conceptual site design: commercial with BMPs"
+    },
+    {
+      "src": "images/obliques/CommercialBad.jpg",
+      "file": "oblique-commercial-without-bmps.jpg",
+      "note": "Conceptual site design: commercial without BMPs"
+    },
+    {
+      "src": "images/obliques/Community.jpg",
+      "file": "oblique-regional.jpg",
+      "note": "Conceptual site design: regional treatment"
+    },
+    {
+      "src": "images/obliques/Marina.jpg",
+      "file": "oblique-marina.jpg",
+      "note": "Conceptual site design: marina"
+    },
+    {
+      "src": "images/obliques/Winterization.jpg",
+      "file": "oblique-winterization.jpg",
+      "note": "Conceptual site design: winterization"
+    },
+    {
+      "src": "images/obliques/TemporaryConstruction.jpg",
+      "file": "oblique-temporary-construction.jpg",
+      "note": "Conceptual site design: temporary construction BMPs"
+    },
+    {
+      "src": "Images/BMPs/paving a.JPG",
+      "file": "prescribed-paving-1.jpg",
+      "note": "Commonly prescribed: pave dirt driveways"
+    },
+    {
+      "src": "Images/BMPs/paving b.JPG",
+      "file": "prescribed-paving-2.jpg",
+      "note": "Commonly prescribed: pave dirt driveways"
+    },
+    {
+      "src": "Images/BMPs/Parking barriers.JPG",
+      "file": "prescribed-parking-barriers.jpg",
+      "note": "Commonly prescribed: parking barriers"
+    },
+    {
+      "src": "Images/BMPs/conveyance slotted channel drain.jpg",
+      "file": "prescribed-conveyance-drain.jpg",
+      "note": "Commonly prescribed: conveyance"
+    },
+    {
+      "src": "Images/BMPs/conveyance swale.jpg",
+      "file": "prescribed-conveyance-swale.jpg",
+      "note": "Commonly prescribed: conveyance"
+    },
+    {
+      "src": "Images/BMPs/Sediment trap a.JPG",
+      "file": "prescribed-sediment-trap-1.jpg",
+      "note": "Commonly prescribed: sediment trap"
+    },
+    {
+      "src": "Images/BMPs/sediment trap b.JPG",
+      "file": "prescribed-sediment-trap-2.jpg",
+      "note": "Commonly prescribed: sediment trap"
+    },
+    {
+      "src": "Images/BMPs/SkiRunMarina 2.jpg",
+      "file": "prescribed-infiltration.jpg",
+      "note": "Commonly prescribed: infiltrate runoff"
+    },
+    {
+      "src": "Images/BMPs/dripline.jpg",
+      "file": "prescribed-dripline.jpg",
+      "note": "Commonly prescribed: infiltrate runoff"
+    },
+    {
+      "src": "Images/BMPs/slope stabilization.jpg",
+      "file": "prescribed-slope-stabilization.jpg",
+      "note": "Commonly prescribed: stabilize soil"
+    },
+    {
+      "src": "Images/BMPs/FDS.jpg",
+      "file": "prescribed-defensible-space.jpg",
+      "note": "Commonly prescribed: fire defensible space"
+    },
+    {
+      "src": "Images/BMPs/veg & mulch.jpg",
+      "file": "prescribed-veg-mulch.jpg",
+      "note": "Commonly prescribed: vegetation and mulch"
+    }
   ]
 }
