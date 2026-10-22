@@ -48,6 +48,44 @@ Two things Connect does that matter when the script changes:
 
 Later: the hosted feature layer can be joined to the BMP Database by APN, and a Survey123 webhook or a scheduled script can email the program when a submission arrives.
 
+## Where submissions go
+
+Survey123 writes only to an ArcGIS feature service, and photo attachments and repeats need a geodatabase behind that service, so neither web form can write straight into a plain SQL Server database. Three places the submissions can land. As of Oct. 21, 2026 nothing has been created in any geodatabase; the XLSForms work for all three, and the choice is open until the BMP Database owner weighs in (see `NEXT-STEPS.md`).
+
+### Path 1: hosted layer plus a sync
+
+Publish from Connect as is. Survey123 creates a hosted feature layer in the portal's ArcGIS Data Store (not the SDE), and a scheduled script in arcgispro-py3 mirrors new rows and their attachments into the SDE by GlobalID. Least setup, no anonymous edits on a production geodatabase, and Survey123 owns its own schema. The Schema tab in Connect shows the exact layer, fields, related table, and attachment tables it will create.
+
+### Path 2: feature services published from the collection geodatabase (working plan)
+
+Chosen Oct. 21, 2026 as the working plan because collection is the transaction geodatabase. What it takes:
+
+- One point feature class per form, named for the form's `form_id` (`bmp_maintenance_documentation`, `bmp_evaluation_request`), with GlobalIDs, attachments enabled, and editor tracking in UTC.
+- One related table per repeat (`bmp_maintenance_photos` with `photo_caption`; `bmp_evaluation_photos`), with GlobalIDs and attachments, joined by a relationship class from the parent GlobalID to a GUID field `parentglobalid`.
+- One field per question name, except notes, the geopoint (the geometry), and image and file questions (attachments). Field names identical to the question names; types from the `bind::esri:fieldType` and `bind::esri:fieldLength` columns (text with the given length, date for dates, text 255 for select questions; select_multiple stores comma-separated choice names).
+- Published from ArcGIS Pro to the federated server referencing the registered geodatabase, Feature Access with Create only, shared with Everyone along with the form. Query stays off on the public service so contact details are not readable by the public; staff read submissions in Pro or through an internal service. Test one submission with a photo through the published form before go-live.
+- XLSForm changes before publishing (a few lines in `scripts/build_survey123_forms.py`): `submission_url` in the settings sheet set to the service URL, `form_id` equal to the layer name, repeats renamed to the table names, `bind::esri:fieldType` set to `null` on the intro notes, and an explicit `bind::esri:fieldType` on every stored question. Then copy the rebuilt workbook over Connect's copy, Update, and Publish.
+
+Cost: anonymous Create on a production geodatabase through a public-facing service, and every form change that adds a field is a schema change in the SDE.
+
+### Path 3: integrate with the BMP Database the way the old toolkit does
+
+The old site's BMP Toolkit (tahoebmp.org/bmptoolkit, observed Oct. 21, 2026) is the "BMP Evaluation and Tracking Tool" on top of the program's SQL Server BMP Database:
+
+- The public search (`SearchBMP.asp`) reads the database by APN, address, owner, or certificate number and shows status, certificate date, county, permeability (KSAT at 12 inches), fire district, area-wide name and treatment, and disclosure date.
+- The property summary (`quickReport.asp?ParcelID=`) shows property, site (soil type, KSAT, soil constraint, slope, land capability, SEZ or shorezone, priority watershed), compliance (implementation required by, certificate issued and updated dates, source control certificate, retrofit only, disclosure received and date, enforcement action, maintenance requested), evaluation (agency, requested and evaluation dates, evaluator), and the maintenance documents on file for the parcel. Owner name shows only after login.
+- `printCertificate.asp`, `printSourceCertificate.asp`, and `printEvaluation.asp` render certificates and evaluations from the database.
+- `RequestEvaluation.asp` no longer has a form; it says no evaluation is on file and points to the hotline (free evaluations ended in 2015). `SupportRequest.asp` is a four-field help request form.
+- The agent login (`login.asp`) is where staff and Conservation District agents enter evaluations, certificates, flags, and maintenance documents.
+- The map service `BMP_Status/MapServer/5` is a view that joins the SDE parcels feature class to the BMP Database by APN: its BMP columns carry doubled SQL Server nvarchar lengths, 'True' and 'False' text, and dates as text. So the BMP Database is already reachable from the SDE's SQL Server, which is the hook for any integration.
+
+An integration would write each submission as a maintenance document or request record in the tables the toolkit uses, store the files where its "Maintenance Documents" live, and set the flags the status symbols read (Maintenance Requested, Certificate Updated, Disclosure Received). Two ways to get there:
+
+1. Survey123 as the intake (Path 1 or 2) plus a SQL Agent job or Python script that copies new submissions and files into the BMP Database tables. Keeps the public face on ArcGIS and keeps the database owner's data model as the system of record.
+2. A custom web form and API in place of Survey123, which is the toolkit's own approach: a small service on an agency server receives the form POST and writes to the BMP Database directly. Full control over the model, but custom code to host and maintain, spam protection, file storage, and no ArcGIS layer to map or join.
+
+Open items only the BMP Database owner can answer: the server and instance, the tables and columns for maintenance documents, evaluations, and disclosures, where the document files live, how the certificate and evaluation prints are built, how LT Info reads the data, and whether the agent tracking tool keeps running after tahoebmp.org retires.
+
 ## Retiring the old files
 
 When the Survey123 forms are live and the AcroForm log is linked, the legacy `Maintenance_Log_interactive_form.pdf` and `Maintenance_Log_static_form.pdf` can be removed from the old server, and the maintenance page's note about Adobe Reader goes away. The disclosure form stays as the static PDF until the program decides whether to rebuild it as an AcroForm (same script, one more spec) or move it into a web form.
