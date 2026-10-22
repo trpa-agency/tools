@@ -157,7 +157,6 @@
     .env-presets button:hover { border-color: var(--eip-blue); color: var(--eip-blue); }
 
     /* picks received */
-    #reviewerChips .r-head { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 0.2rem; }
     .rlist { list-style: none; margin: 0; padding: 0; border: 1px solid var(--gray-border); border-radius: 8px; overflow: hidden; }
     .rrow { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; font-size: 0.76rem; border-top: 1px solid var(--gray-border); background: #fff; }
     .rrow:first-child { border-top: none; }
@@ -241,15 +240,11 @@
     .tier { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5rem; height: 1.3rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; vertical-align: middle; }
     .tier.t1 { background: var(--t1-bg); color: var(--t1); } .tier.t2 { background: var(--t2-bg); color: var(--t2); } .tier.t3 { background: var(--t3-bg); color: var(--t3); }
     .tier.empty { background: transparent; color: var(--gray-text); border: 1px dashed var(--gray-border); font-weight: 500; }
-    /* inline 1 / 2 / 3 picker in the My priority cell (row height 36, so 28 tall is the most it can take) */
-    .tpick { display: inline-flex; gap: 3px; align-items: center; vertical-align: middle; }
-    .tpick button { width: 30px; height: 28px; border-radius: 6px; border: 1px solid var(--gray-border); background: #fff; color: var(--gray-text); cursor: pointer;
-      font-family: var(--font); font-size: 0.76rem; font-weight: 700; padding: 0; line-height: 1; }
-    .tpick button:hover { border-color: var(--blue-text); color: var(--blue-text); }
-    .tpick button.on[data-t="1"] { background: var(--t1-bg); color: var(--t1); border-color: var(--t1); }
-    .tpick button.on[data-t="2"] { background: var(--t2-bg); color: var(--t2); border-color: var(--t2); }
-    .tpick button.on[data-t="3"] { background: var(--t3-bg); color: var(--t3); border-color: var(--t3); }
-    .tpick .cov { margin-left: 0.3rem; }
+    /* project name in the table: a link-style button that opens the pop-up, where every pick is set */
+    .pname { border: none; background: none; padding: 0; margin: 0; max-width: 100%; font: inherit; font-weight: 600; color: var(--blue-text); cursor: pointer;
+      text-align: left; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--blue-text) 40%, transparent); text-underline-offset: 2px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pname:hover { text-decoration-color: currentColor; }
     .tv { display: inline-flex; gap: 0.25rem; align-items: center; }
     .tv span { font-size: 0.68rem; font-weight: 700; padding: 0 0.35rem; border-radius: 6px; }
     .tv .v1 { background: var(--t1-bg); color: var(--t1); } .tv .v2 { background: var(--t2-bg); color: var(--t2); } .tv .v3 { background: var(--t3-bg); color: var(--t3); }
@@ -391,8 +386,8 @@
         </h2>
         <div class="sec-help">
           <ol>
-            <li>In the table, click <em>1</em>, <em>2</em>, or <em>3</em> under <em>My priority</em> for each project your working group wants funded from this list.</li>
-            <li>Type a dollar request in the <em>Request</em> column, or click the row to pick one from the Tracker's figures, tick the LTRA criteria the project meets, and write a note.</li>
+            <li>In the table, click the name of each project your working group wants funded. Its pop-up opens.</li>
+            <li>In the pop-up, confirm or change the list and the priority (<em>1</em>, <em>2</em>, or <em>3</em>), enter the dollar request, tick the LTRA criteria the project meets, and write a note. The table shows what you set but cannot be edited.</li>
             <li>Press <em>Send my picks</em> at the bottom of this panel. You can send again later; only what you sent last counts.</li>
           </ol>
         </div>
@@ -410,22 +405,14 @@
         <label class="field"><span class="lbl" title="Used only to match what you send so your latest picks count. It goes to TRPA's ArcGIS Online and is not shown to other reviewers.">Email <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
           <input id="reviewerEmail" type="email" class="plain" placeholder="you@agency.gov" autocomplete="email" />
         </label>
-        <div class="row" id="surveyRow" style="align-items:center">
-          <div class="foot-status" id="surveyStatus" style="flex:1" hidden></div>
-          <calcite-button id="refreshPicksBtn" icon-start="refresh" appearance="outline" kind="brand" scale="s" title="Reload everyone's sent picks" label="Refresh picks"></calcite-button>
-        </div>
         <calcite-notice id="sentBefore" icon="clock" kind="info" scale="s" width="full" hidden>
           <div slot="message" id="sentBeforeMsg"></div>
           <calcite-button slot="actions-end" id="loadSentBtn" appearance="outline" kind="brand" scale="s" title="Bring the picks you sent before into this browser so you can edit them and send again">Load them</calcite-button>
         </calcite-notice>
-        <div id="reviewerChips" aria-label="Reviewers whose picks are loaded"></div>
         <details class="more">
           <summary>Working group lead tools and CSV fallback</summary>
           <div class="row">
-            <calcite-button id="printBtn" icon-start="print" appearance="solid" kind="brand" scale="s" width="full" title="A readable version of this list's combined picks, one section per working group with totals, for printing or saving as PDF">Print master sheet</calcite-button>
-            <calcite-button id="masterBtn" icon-start="file-csv" appearance="outline" kind="brand" scale="s" width="full" title="The same combined list in the master sheet column layout: one block per working group with Priority 1 and all-priority totals">Master sheet CSV</calcite-button>
-          </div>
-          <div class="row">
+            <calcite-button id="masterBtn" icon-start="file-csv" appearance="outline" kind="brand" scale="s" width="full" title="The combined list in the master sheet column layout: one block per working group with Priority 1 and all-priority totals">Master sheet CSV</calcite-button>
             <calcite-button id="importScoresBtn" icon-start="upload" appearance="outline" kind="brand" scale="s" width="full" title="For working group leads: import one or more reviewers' CSV files">Import CSV</calcite-button>
             <input id="importFile" type="file" accept=".csv,text/csv" multiple hidden />
           </div>
@@ -434,7 +421,7 @@
       </section>
 
       <section class="panel-sec">
-        <h2 class="sec-title">Projects you can pick from
+        <h2 class="sec-title">Filters
           <button id="resetFiltersBtn" class="sec-tool" title="Reset the filters: EIP projects in planning or implementation">Reset</button>
         </h2>
         <p class="sec-help">EIP projects in planning or implementation on the EIP Project Tracker, the same set as its 5-Year List. Use these
@@ -448,7 +435,7 @@
           <calcite-switch id="pickedOnly" scale="s" label="Only picked projects"></calcite-switch>
           <span>Only picked projects</span>
         </label>
-        <label class="field"><span class="lbl" title="The EIP focus area the Tracker assigns each project. Click a focus area to turn it on or off. All projects turns every focus area back on and also shows the projects the Tracker gives no focus area.">Focus area <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <label class="field"><span class="lbl" title="The EIP focus area the Tracker assigns each project. Click a focus area to turn it on or off. All projects turns every focus area back on.">Focus area <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
           <div class="chips" id="focusChips"></div>
         </label>
         <label class="field"><span class="lbl" title="The organization listed as lead implementer on the Tracker. Pick one or more; empty means any.">Lead implementer <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
@@ -490,11 +477,17 @@
               <button data-v="NV" role="radio" aria-checked="false">Nevada</button>
             </div>
           </label>
-          <label class="toggle">
-            <calcite-switch id="nonEip" scale="s" label="Include non-EIP projects tracked on Lake Tahoe Info"></calcite-switch>
-            <span class="lbl" title="Lake Tahoe Info tracks a few dozen projects that are not part of the EIP. They are left out unless you turn this on.">Include non-EIP projects tracked on Lake Tahoe Info</span>
-          </label>
         </details>
+      </section>
+
+      <section class="panel-sec" id="receivedSec">
+        <h2 class="sec-title">Picks received</h2>
+        <div class="row" id="surveyRow" style="align-items:center">
+          <div class="foot-status" id="surveyStatus" style="flex:1" hidden></div>
+          <calcite-button id="refreshPicksBtn" icon-start="refresh" appearance="outline" kind="brand" scale="s" title="Reload everyone's sent picks" label="Refresh picks"></calcite-button>
+        </div>
+        <div id="reviewerChips" aria-label="Working group lists received"></div>
+        <calcite-button id="printBtn" icon-start="print" appearance="solid" kind="brand" scale="m" width="full" title="A readable version of this list's combined picks, one section per working group with totals, for printing or saving as PDF">Print master sheet</calcite-button>
       </section>
 
       <section class="panel-sec collapsed" id="envSec">
@@ -555,14 +548,14 @@
           <div id="drawerTools">
             <input id="quickFilter" type="text" placeholder="Filter rows…" aria-label="Filter rows" />
             <button class="d-txt" id="colsBtn" title="Show every column, including costs and Tracker details">All columns</button>
-            <button class="d-txt" id="maxBtn" title="Give the table the full height and hide the map">Table only</button>
+            <button class="d-txt" id="maxBtn" title="Show or hide the map above the table">Show map</button>
           </div>
           <button class="d-btn" id="drawerToggle" title="Collapse / expand"><calcite-icon icon="chevron-down" scale="s" id="drawerToggleIcon"></calcite-icon></button>
         </div>
         <div id="drawerBody">
           <div style="padding:0.4rem 0.8rem 0"><calcite-notice id="startHint" icon="lightbulb" kind="brand" scale="s" width="full" closable>
-            <div slot="message"><b>Start here:</b> click 1, 2, or 3 under <em>My priority</em> on a project your working group wants funded.
-            Type a request in the <em>Request</em> column, or click the row for the request, criteria, and a note.</div></calcite-notice></div>
+            <div slot="message"><b>Start here:</b> click the name of a project your working group wants funded. Set its priority, request,
+            criteria, and note in the pop-up; the table shows what you set.</div></calcite-notice></div>
           <div class="focus-bar" id="focusBar" hidden><span>Showing the <span id="focusCount"></span> sent by <b id="focusWho"></b> on this list, in their priority order.</span><button id="focusClear">Show All Projects</button></div>
           <div id="gridWrap"><div class="load-wrap" id="gridLoading"><calcite-loader inline scale="m" label="Loading EIP projects"></calcite-loader> Loading EIP projects from the Tracker snapshot</div><div id="grid" hidden></div></div>
           <div id="chartsWrap" hidden>
@@ -584,8 +577,8 @@
       <div id="sendLists"></div>
       <div id="sendModeWrap" hidden style="margin:0.4rem 0 0.6rem">
         <div class="send-h">You have sent picks before</div>
-        <label class="toggle" style="margin-bottom:0.25rem"><input type="radio" name="sendMode" value="add" checked /> <span id="sendAddLabel">Add the picks above to what I sent before</span></label>
-        <label class="toggle"><input type="radio" name="sendMode" value="replace" /> <span>Replace what I sent before with the picks above</span></label>
+        <label class="toggle" style="margin-bottom:0.25rem"><input type="radio" name="sendMode" value="replace" checked /> <span>Replace what I sent before with the picks above</span></label>
+        <label class="toggle"><input type="radio" name="sendMode" value="add" /> <span id="sendAddLabel">Edit Previous LTRA Priority Picks</span></label>
       </div>
       <p class="fine" id="sendNote"></p>
       <p class="send-err" id="sendErr" hidden></p>
@@ -605,11 +598,13 @@
         <li><strong>Two lists.</strong> The LTRA list is the annual Lake Tahoe Restoration Act request. The Other list holds priorities for
           every other funding source. Both draw on the same projects, EIP projects in planning or implementation, and the reviewer decides which
           list a project goes on.</li>
-        <li><strong>Picks.</strong> For each project a reviewer sets a priority (1, 2, or 3, the same as the master sheet), a funding
-          request in dollars, the LTRA criteria the project meets, and a note. <em>Send my picks</em> sends both lists to the survey's layer
-          after a confirmation. Sent picks land in TRPA's ArcGIS Online; the tool reads everyone's latest picks back (without email addresses).
-          Sending again with the same email replaces what you sent before, or, if you choose <em>Add</em> in the confirmation, brings the earlier
-          picks along with the new ones. <em>Load them</em> under your email pulls your earlier picks into the browser to edit first.</li>
+        <li><strong>Picks.</strong> Click a project's name in the table to open it. In the pop-up a reviewer sets a priority (1, 2, or 3, the
+          same as the master sheet), a funding request in dollars, the LTRA criteria the project meets, and a note; the table itself is read-only.
+          <em>Send my picks</em> sends both lists to the survey's layer after a confirmation. Sent picks land in TRPA's ArcGIS Online; the tool
+          reads everyone's latest picks back (without email addresses). Sending again with the same email replaces what you sent before, or, if
+          you choose <em>Edit Previous LTRA Priority Picks</em> in the confirmation, keeps the earlier picks and adds the new ones. The
+          confirmation picks Replace when this browser already holds everything you sent before, and Edit Previous otherwise.
+          <em>Load them</em> under your email pulls your earlier picks into the browser to edit first.</li>
         <li><strong>Picks received.</strong> Everyone whose picks have arrived is listed in the panel. Click a name to see only that reviewer's
           picks on the current list, with their priority, request, and note in a <em>Picks Received</em> column; click again, or <em>Show All Projects</em>, to go back.</li>
         <li id="aboutCombine"><strong>How picks combine.</strong> For each project the tool counts how many reviewers called it Priority 1, Priority 2, and
@@ -618,7 +613,7 @@
           every group whose reviewers picked it. Projects nobody picked have no rank. The
           table opens grouped by working group, as the master sheet is. The working group leads settle the final priority and dollar figure
           from this picture.</li>
-        <li><strong>Projects you can pick from.</strong> Filter by focus area, implementer, stage, funding status, Tracker LTRA history, program,
+        <li><strong>Filters.</strong> Filter by focus area, implementer, stage, funding status, Tracker LTRA history, program,
           tag, funding source, and state.</li>
         <li><strong>Available funding.</strong> Enter a dollar amount for the current list. Picked projects are funded in rank order by their
           request (or unfunded need where none was given). Excluded projects leave the list.</li>
@@ -640,8 +635,8 @@
           requested but not secured, and secured before. It is a hint for building the list (the <em>LTRA history</em> filter uses it) and a
           check for drift: an orange mark next to a request means it differs from the Tracker by more than a tenth, or the Tracker shows no
           request at all. The two are not reconciled automatically; one of them should be updated.</li>
-        <li>Notes travel as one line per project, so line breaks in a note become spaces. Only EIP projects with a Tracker number can be
-          picked; non-EIP projects tracked on Lake Tahoe Info appear for reference when switched on.</li>
+        <li>Notes travel as one line per project, so line breaks in a note become spaces. Only EIP projects with a Tracker number appear and
+          can be picked; the few non-EIP projects tracked on Lake Tahoe Info are left out.</li>
         <li><em>Unfunded need</em> is the estimated total cost minus the funding the implementer reports as secured. It, secured funding, and
           cost are self-reported by implementers and only as current as their last Tracker update.</li>
         <li>Your own picks count toward the group once they are sent. Picks and notes are also kept in this browser until you clear them.</li>
@@ -849,12 +844,6 @@
       saveLS(LS_REVIEW, review); return true;
     }
     // Set or clear a tier from a 1/2/3 control: clicking the current tier clears it; a pick on the other list moves here with a toast
-    function clickTier(id, t) {
-      const cur = myPick(id), same = cur && cur.l === listKey && cur.t === t, from = cur && cur.t && cur.l !== listKey ? cur.l : null;   // read before setMyPick mutates cur
-      if (!setMyPick(id, same ? { t: null } : { t, l: listKey })) return;
-      if (from) toast(`Moved ${(proj(id) || {}).name || id} from your ${LISTS[from].long} to your ${LISTS[listKey].long}.`, 4000);
-      recompute();
-    }
     const critText = (keys) => (keys || []).map(k => (CRITERIA.find(c => c.k === k) || {}).s).filter(Boolean).join(", ");
     // The note as it travels: criteria sentence first, free text after
     const fullNote = (pk) => [pk.c && pk.c.length ? `Criteria addressed: ${critText(pk.c)}.` : "", pk.n || ""].filter(Boolean).join(" ").replace(/\s*[\r\n]+\s*/g, " ");
@@ -924,11 +913,11 @@
     const comboVals = (el) => (el.selectedItems || []).map(i => i.value);
     function passes(p) {
       const fp = focusPicks(); if (fp && !fp[p.id]) return false;
-      if (!$("nonEip").checked && !p.isEip) return false;
+      if (!p.isEip) return false;   // non-EIP Tracker projects cannot be picked and stay out (Oct. 2026 review removed the switch)
       if (!chipsOn($("stageChips")).includes(p.stage)) return false;
       if ($("pickedOnly").checked && !(p.tl.n || (myPick(p.id) || {}).l === listKey && myPick(p.id).t)) return false;
       if ($("ltraHintOnly").checked && !p.hasLtra) return false;
-      // Projects with no focus area show only while every focus area is on (All projects)
+      // Every EIP project has a focus area today; one that lacks it would still show while every focus area is on (All projects)
       const fa = chipsOn($("focusChips")); if (!(fa.includes(p.focus) || p.focus === "Unassigned" && fa.length === FOCUS_CHIPS.length)) return false;
       const prog = comboVals($("programSel")); if (prog.length && !prog.includes(p.program)) return false;
       const lead = comboVals($("leadSel")); if (lead.length && !lead.includes(p.lead)) return false;
@@ -1011,7 +1000,7 @@
       "Working group": "Every working group whose reviewers picked this project, in roster order. The master sheet lists the project under each of them. The table opens in this order: first group in roster order, then rank within it, then projects nobody has picked.",
       "": FEATURES.pins ? "Pin a project to fund it first, or exclude it from the list. Click again to undo." : "Exclude a project from the list. Click again to undo.",
       "Project #": "EIP project number. Opens the project's fact sheet on the EIP Project Tracker.",
-      "Project": "Project name as entered on the Tracker. Click a row for details, criteria, and notes.",
+      "Project": "Project name as entered on the Tracker. Click it to open the project and set your priority, request, criteria, and note.",
       "Focus area": "EIP focus area the Tracker assigns the project to.",
       "Lead implementer": "Organization listed as lead implementer on the Tracker.",
       "Stage": "Project stage on the Tracker. The list holds Planning/Design and Implementation.",
@@ -1024,15 +1013,15 @@
       "Spent": "Expenditures reported to the Tracker to date, all sources.",
       "Remaining": "Estimated total cost minus expenditures to date.",
       "Funding": "Whether the available funding entered in the panel covers this project's request, going down the group ranking. Shown when an amount is set or a project is excluded.",
-      "My priority": "Your working group's priority for this project on the list you are viewing: 1 (highest), 2, or 3. Click to set or change; blank removes it. A project can be on one of your two lists, not both.",
-      "Request": "Your funding request for this project from this list, in dollars. An orange mark means it differs from what the Tracker shows; one of the two should be updated.",
+      "My priority": "Your working group's priority for this project on the list you are viewing: 1 (highest), 2, or 3. Click the project name to set or change it. A project can be on one of your two lists, not both.",
+      "Request": "Your funding request for this project from this list, in dollars; click the project name to set it. An orange mark means it differs from what the Tracker shows; one of the two should be updated.",
       "Picks Received": "What the working group selected under Picks received in the panel gave this project: priority, request, and note. Click Show All Projects above the table to go back to the full list.",
       "Votes": "How many reviewers gave this project Priority 1, 2, and 3 on this list, from everyone whose picks have been sent or imported. Your own count once you send them. Hover for names, requests, and notes.",
       "Group priority": "The priority most reviewers gave this project on this list (ties go to the higher priority), with the number of reviewers who picked it.",
       "Group request": "The median of reviewers' funding requests for this project on this list. Hover for each reviewer's figure.",
       "Group picks": "Each working group's own priority and request for this project, side by side and in roster order. Groups rank together in their meetings and send one list each; the tool does not combine them into a vote.",
-      "Note": "Your note on the project: how the criteria were considered, what changed from last year. Sent with your picks. Tick criteria in the detail card.",
-      "Criteria": `How many of the ${CRITERIA.length} LTRA criteria you ticked for this pick. Click the row to tick them.`,
+      "Note": "Your note on the project: how the criteria were considered, what changed from last year. Sent with your picks. Click the project name to write it.",
+      "Criteria": `How many of the ${CRITERIA.length} LTRA criteria you ticked for this pick. Click the project name to tick them.`,
       "Thresholds": "Threshold categories the project reports against on the Tracker.",
       "Action priority": "The one EIP action priority the Tracker assigns the project for reporting.",
       "Funding sources": "Funding sources with expenditures on the project, from the Tracker.",
@@ -1050,48 +1039,58 @@
         const d = p.data;
         const pinSvg = `<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M9.5 1.5 14.5 6.5l-1.4 1.4-.7-.7-3.2 3.2.4 2.8-1.1 1.1L5.6 11.4 2.1 14.9l-1-1 3.5-3.5L1.7 7.5l1.1-1.1 2.8.4 3.2-3.2-.7-.7z"/></svg>`;
         const exSvg = `<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="6.4"/><path d="M5.5 5.5l5 5M10.5 5.5l-5 5"/></svg>`;
-        return (FEATURES.pins ? `<button class="flag-btn pin ${d.pinned ? "on" : ""}" data-act="pin" title="${d.pinned ? "Unpin" : "Pin: fund this project first"}">${pinSvg}</button>` : "") +
-          `<button class="flag-btn ex ${d.excluded ? "on" : ""}" data-act="ex" title="${d.excluded ? "Return to the list" : "Exclude from the list"}">${exSvg}</button>`;
+        // Read-only marks; pin and exclude are set in the project's pop-up
+        return (FEATURES.pins && d.pinned ? `<span class="flag-btn pin on" title="Pinned: funded first. Open the project to unpin it.">${pinSvg}</span>` : "") +
+          (d.excluded ? `<span class="flag-btn ex on" title="Excluded from the list. Open the project to restore it.">${exSvg}</span>` : "");
       };
       const withTips = (defs) => defs.map(c => ({ headerTooltip: HEADER_TIPS[c.headerName], ...c }));
       const otherList = (id) => { const pk = myPick(id); return pk && pk.t && pk.l !== listKey ? pk.l : null; };
-      const pinL = isPhone() ? null : "left";   // three pinned columns eat a phone screen
+      const pinL = isPhone() ? null : "left";   // a pinned name column eats a phone screen
       const bestFirst = ["asc", "desc", null], bigFirst = ["desc", "asc", null];
       gridApi = agGrid.createGrid($("grid"), {
-        theme, rowData: [], getRowId: (p) => p.data.id, animateRows: false, suppressCellFocus: true, singleClickEdit: true, stopEditingWhenCellsLoseFocus: true,
+        theme, rowData: [], getRowId: (p) => p.data.id, animateRows: false, suppressCellFocus: true,
         tooltipShowDelay: 300, tooltipHideDelay: 4000, tooltipInteraction: true,
         overlayNoRowsTemplate: '<span style="padding:1rem;color:#5F6B7E">No projects match these filters. Reset the filters or clear the search.</span>',
         rowClassRules: { "row-excluded": (p) => p.data.excluded, "row-pinned-proj": (p) => p.data.pinned, "row-selected-proj": (p) => p.data.id === selectedId },
         defaultColDef: { sortable: true, filter: true, resizable: true, suppressMovable: true, wrapHeaderText: true, autoHeaderHeight: true, tooltipValueGetter: (p) => p.valueFormatted ?? p.value },
         columnDefs: withTips([
-          // Reviewer-first order: the reviewer's own controls (priority, request, criteria, note) next to the rank, then the project,
-          // then the group tallies; Tracker detail follows, most of it hidden until "All columns" (applyColumnVisibility).
-          // Default order is the master sheet's: by working group (roster order, projects nobody picked last), then rank within the group.
-          // Clicking # alone restores the plain ranking; shift-click adds a second sort.
-          { headerName: "#", field: "rank", width: 54, type: "rightAligned", pinned: pinL, valueFormatter: (p) => p.value ?? "", comparator: (a, b) => (a ?? 1e9) - (b ?? 1e9), sortingOrder: ["asc", null] },
-          { headerName: "My priority", colId: "myTier", width: 118, pinned: pinL, sortingOrder: bestFirst,
+          // Read-only table (Oct. 2026 review): every pick is set in the project's pop-up, opened by clicking the project name or the row.
+          // Column order is the review's: project, number, lead, the reviewer's pick, the group picks, then Tracker funding, then
+          // Picks Received when a group is focused. Voting columns and Tracker detail follow, hidden until relevant or "All columns"
+          // (applyColumnVisibility). Default order is the master sheet's: by working group (roster order, projects nobody picked last),
+          // then rank or that group's priority within the group.
+          { headerName: "Project", field: "name", width: 280, pinned: pinL,
+            cellRenderer: (p) => `<button class="pname" title="Open this project to set your priority, request, criteria, and note">${escHtml(p.value)}</button>` },
+          { headerName: "Project #", field: "id", width: 112, cellRenderer: (p) => `<a href="${escHtml(p.data.factUrl || p.data.url)}" target="_blank" rel="noopener noreferrer" title="Fact sheet on the EIP Project Tracker">${escHtml(p.value)}</a>` },
+          { headerName: "Lead implementer", field: "lead", flex: 1.2, minWidth: 160 },
+          { headerName: "My priority", colId: "myTier", width: 118, sortingOrder: bestFirst,
             valueGetter: (p) => { const pk = myPick(p.data.id); return pk && pk.l === listKey && pk.t ? pk.t : null; },
             valueFormatter: (p) => p.value ? `Priority ${p.value}` : "",
-            cellRenderer: (p) => { if (!EIP_ID.test(p.data.id)) return `<span class="cov" title="Not an EIP project; no Tracker number to send">not pickable</span>`;
-              const ol = otherList(p.data.id);
-              return `<span class="tpick">${[1, 2, 3].map(t => `<button data-t="${t}" class="${p.value === t ? "on" : ""}" title="${p.value === t ? `Your Priority ${t} on the ${LISTS[listKey].long}. Click to clear.` : ol ? `Move to the ${LISTS[listKey].long} as Priority ${t}` : `Set Priority ${t}`}" aria-pressed="${p.value === t}">${t}</button>`).join("")}` +
-                (ol ? `<span class="cov" title="You put this project on your ${LISTS[ol].long}. Choosing a priority here moves it to the ${LISTS[listKey].long}.">${LISTS[ol].label} list</span>` : "") + `</span>`; },
+            cellRenderer: (p) => { if (p.value) return `${tierBadge(p.value)} Priority ${p.value}`; const ol = otherList(p.data.id);
+              return ol ? `<span class="cov" title="You put this project on your ${LISTS[ol].long}. Open it to move it to the ${LISTS[listKey].long}.">${LISTS[ol].label} list</span>` : ""; },
             cellStyle: mineStyle, comparator: (a, b) => (a || 9) - (b || 9) },
-          { headerName: "Request", colId: "myReq", width: 104, pinned: pinL, type: "rightAligned", editable: (p) => EIP_ID.test(p.data.id), cellEditor: "agNumberCellEditor", cellEditorParams: { min: 0, precision: 0 }, sortingOrder: bigFirst,
+          { headerName: "Request", colId: "myReq", width: 104, type: "rightAligned", sortingOrder: bigFirst,
             valueGetter: (p) => { const pk = myPick(p.data.id); return pk && pk.l === listKey ? (pk.req ?? null) : null; },
-            valueSetter: (p) => { const v = num(p.newValue); const pk = myPick(p.data.id) || {}; return setMyPick(p.data.id, { req: v != null && v >= 0 ? v : null, l: pk.l && pk.t ? pk.l : listKey }); },
             valueFormatter: (p) => p.value == null ? "" : fmtFull(p.value),
             cellRenderer: (p) => { if (p.value == null) return ""; const d = driftNote(p.data, myPick(p.data.id)); return `${fmtFull(p.value)}${d ? ` <span class="drift" title="${escHtml(d)}">!</span>` : ""}`; },
             cellStyle: mineStyle, comparator: (a, b) => (a ?? -1) - (b ?? -1) },
+          { headerName: "Group picks", colId: "gpicks", width: 240, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.groups[0] ? p.data.tl.groups[0].tier : null, comparator: (a, b) => (a || 9) - (b || 9),
+            cellRenderer: (p) => p.data.tl.groups.map(g => `<span style="white-space:nowrap">${escHtml(g.wg ? wgShort(g.wg) : "No group")} ${tierBadge(g.tier)}${g.med != null ? ` ${fmtUSD(g.med)}` : ""}</span>`).join(" &nbsp;"),
+            tooltipValueGetter: (p) => p.data.tl.groups.map(g => `${g.wg || "No working group given"}: Priority ${g.tier}${g.med != null ? ", " + fmtFull(g.med) : ", no request"}`).join("\n") || "No working group has picked this project on this list yet" },
           { headerName: "Criteria", colId: "crit", width: 96, type: "rightAligned", sortingOrder: bigFirst, valueGetter: (p) => { const pk = myPick(p.data.id); return pk && pk.c ? pk.c.length : 0; },
-            valueFormatter: (p) => p.value ? `${p.value} of ${CRITERIA.length}` : "", tooltipValueGetter: (p) => critText((myPick(p.data.id) || {}).c) || "Click the row to tick criteria", cellStyle: mineStyle },
-          { headerName: "Note", colId: "note", width: 170, editable: (p) => EIP_ID.test(p.data.id), cellEditor: "agTextCellEditor", valueGetter: (p) => (myPick(p.data.id) || {}).n ?? "",
-            valueSetter: (p) => setMyPick(p.data.id, { n: String(p.newValue || "") }), cellStyle: mineStyle },
-          { headerName: "Project", field: "name", flex: 2, minWidth: 220 },
-          { headerName: "Project #", field: "id", width: 112, cellRenderer: (p) => `<a href="${escHtml(p.data.factUrl || p.data.url)}" target="_blank" rel="noopener noreferrer" title="Fact sheet on the EIP Project Tracker">${escHtml(p.value)}</a>` },
+            valueFormatter: (p) => p.value ? `${p.value} of ${CRITERIA.length}` : "", tooltipValueGetter: (p) => critText((myPick(p.data.id) || {}).c) || "Click the project name to tick criteria", cellStyle: mineStyle },
+          { headerName: "Note", colId: "note", width: 170, valueGetter: (p) => (myPick(p.data.id) || {}).n ?? "", cellStyle: mineStyle },
+          { headerName: "Tracker LTRA", colId: "tltra", width: 170, valueGetter: (p) => trackerLtra(p.data) },
+          { headerName: "Est. cost", field: "cost", ...money },
+          { headerName: "Unfunded need", field: "need", ...money, width: 118,
+            cellRenderer: (p) => p.value == null ? "" : `${fmtUSD(p.value)}${p.data.needBasis === "spent" ? ' <span class="cov" title="Secured funding not reported; cost minus expenditures">*</span>' : ""}` },
+          { headerName: "Funding status", field: "fstatus", width: 128, cellRenderer: (p) => statusBadge(p.value),
+            comparator: (a, b) => ["unfunded", "partial", "fully", "unpriced"].indexOf(a) - ["unfunded", "partial", "fully", "unpriced"].indexOf(b) },
           { headerName: "Picks Received", colId: "theirs", width: 190, sortingOrder: bestFirst, valueGetter: (p) => { const fp = focusPicks(); return fp && fp[p.data.id] ? fp[p.data.id].t : null; }, comparator: (a, b) => (a || 9) - (b || 9),
             cellRenderer: (p) => { const fp = focusPicks(), pk = fp && fp[p.data.id]; if (!pk) return ""; return `${tierBadge(pk.t)} ${pk.req != null ? fmtFull(pk.req) : '<span class="cov">no request</span>'}${pk.n ? ` <span class="cov" title="${escHtml(pk.n)}">${escHtml(pk.n.length > 40 ? pk.n.slice(0, 38) + "…" : pk.n)}</span>` : ""}`; },
             tooltipValueGetter: (p) => { const fp = focusPicks(), pk = fp && fp[p.data.id]; return pk ? `Priority ${pk.t}${pk.req != null ? ", " + fmtFull(pk.req) : ""}${pk.c && pk.c.length ? "\nCriteria: " + critText(pk.c) : ""}${pk.n ? "\n" + pk.n : ""}` : ""; } },
+          // Clicking # alone restores the plain ranking (voting on); shift-click adds a second sort
+          { headerName: "#", field: "rank", width: 54, type: "rightAligned", valueFormatter: (p) => p.value ?? "", comparator: (a, b) => (a ?? 1e9) - (b ?? 1e9), sortingOrder: ["asc", null] },
           { headerName: "Votes", colId: "votes", width: 96, sortingOrder: bigFirst, valueGetter: (p) => p.data.tl.v[1] * 10000 + p.data.tl.v[2] * 100 + p.data.tl.v[3],
             cellRenderer: (p) => p.data.tl.n ? votesHtml(p.data.tl.v) : "", tooltipValueGetter: (p) => p.data.tl.rows.map(pickLine).join("\n") || "No sent picks for this project on this list yet" },
           { headerName: "Group priority", colId: "gTier", width: 118, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.tier,
@@ -1099,18 +1098,8 @@
             tooltipValueGetter: (p) => p.data.tl.n ? `${p.data.tl.n} reviewer${p.data.tl.n === 1 ? "" : "s"}: ${p.data.tl.v[1]} said Priority 1, ${p.data.tl.v[2]} Priority 2, ${p.data.tl.v[3]} Priority 3` : "" },
           { headerName: "Group request", colId: "gReq", width: 112, type: "rightAligned", sortingOrder: bigFirst, valueGetter: (p) => p.data.tl.med, valueFormatter: (p) => p.value == null ? "" : fmtFull(p.value),
             comparator: (a, b) => (a ?? -1) - (b ?? -1), tooltipValueGetter: (p) => p.data.tl.rows.filter(r => r.req != null).map(r => `${r.who}: ${fmtFull(r.req)}`).join("\n") || "" },
-          { headerName: "Group picks", colId: "gpicks", width: 240, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.groups[0] ? p.data.tl.groups[0].tier : null, comparator: (a, b) => (a || 9) - (b || 9),
-            cellRenderer: (p) => p.data.tl.groups.map(g => `<span style="white-space:nowrap">${escHtml(g.wg ? wgShort(g.wg) : "No group")} ${tierBadge(g.tier)}${g.med != null ? ` ${fmtUSD(g.med)}` : ""}</span>`).join(" &nbsp;"),
-            tooltipValueGetter: (p) => p.data.tl.groups.map(g => `${g.wg || "No working group given"}: Priority ${g.tier}${g.med != null ? ", " + fmtFull(g.med) : ", no request"}`).join("\n") || "No working group has picked this project on this list yet" },
           { headerName: "Working group", colId: "wg", width: 140, valueGetter: (p) => p.data.tl.wg, valueFormatter: (p) => p.data.tl.wgs.map(wgShort).join(", "),
             tooltipValueGetter: (p) => p.data.tl.wgs.join("; ") || "", sortingOrder: ["asc", "desc", null], comparator: (a, b) => wgRank(a) - wgRank(b) || String(a).localeCompare(String(b)) },
-          { headerName: "Lead implementer", field: "lead", flex: 1.2, minWidth: 160 },
-          { headerName: "Tracker LTRA", colId: "tltra", width: 170, valueGetter: (p) => trackerLtra(p.data) },
-          { headerName: "Est. cost", field: "cost", ...money },
-          { headerName: "Unfunded need", field: "need", ...money, width: 118,
-            cellRenderer: (p) => p.value == null ? "" : `${fmtUSD(p.value)}${p.data.needBasis === "spent" ? ' <span class="cov" title="Secured funding not reported; cost minus expenditures">*</span>' : ""}` },
-          { headerName: "Funding status", field: "fstatus", width: 128, cellRenderer: (p) => statusBadge(p.value),
-            comparator: (a, b) => ["unfunded", "partial", "fully", "unpriced"].indexOf(a) - ["unfunded", "partial", "fully", "unpriced"].indexOf(b) },
           { headerName: "Focus area", field: "focus", width: 170, cellRenderer: (p) => `<i class="fdot" style="background:${FOCUS_COLOR[p.value] || C.gray}"></i>${escHtml((FOCUS.find(f => f.key === p.value) || {}).short || p.value)}` },
           { headerName: "Stage", field: "stage", width: 118 },
           { headerName: "Funding", field: "fund", width: 128, cellRenderer: (p) => fundBadge(p.value, p.data.pinned), comparator: (a, b) => ["funded", "cut", "fully", "unranked", "none", "unpriced", "excluded"].indexOf(a) - ["funded", "cut", "fully", "unranked", "none", "unpriced", "excluded"].indexOf(b) },
@@ -1126,15 +1115,8 @@
           { headerName: "5-Year List", field: "fiveYear", width: 96, valueFormatter: (p) => p.value ? "yes" : "" },
           { headerName: "Funding requests", field: "requests", width: 260 },
         ]),
-        onCellClicked: (e) => {
-          const col = e.column.getColId();
-          if (col === "flags") { const b = e.event.target.closest("button"); if (b) toggleFlag(e.data.id, b.dataset.act); return; }
-          if (col === "myTier") { const b = e.event.target.closest("button[data-t]"); if (b) clickTier(e.data.id, +b.dataset.t); return; }
-          if (["note", "myReq"].includes(col)) return;
-          if (e.event.target.closest("a")) return;
-          selectProject(e.data.id, true);
-        },
-        onCellValueChanged: (e) => { const col = e.column.getColId(); if (col === "note") gridApi.refreshCells({ rowNodes: [e.node], force: true }); else recompute(); },
+        // Any click on a row, the project name included, opens the pop-up; the Project # link goes to the Tracker fact sheet instead
+        onCellClicked: (e) => { if (!e.event.target.closest("a")) selectProject(e.data.id, true); },
         onFilterChanged: () => renderDrawerCount(),
         // Clicking # off the default two-column sort would clear every sort; fall back to plain rank order with the indicator showing
         // Clearing every sort falls back to plain rank order (voting) or the default working group order (no voting)
@@ -1186,6 +1168,7 @@
       const show = new Set(fullView ? all : REVIEWER_COLS);
       if (fullView || reviewerCount() > 0) { show.add("votes"); show.add("gTier"); show.add("gReq"); show.add("wg"); show.add("gpicks"); }
       if (FEATURES.voting) show.delete("gpicks"); else VOTING_COLS.forEach(c => show.delete(c));
+      if (!FEATURES.voting && !fullView) show.delete("wg");   // Group picks already names each group
       if (focusPicks()) show.add("theirs"); else show.delete("theirs");
       if (fullView || envelope() > 0 || pins.size || excluded.size) { show.add("fund"); show.add("flags"); }
       if (fullView || listKey === "ltra") show.add("tltra");
@@ -1292,7 +1275,11 @@
       selectedId = id; renderHighlight(); showDetail(id, true);
       if (gridApi) { gridApi.redrawRows(); const node = gridApi.getRowNode(id); if (node && !fromGrid) gridApi.ensureNodeVisible(node, "middle"); }
     }
-    function zoomToSelected() { const p = pool.find(x => x.id === selectedId); if (p && p.pt && view) view.goTo({ center: [p.lon, p.lat], zoom: Math.max(view.zoom, 13) }, { duration: 500 }).catch(() => {}); }
+    function zoomToSelected() {
+      const p = pool.find(x => x.id === selectedId); if (!(p && p.pt && view)) return;
+      if (document.body.classList.contains("drawer-max")) $("maxBtn").click();   // the page opens table only; zooming brings the map back
+      view.when(() => view.goTo({ center: [p.lon, p.lat], zoom: Math.max(view.zoom, 13) }, { duration: 500 })).catch(() => {});
+    }
     function hideDetail() { selectedId = null; $("detailCard").hidden = true; renderHighlight(); if (gridApi) gridApi.redrawRows(); }
     function showDetail(id, open) {
       const p = pool.find(x => x.id === id); if (!p) { hideDetail(); return; }
@@ -1628,7 +1615,7 @@ ${summary}${sections}
         const focused = focusWho === "csv:" + who;
         rows.push(`<li class="rrow pick csv${focused ? " focus" : ""}" data-key="${escHtml("csv:" + who)}" role="button" tabindex="0" aria-pressed="${focused}" title="Imported from a CSV of ${escHtml(who)}'s picks${m.when ? " on " + new Date(m.when).toLocaleString() : ""}. Click to show only these picks in the table. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(wgLabel(m.wg))} <em>CSV</em><small>${counts(m.picks || {})}</small></span>${m.when ? `<span class="r-when">${escHtml(apDate(m.when, false))}</span>` : ""}<button class="r-x" data-who="${escHtml(who)}" title="Remove this imported list" aria-label="Remove the imported list from ${escHtml(wgLabel(m.wg))}">&times;</button></li>`);
       }
-      el.innerHTML = rows.length ? `<div class="r-head">Picks received</div><ul class="rlist">${rows.join("")}</ul><div class="r-hint">Click a working group to see only its picks in the table; click again, or Show All Projects, to go back.</div>` : "";
+      el.innerHTML = rows.length ? `<ul class="rlist">${rows.join("")}</ul><div class="r-hint">Click a working group to see only its picks in the table; click again, or Show All Projects, to go back.</div>` : "";
     }
     $("reviewerChips").addEventListener("click", (e) => {
       const b = e.target.closest(".r-x");
@@ -1719,10 +1706,13 @@ ${summary}${sections}
       const extras = earlierExtras(), before = !!myRemote();
       $("sendModeWrap").hidden = !before;
       if (before) {
-        // Add is the default (Oct. 2026 review): it keeps everything sent before, so a lead never loses criteria by resending.
-        // With nothing new to bring along it sends the same list as Replace, so it stays selectable.
-        const addOpt = document.querySelector('input[name="sendMode"][value="add"]'); addOpt.disabled = false; addOpt.checked = true;
-        $("sendAddLabel").textContent = extras.length ? `Add the picks above to what I sent before (brings along ${extras.length} earlier pick${extras.length === 1 ? "" : "s"} not shown here)` : "Add to what I sent before (everything you sent before is already above)";
+        // Replace is the default when this browser already holds everything sent before, the usual one-person, one-computer case.
+        // When earlier picks are missing from the draft (another computer, a cleared browser), Edit Previous is the default, so
+        // sending a few new picks does not drop the rest of the group's list (Oct. 2026 review). Edit Previous ("add") folds the
+        // earlier picks into the draft; with nothing to fold in it sends the same list as Replace, so it stays selectable.
+        const addOpt = document.querySelector('input[name="sendMode"][value="add"]'), repOpt = document.querySelector('input[name="sendMode"][value="replace"]');
+        addOpt.disabled = false; (extras.length ? addOpt : repOpt).checked = true;
+        $("sendAddLabel").textContent = extras.length ? `Edit Previous LTRA Priority Picks (keeps ${extras.length} earlier pick${extras.length === 1 ? "" : "s"} not shown above and adds these)` : "Edit Previous LTRA Priority Picks (everything you sent before is already above)";
       }
       $("sendNote").textContent = (before ? "Only what you send last counts, so either choice becomes your list of record. " : "Only what you send last counts, so you can send again later. ")
         + (noReq ? `${noReq} pick${noReq === 1 ? " has" : "s have"} no funding request; you can still send.` : "");
@@ -1730,7 +1720,7 @@ ${summary}${sections}
       $("sendDialog").open = true;
     }
     async function confirmSend() {
-      // "Add" folds the earlier picks that are not in the draft into it before building the record
+      // Edit Previous ("add") folds the earlier picks that are not in the draft into it before building the record
       const mode = (document.querySelector('input[name="sendMode"]:checked') || {}).value;
       if (!$("sendModeWrap").hidden && mode === "add" && earlierExtras().length) { for (const [id, p] of earlierExtras()) review.picks[id] = { l: p.l, t: p.t, req: p.req ?? null, c: [...(p.c || [])], n: p.n || "" }; saveLS(LS_REVIEW, review); recompute(); }
       const sub = buildSubmission(); if (!sub) return;
@@ -1834,7 +1824,7 @@ ${summary}${sections}
     $("listSwitch").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && b.dataset.v !== listKey) setList(b.dataset.v); });
     $("listSwitch").addEventListener("keydown", (e) => { if (["ArrowLeft", "ArrowRight"].includes(e.key)) { e.preventDefault(); setList(listKey === "ltra" ? "other" : "ltra"); $("listSwitch").querySelector("button.active").focus(); } });
     ["programSel", "leadSel", "fundSel", "tagSel"].forEach(id => $(id).addEventListener("calciteComboboxChange", recompute));
-    ["nonEip", "pickedOnly", "ltraHintOnly"].forEach(id => $(id).addEventListener("calciteSwitchChange", recompute));
+    ["pickedOnly", "ltraHintOnly"].forEach(id => $(id).addEventListener("calciteSwitchChange", recompute));
     $("searchInput").addEventListener("input", recomputeSoon);
     const syncChips = syncAria;
     [$("stageChips"), $("focusChips"), $("fundChips")].forEach(el => el.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
@@ -1849,7 +1839,7 @@ ${summary}${sections}
       $("searchInput").value = ""; $("stageChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", ["Planning/Design", "Implementation"].includes(b.dataset.v)));
       $("focusChips").querySelectorAll("button").forEach(b => b.classList.add("on")); ["programSel", "leadSel", "fundSel", "tagSel"].forEach(id => setCombo($(id), []));
       $("stateSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === "")); $("fundChips").querySelectorAll("button").forEach(b => b.classList.add("on"));
-      $("nonEip").checked = false; $("pickedOnly").checked = false; $("ltraHintOnly").checked = false;
+      $("pickedOnly").checked = false; $("ltraHintOnly").checked = false;
       if (!skipRecompute) recompute();
     }
     $("resetFiltersBtn").addEventListener("click", () => resetFilters());
@@ -1865,7 +1855,7 @@ ${summary}${sections}
       pins = new Set(); excluded = new Set(); focusWho = null;
       review.picks = {}; saveLS(LS_REVIEW, review); imports = {}; saveLS(LS_IMPORTS, imports);
       $("envSec").classList.add("collapsed"); $("envToggle").textContent = "Show";
-      if (fullView) $("colsBtn").click(); if (document.body.classList.contains("drawer-max")) $("maxBtn").click();
+      if (fullView) $("colsBtn").click(); if (!document.body.classList.contains("drawer-max")) $("maxBtn").click();
       $("quickFilter").value = ""; gridApi && gridApi.setGridOption("quickFilterText", "");
       if (location.hash) history.replaceState(null, "", location.pathname + location.search);
       hideDetail(); renderReviewers(); setList("ltra");
@@ -1881,12 +1871,11 @@ ${summary}${sections}
       $("gridWrap").hidden = activeTab !== "list"; $("chartsWrap").hidden = activeTab !== "charts"; $("drawerTools").hidden = activeTab !== "list";
       if (activeTab === "charts") { renderCharts(); setTimeout(() => ["chartCum", "chartWg", "chartLead"].forEach(id => Plotly.Plots.resize(id)), 50); }
     });
-    // Table only is a per-visit choice; it is not remembered, so the next visit opens with the map
+    // Every visit opens table only (Oct. 2026 review); Show map is a per-visit choice and is not remembered
     $("maxBtn").addEventListener("click", () => { const on = document.body.classList.toggle("drawer-max"); $("maxBtn").classList.toggle("on", on); $("maxBtn").textContent = on ? "Show map" : "Table only";
       if (!on && view) setTimeout(() => window.dispatchEvent(new Event("resize")), 50); });
     try { localStorage.removeItem("eipPriorities.drawerMax"); } catch {}
-    // Phones and portrait tablets open on the table; the stacked layout below 1024 leaves the map and table too short to share
-    if ((window.innerWidth || screen.width || 1280) < 1024) { document.body.classList.add("drawer-max"); $("maxBtn").classList.add("on"); $("maxBtn").textContent = "Show map"; }
+    document.body.classList.add("drawer-max"); $("maxBtn").classList.add("on"); $("maxBtn").textContent = "Show map";
     $("drawerToggle").addEventListener("click", () => { document.body.classList.toggle("drawer-collapsed"); $("drawerToggleIcon").icon = document.body.classList.contains("drawer-collapsed") ? "chevron-up" : "chevron-down"; });
     $("panelToggle").addEventListener("click", () => { document.body.classList.toggle("panel-collapsed"); $("panelToggleIcon").icon = document.body.classList.contains("panel-collapsed") ? "chevron-right" : "chevron-left"; });
     $("aboutBtn").addEventListener("click", () => { $("aboutDialog").open = true; });
@@ -1899,7 +1888,7 @@ ${summary}${sections}
     function scenario() {
       return { v: 3, list: listKey, env: envelopes, mode: fillMode, pins: [...pins], ex: [...excluded],
         f: { q: $("searchInput").value, st: chipsOn($("stageChips")), fa: chipsOn($("focusChips")), pr: comboVals($("programSel")), ld: comboVals($("leadSel")), fs: comboVals($("fundSel")), tg: comboVals($("tagSel")),
-          s: $("stateSeg").querySelector("button.active").dataset.v, fc: chipsOn($("fundChips")), ne: $("nonEip").checked, po: $("pickedOnly").checked, lh: $("ltraHintOnly").checked } };
+          s: $("stateSeg").querySelector("button.active").dataset.v, fc: chipsOn($("fundChips")), po: $("pickedOnly").checked, lh: $("ltraHintOnly").checked } };
     }
     function applyScenario(s) {
       if (s.env && typeof s.env === "object") envelopes = { ltra: s.env.ltra ?? null, other: s.env.other ?? null };
@@ -1914,7 +1903,7 @@ ${summary}${sections}
         setCombo($("programSel"), s.f.pr || []); setCombo($("leadSel"), s.f.ld || []); setCombo($("fundSel"), s.f.fs || []); setCombo($("tagSel"), s.f.tg || []);
         $("stateSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === (s.f.s || "")));
         if (s.f.fc) $("fundChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", s.f.fc.includes(b.dataset.v)));
-        $("nonEip").checked = !!s.f.ne; $("pickedOnly").checked = !!s.f.po; $("ltraHintOnly").checked = !!s.f.lh;
+        $("pickedOnly").checked = !!s.f.po; $("ltraHintOnly").checked = !!s.f.lh;
       }
       if (envelopes.ltra > 0 || envelopes.other > 0) expandSec("envSec", "envToggle");
       setList(s.list === "other" ? "other" : "ltra");
