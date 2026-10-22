@@ -1,0 +1,2415 @@
+{
+ "_comment": "Interactive site designs for about-bmps.html, carried over from the old site's eight example pages (jQuery ImageMapster hotspots). coords are pixels on the image at the stated width and height; assets/site.js draws them as an SVG overlay. doc values resolve against documents.json docBase like every other document link; tooltip text is the old site's wording. Titles are sentence case and the text got a light copyedit (typos, separators, one pasted-in-error paragraph).",
+ "designs": [
+  {
+   "id": "single-family",
+   "title": "Single-family home",
+   "image": "assets/img/oblique-single-family.jpg",
+   "alt": "Conceptual drawing of a single-family lot with retaining walls, parking barriers, paved driveway, slotted channel drain, gravel infiltration, rain gardens, gutters, and an infiltration trench",
+   "width": 1241,
+   "height": 633,
+   "legacyPage": "SingleFamEx.aspx",
+   "hotspots": [
+    {
+     "id": "retaining-walls",
+     "title": "Retaining walls",
+     "text": "Retaining Walls stabilize slopes and reduce erosion but should only be applied to slopes steeper than 2:1.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/f_RetWal.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        165,
+        79,
+        254,
+        73,
+        365,
+        100,
+        169,
+        92
+       ]
+      }
+     ]
+    },
+    {
+     "id": "landscaping",
+     "title": "Landscaping",
+     "text": "Landscaping. A majority of the landscaping here is turf. While this does provide a good 30-foot lean, clean and green zone for fire defensible space, it is not the recommended landscape in Tahoe due to the reliance on fertilizer and irrigation. Reduce turf and replace with native and adaptive species of vegetation for your landscape.",
+     "doc": "Documents/BMPHandbook/Ch5_SoilandVegetationManagement.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        269,
+        124,
+        359,
+        187,
+        266,
+        183
+       ]
+      }
+     ]
+    },
+    {
+     "id": "parking-barriers",
+     "title": "Parking barriers",
+     "text": "Parking barriers. A split rail fence and vegetation are both functioning as parking barriers, preventing vehicular access to unpaved areas and protecting the adjacent soil and vegetation.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/l_ParkVeh.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        191,
+        326,
+        122,
+        416,
+        153,
+        422,
+        215,
+        339
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        145,
+        266,
+        219,
+        279,
+        221,
+        296,
+        151,
+        282
+       ]
+      }
+     ]
+    },
+    {
+     "id": "paved-driveway",
+     "title": "Paved driveway",
+     "text": "Paved Driveway. This driveway is paved with asphalt, a conventional paving material, and slopes to the right-of-way.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/i_PavPark.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        77,
+        350,
+        145,
+        372,
+        119,
+        409,
+        40,
+        389
+       ]
+      }
+     ]
+    },
+    {
+     "id": "slotted-channel-drain",
+     "title": "Slotted channel drain",
+     "text": "Slotted Channel Drain intercepts runoff from the driveway and conveys it to a treatment and/or infiltration system, in this case a gravel infiltration system. The Sediment Trap prevents coarse sediment from clogging the infiltration system.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/g_SltChnDrn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        13,
+        415,
+        98,
+        433,
+        91,
+        441,
+        7,
+        421
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gravel-infiltration-facility",
+     "title": "Gravel infiltration facility",
+     "text": "The Gravel Infiltration Facility is a holding area that receives and stores stormwater runoff until it can infiltrate into the surrounding soil.",
+     "doc": "Documents/BMPHandbook/Chapter 4/BMPDrawings/BMP-106INFILTRATIONFACILITY.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        109,
+        431,
+        123,
+        435,
+        114,
+        448,
+        96,
+        445
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dumpster",
+     "title": "Dumpster",
+     "text": "Dumpster is in a bear proof container to prevent animal scavenging. Failure to secure dumpsters from bears is illegal in the Lake Tahoe Region.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        0,
+        359,
+        25,
+        387,
+        1,
+        403
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        311,
+        420,
+        299,
+        469,
+        329,
+        467,
+        342,
+        436
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pervious-paving-stones",
+     "title": "Pervious paving stones",
+     "text": "The driveway is paved with pervious paving stones, which allows water to move through the surface into an underlying storage area that infiltrates or attenuates the water. Additional BMPs may be required to ensure that the entire 20 year/1 hour storm infiltrates on-site. The driveway has a swale built into it at the property line to convey water to an on-site infiltration system, in this case a rain garden.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/a_PervPav.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        381,
+        410,
+        467,
+        432,
+        444,
+        480,
+        349,
+        454
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rain-gardens",
+     "title": "Rain gardens",
+     "text": "Rain Gardens are small, vegetated depressions that promote stormwater infiltration. They are a great way to incorporate BMPs into your landscaping and they are low-maintenance.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/f_RainGar.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        318,
+        358,
+        392,
+        372,
+        367,
+        416,
+        286,
+        398
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gutter-with-downspout",
+     "title": "Gutter with downspout",
+     "text": "Gutter with downspout directs stormwater from the roof to the rain garden. The gutter is placed on a roof that gets a lot of sun and there is heat tape on the roof to melt snow, both important considerations when installing a roof gutter.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        424,
+        236,
+        524,
+        250,
+        517,
+        284,
+        417,
+        268
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rock-and-vegetation",
+     "title": "Rock and vegetation",
+     "text": "Rock and vegetation are used in combination here to stabilize a slope that may otherwise cause erosion.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/g_Riprap.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        696,
+        63,
+        823,
+        62,
+        829,
+        150,
+        695,
+        121
+       ]
+      }
+     ]
+    },
+    {
+     "id": "parking-barriers-2",
+     "title": "Parking barriers",
+     "text": "Parking barriers such as large boulders seen here prevent vehicular access to unpaved areas.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/l_ParkVeh.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        461,
+        500,
+        493,
+        507,
+        470,
+        521
+       ]
+      }
+     ]
+    },
+    {
+     "id": "infiltration-trench",
+     "title": "Infiltration trench",
+     "text": "Infiltration Trench facilitates infiltration of stormwater runoff from the roofs and decks and protects the soil from the impact of water coming off the roof, preventing soil erosion. The drain rock here is installed 5 feet wide around the entire structure, providing the dual purpose of a fire defensible space zone as well as a water quality BMP.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/c_InfTrc.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        789,
+        279,
+        818,
+        282,
+        787,
+        422,
+        750,
+        418
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fire-defensible-space",
+     "title": "Fire defensible space",
+     "text": "The Landscape here is comprised of native and adapted species of vegetation which requires little if any fertilizer and minimal irrigation compared to turf or a non-native landscape. Fire Defensible Space has also been implemented on this property by practicing lean, clean and green within 0 – 30 feet of the structure.",
+     "doc": "Documents/BMPHandbook/Ch5_SoilandVegetationManagement.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        555,
+        444,
+        662,
+        450,
+        670,
+        510,
+        535,
+        477
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "multi-family",
+   "title": "Multi-family property",
+   "image": "assets/img/oblique-multi-family.jpg",
+   "alt": "Conceptual drawing of a multi-family property with BMPs",
+   "width": 1241,
+   "height": 654,
+   "legacyPage": "MultiFamilyEx.aspx",
+   "hotspots": [
+    {
+     "id": "snow-storage",
+     "title": "Snow storage",
+     "text": "Snow storage areas should be located on a flat, well mulched area upslope of BMPs and clearly marked. A Rolled curb is installed here so snow removal equipment does not damage the curb. If parking off pavement is an issue, some seasonal, removable parking barriers may be installed.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/c_SnwStrg.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        29,
+        469,
+        38,
+        394,
+        96,
+        354,
+        179,
+        347,
+        85,
+        397,
+        32,
+        469
+       ]
+      }
+     ]
+    },
+    {
+     "id": "slotted-channel-drain-and-sediment-trap",
+     "title": "Slotted channel drain and sediment trap",
+     "text": "Slotted Channel Drain and Sediment Trap collect stormwater runoff from the parking lot and conveys it to an infiltration basin.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/g_SltChnDrn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        27,
+        540,
+        154,
+        513,
+        155,
+        524,
+        27,
+        549
+       ]
+      }
+     ]
+    },
+    {
+     "id": "infiltration-basin",
+     "title": "Infiltration basin",
+     "text": "The Infiltration Basin infiltrates stormwater. Soil and vegetation in the basin act as a filter removing nutrients, fine sediment, and oil and grease. Infiltration basins are located in high capability land that does not intercept high ground water.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/b_InfBas.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        218,
+        446,
+        333,
+        428,
+        330,
+        470,
+        220,
+        488
+       ]
+      }
+     ]
+    },
+    {
+     "id": "parking-barriers",
+     "title": "Parking barriers",
+     "text": "Parking Barriers such as boulders restrict vehicular access to unpaved areas, protecting the surrounding soil and vegetation.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/l_ParkVeh.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        535,
+        460,
+        590,
+        457,
+        598,
+        475,
+        536,
+        483
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        519,
+        286,
+        715,
+        262,
+        739,
+        290,
+        520,
+        316
+       ]
+      }
+     ]
+    },
+    {
+     "id": "infiltration-trench",
+     "title": "Infiltration trench",
+     "text": "Infiltration Trench facilitates infiltration of stormwater runoff from the roofs and decks and protects the soil from the impact of water coming off the roof, preventing soil erosion. The drain rock here is installed 5 feet wide around the entire structure, providing the dual purpose of a fire defensible space zone as well as a water quality BMP.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/c_InfTrc.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        519,
+        158,
+        532,
+        160,
+        535,
+        267,
+        516,
+        266
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biodegradable-bags-with-disposal-stations",
+     "title": "Biodegradable bags with disposal stations",
+     "text": "Biodegradable bags with disposal stations that are readily available and clearly marked make it easy for homeowners to properly pick up after their pets.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/p_PetWast.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        563,
+        133,
+        582,
+        131,
+        583,
+        155,
+        563,
+        155
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fertilizer-management",
+     "title": "Fertilizer management",
+     "text": "Fertilizer Management. Limit the amount of turf on-site and plant more native and adaptive species. Apply a slow release, phosphorus free fertilizer unless a soils test has been performed indicating that the soil is phosphorus limited. Keep track of the type, amount and application rate of fertilizer so it can be adjusted as needed.",
+     "doc": "Documents/BMPHandbook/Ch5_SoilandVegetationManagement.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        550,
+        211,
+        619,
+        205,
+        626,
+        260,
+        550,
+        263
+       ]
+      }
+     ]
+    },
+    {
+     "id": "drain-inlet",
+     "title": "Drain inlet",
+     "text": "Drain Inlet collects stormwater runoff from the parking lot and conveys it to a bioswale. The drain inlet has an insert that filters out hydrocarbons.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/e_DrainIn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        579,
+        418,
+        593,
+        419,
+        594,
+        430,
+        578,
+        431
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        962,
+        343,
+        976,
+        342,
+        983,
+        348,
+        971,
+        352
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bio-swales",
+     "title": "Bio swales",
+     "text": "Bio Swales are shallow, vegetated swales for capture of runoff with amended soil matrices designed for filtration and minimal infiltration. Stormwater that does not infiltrate into the bioswale is conveyed through a storm drain into an infiltration basin.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.4/b_Bioswle.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        645,
+        411,
+        773,
+        388,
+        798,
+        425,
+        990,
+        387,
+        1008,
+        421,
+        651,
+        452
+       ]
+      }
+     ]
+    },
+    {
+     "id": "roof-dripline-vegetation",
+     "title": "Roof dripline vegetation",
+     "text": "This Roof Dripline has herbaceous, irrigated vegetation vegetation under it to protect the soil from erosion while facilitating infiltration and providing a 5 foot fire defensible space zone around the structure.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/c_InfTrc.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        713,
+        227,
+        818,
+        199,
+        836,
+        220,
+        717,
+        243
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bicycle-racks",
+     "title": "Bicycle racks",
+     "text": "Bicycle racks promote a bicycle friendly community.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1003,
+        202,
+        1048,
+        208,
+        1046,
+        227,
+        1002,
+        222
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dumpsters",
+     "title": "Dumpsters",
+     "text": "Dumpsters should be located on paved surfaces, screened from public view and covered to prevent exposure to elements and prevent animal scavenging.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1073,
+        201,
+        1127,
+        210,
+        1168,
+        244,
+        1130,
+        293,
+        1047,
+        257
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a-c-swale",
+     "title": "A/C swale",
+     "text": "A/C swale conveys surface runoff in a non-erosive manner to a drain inlet and storm drain that conveys water to the bioswale.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/h_ACswle.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        528,
+        68,
+        579,
+        65,
+        581,
+        111,
+        526,
+        112
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        1026,
+        314,
+        1060,
+        286,
+        1070,
+        296,
+        1035,
+        322
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "commercial-with-bmps",
+   "title": "Commercial property with BMPs",
+   "image": "assets/img/oblique-commercial-with-bmps.jpg",
+   "alt": "Conceptual drawing of a commercial property with BMPs installed",
+   "width": 1241,
+   "height": 654,
+   "legacyPage": "CommGoodEx.aspx",
+   "hotspots": [
+    {
+     "id": "parking-barriers",
+     "title": "Parking barriers",
+     "text": "Parking barriers. installed at the edge of pavement prevent vehicle encroachment off the pavement and protects adjacent soil and vegetation.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/l_ParkVeh.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        169,
+        214,
+        208,
+        221,
+        173,
+        290,
+        148,
+        280
+       ]
+      }
+     ]
+    },
+    {
+     "id": "media-filtration-bmps",
+     "title": "Media filtration BMPs",
+     "text": "Media Filtration BMPs are high level treatment systems typically used to treat stormwater prior to discharging off-site and used when infiltration is not ideal due to proximity to stream environment zone or other sensitive areas.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.4/h_MedFilt.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        20,
+        565,
+        122,
+        554,
+        120,
+        590,
+        20,
+        599
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dumpsters",
+     "title": "Dumpsters",
+     "text": "Dumpsters should be located on paved surfaces, screened from public view and covered to prevent exposure to elements and prevent animal scavenging.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        335,
+        81,
+        362,
+        81,
+        365,
+        123,
+        340,
+        123
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bike-racks",
+     "title": "Bike racks",
+     "text": "Bike racks should be installed to promote a bicycle friendly facility.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        326,
+        132,
+        367,
+        130,
+        370,
+        147,
+        328,
+        148
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vegetated-swale",
+     "title": "Vegetated swale",
+     "text": "The Vegetated Swale is receiving stormwater from the roof gutter downspouts and sheet flow from the parking lot. As water moves through the vegetated swale, the vegetation filters the stormwater and reduces the velocity.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/j_RckVegSwl.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        339,
+        193,
+        363,
+        196,
+        329,
+        389,
+        303,
+        391
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        532,
+        183,
+        550,
+        183,
+        602,
+        367,
+        567,
+        368
+       ]
+      }
+     ]
+    },
+    {
+     "id": "culverts-storm-drain-outlet-with-energy-dissipater",
+     "title": "Culverts/Storm drain outlet with energy dissipater",
+     "text": "Culverts/Storm Drain Outlet with Energy Dissipater discharges stormwater from the vegetated swale into a vegetated infiltration basin.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/d_OutPro.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        294,
+        465,
+        309,
+        465,
+        308,
+        489,
+        286,
+        486
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        601,
+        434,
+        617,
+        432,
+        624,
+        457,
+        604,
+        457
+       ]
+      }
+     ]
+    },
+    {
+     "id": "infiltration-basins",
+     "title": "Infiltration basins",
+     "text": "Infiltration Basins infiltrate stormwater. Soil and vegetation in the basin act as a filter removing nutrients, fine sediment and oil and grease. Infiltration basins are located in high capability land that does not intercept high ground water.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/b_InfBas.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        238,
+        503,
+        364,
+        495,
+        364,
+        510,
+        237,
+        522
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        555,
+        471,
+        676,
+        464,
+        681,
+        483,
+        557,
+        491
+       ]
+      }
+     ]
+    },
+    {
+     "id": "slotted-channel-drain-with-sediment-trap",
+     "title": "Slotted channel drain with sediment trap",
+     "text": "Slotted Channel Drain with Sediment collects stormwater runoff from the parking lot prior to discharging off-site and conveys it to a vegetated infiltration basin.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/g_SltChnDrn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        710,
+        441,
+        815,
+        429,
+        819,
+        439,
+        714,
+        451
+       ]
+      }
+     ]
+    },
+    {
+     "id": "snow-storage",
+     "title": "Snow storage",
+     "text": "Snow storage areas should be located on flat or slightly depressed areas, away from sensitive lands and upslope of collection and conveyance systems. Snow may also be stored on paved surfaces, upslope of collection, conveyance and infiltration systems. Signs shall be placed on site identifying where snow should be stored.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/c_SnwStrg.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1101,
+        278,
+        1148,
+        311,
+        1148,
+        339,
+        1100,
+        300
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a-c-swale",
+     "title": "A/C swale",
+     "text": "A/C Swale collects water from the gas station portion of the property and conveys it to the drain inlet. It is important that this portion of runoff is separated from the rest of the parking lot because there may be pollutants from the gas station use that should not comingle with the rest of the stormwater runoff.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/h_ACswle.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        974,
+        209,
+        984,
+        208,
+        1167,
+        356,
+        1153,
+        360
+       ]
+      }
+     ]
+    },
+    {
+     "id": "drain-inlet",
+     "title": "Drain inlet",
+     "text": "Drain Inlet collects stormwater from the adjoining a/c swale that conveys stormwater runoff from the gas station. The drain inlet is fitted with a hydrodynamic separator to treat hydrocarbons prior to discharging to the underground, pre-fabricated infiltration system.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/e_DrainIn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1164,
+        365,
+        1178,
+        363,
+        1185,
+        369,
+        1171,
+        372
+       ]
+      }
+     ]
+    },
+    {
+     "id": "prefabricated-infiltration-system",
+     "title": "Prefabricated infiltration system",
+     "text": "Prefabricated infiltration system is installed below the asphalt and has the ability to infiltrate a large volume of stormwater without taking up limited space.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/d_SubSur.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        891,
+        460,
+        1139,
+        436,
+        1147,
+        475,
+        891,
+        501
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fueling-system",
+     "title": "Fueling system",
+     "text": "The Fueling station has a roof over it to prevent stormwater from reaching the surrounding ground that may be contaminated with gasoline and other pollutants.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        846,
+        210,
+        904,
+        193,
+        957,
+        203,
+        1059,
+        294,
+        928,
+        301
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sign-ordinance",
+     "title": "Sign ordinance",
+     "text": "Sign is in compliance with the TRPA sign ordinance.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        950,
+        154,
+        973,
+        150,
+        968,
+        183,
+        945,
+        184
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "commercial-without-bmps",
+   "title": "Commercial property without BMPs",
+   "image": "assets/img/oblique-commercial-without-bmps.jpg",
+   "alt": "Conceptual drawing of a commercial property without BMPs, showing runoff leaving the site",
+   "width": 1241,
+   "height": 654,
+   "legacyPage": "CommBadEx.aspx",
+   "hotspots": [
+    {
+     "id": "off-pavement-parking",
+     "title": "Off pavement parking",
+     "text": "Off Pavement Parking. Vehicles are parked off the pavement, causing compaction and disturbance to the soil and vegetation in close proximity to an SEZ. What could be done here to prevent this from happening?",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/l_ParkVeh.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        186,
+        279,
+        247,
+        274,
+        236,
+        307
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        89,
+        430,
+        202,
+        434,
+        185,
+        478,
+        71,
+        480
+       ]
+      }
+     ]
+    },
+    {
+     "id": "improper-dumpster-management",
+     "title": "Improper dumpster management",
+     "text": "Improper Dumpster Management. Dumpster is not contained, screened or bear proof.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        328,
+        97,
+        351,
+        92,
+        364,
+        124,
+        330,
+        126
+       ]
+      }
+     ]
+    },
+    {
+     "id": "improperly-stored-hazardous-waste-and-uncontained-oil-leaks",
+     "title": "Improperly stored hazardous waste and uncontained oil leaks",
+     "text": "Improperly stored hazardous waste and uncontained oil leaks convey toxic compounds to the SEZ and Lake Tahoe.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/n_Hazmat.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        111,
+        299,
+        161,
+        297,
+        159,
+        330,
+        114,
+        327
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        670,
+        164,
+        744,
+        184,
+        744,
+        208,
+        680,
+        200
+       ]
+      }
+     ]
+    },
+    {
+     "id": "improper-snow-storage",
+     "title": "Improper snow storage",
+     "text": "Improper Snow Storage. Snow should not be stored in an SEZ. This pile of sediment is evidence that snow is pushed into the SEZ.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/c_SnwStrg.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        115,
+        218,
+        170,
+        246,
+        168,
+        268,
+        116,
+        260
+       ]
+      }
+     ]
+    },
+    {
+     "id": "broken-berms-and-curbs",
+     "title": "Broken berms and curbs",
+     "text": "Broken berms and curbs. This uneven edge is indicative of broken curbs, a sign of snow removal equipment pushing snow here and breaking the curb.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/b_CuGu.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        254,
+        298,
+        276,
+        272,
+        277,
+        261,
+        292,
+        279,
+        260,
+        310
+       ]
+      }
+     ]
+    },
+    {
+     "id": "trash-junk-on-site",
+     "title": "Trash/Junk on-site",
+     "text": "Trash/Junk on-site, trash, old tires, etc. should be properly disposed of and not scattered throughout the property becoming a pollutant source and an eye sore.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/n_Hazmat.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        216,
+        318,
+        169,
+        386,
+        192,
+        426,
+        229,
+        424,
+        217,
+        369,
+        260,
+        321
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        842,
+        328,
+        867,
+        323,
+        888,
+        340,
+        863,
+        346
+       ]
+      }
+     ]
+    },
+    {
+     "id": "shotgun-culverts-with-no-dissipation",
+     "title": "Shotgun culverts with no dissipation",
+     "text": "Shotgun culverts with no dissipation. Culvert discharges directly to SEZ with insufficient treatment and no energy dissipater to prevent erosion.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/a_Culv.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        8,
+        414,
+        80,
+        414,
+        48,
+        484,
+        3,
+        480
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lack-of-permanent-bmps",
+     "title": "Lack of permanent BMPs",
+     "text": "Lack of permanent BMPs. Stormwater runoff flows from the property directly to the right of way with no infiltration or treatment.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        432,
+        375,
+        418,
+        410,
+        430,
+        434,
+        417,
+        465,
+        425,
+        504
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        698,
+        307,
+        744,
+        375,
+        737,
+        409,
+        797,
+        473,
+        811,
+        467,
+        763,
+        396,
+        766,
+        359,
+        715,
+        297
+       ]
+      }
+     ]
+    },
+    {
+     "id": "no-screening-from-road",
+     "title": "No screening from road",
+     "text": "No Screening from Road. There is no vegetation to screen the property from the road and to improve the aesthetic appeal of the property.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        508,
+        429,
+        697,
+        415,
+        715,
+        445,
+        511,
+        465
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        918,
+        397,
+        1109,
+        379,
+        1141,
+        408,
+        935,
+        428
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pavement-is-in-poor-condition",
+     "title": "Pavement is in poor condition",
+     "text": "Pavement is in poor condition. Cracks in pavement result in years of use without any maintenance and can be a sediment source.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/i_PavPark.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        741,
+        308,
+        804,
+        304,
+        859,
+        384,
+        787,
+        388
+       ]
+      }
+     ]
+    },
+    {
+     "id": "no-cover-over-fueling-station",
+     "title": "No cover over fueling station",
+     "text": "No Cover over Fueling Station. The fueling station should be covered to prevent spills/leaks from being exposed to the elements. Polluted stormwater is flowing directly to the drain inlet that discharges to the SEZ.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        851,
+        272,
+        978,
+        264,
+        1060,
+        339,
+        903,
+        350
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sign",
+     "title": "Sign",
+     "text": "Sign is too tall and not in compliance with TRPA Sign Ordinance.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        953,
+        121,
+        991,
+        121,
+        979,
+        201,
+        945,
+        206
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "regional",
+   "title": "Regional, area-wide treatment",
+   "image": "assets/img/oblique-regional.jpg",
+   "alt": "Conceptual drawing of a regional, area-wide stormwater treatment",
+   "width": 1241,
+   "height": 654,
+   "legacyPage": "RegionalEx.aspx",
+   "hotspots": [
+    {
+     "id": "vegetated-swale",
+     "title": "Vegetated swale",
+     "text": "The Vegetated Swale receives water from the private properties and the road. It conveys the water in a non-erosive manner and the vegetation may filter stormwater.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/j_RckVegSwl.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        533,
+        220,
+        550,
+        189,
+        562,
+        193,
+        546,
+        228
+       ]
+      }
+     ]
+    },
+    {
+     "id": "check-dams",
+     "title": "Check dams",
+     "text": "The Check Dams slow the velocity of runoff in the vegetated swale and promote infiltration.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/k_ChckDam.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        514,
+        251,
+        521,
+        236,
+        535,
+        241,
+        531,
+        252
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        456,
+        346,
+        462,
+        333,
+        478,
+        343,
+        471,
+        353
+       ]
+      }
+     ]
+    },
+    {
+     "id": "culvert",
+     "title": "Culvert",
+     "text": "The Culvert and Storm Drain collect water from the vegetated swale and conveys it under the road and to a stable discharge point, in this case the dry basin.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/a_Culv.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        557,
+        173,
+        562,
+        158,
+        577,
+        167,
+        571,
+        181
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dry-basin",
+     "title": "Dry basin",
+     "text": "The Dry Basin receives stormwater runoff from the neighborhood drainage system and detains and infiltrates the water.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.4/c_DryBsn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        478,
+        27,
+        500,
+        10,
+        524,
+        34,
+        499,
+        47
+       ]
+      }
+     ]
+    },
+    {
+     "id": "curb-and-gutter",
+     "title": "Curb and gutter",
+     "text": "The Curb and Gutter collects water from the private residences and the road and conveys it to a drain inlet and storm drain system.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/b_CuGu.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        668,
+        306,
+        906,
+        344,
+        906,
+        355,
+        665,
+        312
+       ]
+      }
+     ]
+    },
+    {
+     "id": "drop-inlets",
+     "title": "Drop inlets",
+     "text": "The Drop Inlets have a D.I. insert in them to remove pollutants such as sediment, trash, oil and grease prior to discharging downstream.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.4/d_DropIns.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        943,
+        331,
+        952,
+        332,
+        951,
+        338,
+        943,
+        337
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        975,
+        336,
+        986,
+        336,
+        988,
+        346,
+        975,
+        343
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wet-basin",
+     "title": "Wet basin",
+     "text": "The Wet Basin receives stormwater runoff from the neighborhood storm drain system and reduces pollutants by sediment settling out of the water column and nutrient up take by plants.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.4/a_WetBsn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1043,
+        47,
+        1240,
+        15,
+        1239,
+        109,
+        1043,
+        120
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "marina",
+   "title": "Marina and shorezone",
+   "image": "assets/img/oblique-marina.jpg",
+   "alt": "Conceptual drawing of a marina and commercial shorezone setting with BMPs",
+   "width": 1241,
+   "height": 654,
+   "legacyPage": "MarinaEx.aspx",
+   "hotspots": [
+    {
+     "id": "watercraft-inspection-and-boat-wash",
+     "title": "Watercraft inspection and boat wash",
+     "text": "Watercraft Inspection and Boat Wash. Stop the spread of aquatic invasive species to Lake Tahoe! Boat inspections are mandatory to ensure aquatic invasive species are not hitchhiking on your boat. Clean, Drain, and Dry every time!",
+     "doc": "https://www.trpa.gov/programs/environmental-improvement-program/invasive-species/",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        338,
+        46,
+        387,
+        51,
+        253,
+        136,
+        181,
+        134
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a-c-conveyance-swales",
+     "title": "A/C conveyance swales",
+     "text": "A/C Conveyance swales are wide shallow depressions used to capture and convey runoff to prevent it from running directly into Lake Tahoe.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/h_ACswle.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        398,
+        201,
+        452,
+        205,
+        449,
+        216,
+        389,
+        208
+       ]
+      }
+     ]
+    },
+    {
+     "id": "drain-inlet-with-sediment-trap",
+     "title": "Drain inlet with sediment trap",
+     "text": "Drain Inlet with Sediment trap receive conveyed runoff and allow coarse material to settle out into the sump or sediment trap prior to infiltration.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/e_DrainIn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        483,
+        207,
+        509,
+        210,
+        500,
+        219,
+        474,
+        216
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        988,
+        100,
+        1005,
+        101,
+        1006,
+        112,
+        990,
+        113
+       ]
+      }
+     ]
+    },
+    {
+     "id": "infiltration-basins",
+     "title": "Infiltration basins",
+     "text": "Infiltration Basins infiltrate stormwater. Soil and vegetation in the basin act as a filter removing nutrients, fine sediment, and oil and grease. Infiltration basins are located in high capability land that does not intercept high ground water.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/b_InfBas.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        602,
+        111,
+        640,
+        112,
+        641,
+        146,
+        595,
+        143
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        1026,
+        82,
+        1079,
+        83,
+        1079,
+        131,
+        1030,
+        122
+       ]
+      }
+     ]
+    },
+    {
+     "id": "slotted-channel-drain",
+     "title": "Slotted channel drain",
+     "text": "A Slotted Channel Drain is required to capture and convey stormwater runoff from slopes greater than 5%. The removable grate and sediment trap facilitate maintenance of accumulated debris.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.3/g_SltChnDrn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        363,
+        303,
+        412,
+        309,
+        405,
+        317,
+        359,
+        311
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pre-treatment-and-discharge-treat-and-release",
+     "title": "Pre-treatment and discharge (treat and release)",
+     "text": "Pre-treatment and discharge (treat and release). For situations where infiltration is not possible, captured and conveyed stormwater runoff can be treated to meet discharge standards and released directly to the Lake. Several proprietary products are available to treat polluted stormwater runoff prior to discharge.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.4/h_MedFilt.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        293,
+        288,
+        311,
+        290,
+        298,
+        306,
+        280,
+        304
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bear-proof-trash-enclosures",
+     "title": "Bear proof trash enclosures",
+     "text": "Bear Proof Trash Enclosures protect Tahoe’s wildlife and contain trash, preventing it from being unsightly.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        514,
+        225,
+        530,
+        228,
+        520,
+        249,
+        507,
+        244
+       ]
+      }
+     ]
+    },
+    {
+     "id": "shorezone-buffer",
+     "title": "Shorezone buffer",
+     "text": "A Shorezone Buffer is required to prevent potential adverse impacts from development and reduces sediment and nutrient input while providing wildlife habitat and visual screening from the lake. This area should include native plants only and adhere to a fertilizer management plan.",
+     "doc": "Documents/BMPHandbook/Ch8_ShorezoneProtectiveStructuresandBMPs.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        181,
+        188,
+        255,
+        189,
+        254,
+        256,
+        178,
+        256
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pick-up-after-your-pet",
+     "title": "Pick up after your pet",
+     "text": "Pick up after your pet, especially when in proximity to the lake or an SEZ.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/p_PetWast.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        550,
+        179,
+        568,
+        181,
+        568,
+        195,
+        549,
+        195
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pervious-paving",
+     "title": "Pervious paving",
+     "text": "Pervious Paving products such as paving stones or porous concrete offer a durable surface that still infiltrates water directly into the soil.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.1/a_PervPav.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        473,
+        234,
+        499,
+        241,
+        495,
+        257,
+        458,
+        254
+       ]
+      }
+     ]
+    },
+    {
+     "id": "boat-fueling",
+     "title": "Boat fueling",
+     "text": "Boat Fueling areas shall be covered to protect them from the elements and unnecessary contact with stormwater runoff. Secure storage containers with spill prevention kits are required to contain and clean up should a spill occur. Installation of fueling shut off values is also required in case of emergency.",
+     "doc": null,
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        333,
+        469,
+        345,
+        455,
+        352,
+        479,
+        335,
+        481
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bulkhead",
+     "title": "Bulkhead",
+     "text": "A bulkhead is a vertical wall designed to protect backshore erosion and hillslope mass movement. It is most commonly applied in the Lake Tahoe to stabilize commercial marina navigational channels.",
+     "doc": "Documents/BMPHandbook/Ch8_ShorezoneProtectiveStructuresandBMPs.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        681,
+        274,
+        753,
+        279,
+        752,
+        308,
+        677,
+        300
+       ]
+      }
+     ]
+    },
+    {
+     "id": "jetty",
+     "title": "Jetty",
+     "text": "A Jetty protects marina channels from clogging with excessive sediment due to offshore and longshore sediment transport and deposition and is usually constructed with boulder rip-rap.",
+     "doc": "Documents/BMPHandbook/Ch8_ShorezoneProtectiveStructuresandBMPs.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        985,
+        460,
+        1069,
+        405,
+        1119,
+        497,
+        1019,
+        519
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "winterization",
+   "title": "Winterization",
+   "image": "assets/img/oblique-winterization.jpg",
+   "alt": "Conceptual drawing of winterization BMPs on a construction site",
+   "width": 1241,
+   "height": 633,
+   "legacyPage": "WinterEx.aspx",
+   "hotspots": [
+    {
+     "id": "construction-boundary-fencing",
+     "title": "Construction boundary fencing",
+     "text": "Construction Boundary Fencing minimizes the area disturbed during construction by placing orange construction fencing a maximum of 12 feet from the structure and should remain in place throughout the winter.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/b_ConstBdFen.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        318,
+        173,
+        409,
+        100,
+        423,
+        118,
+        324,
+        197
+       ]
+      }
+     ]
+    },
+    {
+     "id": "silt-fences",
+     "title": "Silt fences",
+     "text": "Silt fences are temporary sediment control barriers used to intercept and detain sediment while decreasing the velocity of runoff. They are placed along the downslope edge of disturbed areas and must be maintained through the winter.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/r_SiltFenc.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        449,
+        395,
+        518,
+        380,
+        522,
+        413,
+        453,
+        426
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        896,
+        494,
+        951,
+        480,
+        945,
+        510,
+        891,
+        530
+       ]
+      }
+     ]
+    },
+    {
+     "id": "snow-storage-and-plowing-procedures",
+     "title": "Snow storage and plowing procedures",
+     "text": "Snow Storage and Plowing Procedures. Only paved areas should be plowed and snow should be stored up-slope of collection and conveyance systems.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/c_SnwStrg.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        167,
+        629,
+        282,
+        543,
+        300,
+        570,
+        219,
+        631
+       ]
+      }
+     ]
+    },
+    {
+     "id": "permanent-bmps",
+     "title": "Permanent BMPs",
+     "text": "Permanent BMPs such as collection, conveyance and infiltration systems should be installed under the roof driplines and on the driveway.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/i_Wint.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        526,
+        317,
+        586,
+        236,
+        605,
+        238,
+        549,
+        320
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        762,
+        236,
+        813,
+        110,
+        834,
+        114,
+        783,
+        238
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ingress-and-egress",
+     "title": "Ingress and egress",
+     "text": "Ingress and egress areas are required to be paved if the site is going to be active over the winter. Pave where permanent driveways and parking is planned. Vehicles, construction equipment, and building materials should be stored on paved areas only.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/h_VegIngEg.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        630,
+        262,
+        703,
+        282,
+        644,
+        425,
+        548,
+        398
+       ]
+      }
+     ]
+    },
+    {
+     "id": "material-handling-storage-and-safety",
+     "title": "Material handling storage and safety",
+     "text": "Material Handling Storage and Safety. Store hazardous materials securely in covered areas when possible, like the partially constructed garage. They should still be stored in secondary containment as well.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/k_MaHanStort.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        674,
+        152,
+        709,
+        157,
+        698,
+        203,
+        673,
+        200
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bare-soil-stabilization",
+     "title": "Bare soil stabilization",
+     "text": "Bare soil and disturbed areas should be stabilized using mulch, erosion control blankets, and vegetation while remaining in compliant with fire defensible space recommendations.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/i_Wint.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        383,
+        295,
+        483,
+        315,
+        462,
+        375,
+        355,
+        347
+       ]
+      }
+     ]
+    },
+    {
+     "id": "weighted-fiber-rolls",
+     "title": "Weighted fiber rolls",
+     "text": "Weighted fiber rolls should be placed on the bottom of the paved driveway, directly above conveyance systems to filter runoff prior to it discharging to the BMPs.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/q_FibRol.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        527,
+        403,
+        664,
+        439,
+        651,
+        446,
+        532,
+        416
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vegetation-protection-fencing",
+     "title": "Vegetation protection fencing",
+     "text": "Vegetation Protection Fencing protects vegetation from the negative impacts of construction such as compaction of the root zones and should remain in place throughout winter. Construction boundary fencing may also serve as vegetation protection as seen here.s.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/e_VegProt.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        893,
+        221,
+        809,
+        254,
+        801,
+        302,
+        856,
+        360,
+        865,
+        320,
+        832,
+        283,
+        886,
+        258
+       ]
+      }
+     ]
+    },
+    {
+     "id": "temporary-sanitation-facilities",
+     "title": "Temporary sanitation facilities",
+     "text": "Temporary Sanitation Facilities should be properly located on a construction site to prevent contamination of storm drains, SEZs, or surface waters.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/f_TempSanFac.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        708,
+        316,
+        691,
+        416,
+        745,
+        419,
+        761,
+        328
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dumpsters",
+     "title": "Dumpsters",
+     "text": "Dumpsters should be bear proof. Failure to secure dumpsters from bears is illegal in the Lake Tahoe Region.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1125,
+        518,
+        1175,
+        470,
+        1182,
+        580,
+        1128,
+        570
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "temporary-construction",
+   "title": "Temporary construction BMPs",
+   "image": "assets/img/oblique-temporary-construction.jpg",
+   "alt": "Conceptual drawing of temporary BMPs on an active construction site",
+   "width": 1241,
+   "height": 633,
+   "legacyPage": "TempEx.aspx",
+   "hotspots": [
+    {
+     "id": "construction-boundary-fencing",
+     "title": "Construction boundary fencing",
+     "text": "Construction Boundary Fencing minimizes the area disturbed during construction by placing orange construction fencing a maximum of 12 feet from structures.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/b_ConstBdFen.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        312,
+        167,
+        384,
+        114,
+        388,
+        146,
+        319,
+        205
+       ]
+      }
+     ]
+    },
+    {
+     "id": "stockpile-management",
+     "title": "Stockpile management",
+     "text": "Stockpile Management. All stock piles should be located with the construction boundary where material is easily accessible and protected with an impervious fabric and fiber rolls to prevent wind and water erosion of stored material.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/n_Stockpile.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        370,
+        317,
+        434,
+        289,
+        497,
+        359,
+        449,
+        395,
+        348,
+        371
+       ]
+      }
+     ]
+    },
+    {
+     "id": "silt-fences",
+     "title": "Silt fences",
+     "text": "Silt Fences are temporary sediment control barriers used to intercept and detain sediment while decreasing the velocity of runoff.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/r_SiltFenc.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        473,
+        391,
+        525,
+        372,
+        530,
+        408,
+        479,
+        430
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        899,
+        498,
+        946,
+        484,
+        940,
+        511,
+        895,
+        523
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dust-control",
+     "title": "Dust control",
+     "text": "Dust Control prevents wind erosion on active construction sites by watering and/or sweeping construction area and applying a layer of mulch on bare soil.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/g_DustCont.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        108,
+        353,
+        380,
+        405,
+        310,
+        540,
+        47,
+        465
+       ]
+      },
+      {
+       "shape": "poly",
+       "coords": [
+        482,
+        514,
+        500,
+        434,
+        520,
+        492,
+        569,
+        507,
+        594,
+        545,
+        576,
+        561,
+        495,
+        539
+       ]
+      }
+     ]
+    },
+    {
+     "id": "material-handling-storage-and-safety",
+     "title": "Material handling storage and safety",
+     "text": "Material Handling Storage and Safety. Hazardous materials should be stored in a secondary containment to prevent accidental spills.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/k_MaHanStort.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        711,
+        101,
+        760,
+        105,
+        754,
+        163,
+        707,
+        157
+       ]
+      }
+     ]
+    },
+    {
+     "id": "temporary-sanitation-facilities",
+     "title": "Temporary sanitation facilities",
+     "text": "Temporary Sanitation Facilities should be properly located on a construction site to prevent contamination of storm drains, SEZs, or surface waters.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/f_TempSanFac.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        702,
+        312,
+        764,
+        316,
+        756,
+        413,
+        692,
+        408
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vehicle-tracking",
+     "title": "Vehicle tracking",
+     "text": "Vehicle Tracking prevents vehicles and equipment from transferring sediment off-site and onto roadways and into storm drains by placing a layer of cobble size rocks at the entrance to the construction site.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/h_VegIngEg.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        519,
+        440,
+        553,
+        381,
+        670,
+        411,
+        629,
+        501
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fiber-rolls",
+     "title": "Fiber rolls",
+     "text": "Fiber Rolls should be placed on paved and unpaved surfaces where flow velocities are less than 0.5 cubic feet per second to pond and filter stormwater from upstream construction sites.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/q_FibRol.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        704,
+        548,
+        727,
+        523,
+        741,
+        503,
+        708,
+        563
+       ]
+      }
+     ]
+    },
+    {
+     "id": "drain-inlet-protection",
+     "title": "Drain inlet protection",
+     "text": "Drain Inlet Protection All drop inlets downstream of active construction sites shall be protected with fiber rolls or gravel bags to prevent sediment laden stormwater from entering into the drainage system.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/p_DIprot.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        887,
+        564,
+        908,
+        567,
+        902,
+        592,
+        945,
+        604,
+        950,
+        580,
+        968,
+        582,
+        962,
+        624,
+        880,
+        604
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vegetation-protection-fencing",
+     "title": "Vegetation protection fencing",
+     "text": "Vegetation Protection Fencing protects vegetation from the negative impacts of construction such as compaction of the root zones. Construction boundary fencing may also serve as vegetation protection as seen here.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.5/e_VegProt.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        809,
+        269,
+        832,
+        240,
+        883,
+        230,
+        878,
+        257,
+        832,
+        269,
+        822,
+        283,
+        858,
+        302,
+        851,
+        351,
+        804,
+        306
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dumpsters",
+     "title": "Dumpsters",
+     "text": "Dumpsters should be bear proof. Failure to secure dumpsters from bears is illegal in the Lake Tahoe Region.",
+     "doc": "Documents/BMPHandbook/Chapter 4/4.2/m_DumpMn.pdf",
+     "shapes": [
+      {
+       "shape": "poly",
+       "coords": [
+        1143,
+        472,
+        1189,
+        490,
+        1184,
+        584,
+        1128,
+        572,
+        1125,
+        519
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -274,6 +274,141 @@
     });
   }
 
+  // ── Interactive site designs: [data-site-designs] on about-bmps.html, from data/site-designs.json.
+  // Eight oblique drawings with hotspot polygons carried over from the old site's example pages.
+  // Pointer users hover or tap the shaded areas and numbered pins; keyboard and screen reader
+  // users work the numbered legend (buttons); the detail card is a live region. The static
+  // figure grid inside the holder is the no-JavaScript fallback and is replaced here.
+  async function renderSiteDesigns() {
+    const holder = document.querySelector("[data-site-designs]");
+    if (!holder) return;
+    const [data, docs] = await Promise.all([BMP.loadJson("data/site-designs.json"), BMP.loadJson("data/documents.json")]);
+    const designs = data.designs || [];
+    if (!designs.length) return;
+    const esc = BMP.escape;
+
+    const centroid = (pts) => {
+      // Area-weighted centroid of a polygon; falls back to the vertex mean for degenerate shapes.
+      let a = 0, cx = 0, cy = 0;
+      for (let i = 0; i < pts.length; i++) {
+        const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length];
+        const f = x1 * y2 - x2 * y1;
+        a += f; cx += (x1 + x2) * f; cy += (y1 + y2) * f;
+      }
+      if (Math.abs(a) < 1) {
+        return [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
+      }
+      return [cx / (3 * a), cy / (3 * a)];
+    };
+    const shapeInfo = (s) => {
+      const c = s.coords;
+      if (s.shape === "rect" && c.length >= 4) {
+        const [x1, y1, x2, y2] = c;
+        return { svg: `<rect x="${Math.min(x1, x2)}" y="${Math.min(y1, y2)}" width="${Math.abs(x2 - x1)}" height="${Math.abs(y2 - y1)}"`, center: [(x1 + x2) / 2, (y1 + y2) / 2] };
+      }
+      if (s.shape === "circle" && c.length >= 3) {
+        return { svg: `<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}"`, center: [c[0], c[1]] };
+      }
+      const pts = [];
+      for (let i = 0; i + 1 < c.length; i += 2) pts.push([c[i], c[i + 1]]);
+      return { svg: `<polygon points="${pts.map((p) => p.join(",")).join(" ")}"`, center: centroid(pts) };
+    };
+
+    holder.innerHTML = `
+      <div class="design-tabs" role="tablist" aria-label="Property type">
+        ${designs.map((d, i) => `<button type="button" role="tab" id="design-tab-${esc(d.id)}" aria-selected="${i === 0}" aria-controls="design-${esc(d.id)}" tabindex="${i === 0 ? 0 : -1}">${esc(d.title)}</button>`).join("")}
+      </div>
+      ${designs.map((d, i) => {
+        const shapes = [];
+        const pins = [];
+        d.hotspots.forEach((h, n) => {
+          h.shapes.forEach((s) => {
+            const info = shapeInfo(s);
+            shapes.push(`${info.svg} class="design-hs" data-hotspot="${esc(h.id)}"><title>${esc(h.title)}</title></${info.svg.slice(1).split(" ")[0]}>`);
+            pins.push(`<button type="button" class="design-pin" data-hotspot="${esc(h.id)}" tabindex="-1" aria-hidden="true" style="left:${(100 * info.center[0] / d.width).toFixed(2)}%;top:${(100 * info.center[1] / d.height).toFixed(2)}%">${n + 1}</button>`);
+          });
+        });
+        return `
+      <section class="design" id="design-${esc(d.id)}" role="tabpanel" aria-labelledby="design-tab-${esc(d.id)}"${i === 0 ? "" : " hidden"}>
+        <div class="design-stage" style="aspect-ratio: ${d.width} / ${d.height}">
+          <img src="${esc(d.image)}" alt="${esc(d.alt || "Conceptual drawing: " + d.title)}" width="${d.width}" height="${d.height}" loading="${i === 0 ? "eager" : "lazy"}" decoding="async">
+          <svg class="design-map" viewBox="0 0 ${d.width} ${d.height}" preserveAspectRatio="none" aria-hidden="true" focusable="false">${shapes.join("")}</svg>
+          ${pins.join("")}
+        </div>
+        <div class="design-body">
+          <ol class="design-legend" aria-label="BMPs shown in the ${esc(d.title)} drawing">
+            ${d.hotspots.map((h, n) => `<li><button type="button" class="design-key" data-hotspot="${esc(h.id)}" aria-pressed="false"><span class="design-num" aria-hidden="true">${n + 1}</span>${esc(h.title)}</button></li>`).join("")}
+          </ol>
+          <div class="design-detail" aria-live="polite">
+            <p class="design-hint">Hover or tap a shaded area of the drawing, or choose a BMP from the list.</p>
+          </div>
+          <p class="small design-open"><a href="${esc(d.image)}" target="_blank" rel="noopener">Open the drawing full size</a></p>
+        </div>
+      </section>`;
+      }).join("")}`;
+
+    // Tabs
+    const tabs = [...holder.querySelectorAll('[role="tab"]')];
+    const panels = [...holder.querySelectorAll('[role="tabpanel"]')];
+    const selectTab = (tab, focus) => {
+      tabs.forEach((t) => { const on = t === tab; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
+      panels.forEach((p) => { p.hidden = p.id !== tab.getAttribute("aria-controls"); });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => selectTab(tab, false));
+      tab.addEventListener("keydown", (e) => {
+        const map = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 };
+        if (!(e.key in map)) return;
+        e.preventDefault();
+        selectTab(tabs[(map[e.key] + tabs.length) % tabs.length], true);
+      });
+    });
+
+    // Hotspots, one controller per design
+    designs.forEach((d) => {
+      const panel = holder.querySelector(`#design-${CSS.escape(d.id)}`);
+      const detail = panel.querySelector(".design-detail");
+      const byId = Object.fromEntries(d.hotspots.map((h) => [h.id, h]));
+      let pinned = null;
+      const paint = (id) => {
+        panel.querySelectorAll("[data-hotspot]").forEach((el) => {
+          const on = el.dataset.hotspot === id;
+          el.classList.toggle("is-active", on);
+          if (el.classList.contains("design-key")) el.setAttribute("aria-pressed", String(on));
+        });
+        const h = byId[id];
+        if (!h) {
+          detail.innerHTML = `<p class="design-hint">Hover or tap a shaded area of the drawing, or choose a BMP from the list.</p>`;
+          return;
+        }
+        const url = h.doc ? BMP.docUrl(h.doc, docs.docBase) : "";
+        const external = /^https?:/i.test(h.doc || "") && !/tahoebmp\.org/i.test(h.doc || "");
+        detail.innerHTML = `<h3>${esc(h.title)}</h3><p>${esc(h.text)}</p>` +
+          (url ? `<a class="btn btn-outline btn-sm" href="${esc(url)}" target="_blank" rel="noopener">${external ? "Learn more" : "Fact sheet (PDF)"}</a>` : "");
+      };
+      const show = (id) => paint(id || pinned);
+      panel.addEventListener("click", (e) => {
+        const el = e.target.closest("[data-hotspot]");
+        if (!el || !panel.contains(el)) return;
+        pinned = pinned === el.dataset.hotspot ? null : el.dataset.hotspot;
+        paint(pinned);
+      });
+      panel.addEventListener("mouseover", (e) => {
+        const el = e.target.closest(".design-hs, .design-pin");
+        if (el) show(el.dataset.hotspot);
+      });
+      panel.querySelector(".design-stage").addEventListener("mouseleave", () => show(null));
+      panel.addEventListener("focusin", (e) => {
+        const el = e.target.closest(".design-key");
+        if (el) show(el.dataset.hotspot);
+      });
+      panel.addEventListener("focusout", (e) => {
+        if (!panel.contains(e.relatedTarget)) show(null);
+      });
+    });
+  }
+
   // ── Live counts: [data-stat="bmp|sco|parcels|evaluated"]
   async function renderStats() {
     const els = document.querySelectorAll("[data-stat]");
@@ -300,6 +435,7 @@
     renderDocSections().catch(console.error);
     renderHandbook().catch(console.error);
     renderGallery().catch(console.error);
+    renderSiteDesigns().catch(console.error);
     renderStats().catch(console.error);
   });
 })();

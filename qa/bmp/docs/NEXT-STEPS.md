@@ -7,7 +7,7 @@ The prototype phase closed Oct. 21, 2026. The latest build is at https://trpa-ag
 Everything from the April page review is applied. Links are pages under the build address above.
 
 - Home page: the three-step path to a certificate, audience cards, and program counts read live from the BMP Database.
-- `about-bmps.html`, now titled BMP Requirements: why, what, the requirements list, rock sizes, conceptual drawings, and the commonly prescribed BMPs.
+- `about-bmps.html`, now titled BMP Requirements: why, what, the requirements list, rock sizes, the eight interactive site designs (hover or tap a shaded area for the BMP and its fact sheet, as on the old site), and the commonly prescribed BMPs.
 - `get-certified.html` with the point-of-sale disclosure section (the Realtors page folded in), and `small-retrofit-plan.html` with the BMP Retrofit Permit section and the free plan review called out.
 - `maintenance.html` with the documentation section and submit buttons; they open an email until the web forms are live.
 - `resources.html` regrouped into installation, NRCS drawings, training, maintenance, forms, landscaping, and policy.
