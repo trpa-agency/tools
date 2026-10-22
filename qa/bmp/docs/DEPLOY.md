@@ -41,7 +41,15 @@ New paths below are relative to `https://tools.trpa.gov/bmp/` (while in QA, `htt
 | `/`, `/Default.aspx` | `/` |
 | `/BMPs.aspx`, `/BMPS.aspx` | `/get-certified.html` |
 | `/SmallBMPRetro.aspx` | `/small-retrofit-plan.html` |
-| `/BMPProblem.aspx`, `/WhatAreBMPs.aspx`, `/PrescribedBMPs.aspx`, `/*Ex.aspx`, `/photogallery_rock.aspx` | `/about-bmps.html` |
+| `/BMPProblem.aspx`, `/WhatAreBMPs.aspx`, `/PrescribedBMPs.aspx`, `/photogallery_rock.aspx` | `/about-bmps.html` |
+| `/SingleFamEx.aspx` | `/about-bmps.html#design-single-family` |
+| `/MultiFamilyEx.aspx` | `/about-bmps.html#design-multi-family` |
+| `/CommGoodEx.aspx` | `/about-bmps.html#design-commercial-with-bmps` |
+| `/CommBadEx.aspx` | `/about-bmps.html#design-commercial-without-bmps` |
+| `/RegionalEx.aspx` | `/about-bmps.html#design-regional` |
+| `/MarinaEx.aspx` | `/about-bmps.html#design-marina` |
+| `/WinterEx.aspx` | `/about-bmps.html#design-winterization` |
+| `/TempEx.aspx` | `/about-bmps.html#design-temporary-construction` |
 | `/Maintenance.aspx` | `/maintenance.html` |
 | `/BMPHandbook.aspx` | `/handbook.html` |
 | `/BMPHandbookCh4.aspx` | `/handbook.html#toolkit` |
