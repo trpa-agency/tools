@@ -111,7 +111,7 @@ Recommendation: 1 now, trial 2 before the site leaves qa.
 
 1. **Spanish NRCS drawings and the Tahoe Keys idea book:** update, move, or remove. The site keeps both until told.
 2. **Maintenance steps:** the text of the most recent maintenance letter, so the Maintenance page can state what to do, what to submit, and how.
-3. **Submissions:** Survey123 (recommended), Accela, or Microsoft Forms for maintenance documentation and evaluation requests.
+3. **Submissions:** decided Oct. 21, 2026. The Survey123 forms are the intake and submissions are carried into the BMP Database (`FORMS.md`, "Integration with the BMP Database"). Still needed from the program: who receives and reviews them.
 4. **Photos:** the program's check that every gallery photo is TRPA's, plus a vactor truck photo for maintenance and a replacement single-family drawing.
 
 ## 7. Change list, applied Oct. 21, 2026
