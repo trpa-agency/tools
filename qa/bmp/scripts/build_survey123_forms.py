@@ -62,6 +62,7 @@ CHOICES = {
         ("other", "Other"),
     ],
     "contact_pref": [("email", "Email"), ("phone", "Phone"), ("either", "Either")],
+    "certify": [("yes", "I certify that the information in this form is accurate and that I am authorized to submit it for this property.")],
 }
 
 
@@ -121,7 +122,8 @@ MAINTENANCE_SURVEY = [
     row("file", "maintenance_log", "Maintenance log (PDF)", hint="The BMP Inspection and Maintenance Log, if you keep one."),
     row("file", "invoice", "Contractor invoice (PDF or image)", hint="If a contractor did the work."),
     row("end group", "", ""),
-    row("acknowledge", "certify", "I certify that the information in this form is accurate and that I am authorized to submit it for this property.", required="yes"),
+    # Survey123 has no acknowledge type (Connect renders it as an unsupported "trigger"); a one-option checkbox does the job.
+    row("select_multiple certify", "certify", "Certification", required="yes", required_message="Check the box to certify the submission."),
 ]
 
 EVALUATION_SURVEY = [
