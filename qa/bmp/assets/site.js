@@ -50,10 +50,12 @@
 
   BMP.escape = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-  // Resolve a document href: absolute URLs pass through, everything else hangs off docBase.
+  // Resolve a document href: absolute URLs, fragments, and site-local paths (starting with "./")
+  // pass through; everything else hangs off docBase, the legacy file store.
   BMP.docUrl = function (href, docBase) {
     if (!href) return "#";
     if (/^(https?:)?\/\//i.test(href) || href.startsWith("#") || href.startsWith("mailto:")) return href;
+    if (href.startsWith("./")) return href.slice(2);
     // Encode spaces and other unsafe characters once; leave existing %xx escapes alone.
     const safe = href.split("/").map((seg) => encodeURIComponent(decodeURIComponent(seg))).join("/");
     return docBase.replace(/\/?$/, "/") + safe;

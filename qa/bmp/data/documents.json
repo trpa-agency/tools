@@ -1,5 +1,5 @@
 {
-  "_comment": "Every downloadable document and external link the site offers, grouped by section. href values that start with http are used as-is; everything else resolves against docBase. Today docBase points at the legacy tahoebmp.org file store; to move the files onto tools.trpa.gov, copy them into a documents/ folder in this repo with the same relative paths and set docBase to 'documents/'. type drives the icon and the (PDF) style suffix: pdf, doc, xlsx, dwg, video, link, page. Sections follow the program's Oct. 2026 review: installation, training, maintenance, forms, landscaping, policy.",
+  "_comment": "Every downloadable document and external link the site offers, grouped by section. href values that start with http are used as-is, values that start with ./ are files or pages in this site, and everything else resolves against docBase. Today docBase points at the legacy tahoebmp.org file store; to move the files onto tools.trpa.gov, copy them into a documents/ folder in this repo with the same relative paths and set docBase to 'documents/'. type drives the icon and the (PDF) style suffix: pdf, doc, xlsx, dwg, video, link, page. Sections follow the program's Oct. 2026 review: installation, training, maintenance, forms, landscaping, policy.",
   "docBase": "https://www.tahoebmp.org/",
   "sections": [
     {
@@ -8,7 +8,7 @@
       "description": "Drawings, sizing tools, materials, and the people who install BMPs.",
       "items": [
         { "title": "TRPA Permitting Guidelines for Residential BMPs", "href": "https://www.trpa.gov/wp-content/uploads/documents/BMP-Guidelines.pdf", "type": "pdf", "note": "Updated August 2024. What a residential BMP plan needs, with drawings" },
-        { "title": "BMP Toolkit fact sheets and standard drawings", "href": "handbook.html#toolkit", "type": "page", "note": "Chapter 4 of the BMP Handbook, PDF and DWG for every practice" },
+        { "title": "BMP Toolkit fact sheets and standard drawings", "href": "./handbook.html#toolkit", "type": "page", "note": "Chapter 4 of the BMP Handbook, PDF and DWG for every practice" },
         { "title": "NRCS standard BMP drawings", "href": "#nrcs", "type": "page", "note": "Residential drawings in English and Spanish, listed below" },
         { "title": "BMP Calculation Spreadsheet", "href": "Documents/BMP_Calc.xlsx", "type": "xlsx", "note": "Sizes infiltration systems for the 20-year, one-hour storm" },
         { "title": "Calculation Spreadsheet general instructions", "href": "Documents/CalcSheetInstructions.doc", "type": "doc" },
@@ -80,7 +80,7 @@
       "name": "Maintenance",
       "description": "Logs, checklists, and the handbook chapter that keep a BMP Certificate active.",
       "items": [
-        { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "forms/bmp-maintenance-log.pdf", "type": "pdf", "note": "Fill it in the browser or print it. Twenty BMP sections with a yes or no check and a corrective action column" },
+        { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "./forms/bmp-maintenance-log.pdf", "type": "pdf", "note": "Fill it in the browser or print it. Twenty BMP sections with a yes or no check and a corrective action column" },
         { "title": "BMP Maintenance Log example", "href": "Documents/128_Market_Street_ Log_Example.pdf", "type": "pdf" },
         { "title": "Small residential inspection, maintenance, and monitoring checklist", "href": "Documents/BMPHandbook/Ch6_2_Sm_Residential_Insepct,_Maint_Mont_Checklist.pdf", "type": "pdf" },
         { "title": "Inspection and maintenance for projects over 1 acre", "href": "Documents/BMPHandbook/Ch6_3_1to5.pdf", "type": "pdf" },
@@ -95,11 +95,11 @@
       "items": [
         { "title": "TRPA Applications and Forms", "href": "https://www.trpa.gov/applications-forms/", "type": "link", "note": "Every TRPA application, including the BMP Retrofit Permit and the Wood Heater Retrofit Statement" },
         { "title": "BMP Retrofit Permit packet", "href": "https://www.trpa.gov/wp-content/uploads/documents/BMP_Retrofit_Application.pdf", "type": "pdf", "note": "April 2024 packet; free. Most commercial and multi-family properties" },
-        { "title": "Small BMP Retrofit Plan", "href": "small-retrofit-plan.html", "type": "page", "note": "Free online approval for projects under 10 cubic yards; most homes" },
-        { "title": "Small BMP Treatments Form (fillable)", "href": "forms/small-bmp-treatments-form.pdf", "type": "pdf", "note": "Lists each treatment on the site plan with its NRCS drawing and dimensions" },
+        { "title": "Small BMP Retrofit Plan", "href": "./small-retrofit-plan.html", "type": "page", "note": "Free online approval for projects under 10 cubic yards; most homes" },
+        { "title": "Small BMP Treatments Form (fillable)", "href": "./forms/small-bmp-treatments-form.pdf", "type": "pdf", "note": "Lists each treatment on the site plan with its NRCS drawing and dimensions" },
         { "title": "BMP Calculation Spreadsheet", "href": "Documents/BMP_Calc.xlsx", "type": "xlsx" },
-        { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "forms/bmp-maintenance-log.pdf", "type": "pdf" },
-        { "title": "BMP Real Estate Disclosure Form (fillable)", "href": "forms/bmp-real-estate-disclosure.pdf", "type": "pdf", "note": "Complete and submit within 30 days of sale" }
+        { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "./forms/bmp-maintenance-log.pdf", "type": "pdf" },
+        { "title": "BMP Real Estate Disclosure Form (fillable)", "href": "./forms/bmp-real-estate-disclosure.pdf", "type": "pdf", "note": "Complete and submit within 30 days of sale" }
       ]
     },
     {
@@ -107,7 +107,7 @@
       "name": "Landscaping and fertilizer",
       "description": "Keeping nutrients and sediment out of the lake from lawns, gardens, and slopes.",
       "items": [
-        { "title": "Fertilizer at Lake Tahoe", "href": "fertilizer.html", "type": "page", "note": "Zero-phosphorus products, timing, amounts, and watering" },
+        { "title": "Fertilizer at Lake Tahoe", "href": "./fertilizer.html", "type": "page", "note": "Zero-phosphorus products, timing, amounts, and watering" },
         { "title": "Handbook Chapter 5: Soil and Vegetation Management", "href": "Documents/BMPHandbook/Ch5_SoilandVegetationManagement.pdf", "type": "pdf" },
         { "title": "Tahoe Keys POA Conservation Idea Book", "href": "Documents/TKPOA_ConsvIdeaBook.pdf", "type": "pdf" },
         { "title": "Tahoe Living with Fire", "href": "https://www.tahoelivingwithfire.com/", "type": "link", "note": "Defensible space, which BMPs are designed to work with" }
