@@ -96,10 +96,10 @@
         { "title": "TRPA Applications and Forms", "href": "https://www.trpa.gov/applications-forms/", "type": "link", "note": "Every TRPA application, including the BMP Retrofit Permit and the Wood Heater Retrofit Statement" },
         { "title": "BMP Retrofit Permit packet", "href": "https://www.trpa.gov/wp-content/uploads/documents/BMP_Retrofit_Application.pdf", "type": "pdf", "note": "April 2024 packet; free. Most commercial and multi-family properties" },
         { "title": "Small BMP Retrofit Plan", "href": "small-retrofit-plan.html", "type": "page", "note": "Free online approval for projects under 10 cubic yards; most homes" },
-        { "title": "Small BMP Treatments Form", "href": "documents/Small_BMP_Treatments_Form.pdf", "type": "pdf" },
+        { "title": "Small BMP Treatments Form (fillable)", "href": "forms/small-bmp-treatments-form.pdf", "type": "pdf", "note": "Lists each treatment on the site plan with its NRCS drawing and dimensions" },
         { "title": "BMP Calculation Spreadsheet", "href": "Documents/BMP_Calc.xlsx", "type": "xlsx" },
         { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "forms/bmp-maintenance-log.pdf", "type": "pdf" },
-        { "title": "BMP Real Estate Disclosure Form", "href": "Documents/BMP_Real_Estate_Disclaimer_static.pdf", "type": "pdf", "note": "Print, complete, and submit within 30 days of sale" }
+        { "title": "BMP Real Estate Disclosure Form (fillable)", "href": "forms/bmp-real-estate-disclosure.pdf", "type": "pdf", "note": "Complete and submit within 30 days of sale" }
       ]
     },
     {
