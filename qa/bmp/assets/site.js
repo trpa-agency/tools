@@ -350,10 +350,13 @@
     // Tabs
     const tabs = [...holder.querySelectorAll('[role="tab"]')];
     const panels = [...holder.querySelectorAll('[role="tabpanel"]')];
-    const selectTab = (tab, focus) => {
+    // Each drawing has its own address, about-bmps.html#design-<id>: a tab pick writes the hash
+    // (replaceState, so Back still leaves the page) and a hash on load or in a link picks the tab.
+    const selectTab = (tab, focus, writeHash = true) => {
       tabs.forEach((t) => { const on = t === tab; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
       panels.forEach((p) => { p.hidden = p.id !== tab.getAttribute("aria-controls"); });
       if (focus) tab.focus();
+      if (writeHash) history.replaceState(null, "", "#" + tab.getAttribute("aria-controls"));
     };
     tabs.forEach((tab, i) => {
       tab.addEventListener("click", () => selectTab(tab, false));
@@ -364,6 +367,20 @@
         selectTab(tabs[(map[e.key] + tabs.length) % tabs.length], true);
       });
     });
+    const selectFromHash = () => {
+      let id = "";
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch (err) { return; }
+      const tab = id && tabs.find((t) => t.getAttribute("aria-controls") === id);
+      if (!tab) return;
+      selectTab(tab, false, false);
+      // The panel was hidden when the browser tried to scroll to it, so bring the section up ourselves,
+      // instantly like a native anchor jump (the site's smooth scrolling would otherwise animate it).
+      (document.getElementById("examples") || holder).scrollIntoView({ block: "start", behavior: "instant" });
+    };
+    selectFromHash();
+    window.addEventListener("hashchange", selectFromHash);
+    // Images above the section finish loading after the first scroll and push it down; scroll again once they are in.
+    if (document.readyState !== "complete") window.addEventListener("load", selectFromHash, { once: true });
 
     // Hotspots, one controller per design
     designs.forEach((d) => {
