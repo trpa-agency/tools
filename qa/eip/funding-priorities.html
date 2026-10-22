@@ -448,7 +448,7 @@
           <calcite-switch id="pickedOnly" scale="s" label="Only picked projects"></calcite-switch>
           <span>Only picked projects</span>
         </label>
-        <label class="field"><span class="lbl" title="The EIP focus area the Tracker assigns each project. Click to turn a focus area on or off; Unassigned holds projects with no focus area.">Focus area <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <label class="field"><span class="lbl" title="The EIP focus area the Tracker assigns each project. Click a focus area to turn it on or off. All projects turns every focus area back on and also shows the projects the Tracker gives no focus area.">Focus area <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
           <div class="chips" id="focusChips"></div>
         </label>
         <label class="field"><span class="lbl" title="The organization listed as lead implementer on the Tracker. Pick one or more; empty means any.">Lead implementer <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
@@ -664,6 +664,8 @@
       { key: "Science, Stewardship, and Accountability", short: "Science & Stewardship", color: C.navy },
       { key: "Unassigned", short: "Unassigned", color: C.gray },
     ];
+    // Unassigned keeps its color and legend entry but has no chip; All projects stands in for it (see passes)
+    const FOCUS_CHIPS = FOCUS.filter(f => f.key !== "Unassigned");
     const FOCUS_COLOR = Object.fromEntries(FOCUS.map(f => [f.key, f.color]));
     const JURIS = ["City of South Lake Tahoe", "Douglas County, NV", "El Dorado County, CA", "Placer County, CA", "Washoe County, NV",
       "Carson City County, NV", "Tahoe Regional Planning Agency", "U.S. Forest Service - Lake Tahoe Basin Management Unit", "Alpine County"];
@@ -918,7 +920,7 @@
     }
 
     // ───────────────────────── Filters ─────────────────────────
-    const chipsOn = (el) => [...el.querySelectorAll("button.on")].map(b => b.dataset.v);
+    const chipsOn = (el) => [...el.querySelectorAll("button.on:not([data-all])")].map(b => b.dataset.v);
     const comboVals = (el) => (el.selectedItems || []).map(i => i.value);
     function passes(p) {
       const fp = focusPicks(); if (fp && !fp[p.id]) return false;
@@ -926,7 +928,8 @@
       if (!chipsOn($("stageChips")).includes(p.stage)) return false;
       if ($("pickedOnly").checked && !(p.tl.n || (myPick(p.id) || {}).l === listKey && myPick(p.id).t)) return false;
       if ($("ltraHintOnly").checked && !p.hasLtra) return false;
-      if (!chipsOn($("focusChips")).includes(p.focus)) return false;
+      // Projects with no focus area show only while every focus area is on (All projects)
+      const fa = chipsOn($("focusChips")); if (!(fa.includes(p.focus) || p.focus === "Unassigned" && fa.length === FOCUS_CHIPS.length)) return false;
       const prog = comboVals($("programSel")); if (prog.length && !prog.includes(p.program)) return false;
       const lead = comboVals($("leadSel")); if (lead.length && !lead.includes(p.lead)) return false;
       const fs = comboVals($("fundSel")); if (fs.length && !p.funding.some(f => fs.includes(f))) return false;
@@ -1158,6 +1161,8 @@
     ["calciteNoticeBeforeClose", "calciteNoticeClose"].forEach(ev => $("startHint").addEventListener(ev, () => { startHintDismissed = true; }));
     // Keep ARIA state in step with the classes after resets and share links (click handlers do it themselves)
     function syncAria() {
+      // An All button is on while every chip beside it is on
+      document.querySelectorAll(".chips button[data-all]").forEach(a => a.classList.toggle("on", !a.parentElement.querySelector("button[data-v]:not(.on)")));
       document.querySelectorAll(".chips:not(.crit) button").forEach(b => b.setAttribute("aria-pressed", String(b.classList.contains("on"))));
       document.querySelectorAll(".seg[role=radiogroup] button").forEach(b => b.setAttribute("aria-checked", String(b.classList.contains("active"))));
       document.querySelectorAll(".dtabs button").forEach(b => b.setAttribute("aria-selected", String(b.classList.contains("active"))));
@@ -1808,7 +1813,8 @@ ${summary}${sections}
 
     // ───────────────────────── Controls ─────────────────────────
     function buildControls() {
-      $("focusChips").innerHTML = FOCUS.map(f => `<button data-v="${escHtml(f.key)}" class="on" style="--c:${f.color}"><i></i>${escHtml(f.short)}</button>`).join("");
+      $("focusChips").innerHTML = `<button data-all="1" class="on">All projects</button>` +
+        FOCUS_CHIPS.map(f => `<button data-v="${escHtml(f.key)}" class="on" style="--c:${f.color}"><i></i>${escHtml(f.short)}</button>`).join("");
       $("reviewerWg").innerHTML = `<option value="">Choose your working group</option>` + WORKING_GROUPS.map(w => `<option value="${escHtml(w)}">${escHtml(w)}</option>`).join("");
       const fill = (el, values) => { el.innerHTML = ""; for (const v of values) { const it = document.createElement("calcite-combobox-item"); it.value = v; it.heading = v; el.appendChild(it); } };
       const uniq = (arr) => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b));
@@ -1831,7 +1837,8 @@ ${summary}${sections}
     ["nonEip", "pickedOnly", "ltraHintOnly"].forEach(id => $(id).addEventListener("calciteSwitchChange", recompute));
     $("searchInput").addEventListener("input", recomputeSoon);
     const syncChips = syncAria;
-    [$("stageChips"), $("focusChips"), $("fundChips")].forEach(el => el.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; b.classList.toggle("on"); syncChips(); recompute(); }));
+    [$("stageChips"), $("focusChips"), $("fundChips")].forEach(el => el.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.all) el.querySelectorAll("button[data-v]").forEach(x => x.classList.add("on")); else b.classList.toggle("on"); syncChips(); recompute(); }));
     const segClick = (id, fn) => $(id).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
       $(id).querySelectorAll("button").forEach(x => { x.classList.toggle("active", x === b); x.setAttribute("aria-checked", String(x === b)); }); fn(b.dataset.v); });
     segClick("stateSeg", () => recompute());

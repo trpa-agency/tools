@@ -15,6 +15,7 @@ EIP Funding Priorities lives in the trpa-agency/tools repo at `qa/eip/funding-pr
 **Constants at the top of the script:**
 - `FEATURES = { pins: false, voting: false }`.
 - `CRITERIA`: 10 LTRA criteria since the Oct. 2026 review. They are Measurable progress, Threshold contribution, Multiple benefits, Non-federal leverage, Stakeholder support, Federal nexus (renamed from Federal interest), Agency capacity, Federal funding history, NHPA compliance, and ESA compliance. Threshold evaluation, Cost-effectiveness, and Agency priority were removed.
+- `FOCUS` / `FOCUS_CHIPS`: since Oct. 21, 2026 (staff review) the Focus area filter has an All projects button and no Unassigned chip. Unassigned keeps its color and legend entry, and those projects pass only while all four focus areas are on. All 38 Unassigned projects in the snapshot are non-EIP Tracker entries, so they appear only with the non-EIP switch on.
 - `WG_SHORT` / `WORKING_GROUPS`: TFFT, Water Infrastructure, SWQIC, TWIG, AIS, LCT, Recreation, Accountability, and Other, in roster order.
 - `SURVEY`: formId, viewUrl, submitUrl, `round: "FY28"`, `roundLabel`, `deadline`, and `fields`.
 
