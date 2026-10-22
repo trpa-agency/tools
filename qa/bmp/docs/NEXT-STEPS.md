@@ -26,7 +26,7 @@ Everything from the April page review is applied. Links are pages under the buil
 - Open the three PDF forms in a browser and send wording or field changes; they regenerate from a script.
 - Review the two web forms question by question (a preview can be shared) and name who in the program receives and reviews submissions. That answer shapes the integration.
 - Decide the fate of the old server's documents: 488 MB of PDFs and DWGs, with the 282 MB workshop video going to a video host either way.
-- Approve the home address, tools.trpa.gov/bmp, with bmp.trpa.gov redirecting to it.
+- The home address will be bmp.trpa.gov, served from a repository of its own after the integration phase (decided Oct. 22, 2026). Until then the beta address above is the one to share internally.
 - What to expect during the integration phase: the public pages stay as they are, except the search detail gains the property summary fields and the submit buttons switch from email to the web forms. The old site stays up until cutover.
 - Schedule the content-model walkthrough: pages are plain HTML, document lists and the handbook and gallery are JSON files, changes go through the GitHub repo.
 

@@ -4,29 +4,49 @@ Target: `https://bmp.trpa.gov`, replacing `https://www.tahoebmp.org` (ASP.NET on
 
 ## 0. Where it lives today
 
-The site is developed as a beta app in the TRPA Tools repo at `qa/bmp/` and reviewed at `https://trpa-agency.github.io/tools/qa/bmp/` (listed on the QA gallery under Environmental Improvement). Every link inside the site is relative, so the folder can be served from any root.
+The site is developed as a beta app in the TRPA Tools repo at `qa/bmp/` and reviewed at `https://trpa-agency.github.io/tools/qa/bmp/` (listed on the QA gallery under Environmental Improvement). Every link inside the site is relative, so the folder can be served from any root, and the folder carries its own copy of `assets/trpa-tokens.css`.
 
-**Recommended production home: `https://tools.trpa.gov/bmp/`** (decided Oct. 20, 2026). The site stays in this repo and moves from `qa/bmp/` to `bmp/` at the top level when it is ready, like the other production apps. GitHub Pages allows one custom domain per repository, so `bmp.trpa.gov` becomes a redirect to `tools.trpa.gov/bmp/` rather than a second Pages site. Reasons: one repo and one deploy to maintain, the shared tokens and gallery registry stay in sync, and the domain verification and DNS work already planned for tools.trpa.gov covers it. The trade-off is that the short URL on brochures and the hotline recording will always be a redirect; that is acceptable.
+**Production home, decided Oct. 22, 2026: its own repository, `trpa-agency/bmp`, served by GitHub Pages at `https://bmp.trpa.gov`.** Not yet. The site stays in this repo under `qa/` through the BMP Database integration phase (`FORMS.md`), and the move is the last step before cutover. Reasons for a repo of its own: the short URL on brochures, the hotline recording, and the certificates resolves directly instead of through a redirect; GitHub Pages allows one custom domain per repository, so the domain needs its own repo; the program's content (pages, JSON, forms, documents) gets its own history and its own access list, so Communications can be given write access without touching the rest of TRPA Tools; and the BMP Database integration scripts travel with the site. The cost is a second deploy to keep in step with the shared tokens, and the TRPA Tools gallery links out to the site instead of hosting it.
 
-The alternative, a separate `trpa-agency/bmp` repo with `bmp.trpa.gov` as its own Pages domain, remains possible later because every link inside the folder is relative. Only the footer's TRPA Tools link (`../../`) would need to become absolute.
+This supersedes the Oct. 20, 2026 plan (a top-level `bmp/` folder in this repo at `tools.trpa.gov/bmp/`, with `bmp.trpa.gov` as a redirect), which `IMPROVEMENTS.md` and the project notes referred to.
 
-## 1. Promote from qa to production
+### In plain language: a site of its own on GitHub, or a section of trpa.gov in WordPress
 
-1. Finish the must-fix items in `IMPROVEMENTS.md` (documents, redirects, agent workflow, owner search, content review).
-2. Move the folder: `git mv qa/bmp bmp` on `mtb-edits`, update the two `apps.json` entries (`bmpsite`, `bmpsearch`, plus `bmpmap` if present) from `qa/bmp/...` to `bmp/...` and drop `"beta": true`, then merge to `main`. Pages publishes within about a minute.
-3. The site is then at `https://trpa-agency.github.io/tools/bmp/` and, once the tools.trpa.gov DNS exists, `https://tools.trpa.gov/bmp/`.
+A site of its own at bmp.trpa.gov:
 
-## 2. DNS and the short URL (DTS request)
+- Everything the program needs is one site: the property search, the map, the interactive drawings, the handbook, the forms. None of those can be built inside WordPress; they would be embedded in frames and maintained separately anyway.
+- Nothing to patch and nothing to hack. There is no server, no database, and no plugins on the public side, which is what failed on the old tahoebmp.org server. Hosting is free.
+- Changes go live in about a minute and every change is recorded with who made it and when, so anything can be undone.
+- A WordPress update cannot break the tools, and the tools cannot slow trpa.gov down.
+- The cost: content is edited as plain files in GitHub rather than in the WordPress editor, which takes a short walkthrough, and it is a second site to track in analytics and audits.
 
-`tools.trpa.gov` first: the CNAME to `trpa-agency.github.io.` and the `CNAME` file in this repo, as described in the TRPA Tools notes. Verify `trpa.gov` for the `trpa-agency` organization while DTS is in the DNS (Organization settings, Pages, Verified domains; GitHub gives a TXT record `_github-pages-challenge-trpa-agency.trpa.gov`), so no one outside the org can claim a `*.trpa.gov` Pages site.
+A section of trpa.gov in WordPress:
 
-Then `bmp.trpa.gov` as a redirect. Options, in order of preference:
+- One site, one editor Communications already uses, one menu, one search, one analytics account.
+- The tools still have to be built and hosted outside WordPress and embedded, so both have to be maintained, and embeds are the part that breaks with theme updates and on phones.
+- About 300 documents (488 MB of PDFs and drawings) would go into the media library, which is not built to organize a collection that size.
+- Each edit goes through the WordPress workflow with no preview site, and the structured content (127 fact sheets, 77 photos, the document registry) becomes hand-maintained pages.
 
-| Option | How |
-|---|---|
-| Redirect on the old tahoebmp.org server | Point `bmp.trpa.gov` (A or CNAME) at the IIS server that hosts tahoebmp.org and add a site binding plus a rewrite rule that 301s every path to `https://tools.trpa.gov/bmp/<mapped path>` (table in section 3). Reuses the server that must redirect tahoebmp.org anyway. |
-| Redirect at the DNS or CDN provider | If TRPA's DNS host offers HTTP redirect records (many do), `bmp.trpa.gov -> https://tools.trpa.gov/bmp/` with no server involved. Path mapping is lost, so the old `.aspx` URLs land on the home page. |
-| A tiny Pages repo | `trpa-agency/bmp` with `CNAME` and a one-file `index.html` plus `404.html` that JavaScript-redirects to `tools.trpa.gov/bmp/` with the legacy path map. Free and path-aware, but one more repo. |
+The middle path, if the program wants its prose in WordPress: a short trpa.gov/bmp landing page that Communications owns, linking to the tools on bmp.trpa.gov. The words live where the editor is; the tools live where they can be maintained.
+
+## 1. Move to the new repository
+
+When the must-fix items in `IMPROVEMENTS.md` are closed and the integration steps in `FORMS.md` are done:
+
+1. Create `trpa-agency/bmp`, public like this repo, with Pages set to deploy from `main` at the root.
+2. Carry the folder's history over rather than copying files: in this repo, `git subtree split --prefix=qa/bmp -b bmp-export`, then push that branch to the new repo's `main`. The folder's contents become the repository root, so `index.html` is the site root and every relative link keeps working.
+3. In the new repo: add a `CNAME` file containing `bmp.trpa.gov`; change the footer's TRPA Tools link from `../../` to `https://tools.trpa.gov/`; add the `404.html` with the legacy path map from section 3; keep `assets/trpa-tokens.css` in step with the copy in this repo when the design system changes. The scripts in `scripts/` already resolve paths from the folder root and need no change; the integration job's config lives there too, with its secrets in a gitignored `.env`.
+4. In this repo: remove `qa/bmp/`, keep the three thumbnails, and point the `bmpsite`, `bmpsearch`, and `bmpmap` entries in `apps.json` at `https://bmp.trpa.gov/...` as external links without `"beta": true`.
+5. Pages publishes within about a minute at `https://trpa-agency.github.io/bmp/`, and at `https://bmp.trpa.gov` once the DNS in section 2 resolves.
+
+## 2. DNS and the domain (DTS request)
+
+1. Verify `trpa.gov` for the `trpa-agency` organization first (Organization settings, Pages, Verified domains; GitHub gives a TXT record `_github-pages-challenge-trpa-agency.trpa.gov`), so no one outside the org can claim a `*.trpa.gov` Pages site. This is the same step tools.trpa.gov needs, so it may already be done.
+2. Ask DTS for `bmp.trpa.gov` as a CNAME to `trpa-agency.github.io.` (a subdomain needs no A records). A short TTL during cutover makes a rollback quick.
+3. In the new repo's Pages settings, enter the custom domain. GitHub checks the DNS and issues the certificate, usually within the hour; then turn on Enforce HTTPS.
+4. Leave `tools.trpa.gov` as it is; the BMP cards there link out to the new domain.
+
+If the program wants the short URL before the move, DTS can point `bmp.trpa.gov` at the old IIS server with a rewrite rule to the QA address in the meantime; it is optional and goes away at the move.
 
 ## 3. Redirect the old site
 
@@ -34,7 +54,7 @@ Keep `tahoebmp.org` alive long enough to redirect. Two parts:
 
 **Pages** (301 to the new site). IIS `web.config` rewrite rules for the old server, or the equivalent on whatever fronts it:
 
-New paths below are relative to `https://tools.trpa.gov/bmp/` (while in QA, `https://trpa-agency.github.io/tools/qa/bmp/`).
+New paths below are relative to `https://bmp.trpa.gov/` (while in QA, `https://trpa-agency.github.io/tools/qa/bmp/`).
 
 | Old | New |
 |---|---|
@@ -61,7 +81,7 @@ New paths below are relative to `https://tools.trpa.gov/bmp/` (while in QA, `htt
 | `/Contact.aspx`, `/WhoAreYou.aspx`, `/Residential.aspx`, `/MultiFamily.aspx`, `/News.aspx`, `/Reporting.aspx`, `/LivingWithFire.aspx`, `/BMPComments.aspx` | `/` |
 | `/bmptoolkit/searchBMP.asp` | `/search.html` (query string `?apn=` is honored) |
 
-The Tools repo's root `404.html` can carry the same lookup table (keyed on the lowercase legacy path under `/bmp/`), so a blanket redirect of `tahoebmp.org/* -> tools.trpa.gov/bmp/*` still lands users on the right page.
+The new repo's `404.html` carries the same lookup table (keyed on the lowercase legacy path), so a blanket redirect of `tahoebmp.org/* -> bmp.trpa.gov/*` still lands users on the right page.
 
 **Files.** `data/documents.json` has `"docBase": "https://www.tahoebmp.org/"`, so every PDF, DWG, DOC, and XLSX still comes from the old server's `Documents/`, `NRCSDocuments/`, and `documents/` folders. Do not redirect those paths until the files have moved.
 
@@ -91,6 +111,6 @@ Either way the site only changes in one place, `docBase`, plus the `data-doc` li
 
 - Run the `trpa-dashboard-qa` checklist on `search.html` (the only app page).
 - Confirm `BMP_Status/MapServer/5` field names have not changed (`APN`, `ParcelStreet`, `BMPStatus`, `CertNo`, `CertDate`, `SourceCertNo`, `SiteConstraint`, `AreaWide`, `EvaluationComplete`, `Rvkd`).
-- Flip the `bmpsite`, `bmpsearch`, and `bmpmap` entries in `apps.json` from beta to production URLs (category `eip`); retire the gis.trpa.org BMP Mapping Tool card once the new map page replaces it.
-- Ask the LT Info product manager to have the Parcel Tracker's "View this Parcel in the BMP Database" link point at `tools.trpa.gov/bmp/search.html?apn=<APN>`.
+- Point the `bmpsite`, `bmpsearch`, and `bmpmap` entries in `apps.json` at `bmp.trpa.gov` (category `eip`, no longer beta); retire the gis.trpa.org BMP Mapping Tool card once the new map page replaces it.
+- Ask the LT Info product manager to have the Parcel Tracker's "View this Parcel in the BMP Database" link point at `bmp.trpa.gov/search.html?apn=<APN>`.
 - Update trpa.gov links that point at tahoebmp.org.

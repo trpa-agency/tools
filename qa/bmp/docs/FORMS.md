@@ -99,7 +99,7 @@ Staff keep reviewing and entering certificates, evaluations, and flags in the tr
 
 ### Step 5: cutover
 
-Redirects from tahoebmp.org per `DEPLOY.md`, the document files (488 MB) either moved into the repo or left on the old server, DNS for bmp.trpa.gov with DTS, then the public pages retire while the toolkit's staff pages stay reachable.
+Redirects from tahoebmp.org per `DEPLOY.md`, the document files (488 MB) either moved into the repo or left on the old server, the move into its own repository with bmp.trpa.gov as its Pages domain (`DEPLOY.md`, sections 1 and 2), then the public pages retire while the toolkit's staff pages stay reachable.
 
 ### Fallbacks considered
 
