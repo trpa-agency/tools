@@ -80,7 +80,7 @@
       "name": "Maintenance",
       "description": "Logs, checklists, and the handbook chapter that keep a BMP Certificate active.",
       "items": [
-        { "title": "BMP Maintenance Log template (print)", "href": "Documents/BMPHandbook/Maintenance_Log_static_form.pdf", "type": "pdf", "note": "Opens in Adobe Reader; browsers cannot display this form until it is rebuilt" },
+        { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "forms/bmp-maintenance-log.pdf", "type": "pdf", "note": "Fill it in the browser or print it. Twenty BMP sections with a yes or no check and a corrective action column" },
         { "title": "BMP Maintenance Log example", "href": "Documents/128_Market_Street_ Log_Example.pdf", "type": "pdf" },
         { "title": "Small residential inspection, maintenance, and monitoring checklist", "href": "Documents/BMPHandbook/Ch6_2_Sm_Residential_Insepct,_Maint_Mont_Checklist.pdf", "type": "pdf" },
         { "title": "Inspection and maintenance for projects over 1 acre", "href": "Documents/BMPHandbook/Ch6_3_1to5.pdf", "type": "pdf" },
@@ -98,6 +98,7 @@
         { "title": "Small BMP Retrofit Plan", "href": "small-retrofit-plan.html", "type": "page", "note": "Free online approval for projects under 10 cubic yards; most homes" },
         { "title": "Small BMP Treatments Form", "href": "documents/Small_BMP_Treatments_Form.pdf", "type": "pdf" },
         { "title": "BMP Calculation Spreadsheet", "href": "Documents/BMP_Calc.xlsx", "type": "xlsx" },
+        { "title": "BMP Inspection and Maintenance Log (fillable)", "href": "forms/bmp-maintenance-log.pdf", "type": "pdf" },
         { "title": "BMP Real Estate Disclosure Form", "href": "Documents/BMP_Real_Estate_Disclaimer_static.pdf", "type": "pdf", "note": "Print, complete, and submit within 30 days of sale" }
       ]
     },

@@ -16,7 +16,11 @@
     parcelTracker: "https://parcels.laketahoeinfo.org/parcels/",
     mapTool: "map.html",
     hotline: "(775) 589-5202",
-    email: "bmp@trpa.gov"
+    email: "bmp@trpa.gov",
+    // Survey123 links. Leave empty until the forms are published (docs/FORMS.md); pages fall
+    // back to the email path while they are empty.
+    maintenanceForm: "",
+    evaluationForm: ""
   };
 
   // ── ArcGIS REST query with a JSONP fallback. On the TRPA office network
@@ -59,6 +63,15 @@
     const cache = {};
     return (path) => (cache[path] ||= fetch(path).then((r) => { if (!r.ok) throw new Error(`${path}: HTTP ${r.status}`); return r.json(); }));
   })();
+
+  // ── Online forms: <a data-form="maintenanceForm" hidden> shows once the Survey123 link is configured
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-form]").forEach((a) => {
+      const url = BMP.config[a.dataset.form];
+      if (url) { a.href = url; a.hidden = false; a.target = "_blank"; a.rel = "noopener"; }
+    });
+    document.querySelectorAll("[data-form-fallback]").forEach((el) => { if (BMP.config[el.dataset.formFallback]) el.hidden = true; });
+  });
 
   // ── Header: mobile toggle, current page
   document.addEventListener("DOMContentLoaded", () => {
