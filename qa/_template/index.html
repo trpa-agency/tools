@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- TODO: title and description -->
+  <title>App Title - TRPA</title>
+  <meta name="description" content="One sentence on what this tool does." />
+  <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+
+  <!-- Calcite Design System (5.0 has no separate stylesheet) -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+
+  <!-- UMD libraries BEFORE the ArcGIS SDK: once Dojo defines an AMD loader,
+       Plotly and AG Grid register as anonymous modules instead of globals.
+       Delete what this app does not use. -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
+
+  <!-- ArcGIS Maps SDK, last. Delete both lines if the app has no map. -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.31/"></script>
+
+  <!-- Open Sans (agency). EIP uses Lexend Deca, Tahoe Living uses Montserrat. -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Shared design tokens. Agency brand is the default; put
+       data-brand="eip" or data-brand="tahoe-living" on <body> to switch. -->
+  <link rel="stylesheet" href="../../assets/trpa-tokens.css" />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--brand-font);
+      color: var(--brand-text);
+      background: var(--brand-page);
+    }
+
+    .app-header {
+      background: var(--brand-dark);
+      color: #fff;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .app-header img.logo { height: 44px; }
+    .app-header h1 { font-size: 1.3rem; font-weight: 700; margin: 0; }
+    .app-header .subtitle { font-size: 0.8rem; opacity: 0.75; }
+    .beta-chip {
+      margin-left: auto;
+      background: var(--brand-accent);
+      color: #fff;
+      border-radius: var(--brand-radius-pill);
+      padding: 0.2rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-row { display: flex; gap: 1rem; padding: 1.25rem 1.5rem 0; flex-wrap: wrap; }
+    .kpi-card {
+      background: var(--brand-surface);
+      border-radius: var(--brand-radius);
+      padding: 1rem 1.25rem;
+      flex: 1;
+      min-width: 170px;
+      box-shadow: var(--brand-shadow-sm);
+      border-top: 3px solid var(--brand-primary);
+    }
+    .kpi-card .kpi-value { font-size: 1.8rem; font-weight: 700; }
+    .kpi-card .kpi-label { font-size: 0.78rem; color: var(--gray-text); margin-top: 0.25rem; }
+
+    .app-content { padding: 1rem 1.5rem 2rem; }
+
+    .panel {
+      background: var(--brand-surface);
+      border-radius: var(--brand-radius);
+      padding: 1.1rem;
+      box-shadow: var(--brand-shadow-sm);
+      margin-bottom: 1rem;
+    }
+    .panel h3 { margin: 0 0 0.6rem; font-size: 1rem; font-weight: 600; }
+
+    #map-view { width: 100%; height: 450px; border-radius: var(--brand-radius); overflow: hidden; }
+
+    .app-footer {
+      padding: 1rem 1.5rem 1.5rem;
+      font-size: 0.78rem;
+      color: var(--gray-text);
+    }
+    .app-footer a { color: var(--brand-primary-text); }
+
+    @media (max-width: 480px) {
+      .app-header { flex-wrap: wrap; }
+      .kpi-row, .app-content { padding-left: 1rem; padding-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <a href="https://www.trpa.gov" title="Tahoe Regional Planning Agency">
+      <img class="logo" src="../../assets/TRPALogo_WHITE.png" alt="Tahoe Regional Planning Agency logo" />
+    </a>
+    <div>
+      <div class="subtitle">Tahoe Regional Planning Agency</div>
+      <!-- TODO: app title -->
+      <h1>App Title</h1>
+    </div>
+    <span class="beta-chip">BETA</span>
+  </header>
+
+  <!-- KPI cards. Delete the row if the app has no headline numbers. -->
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-value" id="kpi-1">&mdash;</div><div class="kpi-label">Label 1</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="kpi-2">&mdash;</div><div class="kpi-label">Label 2</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="kpi-3">&mdash;</div><div class="kpi-label">Label 3</div></div>
+  </div>
+
+  <main class="app-content">
+
+    <calcite-notice icon="information" scale="s" open>
+      <!-- TODO: real source and refresh cadence -->
+      <span slot="message">Source: TRPA. Updated monthly. In development: numbers may change.</span>
+    </calcite-notice>
+
+    <!-- Tabs: delete the ones this app does not need -->
+    <calcite-tabs>
+      <calcite-tab-nav slot="title-group">
+        <calcite-tab-title selected>Charts</calcite-tab-title>
+        <calcite-tab-title>Map</calcite-tab-title>
+        <calcite-tab-title>Table</calcite-tab-title>
+      </calcite-tab-nav>
+
+      <calcite-tab selected>
+        <div class="panel">
+          <h3>Chart title</h3>
+          <div id="chart"></div>
+        </div>
+      </calcite-tab>
+
+      <calcite-tab>
+        <div class="panel"><div id="map-view"></div></div>
+      </calcite-tab>
+
+      <calcite-tab>
+        <div class="panel">
+          <calcite-button id="csv-export" icon-start="download" appearance="outline" scale="s">CSV</calcite-button>
+          <div id="grid" style="height: 500px; width: 100%; margin-top: 0.6rem;"></div>
+        </div>
+      </calcite-tab>
+    </calcite-tabs>
+
+  </main>
+
+  <footer class="app-footer">
+    Tahoe Regional Planning Agency &middot; <a href="https://www.trpa.gov">trpa.gov</a> &middot;
+    <a href="../../">TRPA Tools</a>
+  </footer>
+
+  <script>
+    // ── App config: everything an editor should touch lives here ──
+    const APP = {
+      // TODO: point at the real service and fields
+      serviceUrl: 'https://maps.trpa.org/server/rest/services/CHANGE_ME/MapServer/0',
+      where: '1=1',
+      outFields: '*'
+    };
+
+    const BRAND_COLORS = ['#0072CE', '#003B71', '#E87722', '#4A6118', '#9C3E27', '#B5A64C', '#7B6A8A', '#B4CBE8'];
+    const BRAND_FONT = 'Open Sans, system-ui, sans-serif';
+    const BRAND_TEXT = '#003B71';
+
+    // Paginated query against an ArcGIS REST endpoint. On the office network
+    // maps.trpa.org fetches can fail on CORS; see the locator's JSONP fallback
+    // (.claude/memory/internal-cors-issue.md) if that bites.
+    async function queryFeatures(url, where = '1=1', outFields = '*') {
+      const all = [];
+      let offset = 0;
+      const batch = 2000;
+      while (true) {
+        const params = new URLSearchParams({
+          where, outFields, f: 'json', returnGeometry: false,
+          resultOffset: offset, resultRecordCount: batch
+        });
+        const resp = await fetch(`${url}/query?${params}`);
+        const json = await resp.json();
+        if (!json.features || json.features.length === 0) break;
+        all.push(...json.features.map(f => f.attributes));
+        if (json.features.length < batch) break;
+        offset += batch;
+      }
+      return all;
+    }
+
+    function buildChart(data) {
+      const trace = {
+        x: data.map(d => d.category),
+        y: data.map(d => d.value),
+        type: 'bar'
+      };
+      Plotly.newPlot('chart', [trace], {
+        font: { family: BRAND_FONT, color: BRAND_TEXT },
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        margin: { t: 20, r: 20, b: 40, l: 50 },
+        xaxis: { gridcolor: '#e8e8e8' },
+        yaxis: { gridcolor: '#e8e8e8' },
+        colorway: BRAND_COLORS,
+        hovermode: 'x unified'
+      }, { responsive: true, displayModeBar: false });
+    }
+
+    let gridApi;
+    function buildGrid(data, columnDefs) {
+      gridApi = agGrid.createGrid(document.getElementById('grid'), {
+        columnDefs,
+        rowData: data,
+        theme: agGrid.themeQuartz.withParams({ fontFamily: BRAND_FONT }),
+        defaultColDef: { sortable: true, filter: true, resizable: true },
+        pagination: true,
+        paginationPageSize: 25
+      });
+      document.getElementById('csv-export').addEventListener('click', () => gridApi.exportDataAsCsv());
+    }
+
+    function buildMap() {
+      require(['esri/Map', 'esri/views/MapView', 'esri/widgets/Home'], (Map, MapView, Home) => {
+        const view = new MapView({
+          container: 'map-view',
+          map: new Map({ basemap: 'gray-vector' }),
+          center: [-120.04, 39.09],
+          zoom: 10
+        });
+        view.ui.add(new Home({ view }), 'top-left');
+        // TODO: add FeatureLayers with brand renderers
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // TODO: wire up for real. Each builder works independently; delete the unused ones.
+      // const rows = await queryFeatures(APP.serviceUrl, APP.where, APP.outFields);
+      // buildChart(rows);
+      // buildGrid(rows, [{ field: 'category' }, { field: 'value', valueFormatter: p => p.value?.toLocaleString() ?? '—' }]);
+      // buildMap();
+    });
+  </script>
+
+</body>
+</html>
