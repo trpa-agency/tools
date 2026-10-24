@@ -4,9 +4,10 @@
 
 ## In flight
 
-- Threshold Dashboard embeds: charts and maps in the `trpa-agency/ThresholdEvaluation` repo, served into thresholds.laketahoeinfo.org.
-- Monitoring Dashboard embeds: Forest Health and other program dashboards on monitoring.laketahoeinfo.org.
+- Threshold Dashboard embeds: charts and maps in the `trpa-agency/ThresholdEvaluation` repo, served into thresholds.laketahoeinfo.org, plus the threshold trend and status notebook in `trpa-agency/Monitoring`.
+- Monitoring Dashboard embeds: Forest Structure and Fire Dynamics dashboards with a card index, restyled in October 2026 to match monitoring.laketahoeinfo.org (`trpa-agency/ForestHealth/monitoring`).
 - Climate Resilience Dashboard charts on climate.laketahoeinfo.org.
+- Tahoe Development Tracker suite (`trpa-agency/Reporting`): allocation tracking, development history, residential additions by source, a development rights ledger prototype, and the parcel development history ETL. Paused since June 2026; a candidate for the first engagement here.
 
 ## Notes
 

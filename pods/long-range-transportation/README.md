@@ -5,7 +5,7 @@
 ## In flight: web tools
 
 - [What Can I Do on My Parcel?](https://trpa-agency.github.io/Planning/LongRange/html/parcel-lookup.html) and [Where Can I Build?](https://trpa-agency.github.io/Planning/LongRange/html/district-explorer.html): zoning and permitted-use lookups.
-- [Housing Progress Since 2012](https://trpa-agency.github.io/Planning/LongRange/html/multifamily-housing.html) and [Deed Restriction Explorer](https://trpa-agency.github.io/Planning/LongRange/html/deed-restriction-explorer.html).
+- [Housing Progress Since 2012](https://trpa-agency.github.io/Planning/LongRange/html/multifamily-housing.html) and [Deed Restriction Explorer](https://trpa-agency.github.io/Planning/LongRange/html/deed-restriction-explorer.html). The housing dashboard is in active staff review cycles, with a pre-commit hook keeping its text review sheet in step with the page: a working model for the pod's QA and review step.
 - Transit Funding Tool: regional transit funding model for the RTP funding and implementation strategy. Single-file model page plus concept mockups, under active review with the domain lead. Lives in `trpa-agency/Transportation/TransitFundingTool`.
 
 ## In flight: data engineering (`trpa-agency/Transportation`)
