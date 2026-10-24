@@ -5,7 +5,6 @@
 ## In flight
 
 - [Parcel Change Explorer](../../qa/permitting/parcel-explorer.html): parcel history from 2012 to today with year-to-year change tables.
-- [Public Notice List](../../qa/permitting/public-notice.html): owner mailing lists, labels, and notice-area maps.
 - [Property BMP Status Search](../../qa/bmp/search.html): certificate status lookup, replaces the tahoebmp.org database search.
 - [Permit Completeness Review](https://emulatecities.com/trpa/completeness): external beta built with Emulate Cities.
 - Parcel viewers and zoning lookup (`trpa-agency/Planning/Permitting`): 2D and 3D parcel viewers, a zoning lookup page, and the parcel attributes ETL behind them.
