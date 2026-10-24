@@ -5,7 +5,7 @@
 ## In flight
 
 - [Tahoe Data Inventory](../../qa/data/data-inventory.html), [Open Data Policy and Developer Guide](../../qa/data/open-data-policy.html), and the [Design System](../../qa/data/design-system.html).
-- The LT Info dashboards: Threshold Dashboard embeds (`trpa-agency/ThresholdEvaluation`, plus the trend and status notebook in `trpa-agency/Monitoring`), Monitoring Dashboard embeds (Forest Structure and Fire Dynamics with a card index, restyled October 2026, in `trpa-agency/ForestHealth/monitoring`), and Climate Resilience Dashboard charts.
+- The LT Info dashboards: Threshold Dashboard embeds (`trpa-agency/ThresholdEvaluation`, plus the trend and status notebook in `trpa-agency/Monitoring`), [Monitoring Dashboard embeds](https://trpa-agency.github.io/ForestHealth/monitoring/) (Forest Structure and Fire Dynamics with a card index, restyled October 2026, in `trpa-agency/ForestHealth/monitoring`), and Climate Resilience Dashboard charts.
 - [Smoke Forecast and Air Quality](../../qa/monitoring/smoke-map.html) and [Lake Tahoe Currents](https://trpa-agency.github.io/Monitoring/Currents/), both under active iteration.
 - Forest health analysis (`trpa-agency/ForestHealth`): monitoring plot network design (the most active work in that repo since August), and the Caldor reforestation need analysis with its app.
 - Data pipelines in their own repos: residential units tracking, Tahoe Keys lawn change (`Monitoring/Lawns`, active since August).

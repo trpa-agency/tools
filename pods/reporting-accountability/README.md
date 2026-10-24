@@ -4,7 +4,7 @@
 
 ## In flight
 
-- Tahoe Development Tracker suite (`trpa-agency/Reporting`): allocation tracking, development history, residential additions by source, a development rights ledger prototype, and the parcel development history ETL. Paused since June 2026; a candidate for the first engagement here.
+- [Tahoe Development Tracker suite](https://trpa-agency.github.io/Reporting/html/tahoe-development-tracker.html) (`trpa-agency/Reporting`): allocation tracking, development history, residential additions by source, a development rights ledger prototype, and the parcel development history ETL. Paused since June 2026; a candidate for the first engagement here.
 
 ## Notes
 
