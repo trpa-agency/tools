@@ -1,19 +1,19 @@
 {
- "generated_at": "2026-10-23T19:10:59+00:00",
+ "generated_at": "2026-10-26T14:50:37+00:00",
  "window": {
-  "start": "2026-09-23",
-  "end": "2026-10-23"
+  "start": "2026-09-26",
+  "end": "2026-10-26"
  },
  "meeting_window": {
-  "start": "2026-09-23",
-  "end": "2026-11-22"
+  "start": "2026-09-26",
+  "end": "2026-11-25"
  },
  "sources": [
   {
    "name": "Google News",
    "kind": "press",
    "platform": "Google News search",
-   "hits": 17,
+   "hits": 14,
    "ok": true,
    "error": ""
   },
@@ -29,7 +29,7 @@
    "name": "Tahoe Daily Tribune",
    "kind": "press",
    "platform": "RSS feed",
-   "hits": 2,
+   "hits": 1,
    "ok": true,
    "error": ""
   },
@@ -45,7 +45,7 @@
    "name": "Moonshine Ink",
    "kind": "press",
    "platform": "RSS feed",
-   "hits": 1,
+   "hits": 2,
    "ok": true,
    "error": ""
   },
@@ -88,7 +88,7 @@
    "hits": 3,
    "ok": true,
    "error": "",
-   "docs_scanned": 41,
+   "docs_scanned": 38,
    "docs_unreadable": 0
   },
   {
@@ -98,27 +98,27 @@
    "hits": 2,
    "ok": true,
    "error": "",
-   "docs_scanned": 27,
+   "docs_scanned": 25,
    "docs_unreadable": 0
   },
   {
    "name": "Placer County",
    "kind": "meetings",
    "platform": "CivicPlus AgendaCenter",
-   "hits": 2,
+   "hits": 1,
    "ok": true,
    "error": "",
-   "docs_scanned": 39,
+   "docs_scanned": 35,
    "docs_unreadable": 0
   },
   {
    "name": "Douglas County",
    "kind": "meetings",
    "platform": "Granicus",
-   "hits": 2,
+   "hits": 3,
    "ok": true,
    "error": "",
-   "docs_scanned": 25,
+   "docs_scanned": 26,
    "docs_unreadable": 2
   },
   {
@@ -128,7 +128,7 @@
    "hits": 1,
    "ok": true,
    "error": "",
-   "docs_scanned": 6,
+   "docs_scanned": 7,
    "docs_unreadable": 0
   },
   {
@@ -148,17 +148,17 @@
    "hits": 0,
    "ok": true,
    "error": "",
-   "docs_scanned": 4,
+   "docs_scanned": 5,
    "docs_unreadable": 0
   },
   {
    "name": "Incline Village General Improvement District",
    "kind": "meetings",
    "platform": "CivicClerk",
-   "hits": 3,
+   "hits": 1,
    "ok": true,
    "error": "",
-   "docs_scanned": 5,
+   "docs_scanned": 2,
    "docs_unreadable": 0
   },
   {
@@ -175,11 +175,11 @@
    "name": "Tahoe Transportation District",
    "kind": "meetings",
    "platform": "Agency website",
-   "hits": 1,
+   "hits": 2,
    "ok": true,
    "error": "",
    "docs_scanned": 2,
-   "docs_unreadable": 1
+   "docs_unreadable": 0
   },
   {
    "name": "Lahontan Regional Water Quality Control Board",
@@ -188,8 +188,8 @@
    "hits": 0,
    "ok": true,
    "error": "",
-   "docs_scanned": 1,
-   "docs_unreadable": 1
+   "docs_scanned": 0,
+   "docs_unreadable": 0
   },
   {
    "name": "California Tahoe Conservancy (board)",
@@ -208,7 +208,7 @@
    "hits": 1,
    "ok": true,
    "error": "",
-   "docs_scanned": 9,
+   "docs_scanned": 8,
    "docs_unreadable": 0
   },
   {
@@ -225,10 +225,10 @@
    "name": "Tahoe Douglas Fire Protection District",
    "kind": "meetings",
    "platform": "Agency website",
-   "hits": 1,
+   "hits": 0,
    "ok": true,
    "error": "",
-   "docs_scanned": 2,
+   "docs_scanned": 0,
    "docs_unreadable": 0
   },
   {
@@ -421,16 +421,16 @@
      "type": "Agenda item",
      "title": "1) Adopt and authorize the Chair to sign Resolution 171-2026 authorizing the County to accept the California Department of Housing and Community Development (HCD) Transitional Housing Program (THP)…",
      "pages": [
-      7
+      8
      ],
      "count": 3,
      "in_title": true
     },
     {
      "type": "Agenda item",
-     "title": "Board of Supervisors County of El Dorado MEETING AGENDA Board of Supervisors Department 330 Fair Lane, Building A Placerville, California 530-621-5390 Brooke Laine, Chair, District V Greg Ferrero,…",
+     "title": "Materials related to agenda items submitted after the packet is distributed are available for public review during normal business hours at Building A, 330 Fair Lane, Placerville, outside the Board…",
      "pages": [
-      1
+      2
      ],
      "count": 1,
      "in_title": false
@@ -439,7 +439,7 @@
      "type": "Agenda item",
      "title": "2) Authorize the Purchasing Agent to execute amendments relating to Agreement 8113, contingent upon approval by County Counsel and Risk Management, which do not increase this revised maximum amount,…",
      "pages": [
-      7
+      8
      ],
      "count": 1,
      "in_title": false
@@ -449,9 +449,9 @@
     "housing": {
      "count": 5,
      "snippets": [
-      "p.1: ...Board meets simultaneously as the Board of Supervisors and the Board of Directors of the Air Quality Management District, In-Home Supportive Services, Public Housing Authority, Redevelopment Agency, and other Special Districts. The County of El Dorado strives to ensure all Board agenda materials are ADA-compliant. Howeve...",
-      "p.7: ...ency (HHSA) recommending the Board: 1) Adopt and authorize the Chair to sign Resolution 171-2026 authorizing the County to accept the California Department of Housing and Community Development (HCD) Transitional Housing Program (THP) Round 8 Allocation Award in an amount not to exceed $139,742, and the Housing Navigation...",
-      "p.7: ...nt, which do not increase this revised maximum amount, or extend the term of the Agreement. FUNDING: 100% Federal Funding awarded through U.S. Department of Housing and Urban Development Continuum of Care Planning Grants. Page 7 County of El Dorado Printed on 10/21/2026"
+      "p.2: ...Board meets simultaneously as the Board of Supervisors and the Board of Directors of the Air Quality Management District, In-Home Supportive Services, Public Housing Authority, Redevelopment Agency, and other Special Districts. The County of El Dorado strives to ensure all Board agenda materials are ADA-compliant. Howeve...",
+      "p.8: ...ency (HHSA) recommending the Board: 1) Adopt and authorize the Chair to sign Resolution 171-2026 authorizing the County to accept the California Department of Housing and Community Development (HCD) Transitional Housing Program (THP) Round 8 Allocation Award in an amount not to exceed $139,742, and the Housing Navigation...",
+      "p.8: ...nt, which do not increase this revised maximum amount, or extend the term of the Agreement. FUNDING: 100% Federal Funding awarded through U.S. Department of Housing and Urban Development Continuum of Care Planning Grants. Page 8 County of El Dorado Printed on 10/23/2026"
      ]
     }
    }
@@ -537,44 +537,76 @@
    }
   },
   {
-   "category": "upcoming",
-   "source": "Placer County",
-   "title": "Behavioral Health Advisory Board (BHAB): BHAB Regular Meeting Agenda",
+   "category": "press",
+   "source": "Bing News",
+   "title": "Zendaya expands Hollywood Hills estate with another $2M home",
    "date": "2026-10-26",
-   "url": "https://www.placer.ca.gov/AgendaCenter/ViewFile/Agenda/_10262026-6664",
+   "url": "https://www.msn.com/en-in/entertainment/celebrities/zendaya-expands-hollywood-hills-estate-with-another-2m-home/ar-AA2g4YkA",
    "hit_count": 0,
-   "snippets": [],
+   "snippets": [
+    "Zendaya began her real estate journey with a Mediterranean-style home purchased at age 20 in San Fernando Valley. She later acquired a ranch-style estate in Encino and a luxury condo in Brooklyn ..."
+   ],
+   "detail": "The Times of India on MSN",
+   "verified": false,
+   "contexts": [],
+   "keywords": {}
+  },
+  {
+   "category": "press",
+   "source": "Google News",
+   "title": "Column: Stronger Forests, Safer Tahoe",
+   "date": "2026-10-24",
+   "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE84aWJIcnpSNm5fWHFRaDVNenpFYUdLU1dUd1ZxZmVVWkxXWC01U3hIWjNvem10cFVqbVczMzZCdHNaTS0zdW9ndk1obXBoU0JUWjBwYnBmZDIybm8wM2hGODhOcnRuc2JMaDVrT2NaaXRaLWMzaGdpX2lPb28?oc=5",
+   "hit_count": 0,
+   "snippets": [
+    "Column: Stronger Forests, Safer Tahoe - South Tahoe Now"
+   ],
+   "detail": "South Tahoe Now",
+   "verified": false,
+   "contexts": [],
+   "keywords": {}
+  },
+  {
+   "category": "press",
+   "source": "Bing News",
+   "title": "SNOW Museum Approved in Olympic Valley; Parent Town Halls on Teen Substance Abuse; More",
+   "date": "2026-10-24",
+   "url": "https://www.moonshineink.com/weekly-brief/briefs-oct-16-22-2026/",
+   "hit_count": 9,
+   "snippets": [
+    "...org/cocapplication . ~ Truckee Fire press release Author Staff Report More from this author Open Brief West Shore Trail Extension Study Underway LAKE TAHOE The Tahoe Regional Planning Agency (TRPA) and El Dorado County announced the opening public scoping period for a… LAKE TAHOE The Tahoe Regional Planning Agency (TRPA) and El Dorado County announ...",
+    "...tend the public scoping meeting on Nov. 2 from 5:30-7 p.m. at the Tahoe City Public Utility District, 221 Fairway Drive,, Tahoe City . Attend or tune in to the TRPA Advisory Planning Commission meeting Nov. 12. Submit comments in writing by Nov. 20 through the online comment form [ trpa.gov/westshoretrail-commentform ] or...",
+    "...y Planning Commission meeting Nov. 12. Submit comments in writing by Nov. 20 through the online comment form [ trpa.gov/westshoretrail-commentform ] or mail to TRPA at PO Box 5310, Stateline, NV 89449. Email comments to rcremeen@trpa.gov . ~ TRPA press release Author Staff Report More from this author Open Brief Volunteers..."
+   ],
+   "detail": "Moonshine Ink",
+   "verified": true,
+   "contexts": [],
+   "keywords": {}
+  },
+  {
+   "category": "meeting",
+   "source": "Douglas County",
+   "title": "Stormwater Task Force - Supplemental",
+   "date": "2026-10-22",
+   "url": "https://douglascountynv.granicus.com/AgendaViewer.php?view_id=1&clip_id=1920",
+   "hit_count": 1,
+   "snippets": [
+    "p.13: ...EarningsSettlementsGrant Revenue - FederalTransfers In - Other (General Fund)Transfers In - Operating (General Fund) Miscellaneous Reimbursements For Services TRPA Mitigation"
+   ],
    "detail": "Agenda",
    "verified": true,
    "contexts": [
     {
      "type": "Agenda item",
-     "title": "4. Guest Speaker: • AMI Housing - Behavioral Health Peer Services Overview. Presenter: Elisa (Ellie) Madsen, Program Supervisor",
+     "title": "EXPENSE AND REVENUE CATEGORIES Capital AssetsMaintenance Supplies and ProjectsRegulatory Fees and MonitoringOverheadVehicle and Equipment MaintenanceSalaries and Benefits Machinery and…",
      "pages": [
-      1
+      13
      ],
      "count": 1,
-     "in_title": true
-    },
-    {
-     "type": "Agenda item",
-     "title": "BEHAVIORAL HEALTH ADVISORY BOARD MEETING Monday, October 26, 2026, 6:15 p.m. - 8:00 p.m. Location: HHS Center: 11434 B Avenue, Auburn CA, Jeff Brown #3 Room 510 Virtual Meeting Access (Microsoft…",
-     "pages": [
-      1
-     ],
-     "count": 2,
      "in_title": false
     }
    ],
-   "keywords": {
-    "housing": {
-     "count": 3,
-     "snippets": [
-      "p.1: ...ions (6:15 pm) Sharon Behrens 2. Board Protocol / Public Participation Guidelines Ted Lopez 3. Public Comment Sharon Behrens 4. Guest Speaker: • AMI Housing - Behavioral Health Peer Services Overview. Presenter: Elisa (Ellie) Madsen, Program Supervisor. 5. Action Item: Consent Agenda Item(S) Sharon Behrens •...",
-      "p.1: ...ile Temporary Shelter) Services Approved Board of Supervisors Contracts (for review and informational purposes only) • Amendment with the Department of Housing and Community Development for Housing-Related Subsidies 6. Action Item: Secretary / Treasurer’s Report Amy Dietz • Approval of the September Treasurer’s R..."
-     ]
-    }
-   }
+   "keywords": {}
   },
   {
    "category": "meeting",
@@ -641,7 +673,7 @@
    "snippets": [
     "...re Trail Extension Study Underway News News | Oct 21, 2026 Staff Report Follow editor@tahoedailytribune.com Share this story A A LAKE TAHOE, Nev./Calif. – The Tahoe Regional Planning Agency (TRPA) and El Dorado County announced the opening public scoping period for a joint environmental study of a proposed 6.5-mile extension to the West Shore Taho...",
     "...Attend the public scoping meeting on Nov. 2 from 5:30-7 p.m. at the Tahoe City Public Utility District, 221 Fairway Drive, Tahoe City. Attend or tune in to the TRPA Advisory Planning Commission meeting Nov. 12. Submit comments in writing by Nov. 20 through the online comment form [trpa.gov/westshoretrail-commentform] or ma...",
-    "...ory Planning Commission meeting Nov. 12. Submit comments in writing by Nov. 20 through the online comment form [trpa.gov/westshoretrail-commentform] or mail to TRPA at PO Box 5310, Stateline, NV 89449. Email comments to rcremeen@trpa.gov . Share this story News City council is going to give itself a standard raise. They’l..."
+    "...ory Planning Commission meeting Nov. 12. Submit comments in writing by Nov. 20 through the online comment form [trpa.gov/westshoretrail-commentform] or mail to TRPA at PO Box 5310, Stateline, NV 89449. Email comments to rcremeen@trpa.gov . Share this story News Dominant First Period Helps Lead Knight Monsters to Victory O..."
    ],
    "detail": "Tahoe Daily Tribune",
    "verified": true,
@@ -666,15 +698,16 @@
   {
    "category": "press",
    "source": "Bing News",
-   "title": "Fairfield Home Listed For Sale: Mowry-Housley couple asks $2.69 million; Napa Valley farm dream drives move",
-   "date": "2026-10-20",
-   "url": "https://www.msn.com/en-in/news/other/fairfield-home-listed-for-sale-mowry-housley-couple-asks-269-million-napa-valley-farm-dream-drives-move/ar-AA2fFMRL",
-   "hit_count": 0,
+   "title": "TRPA seeks input on Tahoe’s transportation future",
+   "date": "2026-10-16",
+   "url": "https://www.mtdemocrat.com/news/trpa-seeks-input-on-tahoe-s-transportation-future/article_d5f37e33-c29e-4c36-b648-83ea6b068181.html",
+   "hit_count": 3,
    "snippets": [
-    "Tamera Mowry-Housley and Adam Housley are making waves in real estate as they list their picturesque Fairfield, California home for $2.69 million. Having acquired a quaint Napa Valley estate that ..."
+    "TRPA seeks input on Tahoe’s transportation future | News | mtdemocrat.com Skip to main content You have permission to edit this article. Edit Close A key transporta...",
+    "...content You have permission to edit this article. Edit Close A key transportation corridor on Lake Tahoe's east shore runs next to the water. Photo courtesy of TRPA Tags Lake Tahoe Transport Vortices Storms Natural Disasters Weather Events Weather Natural Hazards Tropical Cyclones Tropical Cyclone Seasons Tahoe Regional Pl..."
    ],
-   "detail": "The Times of India on MSN",
-   "verified": false,
+   "detail": "Mountain Democrat",
+   "verified": true,
    "contexts": [],
    "keywords": {}
   },
@@ -940,21 +973,6 @@
    "keywords": {}
   },
   {
-   "category": "press",
-   "source": "Bing News",
-   "title": "Tahoe East Shore Trail expansion advances as construction season ends",
-   "date": "2026-10-13",
-   "url": "https://thisisreno.com/2026/10/tahoe-east-shore-trail-expansion-advances-as-construction-season-ends/",
-   "hit_count": 1,
-   "snippets": [
-    "...are necessary steps on the path to constructing new sections of the East Shore Trail.” The district is coordinating the projects with the U.S. Forest Service, Tahoe Regional Planning Agency, Nevada Department of Transportation, Tahoe Fund, Nevada Division of State Lands, Nevada State Parks and local governments. Several improvements have been comp..."
-   ],
-   "detail": "This Is Reno",
-   "verified": true,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
    "category": "meeting",
    "source": "El Dorado County",
    "title": "Meyers Advisory Council",
@@ -1009,19 +1027,16 @@
   },
   {
    "category": "press",
-   "source": "Bing News",
-   "title": "Tahoe grading season ends October 15",
+   "source": "Google News",
+   "title": "Former chair of Tahoe Douglas Sewer District and community banker says listening is her top priority in Douglas County Commissioner race",
    "date": "2026-10-12",
-   "url": "https://www.sierrasun.com/news/tahoe-grading-season-ends-october-15-2/",
-   "hit_count": 7,
+   "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxPeFJfWGNUc0tzZTI1YTJkNjdyWlhRZFQ0MlIwWFdzYU4zRWJ2aTBQQVpDakxZRy1TYjE2UkxUSWZ2aEgxNkdNZXRJMkE2ZHBpRkRhYll6bEVVSURUZi1sc29uNVhBTzJFU3FlaHRnUHFBaDRQeld5VDJvZmlmb0tWV0kzWGI2WWFkNUxaWVJyWXlvRWhPMlNpWlB6SDNxeGZZR0JGQkhmc3dqRnMzUHNqOVhBNl9FZTZpbzVHYzJSblFsRmliRjNmU1ZKWkdOV1hfblJNU1JCemkyaVBEV09oNGJwQzZyRXZmN0hhU3BIbjdLTmlRSnhVcTQxcm44cXA3ZXFKcWx2WQ?oc=5",
+   "hit_count": 0,
    "snippets": [
-    "...RE » Tahoe grading season ends October 15 News News | Oct 12, 2026 Staff Report Follow editor@sierrasun.com Share this story A A LAKE TAHOE, Nev./Calif. – The Tahoe Regional Planning Agency (TRPA) is reminding property owners and contractors that the annual grading and digging season for permitted projects will close Thursday, October 15, 2026. Al...",
-    "...ashing into stormwater systems and the lake. Disturbing or compacting soil during Tahoe’s wettest time of year can harm lake clarity and increase algal growth. TRPA’s winterization requirements are available on trpa.gov/applications-forms/winterization-guidelines . The agency may permit grading season exceptions under spec...",
-    "...ing season exceptions under special circumstances such as public health, safety, or water quality emergencies. The application for an exception is available at trpa.gov/inspections-and-securities . Applications can be submitted beginning October 12, 2026. Some digging activities are considered exempt and do not require TRP...",
-    "...the site must be stabilized following the winterization guidelines at the link above. A list of exempt projects is under “How do I know if I need a permit?” at trpa.gov/frequently-asked-questions . The grading and digging season for permitted projects at Lake Tahoe will open again May 1, 2027. Share this story News One Ye..."
+    "Former chair of Tahoe Douglas Sewer District and community banker says listening is her top priority in Douglas County Commissioner race - TahoeDailyTribune.com"
    ],
-   "detail": "Sierra Sun",
-   "verified": true,
+   "detail": "TahoeDailyTribune.com",
+   "verified": false,
    "contexts": [],
    "keywords": {}
   },
@@ -1045,34 +1060,18 @@
   {
    "category": "press",
    "source": "Bing News",
-   "title": "Former chair of Tahoe Douglas Sewer District and community banker says listening is her top priority in Douglas County Commissioner race",
+   "title": "Tahoe grading season ends October 15",
    "date": "2026-10-11",
-   "url": "https://www.tahoedailytribune.com/news/former-chair-of-tahoe-douglas-sewer-district-and-community-banker-says-listening-is-her-top-priority-in-douglas-county-commissioner-race/",
-   "hit_count": 4,
+   "url": "https://www.tahoedailytribune.com/news/tahoe-grading-season-ends-october-15-2/",
+   "hit_count": 8,
    "snippets": [
-    "...he first time in a long time that there’s more than one option on the ballot for this race. The lack of information on what was happening in her county and the Tahoe Regional Planning Agency (TRPA), where the commissioner has a seat, was a major motivator for Imbach to run. Imbach said, “I think that government works better when it listens to peopl...",
-    "...ons and nonprofits she has worked on have put Imbach in close touch with many of the agencies around the basin. Imbach said that her interest in serving on the TRPA board as part of the commissioner’s duties comes from her desire for responsible growth in the Tahoe Basin. “I want to get it right. Residents should have a vo...",
+    "...oe grading season ends October 15 News News | Oct 12, 2026 Staff Report Follow editor@tahoedailytribune.com Share this story A A LAKE TAHOE, Nev./Calif. – The Tahoe Regional Planning Agency (TRPA) is reminding property owners and contractors that the annual grading and digging season for permitted projects will close Thursday, October 15, 2026. Al...",
+    "...ashing into stormwater systems and the lake. Disturbing or compacting soil during Tahoe’s wettest time of year can harm lake clarity and increase algal growth. TRPA’s winterization requirements are available on trpa.gov/applications-forms/winterization-guidelines . The agency may permit grading season exceptions under spec...",
+    "...ing season exceptions under special circumstances such as public health, safety, or water quality emergencies. The application for an exception is available at trpa.gov/inspections-and-securities . Applications can be submitted beginning October 12, 2026. Some digging activities are considered exempt and do not require TRP...",
+    "...the site must be stabilized following the winterization guidelines at the link above. A list of exempt projects is under “How do I know if I need a permit?” at trpa.gov/frequently-asked-questions . The grading and digging season for permitted projects at Lake Tahoe will open again May 1, 2027. Share this story News Hyatt...",
     "...eads not guilty at arraignment Tuesday Oct 13, 2026 City council opposes Measure S, the proposed El Dorado County sales tax Oct 14, 2026 City council to demand TRPA prevent herbicide spraying in Caldor Fire area Oct 14, 2026 G-Pro Snow Removal celebrates 10-plus years in business with new home base Oct 15, 2026 Everything..."
    ],
    "detail": "Tahoe Daily Tribune",
-   "verified": true,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
-   "category": "press",
-   "source": "Bing News",
-   "title": "TRPA Seeks Input on Tahoe’s Transportation Future",
-   "date": "2026-10-09",
-   "url": "https://www.moonshineink.com/brief/2026/10/trpa-seeks-input-on-tahoes-transportation-future/",
-   "hit_count": 6,
-   "snippets": [
-    "TRPA Seeks Input on Tahoe’s Transportation Future - Moonshine Ink Sign in Join Home News All News Elections Business Feature In the Past You Asked. They Answered. O...",
-    "...Updates Moonshine Ink Members HIGHWAY 28: A key transportation corridor on Lake Tahoe's East Shore. Photo courtesy Tahoe Transportation District LAKE TAHOE The Tahoe Regional Planning Agency (TRPA) is inviting Lake Tahoe residents, workers, commuters, and visitors to participate in a survey to help create a more resilient transportation system. The...",
-    "...e information gathered will help partners strengthen Lake Tahoe’s transportation and emergency communications systems during hazardous events. Take the survey: trpa.gov/resilienttransportation Participants who complete the survey and provide their contact information may enter to win a $100 Safeway gift card. Lake Tahoe is...",
-    "...t Operations for Transformative, Efficient, and Cost-Saving Transportation (PROTECT) Program. The final plan is anticipated to be completed in late 2027. Visit trpa.gov/resilienttransportation to take the survey, learn more about the project, and get involved. ~ TRPA press release Author Special to Moonshine Ink More from..."
-   ],
-   "detail": "Moonshine Ink",
    "verified": true,
    "contexts": [],
    "keywords": {}
@@ -1094,7 +1093,7 @@
   },
   {
    "category": "press",
-   "source": "Bing News",
+   "source": "Moonshine Ink",
    "title": "$700K Caltrans Grant for Tahoe City; Truckee’s First-Ever Youth Commission; More",
    "date": "2026-10-09",
    "url": "https://www.moonshineink.com/weekly-brief/briefs-oct-2-8-2026/",
@@ -1139,6 +1138,65 @@
    "detail": "Moonshine Ink",
    "verified": true,
    "contexts": [],
+   "keywords": {}
+  },
+  {
+   "category": "meeting",
+   "source": "Tahoe Transportation District",
+   "title": "TTD Finance and Personnel Committee Meeting",
+   "date": "2026-10-07",
+   "url": "https://tahoetransportation.org/wp-content/uploads/2026/10/2026-10-7-TTD-Finance-Comm-Mtg-Agenda-Packet.pdf",
+   "hit_count": 14,
+   "snippets": [
+    "p.7: ...l be needed that NDOT will not cover, such as propane tanks and other underground utility options for water that were not included in the original contract. TRPA is concurrently working on authorizing additional grant funds to be reallocated from construction for the amendment. TTD will wait for TRPA authorization to...",
+    "p.7: ...ed in the approved fiscal year 26 budget...sufficient funds exist within the work program to support this contract amendment”, despite approval of funds from TRPA still pending. Mr. Burke provided that the report was submitted three weeks ago and the hope was for funding to have been executed by today, but it is still...",
+    "p.36: ...,812$ 4,469,982$ 5.59% 249,107$ 599$ 106$ -$ -$ 249,812$ TRPA incl Fish & Wildlife Services Fund 9,952 9,952 9,952 313,806 3.17% 9,952 9,952 Highway Infrastructure Pgm (HIP) 108 108 108 16,504 0.66% 108 108 Infrastr...",
+    "p.43: ...FTA 5307 - CMAQ 500,000 - - 168,038 - 184,061 147,901 - TRPA - SB125 500,000 - - - - 262,920 212,457 24,622 TRPA - S...",
+    "p.44: Tahoe Transportation District Governmental Funds Cash Flow July 1, 2026 through July 31, 2026 Cash In Source Total TRPA incl RVMF Transfer from other funds for PR Liab Interfund Advance ICAP Adm Fees Regional Revenue / Contributions Misc Receipts Jul-26 459,275 17,838 182..."
+   ],
+   "detail": "Agenda packet",
+   "verified": true,
+   "contexts": [
+    {
+     "type": "Staff report",
+     "title": "Review and Recommend Acceptance of the District’s Financial Statement of",
+     "pages": [
+      36,
+      43,
+      44,
+      45
+     ],
+     "count": 6,
+     "in_title": false
+    },
+    {
+     "type": "Staff report",
+     "title": "Recommend to the TTD Board of Directors Adoption of Resolution 2026-009",
+     "pages": [
+      108
+     ],
+     "count": 4,
+     "in_title": false
+    },
+    {
+     "type": "Attachment",
+     "title": "TAHOE TRANSPORTATION DISTRICT",
+     "pages": [
+      109
+     ],
+     "count": 1,
+     "in_title": false
+    },
+    {
+     "type": "Minutes",
+     "title": "TTD Finance and Personnel Committee Meeting Minutes –August 5, 2026",
+     "pages": [
+      7
+     ],
+     "count": 3,
+     "in_title": false
+    }
+   ],
    "keywords": {}
   },
   {
@@ -1285,6 +1343,21 @@
   {
    "category": "press",
    "source": "Bing News",
+   "title": "Old Macs could run Tahoe soon, with this great hack",
+   "date": "2026-10-05",
+   "url": "https://appleinsider.com/articles/26/10/05/old-macs-could-run-tahoe-soon-with-this-great-hack",
+   "hit_count": 0,
+   "snippets": [
+    "The OCLP project has been around for a while, but didn't commit to macOS Tahoe compatibility until recently. Over the weekend, the release candidate for OCLP 3.0.0 was released, with Tahoe support for ..."
+   ],
+   "detail": "AppleInsider",
+   "verified": false,
+   "contexts": [],
+   "keywords": {}
+  },
+  {
+   "category": "press",
+   "source": "Bing News",
    "title": "Experience Lake Tahoe’s Quieter Side in This Nevada Town, Home to ‘America’s Most Beautiful Bikeway’",
    "date": "2026-10-03",
    "url": "https://www.travelandleisure.com/incline-village-lake-tahoe-hiking-most-beautiful-bikeway-12120883",
@@ -1299,16 +1372,16 @@
   },
   {
    "category": "press",
-   "source": "Google News",
-   "title": "TRPA welcomes Eric Cachinero as Public Information Officer",
+   "source": "Bing News",
+   "title": "South Lake Tahoe area rattled by magnitude 3.7 earthquake",
    "date": "2026-10-02",
-   "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPZHBHME1MWG5rQmZhb240X1RoS0F1aXlqWlI3NmRuQUlOSkJKV0RRSDhwbUtqOTRIWTQwT2d1OEstUlNrVHEwaXFhYVVjQ2tnUHJTSFJVdUFpWnBKXzZlaTFQendLU1pYeWJuNS03UjM0dXlEU3ZjZlpKNWlma1pyeXJTZEh5RzVOckNZUV9WVGx3ODVEM0dVTFdTTF8tQjg?oc=5",
-   "hit_count": 1,
+   "url": "https://www.cbsnews.com/sacramento/news/south-lake-tahoe-earthquake-oct-2-2026/",
+   "hit_count": 0,
    "snippets": [
-    "TRPA welcomes Eric Cachinero as Public Information Officer - TahoeDailyTribune.com"
+    "Cecilio Padilla is a digital producer for CBS Sacramento and a Sacramento-area native who has been covering Northern California for more than a decade. A magnitude 3.7 earthquake struck near South ..."
    ],
-   "detail": "TahoeDailyTribune.com",
-   "verified": true,
+   "detail": "CBS News",
+   "verified": false,
    "contexts": [],
    "keywords": {}
   },
@@ -1345,6 +1418,21 @@
   {
    "category": "press",
    "source": "Bing News",
+   "title": "macOS Tahoe 26.7.1 patches a flaw linked to targeted attacks",
+   "date": "2026-09-29",
+   "url": "https://www.macobserver.com/news/macos-tahoe-26-7-1-fixes-targeted-attack-flaw/",
+   "hit_count": 0,
+   "snippets": [
+    "Apple has released macOS Tahoe 26.7.1 with a security fix for a vulnerability connected to highly targeted attacks. Mac owners remaining on Tahoe should install the update promptly, particularly when ..."
+   ],
+   "detail": "macobserver",
+   "verified": false,
+   "contexts": [],
+   "keywords": {}
+  },
+  {
+   "category": "press",
+   "source": "Bing News",
    "title": "$150,000 Settlement Forces Lake Tahoe Homeowner to Undo Unpermitted Construction",
    "date": "2026-09-27",
    "url": "https://www.yahoo.com/news/articles/150-000-settlement-forces-lake-120018392.html",
@@ -1358,196 +1446,6 @@
    ],
    "detail": "Yahoo",
    "verified": true,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
-   "category": "press",
-   "source": "Bing News",
-   "title": "Forest Service may add, raise fees at Tahoe beaches, campgrounds and trailheads",
-   "date": "2026-09-27",
-   "url": "https://www.sacbee.com/news/local/article317402235.html",
-   "hit_count": 0,
-   "snippets": [
-    "A cyclist rides along a bike trail near Highway 50 in South Lake Tahoe. A U.S. Forest Service proposal would add or increase fees at several Lake Tahoe recreation sites, including campgrounds, beaches ..."
-   ],
-   "detail": "Sacramento Bee",
-   "verified": false,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
-   "category": "press",
-   "source": "Bing News",
-   "title": "Employees at iconic California steakhouse stunned by abrupt closure: ‘I felt betrayed’",
-   "date": "2026-09-25",
-   "url": "https://nypost.com/2026/09/25/us-news/employees-at-iconic-california-steakhouse-tahoe-joes-stunned-by-closure/",
-   "hit_count": 0,
-   "snippets": [
-    "The sudden closing of an iconic and mouthwatering Central Valley steakhouse rattled its employees, including a single mother of two who is now left trying to find another way to feed her children."
-   ],
-   "detail": "New York Post",
-   "verified": false,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
-   "category": "press",
-   "source": "Google News",
-   "title": "TRPA Board takes action on construction violation",
-   "date": "2026-09-24",
-   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOVXlsdnh5Rk1WOG5MTTRRaDA5YVR4VW1MYTcyZjg2TGFBTHRBUU12OFRpMkFlUDhsLU1kcXRVVXoyVHFLZzN4bkJuNjFld25weURVaEIydzZTRi11LWVEY3ROZE1yQlRaUDR0TDV0UzRaZlRYZ2otLXlWYVRXN21NZEZsR0U4SXhna3c0QjNCUE9NMDQ?oc=5",
-   "hit_count": 1,
-   "snippets": [
-    "TRPA Board takes action on construction violation - Tahoe Daily Tribune"
-   ],
-   "detail": "Tahoe Daily Tribune",
-   "verified": true,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
-   "category": "meeting",
-   "source": "Incline Village General Improvement District",
-   "title": "Board of Trustees Meeting",
-   "date": "2026-09-23",
-   "url": "https://ivgid.api.civicclerk.com/v1/Meetings/GetMeetingFileStream(fileId=2851,plainText=false)",
-   "hit_count": 14,
-   "snippets": [
-    "p.6: ...ine/Crystal Bay priority if lawful Covenant and fair-housing review required Use protection Primary residence; no STR or second-home use; annual certification TRPA-aligned concept Rent schedule $1,350 studio | $2,250 1BR | $3,100 2BR | $3,700 3BR Discussion targets; rent study required Site focus Workforce housing, tran...",
-    "p.9: ..., and emergency access require study Environmental constraints SEZ and land-capability conditions must control final layout 3. Proposed operating covenant TRPA's achievable-housing materials provide a useful starting point: the published form references a 30 - hour-per-week or full -time-equivalent local-employment te...",
-    "p.9: ...ur-per-week or full -time-equivalent local-employment test, prohibits vacation -rental use, and requires annual compliance reporting and audit access. Current TRPA materials also treat achievable units as primary residences. The final instrument must use the rules in effect at approval and be reviewed by TRPA and counse...",
-    "p.9: ...geography Define employer location, remote work, self-employment, and seasonal equivalency Work threshold 30 hours/week or full-time equivalent Use current TRPA definition; document acceptable proof Local priority Priority for Incline Village/Crystal Bay workers if legally permissible Requires fair-housing and local-p...",
-    "p.9: ...al eligibility + annual recertification Owner reporting, audit rights, privacy safeguards Term No less than 30 years; permanent or land-control term preferred TRPA sample uses permanent restriction; FTA route requires at least 30 years Income No general low-income cap for employment-based units Hybrid/AMI set-aside units..."
-   ],
-   "detail": "Agenda packet",
-   "verified": true,
-   "contexts": [
-    {
-     "type": "Staff report",
-     "title": "(Not For Possible Action) Presentation on Alternative",
-     "pages": [
-      6,
-      9,
-      10,
-      15,
-      16
-     ],
-     "count": 12,
-     "in_title": false
-    },
-    {
-     "type": "Attachment",
-     "title": "PROFESSIONAL SERVICES AGREEMENT",
-     "pages": [
-      97,
-      98
-     ],
-     "count": 2,
-     "in_title": false
-    }
-   ],
-   "keywords": {}
-  },
-  {
-   "category": "meeting",
-   "source": "Incline Village General Improvement District",
-   "title": "Board of Trustees Meeting",
-   "date": "2026-09-23",
-   "url": "https://ivgid.api.civicclerk.com/v1/Meetings/GetMeetingFileStream(fileId=2874,plainText=false)",
-   "hit_count": 5,
-   "snippets": [
-    "p.3: ...candidate for trustee) stated that contracting for design before firm requirements and community buy-in are established is premature, expressed concern that TRPA would not approve an increased commercial footprint, and recommended community buy-in on a buildable project and use of recreation funds to replace ski lifts...",
-    "p.4: ...vent/756/media Media Timestamp (00:57:35 – 01:13:35) Treasurer Mick Homan first responded to two public comments, stating that (1) the District holds prior TRPA approval under the 1987 master plan, that the scope and visitor numbers remain within that plan, and that staff is working with TRPA on an update; and (2) st...",
-    "p.8: ...d more than 20 people. Ms. Waters confirmed the lodge site is District-owned land, not Forest Service property, and noted the project will require a difficult TRPA permitting process, which staff is pursuing in parallel. Staff and the Vice Chair clarified that the action before the Board is limited to a professional se...",
-    "p.12: ...s to fund it, referenced NRS 354.517 and Board Policy 12.1, and stated his understanding that the master plan had been submitted to, rather than approved by, TRPA. K. ADJOURNMENT - (For possible Action) The Meeting of the IVGID Board of Trustees adjourned at 6:24 p.m."
-   ],
-   "detail": "Minutes",
-   "verified": true,
-   "contexts": [
-    {
-     "type": "Minutes",
-     "title": "Minutes",
-     "pages": [
-      3,
-      4,
-      8,
-      12
-     ],
-     "count": 5,
-     "in_title": false
-    }
-   ],
-   "keywords": {}
-  },
-  {
-   "category": "meeting",
-   "source": "Tahoe Douglas Fire Protection District",
-   "title": "Board of Trustees",
-   "date": "2026-09-23",
-   "url": "https://tahoefire.org/wp-content/uploads/2026/09/Board-Book-092326-1.pdf",
-   "hit_count": 10,
-   "snippets": [
-    "p.23: ...will be charged for the on-site inspection and issuance of a tree permit authorizing removal, pruning, or vegetation modification under the authority of the Tahoe Regional Planning Agency (TRPA) and the Fire District. The inspection verifies that proposed tree work complies with TRPA regulations, defensible space standards, and applicable fire...",
-    "p.23: ...defensible space standards, and applicable fire code requirements before the permit is issued. JUSTIFICATION: Tree permit inspections conducted under TRPA authority require Fire District staff to travel to the site, review existing conditions, confirm that proposed work meets TRPA and fire safety criteria, docu...",
-    "p.24: ...las Fire Protection District Fees for Service – Effective August 1, 2024October 1, 2026 fuel, and administrative support for scheduling, coordination with TRPA as needed, and maintaining permit documentation. A flat fee of $75.00 per permit provides reasonable recovery of inspection and administrative costs while s...",
-    "p.24: ...umentation. A flat fee of $75.00 per permit provides reasonable recovery of inspection and administrative costs while supporting consistent implementation of TRPA requirements and wildland–urban interface standards that reduce overall fire risk to the community. This fee will not be assessed when grant funding is avail...",
-    "p.29: ...or an appeal $600.00 Residential Deck/Dock Plan Review $234.00 Patio Cover / Carport Plan Review $234.00 Pre/Development Meeting $220.00220.00$220.00 Pre-TRPA $ 400.00200.00 Re-Roof Plan Check $ 155.00310.00 Residential Plan Review $ 600.00400.00 Re-Siding Plan Check $115.00 Solar or Energy Storage Plan Check and..."
-   ],
-   "detail": "Agenda packet",
-   "verified": true,
-   "contexts": [
-    {
-     "type": "Attachment",
-     "title": "Fees for Service – Effective August 1, 2024October 1, 2026",
-     "pages": [
-      23,
-      24,
-      29
-     ],
-     "count": 8,
-     "in_title": false
-    },
-    {
-     "type": "Attachment",
-     "title": "CHARITABLE FUND AGREEMENT",
-     "pages": [
-      55,
-      62
-     ],
-     "count": 2,
-     "in_title": false
-    }
-   ],
-   "keywords": {}
-  },
-  {
-   "category": "press",
-   "source": "Google News",
-   "title": "TRPA Board approves $150,000 settlement with lakefront homeowner over construction violations",
-   "date": "2026-09-23",
-   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNTURLMTRVVDk3LXZrTUM4ZUIzZmEwY1VRbjN3S2RRYWJLS21XTmlFZjhDX1Bya21malE4Tk93ckJZcHV1enZDX0JzV3U0YzdNaHpnTFc4MTI0T1ZCX3E5OG5mSC1KUGJocUU1NHN2LWs3RklvS1dmUW1uazhHUEJUaFVxZWlsZjhTcWxJNnFmZF9uckNTd3ZnREdMSEZ0dGg4aVBhVTl0MG41X094REZCZkZkdHNQVllCRnBoRFp2TWN5V0tPNFVR?oc=5",
-   "hit_count": 1,
-   "snippets": [
-    "TRPA Board approves $150,000 settlement with lakefront homeowner over construction violations - South Tahoe Now"
-   ],
-   "detail": "South Tahoe Now",
-   "verified": true,
-   "contexts": [],
-   "keywords": {}
-  },
-  {
-   "category": "press",
-   "source": "Bing News",
-   "title": "Steakhouse chain born in Fresno closes another location. What happened to Tahoe Joe’s?",
-   "date": "2026-09-23",
-   "url": "https://www.yahoo.com/news/articles/steakhouse-chain-born-fresno-closes-224832570.html",
-   "hit_count": 0,
-   "snippets": [
-    "Add Yahoo as a preferred source to see more of our stories on Google. The Tahoe Joe’s restaurant at Shaw and Marks in Fresno closed in 2016. (File photo) There's one less place to get a steak dinner ..."
-   ],
-   "detail": "Yahoo",
-   "verified": false,
    "contexts": [],
    "keywords": {}
   }
