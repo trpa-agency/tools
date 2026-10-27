@@ -285,6 +285,30 @@
       .kpis { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 400px) { .beta-chip { display: none; } }
+
+    /* ── LT Info Monitoring section ──
+       The kit stylesheet styles everything inside .lti. These rules only stop this page's
+       section typography (section.ds h3, p, ul) from leaking into the specimen. */
+    #ltinfo-monitoring .lti-spec-frame { background: #f7f7f7; }
+    #ltinfo-monitoring .lti h2, #ltinfo-monitoring .lti h3 { margin: 0; font-weight: 600; letter-spacing: 0; text-transform: none; }
+    #ltinfo-monitoring .lti h2 { font-size: 1.125rem; color: #3d3d3d; }
+    #ltinfo-monitoring .lti .card-head h3 { font-size: 1rem; color: #3d3d3d; }
+    #ltinfo-monitoring .lti p { max-width: none; }
+    #ltinfo-monitoring .lti .section-head p { max-width: 780px; margin: 0.25rem 0 0; }
+    #ltinfo-monitoring .lti .card .caption { margin: 0.5rem 1rem 0; }
+    #ltinfo-monitoring .lti .card .source { margin: 0.3rem 1rem 0; }
+    #ltinfo-monitoring .lti .empty ul { margin: 0.35rem 0 0 1.1rem; }
+    #ltinfo-monitoring .lti .seg { margin-left: auto; min-width: 150px; border-color: #789440; }
+    #ltinfo-monitoring .lti .seg button { font-family: 'Lexend Deca', sans-serif; min-height: 26px; padding: 0.2rem 0.6rem; }
+    #ltinfo-monitoring .lti .seg button.active { background: var(--lti-accent, #789440); }
+    #ltinfo-monitoring .lti table.ds td, #ltinfo-monitoring .lti table.ds th { font-family: 'Lexend Deca', sans-serif; }
+    #ltinfo-monitoring .lti-popup-mock { font-family: 'Lexend Deca', sans-serif; background: #fff; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); width: 300px; max-width: 100%; margin-left: auto; padding: 0.7rem 0.9rem 0.8rem; color: #333; }
+    #ltinfo-monitoring .lti-popup-mock .pm-title { font-weight: 600; font-size: 0.95rem; color: #323232; margin-bottom: 0.35rem; }
+    #ltinfo-monitoring .lti-popup-mock p { font-size: 0.82rem; line-height: 1.45; margin: 0 0 0.6rem; max-width: none; }
+    #ltinfo-monitoring .lti-popup-mock .pm-chart-title { font-size: 0.78rem; font-weight: 600; color: #323232; margin-bottom: 0.3rem; }
+    #ltinfo-monitoring .lti-popup-mock .pm-chart { width: 100%; height: auto; display: block; }
+    #ltinfo-monitoring .lti-popup-mock .pm-axis { display: flex; justify-content: space-between; font-size: 0.68rem; color: #6a6a6a; margin-top: 0.15rem; }
+    #ltinfo-monitoring .lti-popup-mock .pm-cap { font-size: 0.7rem; color: #6a6a6a; margin-top: 0.25rem; }
   </style>
 </head>
 <body>
@@ -339,6 +363,7 @@
     <a href="#shell">App shell</a>
     <a href="#pages">Page types</a>
     <a href="#ltinfo">Lake Tahoe Info embeds</a>
+    <a href="#ltinfo-monitoring">LT Info Monitoring</a>
     <a href="#maps">Map conventions</a>
     <a href="#states">States</a>
     <a href="#a11y">Accessibility</a>
@@ -989,12 +1014,231 @@ const LTI_LAYOUT = {
   colorway: LTI_COLORS, hovermode: 'x unified', legend: { orientation: 'h', y: -0.2 }
 };</code></pre>
       <p class="note">The anonymous API at <code>internalapi.laketahoeinfo.org</code> serves everything the public pages show. Routes and JSON shapes are in the dashboard skills.</p>
+      <p class="note">Building for monitoring.laketahoeinfo.org? The monitoring kit, its fragments, and the inline rendering target are in <a href="#ltinfo-monitoring">LT Info Monitoring</a>.</p>
+    </section>
+
+    <section class="ds" id="ltinfo-monitoring">
+      <h2><span class="num">19</span>LT Info Monitoring</h2>
+      <p class="lead">Pages and sections that TRPA builds for monitoring.laketahoeinfo.org. They are written as fragments: a piece of markup with its own config and snapshot that renders inline inside an LT Info page, so the platform's header, navigation, and program cards surround it with no iframe in between.</p>
+      <p>The destination is ESA's framework, where staff will author these pages in ESA's repository. Until that lands, TRPA builds the prototypes in <a href="https://github.com/trpa-agency/Monitoring/tree/main/ltinfo" target="_blank" rel="noopener noreferrer">trpa-agency/Monitoring, folder ltinfo</a> in the same shape, so the port is a move and not a rewrite. Today's Dashboard card is still an iframe, and every fragment also runs there. Everything in <a href="#ltinfo">Lake Tahoe Info embeds</a> still applies; this section adds the monitoring kit, its fragments, and the rules that came out of building the first pages.</p>
+      <div class="callout blue" id="ltiKitNote" hidden>The kit stylesheet did not load, so the specimens below are unstyled. It is served from the Monitoring repo's GitHub Pages site, which carries <code>ltinfo/</code> once the MTB-Edits branch is merged and deployed. For local review, open this page with <code>?ltinfo=http://localhost:8766/ltinfo/</code> while the Monitoring preview server runs.</div>
+
+      <h3>Where it lives</h3>
+      <table class="ds">
+        <tr><th style="width:240px">File</th><th>What it is</th></tr>
+        <tr><td><code>kit/ltinfo-embed.css</code></td><td>Host tokens and every style, scoped under <code>.lti</code> so it can sit in ESA's cascade, or in this page, without touching anything outside a fragment. Per-site accents and chart palettes keyed on <code>data-site</code>.</td></tr>
+        <tr><td><code>kit/ltinfo-embed.js</code></td><td>The <code>LTI</code> global: <code>define</code>, <code>mount</code>, <code>include</code>, the query helper with snapshot fallback, <code>LTI.plot</code>, the Chart/Table toggle, AG Grid with CSV, skeletons, deep links, and the interim iframe messages.</td></tr>
+        <tr><td><code>kit/ltinfo-map.js</code></td><td><code>LTI.map</code> and friends: the Human Geography basemap with a terrain switch, the docked story popup, client-side layers, one-click select with hover.</td></tr>
+        <tr><td><code>kit/fragments/</code></td><td>One module per generic fragment kind: <code>section-embed.js</code>, <code>sites-timeseries.js</code>. A program dashboard's module sits next to its page.</td></tr>
+        <tr><td><code>kit/popups/</code></td><td>Arcade files, a story and a chart per layer, fetched at mount. The same files run in ArcGIS Pro and Portal web maps.</td></tr>
+        <tr><td><code>templates/</code></td><td>The four templates and the review frame, each a harness page around one fragment.</td></tr>
+        <tr><td><code>pages/</code></td><td>The first real pages: Bike Ped, Noise, Forest Health.</td></tr>
+        <tr><td><code>CONTRACT.md</code>, <code>PLAN.md</code></td><td>The fragment contract written for ESA, and the plan with the data table and open items.</td></tr>
+      </table>
+
+      <h3>Color</h3>
+      <p>Every chart on a Monitoring Dashboard page leads with the monitoring card header green and takes its second series from the host navy. The palette is set per <code>data-site</code> in the kit stylesheet and read with <code>LTI.colors(root)</code>, so the same fragment placed on the Threshold Dashboard or the Transportation Tracker leads with that site's accent instead. Popup charts in Arcade use the same green.</p>
+      <div class="ramp-row"><span>Monitoring series</span><div class="ramp" data-ramp="#789440,#2f3f56,#b5a64c,#5a9cb0,#e49937,#4e6230,#89cad7,#9c3e27"></div></div>
+      <div class="ramp-row"><span>Thresholds series</span><div class="ramp" data-ramp="#6c91a4,#2f3f56,#e49937,#89bf40,#be4c4c,#646820,#89cad7,#2c5f72"></div></div>
+      <div class="ramp-row"><span>Transportation series</span><div class="ramp" data-ramp="#2c5282,#e49937,#89bf40,#5a9cb0,#be4c4c,#646820,#89cad7,#2c5f72"></div></div>
+      <table class="ds">
+        <tr><th>Role</th><th>Value</th><th>Where</th></tr>
+        <tr><td>Accent</td><td><span class="status-dot"><i style="background:#789440"></i>#789440</span></td><td>Section labels, tile bars, Calcite controls, first series, popup chart bars</td></tr>
+        <tr><td>Accent hover and press</td><td><span class="status-dot"><i style="background:#61783a"></i>#61783a</span> <span class="status-dot"><i style="background:#4e6230"></i>#4e6230</span></td><td>Calcite brand hover and press states</td></tr>
+        <tr><td>Card body and label bar</td><td><span class="status-dot"><i style="background:#f7f7f7;outline:1px solid #dcdcdc"></i>#f7f7f7</span> <span class="status-dot"><i style="background:#efefef;outline:1px solid #dcdcdc"></i>#efefef</span></td><td>Dashboard card slot background; card header bar inside a fragment</td></tr>
+        <tr><td>Selection ring</td><td><span class="status-dot"><i style="background:#e49937"></i>#e49937</span></td><td>The selected site on a map, one at a time</td></tr>
+        <tr><td>Standard or target</td><td><span class="status-dot"><i style="background:#4e4e4e"></i>#4e4e4e dashed</span></td><td>A labeled dashed line on the chart, never a legend entry alone</td></tr>
+      </table>
+
+      <h3>Specimen: a fragment, styled by the kit</h3>
+      <p>The block below is plain markup inside <code>&lt;section class="lti" data-site="monitoring"&gt;</code>, styled by the real kit stylesheet loaded into this page. Switch the site to see the accent and the chart palette follow <code>data-site</code>. The numbers are Tahoe yellow cress, from the program dashboard template's snapshot.</p>
+      <div class="row" style="margin:0.4rem 0 0.2rem">
+        <span class="rl">data-site</span>
+        <div class="seg" id="ltiSiteSeg" role="radiogroup" aria-label="Host dashboard for the specimen" style="max-width:420px">
+          <button type="button" class="active" data-site="monitoring" role="radio" aria-checked="true">Monitoring</button>
+          <button type="button" data-site="thresholds" role="radio" aria-checked="false">Thresholds</button>
+          <button type="button" data-site="transportation" role="radio" aria-checked="false">Transportation</button>
+        </div>
+      </div>
+      <div class="frame lti-spec-frame" data-label="Fragment on the Dashboard card body">
+        <section class="lti" data-site="monitoring" id="ltiSpec" aria-label="Fragment specimen">
+          <div class="section">
+            <div class="section-label">At a glance</div>
+            <div class="section-head">
+              <h2>Tahoe yellow cress on the shores of Lake Tahoe</h2>
+              <p>Tiles answer the headline question at a glance, each with a direction line where the data supports one.</p>
+            </div>
+            <div class="tiles">
+              <div class="tile"><div class="v">65 <small>sites</small></div><div class="l">Known sites tracked around the lake</div><div class="d">first recorded 1978</div></div>
+              <div class="tile"><div class="v">45 <small>of 65</small></div><div class="l">Sites surveyed in 2025</div><div class="d">down from 51 in 2024</div></div>
+              <div class="tile"><div class="v">20 <small>sites</small></div><div class="l">Occupied in 2023</div><div class="d">down from 30 in 2022</div></div>
+              <div class="tile"><div class="v">26 <small>sites</small></div><div class="l">Standard: occupied sites</div><div class="d">6 short in 2023</div></div>
+              <div class="tile pending"><div class="v">Not yet shown</div><div class="l">Plants counted per site</div><div class="d">count field under review</div></div>
+            </div>
+          </div>
+          <div class="section">
+            <div class="section-label">The record</div>
+            <div class="grid-2">
+              <div class="card span-2">
+                <div class="card-head">
+                  <h3>Occupied sites by year</h3>
+                  <div class="seg lti-spec-toggle" role="radiogroup" aria-label="Chart or table">
+                    <button type="button" class="active" data-view="chart" role="radio" aria-checked="true">Chart</button>
+                    <button type="button" data-view="table" role="radio" aria-checked="false">Table</button>
+                  </div>
+                </div>
+                <div class="plot" id="ltiSpecPlot" style="height:300px"></div>
+                <div class="hidden" id="ltiSpecTable"></div>
+                <div class="chart-legend" id="ltiSpecLegend"></div>
+                <p class="caption">Bars are sites where plants were found. The line is lake level on the right axis. The dashed line is the standard.</p>
+                <p class="source">Source: TRPA LTInfo_Monitoring map service, Occupied Sites by Year table, snapshot captured Oct. 26, 2026.</p>
+              </div>
+              <div class="card">
+                <div class="card-head"><h3>While queries run</h3></div>
+                <div class="tiles" aria-hidden="true">
+                  <div class="tile skeleton"><div class="v">&nbsp;</div><div class="l">&nbsp;</div></div>
+                  <div class="tile skeleton"><div class="v">&nbsp;</div><div class="l">&nbsp;</div></div>
+                </div>
+                <div class="plot skeleton" style="height:150px;min-height:150px;margin-top:0.6rem" aria-hidden="true"></div>
+                <p class="caption">Skeletons hold the shape of what is coming. If the live query is slow, the snapshot shows within a second and the live numbers replace it.</p>
+              </div>
+              <div class="card">
+                <div class="card-head"><h3>Before the data exists</h3></div>
+                <div class="empty"><calcite-icon icon="information" scale="m" aria-hidden="true"></calcite-icon><div><strong>Per-site plant counts are not shown yet. When they are, this section will show:</strong><ul><li>Plants counted at each site in the latest survey, with CSV download.</li><li>Sites that changed from occupied to unoccupied, and back.</li></ul></div></div>
+                <p class="caption">Say what will appear. Never draw a chart from placeholder numbers.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <h3>Maps and popups</h3>
+      <p>Monitoring fragments depart from the agency <a href="#maps">Map conventions</a> in two places, because they sit inside the host's pages rather than a TRPA tool: the basemap is Esri Human Geography instead of gray vector, and the popup docks in the top right corner of the map with a story and a chart.</p>
+      <div class="two">
+        <ul style="margin-left:1.25rem">
+          <li><b>Basemap.</b> Human Geography, built from Esri's three public vector tile items so no key is needed. All three are base layers, so the data points draw above the roads and labels.</li>
+          <li><b>Terrain.</b> A switch under the zoom controls adds a hillshade between the base and the detail layer, multiply blend, off by default.</li>
+          <li><b>One click.</b> Clicking a point selects the site, opens its story, and the tiles, chart, and table follow. The site list does the same. Hover highlights.</li>
+          <li><b>Selection.</b> One orange ring, <code>#e49937</code>, on the selected site.</li>
+          <li><b>Legend.</b> Bottom left on wide screens, a drawer on phones. The top right belongs to the popup.</li>
+          <li><b>Popup content.</b> Arcade files under <code>kit/popups/</code>: a text element that leads with the sentence a reader wants, then the record; then a media element with a column chart in the accent. No field lists.</li>
+          <li><b>Story numbers.</b> The service's fields rarely carry the story, so the fragment builds a client-side layer with the numbers it computed (rank, trend, the past 12 months) and the Arcade reads those.</li>
+        </ul>
+        <div class="frame" data-label="Docked popup, as rendered">
+          <div class="lti-popup-mock" role="img" aria-label="A docked popup for Baldwin Beach: the story text above a column chart of plants counted over ten survey years">
+            <div class="pm-title">Baldwin Beach</div>
+            <p><b>Surveyed in 2025</b>. Land owner: U.S. Forest Service. Plants counted that year: 42. Tracked since 1978 across 32 survey years; plants were found in 26 of them, most recently in 2025.</p>
+            <div class="pm-chart-title">Plants counted, last 10 counted years</div>
+            <svg viewBox="0 0 250 92" class="pm-chart" aria-hidden="true">
+              <g fill="#789440">
+                <rect x="6" y="30" width="18" height="55"/><rect x="30" y="0" width="18" height="85"/><rect x="54" y="82" width="18" height="3"/><rect x="78" y="72" width="18" height="13"/><rect x="102" y="73" width="18" height="12"/>
+                <rect x="126" y="69" width="18" height="16"/><rect x="150" y="78" width="18" height="7"/><rect x="174" y="79" width="18" height="6"/><rect x="198" y="49" width="18" height="36"/><rect x="222" y="74" width="18" height="11"/>
+              </g>
+              <line x1="0" y1="85.5" x2="250" y2="85.5" stroke="#bdbdbd"/>
+            </svg>
+            <div class="pm-axis"><span>2014</span><span>2025</span></div>
+            <div class="pm-cap">Count field under review.</div>
+          </div>
+        </div>
+      </div>
+      <pre><code><span class="cmt">// kit/popups/yellow-cress-site-chart.arcade: returns one popup element</span>
+var attrs = {}; var fields = [];
+for (var i = 1; i &lt;= 10; i++) {
+  var label = $feature['y' + Text(i, '00')];
+  if (IsEmpty(label)) { continue; }
+  attrs[label] = DefaultValue($feature['c' + Text(i, '00')], 0);
+  Push(fields, label);
+}
+return { type: 'media', title: 'Plants counted', attributes: attrs,
+  mediaInfos: [{ type: 'columnchart', value: { fields: fields, colors: ['#789440'] } }] };</code></pre>
+
+      <h3>Fragment anatomy</h3>
+      <p>A fragment has no element ids, loads no script of its own, and never reaches outside its root, so two can share a page. Elements carry <code>data-ref</code>; the module finds them inside its own root. Config and snapshot are JSON blocks the CMS, or ESA's repository, can edit without touching code.</p>
+      <pre><code>&lt;section class="lti" data-site="monitoring" data-kind="section-embed"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-head"&gt;&lt;h3 data-ref="title"&gt;&lt;/h3&gt; ...Chart/Table control data-ref="toggle"... &lt;/div&gt;
+    &lt;div class="plot" data-ref="plot"&gt;&lt;/div&gt;
+    &lt;div class="hidden" data-ref="grid"&gt;&lt;/div&gt;
+    &lt;p class="caption" data-ref="caption"&gt;&lt;/p&gt;  &lt;p class="source" data-ref="source"&gt;&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;script type="application/json" data-lti="config"&gt;{ "service": "...MapServer/78", "xField": "Year", ... }&lt;/script&gt;
+  &lt;script type="application/json" data-lti="snapshot"&gt;{ "captured": "Oct. 26, 2026", "rows": [ ... ] }&lt;/script&gt;
+&lt;/section&gt;</code></pre>
+      <pre><code><span class="cmt">// kit/fragments/section-embed.js: the kit mounts every fragment on DOMContentLoaded</span>
+LTI.define('section-embed', async function (root, CONFIG, SNAPSHOT) {
+  const $ = (name) => LTI.ref(root, name);
+  const C = LTI.colors(root);                       <span class="cmt">// the site's palette, green first on Monitoring</span>
+  LTI.skeleton($('plot'), 340);
+  const { data, live } = await LTI.load(queryLive, SNAPSHOT, showSnapshotFirst);
+  LTI.plot($('plot'), traces, LTI.layout({ height: 340 }, root));   <span class="cmt">// never Plotly.newPlot</span>
+  LTI.toggle($('toggle'), { chart: ..., table: () => LTI.grid($('grid'), columns, rows, 'export-name') });
+});</code></pre>
+      <p>A topic page pulls a fragment in with <code>&lt;div data-lti-include="plan-area-noise.html"&gt;</code>: the kit fetches that harness page, lifts the fragment, and mounts it inline. The placeholder's own children are the fallback if the fetch fails. In ESA's framework this becomes however their framework renders a section.</p>
+
+      <h3>Live fragments</h3>
+      <p>The frame below runs the real shoreline noise section from the Monitoring repo, with its own libraries. A frame is used here only to keep its Calcite 2.13 build, which the ArcGIS Maps SDK 4.31 needs, apart from this page's Calcite 5. On Lake Tahoe Info the fragment renders inline.</p>
+      <div class="frame" data-label="Section fragment: shoreline noise, table 78" style="padding:0;overflow:hidden">
+        <iframe class="lti-live" title="Live section fragment: shoreline noise exceedances per day" data-path="pages/noise/shoreline-exceedances.html" loading="lazy" style="display:block;width:100%;height:560px;border:0;border-radius:10px;background:#f7f7f7"></iframe>
+      </div>
+      <p class="note" id="ltiLiveNote">Sized by the fragment's interim height message.</p>
+
+      <h3>Templates and pages</h3>
+      <table class="ds">
+        <tr><th>Template</th><th>What it is</th><th>Default data</th><th>Open</th></tr>
+        <tr><td><b>Program dashboard</b></td><td>A complete dashboard for a program's Dashboard card: tiles, map with story popups, charts with tables, measurement cards, an empty section, footer. The Forest Health section pattern.</td><td>Tahoe Yellow Cress, layer 9 and table 86</td><td><a class="lti-link" data-path="templates/program-dashboard.html" href="#" target="_blank" rel="noopener noreferrer">Template</a></td></tr>
+        <tr><td><b>Section</b></td><td>One chart with title, Chart/Table control, CSV, caption, and source. Config-driven: any table with x, y, series, and standard fields.</td><td>Plan area noise, table 74</td><td><a class="lti-link" data-path="templates/section-embed.html" href="#" target="_blank" rel="noopener noreferrer">Template</a></td></tr>
+        <tr><td><b>Sites and time series</b></td><td>Map, site picker, tiles, and the selected site's monthly record against what is typical there, with a table. Deep link with <code>?site=</code>.</td><td>Bike ped counters, layer 5 and table 1</td><td><a class="lti-link" data-path="templates/sites-timeseries.html" href="#" target="_blank" rel="noopener noreferrer">Template</a></td></tr>
+        <tr><td><b>Topic page</b></td><td>Narrative blocks with sections included inline, a jump list, related links. For a staff page at a vanity URL.</td><td>A short noise page</td><td><a class="lti-link" data-path="templates/topic-page.html" href="#" target="_blank" rel="noopener noreferrer">Template</a></td></tr>
+        <tr><td><b>Review frame</b></td><td>A mock of a monitoring.laketahoeinfo.org page around any template or page, in Dashboard card, section, or topic mode. Only the framed content ships.</td><td>Any of the above</td><td><a class="lti-link" data-path="templates/_frame.html" href="#" target="_blank" rel="noopener noreferrer">Frame</a></td></tr>
+      </table>
+      <div class="row">
+        <span class="rl">Pages</span>
+        <calcite-button class="lti-link" data-path="pages/bike-ped/" appearance="outline" kind="brand" scale="s" icon-end="launch" target="_blank" rel="noopener noreferrer">Bicycle and Pedestrian</calcite-button>
+        <calcite-button class="lti-link" data-path="pages/noise/" appearance="outline" kind="brand" scale="s" icon-end="launch" target="_blank" rel="noopener noreferrer">Noise</calcite-button>
+        <calcite-button class="lti-link" data-path="pages/forest-health/" appearance="outline" kind="brand" scale="s" icon-end="launch" target="_blank" rel="noopener noreferrer">Forest Health</calcite-button>
+      </div>
+
+      <h3>Rules</h3>
+      <div class="do-dont">
+        <div class="do"><b>Do</b><ul>
+          <li>Scope every style under <code>.lti</code> and every lookup under the fragment's root.</li>
+          <li>Draw charts with <code>LTI.plot</code> and a layout height, so a container resize cannot collapse them.</li>
+          <li>Take series colors from <code>LTI.colors(root)</code>.</li>
+          <li>Show skeletons, then the snapshot within a second, then live.</li>
+          <li>Give every chart a table and a CSV, and every card a source line.</li>
+          <li>Pin libraries: Plotly 2.35.2, ag-grid-community 36.2.0, Calcite 2.13.2 with ArcGIS Maps SDK 4.31.</li>
+        </ul></div>
+        <div class="dont"><b>Don't</b><ul>
+          <li>Use element ids, inline scripts inside the fragment, or global styles.</li>
+          <li>Repeat what the host shows: program name, partners, documents, indicators.</li>
+          <li>Use TRPA, EIP, or Tahoe Living brand colors inside a fragment.</li>
+          <li>Hide the story behind a second click or a "view details" button.</li>
+          <li>Draw a chart from placeholder numbers.</li>
+          <li>Call the LT Info internal API from the browser.</li>
+        </ul></div>
+      </div>
+
+      <h3>Checklist before a fragment goes to ESA or the LT Info admin</h3>
+      <ol>
+        <li>Renders at the slot width and at 375 px with no horizontal scroll, on the right background.</li>
+        <li>Lexend Deca everywhere, including Plotly and AG Grid.</li>
+        <li>No console errors on mount, alone and with a second fragment on the same page.</li>
+        <li>Live query succeeds, and the snapshot renders with <code>?lti-snapshot=1</code>.</li>
+        <li>Every chart has a working Table toggle and CSV download. Sources and vintage are stated.</li>
+        <li>No element ids, no styles outside <code>.lti</code>, no executable script inside the fragment.</li>
+        <li>Map on Human Geography with the points above its labels, terrain switch works, the popup docks top right with its story and chart, and one click selects.</li>
+        <li>Skeletons show while loading; nothing renders blank.</li>
+        <li>Height message observed in the review frame, for today's Dashboard card.</li>
+        <li>Committed, pushed, and the GitHub Pages URL returns the page.</li>
+        <li><code>trpa-dashboard-qa</code> run and passed.</li>
+      </ol>
+      <p class="note">The full contract is <a class="lti-link" data-path="CONTRACT.md" href="https://github.com/trpa-agency/Monitoring/blob/main/ltinfo/CONTRACT.md" target="_blank" rel="noopener noreferrer">CONTRACT.md</a>; the skill is <code>trpa-monitoring-dashboard</code>.</p>
     </section>
 
     <section class="ds" id="maps">
-      <h2><span class="num">19</span>Map conventions</h2>
+      <h2><span class="num">20</span>Map conventions</h2>
       <ul>
-        <li><b>Basemap</b> <code>gray-vector</code>. Imagery only on explicit toggle.</li>
+        <li><b>Basemap</b> <code>gray-vector</code>. Imagery only on explicit toggle. LT Info Monitoring fragments use Human Geography with a terrain switch instead; see <a href="#ltinfo-monitoring">LT Info Monitoring</a>.</li>
         <li><b>Initial view</b> centered on the lake, <code>[-120.04, 39.09]</code>, zoom 10, unless the tool opens on a feature.</li>
         <li><b>Widgets</b> Home always. Legend when more than one symbol is on the map. Attribution stays on. No Zoom widget on phones.</li>
         <li><b>Selection</b> brand primary, 28 percent fill, 2px outline. <b>Subject</b> accent, 50 percent fill, 3px outline. <b>Buffers</b> dashed accent, no fill.</li>
@@ -1009,7 +1253,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="states">
-      <h2><span class="num">20</span>States</h2>
+      <h2><span class="num">21</span>States</h2>
       <p>A panel is empty, loading, showing results, or failing. Design all four.</p>
       <div class="brand-scope frame" data-label="Empty, loading, error">
         <div class="two">
@@ -1028,7 +1272,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="a11y">
-      <h2><span class="num">21</span>Accessibility</h2>
+      <h2><span class="num">22</span>Accessibility</h2>
       <ul>
         <li><b>Contrast.</b> Text meets WCAG 2.2 AA at 4.5 to 1. Help text is #6B7688, not lighter. EIP Blue and all oranges get their text steps when they carry words.</li>
         <li><b>Focus.</b> <code>:focus-visible</code> draws a 2px brand outline with 2px offset on everything, including custom buttons.</li>
@@ -1042,7 +1286,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="writing">
-      <h2><span class="num">22</span>Writing for the interface</h2>
+      <h2><span class="num">23</span>Writing for the interface</h2>
       <p>Interface copy follows the TRPA Style Guide, with a few adaptations for buttons and labels.</p>
       <table class="ds">
         <tr><th style="width:200px">Rule</th><th>Do</th><th>Don't</th></tr>
@@ -1062,7 +1306,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
 
     <!-- ═══════════════ RESOURCES ═══════════════ -->
     <section class="ds" id="tokens">
-      <h2><span class="num">23</span>Tokens and snippets</h2>
+      <h2><span class="num">24</span>Tokens and snippets</h2>
       <p>Link the token file and the brand follows. Tools that must stay fully self-contained paste the <code>:root</code> block instead; this page and the skills are the places to copy from.</p>
       <pre><code>&lt;link rel="stylesheet" href="https://tools.trpa.gov/assets/trpa-tokens.css" /&gt;
 <span class="cmt">&lt;!-- then, for an EIP tool --&gt;</span>
@@ -1110,7 +1354,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
         <div class="res"><b>tahoe-living-brand</b>Sage and terracotta palette, Montserrat, warm neutrals, housing semantic colors, bilingual notes.</div>
         <div class="res"><b>trpa-dashboard-stack</b>Calcite, ArcGIS SDK, Plotly, AG Grid: load order, page template, fetch pagination, conventions.</div>
         <div class="res"><b>trpa-dashboard-qa</b>Pre-deploy checklist: data, brand, stack, accessibility, mobile, and copy checks before a tool goes live.</div>
-        <div class="res"><b>ltinfo-platform</b>Lake Tahoe Info shell, tokens sampled from the live site, embed contract, and API conventions. LT Info embeds use the platform's styling, not this page's brands; the <code>ltinfo</code> token layer mirrors it. See <a href="#ltinfo">Lake Tahoe Info embeds</a>.</div>
+        <div class="res"><b>ltinfo-platform</b>Lake Tahoe Info shell, tokens sampled from the live site, embed contract, and API conventions. LT Info embeds use the platform's styling, not this page's brands; the <code>ltinfo</code> token layer mirrors it. See <a href="#ltinfo">Lake Tahoe Info embeds</a> and <a href="#ltinfo-monitoring">LT Info Monitoring</a>.</div>
         <div class="res"><b>trpa-threshold-dashboard, trpa-monitoring-dashboard, trpa-transportation-tracker, trpa-climate-dashboard</b>One skill per LT Info dashboard: framework, page anatomy, API routes, and file conventions for the charts and maps TRPA embeds.</div>
       </div>
       <h4>How they load</h4>
@@ -1136,7 +1380,7 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     </section>
 
     <section class="ds" id="references">
-      <h2><span class="num">24</span>References</h2>
+      <h2><span class="num">25</span>References</h2>
       <p>Systems this one borrows from. Calcite supplies the components; the others shaped how the documentation is organized: foundations before components, semantic tokens over raw hex, chart palettes as a first-class section, and a department-level brand layered over a shared base.</p>
       <div class="res-grid">
         <div class="res"><b><a href="https://developers.arcgis.com/calcite-design-system/" target="_blank" rel="noopener">Calcite Design System</a></b>Esri. Foundations (color, typography, icons), 35-plus web components, semantic tokens with -1, -2, -3 hierarchy. Our component layer.<div class="note">Current version pages list 5.x; this site pins 5.0.</div></div>
@@ -1354,6 +1598,105 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     entries.forEach(en => { if (en.isIntersecting) { links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id)); } });
   }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
   secs.forEach(s => io.observe(s));
+})();
+</script>
+<script>
+/* ── LT Info Monitoring section: the kit stylesheet, the specimen chart, live links ──
+   The kit is served from the Monitoring repo's GitHub Pages site. ?ltinfo=<base> points the
+   section at another copy (the local preview server) when the host is on the allowlist. */
+(function () {
+  'use strict';
+  const DEFAULT_BASE = 'https://trpa-agency.github.io/Monitoring/ltinfo/';
+  const ALLOWED = ['trpa-agency.github.io', 'data.trpa.gov', 'tools.trpa.gov', 'localhost', '127.0.0.1'];
+  let base = DEFAULT_BASE;
+  try {
+    const q = new URLSearchParams(location.search).get('ltinfo');
+    if (q) { const u = new URL(q); if (/^https?:$/.test(u.protocol) && ALLOWED.includes(u.hostname)) base = u.href.endsWith('/') ? u.href : u.href + '/'; }
+  } catch (e) { /* keep the default */ }
+  const at = (p) => new URL(p, base).href;
+
+  const section = document.getElementById('ltinfo-monitoring');
+  if (!section) return;
+  const spec = document.getElementById('ltiSpec');
+
+  /* Links and the live frame follow the base. */
+  section.querySelectorAll('.lti-link[data-path]').forEach(a => {
+    if (a.dataset.path.endsWith('.md') && base === DEFAULT_BASE) return;   // the Markdown reads better on GitHub
+    a.setAttribute('href', at(a.dataset.path));
+  });
+  const frames = [...section.querySelectorAll('iframe.lti-live')];
+  frames.forEach(f => { f.src = at(f.dataset.path); });
+  window.addEventListener('message', (e) => {
+    const m = e.data;
+    if (!m || m.type !== 'ltinfo-embed:height') return;
+    const f = frames.find(fr => fr.contentWindow === e.source);
+    if (!f) return;
+    f.style.height = Math.ceil(m.height) + 'px';
+    const note = document.getElementById('ltiLiveNote');
+    if (note) note.textContent = `Sized by the fragment's interim height message: ${Math.ceil(m.height)} px from "${m.source}".`;
+  });
+
+  /* The kit stylesheet, loaded once into this page. Everything in it is scoped under .lti. */
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = at('kit/ltinfo-embed.css');
+  let kitLoaded = false;   // this page's own tokens also define --chart-1, so only trust it once the kit is in
+  link.onload = () => { kitLoaded = true; draw(); };
+  link.onerror = () => { document.getElementById('ltiKitNote').hidden = false; draw(); };
+  document.head.append(link);
+
+  /* Specimen chart: occupied sites by year, colored from the specimen root's palette. */
+  const YEARS = [2009, 2011, 2012, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+  const OCC = [44, 23, 29, 39, 41, 21, 24, 22, 17, 8, 30, 20];
+  const LAKE = [6223, 6228, 6226, 6223, 6223, 6228, 6228, 6228, 6227, 6224, 6224, 6228];
+  const FALLBACK = { monitoring: ['#789440', '#2f3f56'], thresholds: ['#6c91a4', '#2f3f56'], transportation: ['#2c5282', '#e49937'] };
+  function palette() {
+    const cs = getComputedStyle(spec);
+    const c1 = cs.getPropertyValue('--chart-1').trim(), c2 = cs.getPropertyValue('--chart-2').trim();
+    return kitLoaded && c1 && c2 ? [c1, c2] : FALLBACK[spec.dataset.site] || FALLBACK.monitoring;
+  }
+  function draw() {
+    if (!window.Plotly) return;
+    const [c1, c2] = palette();
+    const el = document.getElementById('ltiSpecPlot');
+    const font = { family: 'Lexend Deca, sans-serif', color: '#333333', size: 12 };
+    Plotly.react(el, [
+      { type: 'bar', name: 'Occupied sites', x: YEARS.map(String), y: OCC, marker: { color: c1 }, hovertemplate: '%{x}: %{y} occupied sites<extra></extra>' },
+      { type: 'scatter', mode: 'lines+markers', name: 'Lake level', x: YEARS.map(String), y: LAKE, yaxis: 'y2', line: { color: c2, width: 2 }, marker: { size: 5 }, hovertemplate: '%{x}: %{y:,.0f} ft<extra></extra>' },
+    ], {
+      height: 300, font, paper_bgcolor: 'transparent', plot_bgcolor: 'transparent', showlegend: false, hovermode: 'x unified',
+      margin: { t: 8, r: 50, b: 36, l: 46 },
+      xaxis: { type: 'category', gridcolor: '#dcdcdc', linecolor: '#bdbdbd' },
+      yaxis: { title: { text: 'Occupied sites', font: { size: 11 } }, gridcolor: '#dcdcdc', zeroline: false, rangemode: 'tozero' },
+      yaxis2: { title: { text: 'Lake level (ft)', font: { size: 11 } }, overlaying: 'y', side: 'right', showgrid: false, range: [6218, 6232] },
+      shapes: [{ type: 'line', xref: 'paper', x0: 0, x1: 1, y0: 26, y1: 26, line: { color: '#4e4e4e', width: 1.5, dash: 'dash' } }],
+      annotations: [{ xref: 'paper', x: 1, y: 26, text: 'Standard: 26 sites', showarrow: false, xanchor: 'right', yanchor: 'bottom', font: { size: 10, color: '#4e4e4e' } }],
+      hoverlabel: { font: { family: 'Lexend Deca, sans-serif' }, bgcolor: '#fff', bordercolor: '#bdbdbd' },
+    }, { displayModeBar: false, responsive: true });
+    document.getElementById('ltiSpecLegend').innerHTML = `<span><i style="background:${c1}"></i>Occupied sites</span><span><i style="background:${c2}"></i>Lake level, right axis</span><span><i style="background:#4e4e4e;height:2px"></i>Standard</span>`;
+    document.getElementById('ltiSpecTable').innerHTML = `<table class="ds" style="margin:0"><tr><th>Year</th><th>Occupied sites</th><th>Standard</th><th>Lake level (ft)</th></tr>${YEARS.map((y, i) => `<tr><td>${y}</td><td>${OCC[i]}</td><td>26</td><td>${LAKE[i].toLocaleString('en-US')}</td></tr>`).join('')}</table>`;
+  }
+
+  /* data-site switch for the specimen. */
+  const seg = document.getElementById('ltiSiteSeg');
+  seg.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    seg.querySelectorAll('button').forEach(x => { x.classList.toggle('active', x === b); x.setAttribute('aria-checked', x === b); });
+    spec.dataset.site = b.dataset.site;
+    draw();
+  }));
+
+  /* Chart/Table control inside the specimen card. */
+  const tog = section.querySelector('.lti-spec-toggle');
+  tog.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    tog.querySelectorAll('button').forEach(x => { x.classList.toggle('active', x === b); x.setAttribute('aria-checked', x === b); });
+    const table = b.dataset.view === 'table';
+    document.getElementById('ltiSpecPlot').classList.toggle('hidden', table);
+    document.getElementById('ltiSpecLegend').classList.toggle('hidden', table);
+    document.getElementById('ltiSpecTable').classList.toggle('hidden', !table);
+    if (!table && window.Plotly) Plotly.Plots.resize('ltiSpecPlot');
+  }));
+
+  draw();
 })();
 </script>
 </body>
