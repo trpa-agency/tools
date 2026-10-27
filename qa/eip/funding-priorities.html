@@ -299,8 +299,15 @@
     .dc-score b { font-size: 1.2rem; color: var(--eip-blue); }
     .dc-score span { font-size: 0.66rem; color: var(--gray-text); }
     .dc-links { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.5rem; }
-    .dc-close { border: none; background: transparent; cursor: pointer; color: var(--gray-text); line-height: 0; padding: 0.35rem; min-width: 28px; min-height: 28px; border-radius: 999px; }
-    .dc-close:hover { background: var(--gray-bg); color: var(--blue-text); }
+    /* Done saves and closes; a check reads as "keep this", where an X read as "throw it away" (Oct. 2026 review) */
+    .dc-done { display: inline-flex; align-items: center; gap: 0.3rem; flex: 0 0 auto; border: none; background: var(--blue-text); color: #fff; cursor: pointer;
+      font-family: var(--font); font-size: 0.74rem; font-weight: 700; padding: 0.3rem 0.8rem 0.3rem 0.6rem; min-height: 30px; border-radius: 999px; }
+    .dc-done:hover { background: var(--eip-navy); }
+    .dc-done:focus-visible { outline: 2px solid var(--eip-navy); outline-offset: 2px; }
+    /* Group picks column filter (AG Grid custom filter) */
+    .wg-filter { padding: 0.6rem 0.7rem; font-family: var(--font); font-size: 0.74rem; color: var(--eip-navy); }
+    .wg-filter label { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 700; }
+    .wg-filter select { font: inherit; font-weight: 400; min-width: 15rem; padding: 0.3rem 0.4rem; border: 1px solid var(--gray-border); border-radius: 6px; background: #fff; color: var(--eip-navy); }
 
     /* Dialogs */
     .dlg { font-size: 0.86rem; line-height: 1.6; color: var(--eip-navy); }
@@ -949,9 +956,12 @@
       renderListCounts(); syncAria();
       renderGrid(); renderMap(); renderLegend(); renderStatus(); updateSendState(); chartsDirty = true;
       if (activeTab === "charts") renderCharts();
-      if (selectedId) showDetail(selectedId, false);
+      if (selectedId && !keepDetailCard) showDetail(selectedId, false);
       $("csvBtn").disabled = !pool.length;
     }
+    // Set while a typed field in the pop-up saves on blur: redrawing the card then would replace the field or button the person
+    // just clicked and swallow the click (a note typed after the request went nowhere), so the table and map update and the card stays
+    let keepDetailCard = false;
     function renderListCounts() {
       const c = myPickCount();
       for (const l of Object.keys(LISTS)) {
@@ -1030,6 +1040,34 @@
       "5-Year List": "Whether the project is on the EIP 5-Year Project List.",
       "Funding requests": "Secured and requested amounts by funding source, from the project's expected funding table on the Tracker.",
     };
+    // Group picks column filter: one dropdown of the working groups with picks on this list (Oct. 2026 review). AG Grid Community
+    // has no set filter, and the column's sort value is a priority number, so the built-in filter could not match a group name.
+    const NO_WG = "(none)";
+    class WgPicksFilter {
+      init(params) {
+        this.params = params; this.value = "";
+        this.gui = document.createElement("div"); this.gui.className = "wg-filter";
+        this.gui.innerHTML = `<label>Working group<select aria-label="Filter Group picks by working group"></select></label>`;
+        this.sel = this.gui.querySelector("select");
+        this.sel.addEventListener("change", () => { this.value = this.sel.value; params.filterChangedCallback(); });
+        this.fill();
+      }
+      // Options follow the picks loaded at the time the menu opens, in roster order
+      fill() {
+        const present = new Set(pool.flatMap(p => p.tl.groups.map(g => g.wg || NO_WG)));
+        const names = [...WORKING_GROUPS.filter(w => present.has(w)), ...[...present].filter(w => w !== NO_WG && !WORKING_GROUPS.includes(w)).sort()];
+        if (this.value && !names.includes(this.value) && this.value !== NO_WG) names.push(this.value);
+        this.sel.innerHTML = `<option value="">Any working group</option>` + names.map(w => `<option value="${escHtml(w)}">${escHtml(w)}</option>`).join("") +
+          (present.has(NO_WG) || this.value === NO_WG ? `<option value="${NO_WG}">No working group given</option>` : "");
+        this.sel.value = this.value;
+      }
+      getGui() { return this.gui; }
+      afterGuiAttached() { this.fill(); this.sel.focus(); }
+      isFilterActive() { return !!this.value; }
+      doesFilterPass(params) { return params.data.tl.groups.some(g => (g.wg || NO_WG) === this.value); }
+      getModel() { return this.value ? { value: this.value } : null; }
+      setModel(model) { this.value = (model && model.value) || ""; this.fill(); }
+    }
     function initGrid() {
       const theme = agGrid.themeQuartz.withParams({ accentColor: C.blue, fontFamily: "Lexend Deca, system-ui, sans-serif", fontSize: 12,
         headerFontSize: 11, headerFontWeight: 700, rowHeight: 36, headerHeight: 32, borderColor: "#E1E5EC", foregroundColor: C.navy });
@@ -1074,7 +1112,7 @@
             valueFormatter: (p) => p.value == null ? "" : fmtFull(p.value),
             cellRenderer: (p) => { if (p.value == null) return ""; const d = driftNote(p.data, myPick(p.data.id)); return `${fmtFull(p.value)}${d ? ` <span class="drift" title="${escHtml(d)}">!</span>` : ""}`; },
             cellStyle: mineStyle, comparator: (a, b) => (a ?? -1) - (b ?? -1) },
-          { headerName: "Group picks", colId: "gpicks", width: 240, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.groups[0] ? p.data.tl.groups[0].tier : null, comparator: (a, b) => (a || 9) - (b || 9),
+          { headerName: "Group picks", colId: "gpicks", width: 240, filter: WgPicksFilter, sortingOrder: bestFirst, valueGetter: (p) => p.data.tl.groups[0] ? p.data.tl.groups[0].tier : null, comparator: (a, b) => (a || 9) - (b || 9),
             cellRenderer: (p) => p.data.tl.groups.map(g => `<span style="white-space:nowrap">${escHtml(g.wg ? wgShort(g.wg) : "No group")} ${tierBadge(g.tier)}${g.med != null ? ` ${fmtUSD(g.med)}` : ""}</span>`).join(" &nbsp;"),
             tooltipValueGetter: (p) => p.data.tl.groups.map(g => `${g.wg || "No working group given"}: Priority ${g.tier}${g.med != null ? ", " + fmtFull(g.med) : ", no request"}`).join("\n") || "No working group has picked this project on this list yet" },
           { headerName: "Criteria", colId: "crit", width: 96, type: "rightAligned", sortingOrder: bigFirst, valueGetter: (p) => { const pk = myPick(p.data.id); return pk && pk.c ? pk.c.length : 0; },
@@ -1131,7 +1169,7 @@
     function renderDrawerCount() {
       if (!gridApi) return;
       const n = pool.filter(p => !p.excluded).length, nx = pool.length - n, ranked = pool.filter(p => p.rank).length;
-      const shown = gridApi.getDisplayedRowCount(), filtered = $("quickFilter").value.trim() && shown !== pool.length;
+      const shown = gridApi.getDisplayedRowCount(), filtered = shown !== pool.length;   // quick filter or a column filter such as Group picks
       $("drawerCount").textContent = focusPicks() ? `${LISTS[listKey].long}: ${focusLabel(focusEntry())}, ${n} pick${n === 1 ? "" : "s"}`
         : `${LISTS[listKey].long}: ${filtered ? `${shown.toLocaleString()} of ` : ""}${n.toLocaleString()} project${n === 1 ? "" : "s"}${ranked ? `, ${ranked} with sent picks` : ""}${nx ? `, ${nx} excluded` : ""}`;
     }
@@ -1292,7 +1330,7 @@
       const pickable = EIP_ID.test(p.id);
       $("detailCard").innerHTML = `
         <div class="dc-head"><h3><i class="fdot" style="background:${f.color}"></i>${escHtml(p.name)}</h3>
-          <button class="dc-close" id="dcClose" title="Close" aria-label="Close"><calcite-icon icon="x" scale="s"></calcite-icon></button></div>
+          <button class="dc-done" id="dcDone" title="Save and close. Your picks stay in this browser until you press Send my picks."><calcite-icon icon="check" scale="s"></calcite-icon>Done</button></div>
         <div class="dc-sub">${escHtml(p.id)} · ${escHtml(p.lead)} · ${escHtml(p.stage)}${p.need != null ? ` · <b>${fmtUSD(p.need)}</b> unfunded need` : ""}${p.hasLtra ? `<br>Tracker LTRA: ${escHtml(trackerLtra(p) || "funding on record")}` : ""}</div>
         ${pickable ? `<div class="dc-pick">
           <h4>Your pick${mine.t ? ` · ${LISTS[mine.l].long}` : ""}</h4>` : `<div class="dc-pick" style="border-style:dashed"><h4>Not pickable</h4><span class="field-help">This is not an EIP project, so it has no Tracker number to send. Ask the implementer to add it to the EIP.</span></div><div class="dc-pick" hidden>`}
@@ -1339,7 +1377,21 @@
           <calcite-button id="dcEx" icon-start="x-circle" appearance="${p.excluded ? "solid" : "outline"}" kind="neutral" scale="s">${p.excluded ? "Restore" : "Exclude"}</calcite-button>
         </div>`;
       $("detailCard").hidden = !open && $("detailCard").hidden;
-      $("dcClose").addEventListener("click", hideDetail);
+      // Done keeps focus where it is on press: a request or note saves on blur, and that save redraws the card, which would swallow the click.
+      // It saves whatever is still being typed itself, then closes.
+      $("dcDone").addEventListener("mousedown", (e) => e.preventDefault());
+      $("dcDone").addEventListener("click", () => {
+        let changed = false;
+        if (pickable) {
+          const cur = myPick(p.id) || {}, l = mine.t ? mine.l : listKey;
+          const v = parseMoney($("dcReq").value), req = v != null && v >= 0 ? Math.round(v) : null, n = $("dcNote").value.trim();
+          if (req !== (cur.req ?? null)) { setMyPick(p.id, { req, l }); changed = true; }
+          if (n !== (cur.n || "")) { setMyPick(p.id, { n, l }); changed = true; }
+        }
+        const saved = (myPick(p.id) || {}).t;
+        hideDetail(); if (changed) recompute();
+        if (saved) toast("Saved. Press Send my picks when your list is ready.", 2500);
+      });
       $("dcDescBtn").addEventListener("click", (e) => { const open = $("dcDesc").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", String(open)); });
       if ($("dcPin")) $("dcPin").addEventListener("click", () => toggleFlag(p.id, "pin"));
       $("dcEx").addEventListener("click", () => toggleFlag(p.id, "ex"));
@@ -1350,7 +1402,10 @@
         setMyPick(p.id, { t, l: t ? (mine.t ? mine.l : listKey) : mine.l }); recompute(); });
       // Typed amounts accept shorthand (500k, 1.5M); the chips fill the box with a figure from the Tracker
       const setReq = (v) => { setMyPick(p.id, { req: v != null && v >= 0 ? Math.round(v) : null, l: mine.t ? mine.l : listKey }); recompute(); };
-      $("dcReq").addEventListener("change", () => setReq(parseMoney($("dcReq").value)));
+      $("dcReq").addEventListener("change", () => {
+        keepDetailCard = true; try { setReq(parseMoney($("dcReq").value)); } finally { keepDetailCard = false; }
+        const pk = myPick(p.id); $("dcReq").value = pk && pk.req != null ? Math.round(pk.req).toLocaleString("en-US") : "";
+      });
       if ($("dcReqChips")) $("dcReqChips").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; setReq(+b.dataset.v); });
       $("dcCrit").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; const c = new Set((myPick(p.id) || {}).c || []);
         if (c.has(b.dataset.k)) c.delete(b.dataset.k); else c.add(b.dataset.k); setMyPick(p.id, { c: [...c], l: mine.t ? mine.l : listKey }); b.classList.toggle("on"); b.setAttribute("aria-pressed", String(b.classList.contains("on"))); if (gridApi) gridApi.refreshCells({ force: true }); });
@@ -1842,6 +1897,7 @@ ${summary}${sections}
       $("focusChips").querySelectorAll("button").forEach(b => b.classList.add("on")); ["programSel", "leadSel", "fundSel", "tagSel"].forEach(id => setCombo($(id), []));
       $("stateSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === "")); $("fundChips").querySelectorAll("button").forEach(b => b.classList.add("on"));
       $("pickedOnly").checked = false; $("ltraHintOnly").checked = false;
+      if (gridApi) gridApi.setFilterModel(null);   // column filters too, such as the Group picks working group
       if (!skipRecompute) recompute();
     }
     $("resetFiltersBtn").addEventListener("click", () => resetFilters());
