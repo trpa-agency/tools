@@ -264,3 +264,27 @@
   --calcite-color-border-1:     var(--lti-border);
   --calcite-button-corner-radius: 4px;
 }
+
+/* -- Site accent inside the ltinfo layer. Each LT Info dashboard overrides the card
+   header color; an embed that draws its own section bars, tile accents, or Calcite
+   controls uses its host's color. data-site goes on <html> or <body> next to
+   data-brand="ltinfo". Default is the Monitoring Dashboard. The Monitoring repo's
+   ltinfo/kit/ltinfo-embed.css carries the same values for pages built outside this
+   repo. -- */
+[data-brand="ltinfo"] {
+  --lti-accent:       var(--lti-header-monitoring);
+  --lti-accent-dark:  #61783a;
+  --lti-accent-press: #4e6230;
+  --calcite-color-brand:        var(--lti-accent);
+  --calcite-color-brand-hover:  var(--lti-accent-dark);
+  --calcite-color-brand-press:  var(--lti-accent-press);
+}
+[data-brand="ltinfo"][data-site="thresholds"], [data-brand="ltinfo"] [data-site="thresholds"] {
+  --lti-accent: var(--lti-header-thresholds); --lti-accent-dark: #567a8c; --lti-accent-press: #466676;
+}
+[data-brand="ltinfo"][data-site="transportation"], [data-brand="ltinfo"] [data-site="transportation"] {
+  --lti-accent: var(--lti-header-transportation); --lti-accent-dark: #1f3a5e; --lti-accent-press: #172c48;
+}
+[data-brand="ltinfo"][data-site="climate"], [data-brand="ltinfo"] [data-site="climate"] {
+  --lti-accent: var(--lti-primary); --lti-accent-dark: var(--lti-navy); --lti-accent-press: #243043;
+}
