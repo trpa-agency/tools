@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 266" width="400" height="266" role="img"
+     aria-label="Forest Health monitoring hub prototype: three program cards for Forest Structure, Fire Dynamics, and Subalpine Conifer">
+  <rect width="400" height="266" fill="#ffffff"/>
+  <rect width="400" height="26" fill="#2f3f56"/>
+  <rect x="12" y="8" width="90" height="10" rx="2" fill="#ffffff" opacity="0.9"/>
+  <rect y="26" width="400" height="12" fill="#789440"/>
+
+  <text x="16" y="60" font-family="Lexend Deca, Arial, sans-serif" font-size="9" font-weight="700" fill="#789440" letter-spacing="0.8">FOREST HEALTH</text>
+  <rect x="16" y="68" width="150" height="8" rx="2" fill="#3d3d3d"/>
+  <g fill="#bdbdbd"><rect x="16" y="84" width="260" height="4" rx="1"/><rect x="16" y="92" width="230" height="4" rx="1"/></g>
+
+  <!-- Three program cards -->
+  <g>
+    <rect x="16" y="108" width="116" height="142" rx="4" fill="#ffffff" stroke="#efefef"/>
+    <rect x="16" y="108" width="116" height="20" rx="4" fill="#efefef"/>
+    <text x="24" y="122" font-family="Lexend Deca, Arial, sans-serif" font-size="9" font-weight="600" fill="#3d3d3d">Forest Structure</text>
+    <!-- stacked seral bars -->
+    <g><rect x="28" y="150" width="14" height="60" fill="#789440"/><rect x="48" y="138" width="14" height="72" fill="#789440"/><rect x="68" y="160" width="14" height="50" fill="#789440"/><rect x="88" y="172" width="14" height="38" fill="#789440"/><rect x="108" y="184" width="14" height="26" fill="#789440"/></g>
+    <g fill="#bdbdbd"><rect x="28" y="222" width="90" height="3" rx="1"/><rect x="28" y="230" width="70" height="3" rx="1"/></g>
+    <rect x="28" y="238" width="36" height="8" rx="2" fill="#789440"/>
+  </g>
+  <g>
+    <rect x="142" y="108" width="116" height="142" rx="4" fill="#ffffff" stroke="#efefef"/>
+    <rect x="142" y="108" width="116" height="20" rx="4" fill="#efefef"/>
+    <text x="150" y="122" font-family="Lexend Deca, Arial, sans-serif" font-size="9" font-weight="600" fill="#3d3d3d">Fire Dynamics</text>
+    <!-- severity zones -->
+    <path d="M154 140 L200 134 L246 146 L240 196 L200 212 L156 198 Z" fill="#b5a64c" opacity="0.55"/>
+    <path d="M166 150 L204 146 L232 156 L228 188 L200 200 L170 190 Z" fill="#e49937" opacity="0.7"/>
+    <path d="M182 160 L206 158 L220 166 L216 182 L200 188 L186 180 Z" fill="#9c3e27" opacity="0.8"/>
+    <g fill="#bdbdbd"><rect x="154" y="222" width="90" height="3" rx="1"/><rect x="154" y="230" width="70" height="3" rx="1"/></g>
+    <rect x="154" y="238" width="36" height="8" rx="2" fill="#789440"/>
+  </g>
+  <g>
+    <rect x="268" y="108" width="116" height="142" rx="4" fill="#ffffff" stroke="#efefef"/>
+    <rect x="268" y="108" width="116" height="20" rx="4" fill="#efefef"/>
+    <text x="276" y="122" font-family="Lexend Deca, Arial, sans-serif" font-size="9" font-weight="600" fill="#3d3d3d">Subalpine Conifer</text>
+    <!-- ridge line and trees -->
+    <path d="M276 196 L296 166 L314 182 L334 150 L352 172 L372 158 L376 196 Z" fill="#dcdcdc"/>
+    <g fill="#4e6230"><path d="M300 192 l5 -14 l5 14 z"/><path d="M322 188 l5 -16 l5 16 z"/><path d="M344 192 l5 -14 l5 14 z"/><path d="M358 186 l4 -12 l4 12 z"/></g>
+    <g fill="#bdbdbd"><rect x="280" y="222" width="90" height="3" rx="1"/><rect x="280" y="230" width="70" height="3" rx="1"/></g>
+    <rect x="280" y="238" width="36" height="8" rx="2" fill="#789440"/>
+  </g>
+</svg>

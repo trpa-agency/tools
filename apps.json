@@ -378,6 +378,64 @@
       "beta": true
     },
     {
+      "id": "ltinfo-bike-ped",
+      "title": "Bicycle and Pedestrian Counts",
+      "category": "monitoring",
+      "url": "https://trpa-agency.github.io/Monitoring/ltinfo/pages/bike-ped/",
+      "thumbnail": "assets/thumbs/ltinfo-bike-ped.svg",
+      "description": "Prototype Lake Tahoe Info program page: counter locations on a map with a story popup, the monthly count record at the selected site against what is typical there, and a table with CSV download. Built on the LT Info fragment kit for inline rendering in the Monitoring Dashboard.",
+      "tags": [
+        "LT Info",
+        "Transportation",
+        "Bike Ped",
+        "Prototype"
+      ],
+      "beta": true
+    },
+    {
+      "id": "ltinfo-noise",
+      "title": "Noise in the Tahoe Basin",
+      "category": "monitoring",
+      "url": "https://trpa-agency.github.io/Monitoring/ltinfo/pages/noise/",
+      "thumbnail": "assets/thumbs/ltinfo-noise.svg",
+      "description": "Prototype Lake Tahoe Info staff topic page: plan area, shoreline, and highway noise monitoring in one narrative, with the plan area and shoreline records rendered inline as fragments against their standards.",
+      "tags": [
+        "LT Info",
+        "Noise",
+        "Thresholds",
+        "Prototype"
+      ],
+      "beta": true
+    },
+    {
+      "id": "ltinfo-forest-health",
+      "title": "Forest Health Monitoring Hub",
+      "category": "monitoring",
+      "url": "https://trpa-agency.github.io/Monitoring/ltinfo/pages/forest-health/",
+      "thumbnail": "assets/thumbs/ltinfo-forest-health.svg",
+      "description": "Prototype Lake Tahoe Info staff page gathering the three Forest Health monitoring programs, Forest Structure, Fire Dynamics, and Subalpine Conifer, with what each one measures and links to their dashboards and program records.",
+      "tags": [
+        "LT Info",
+        "Forest Health",
+        "Prototype"
+      ],
+      "beta": true
+    },
+    {
+      "id": "ltinfo-review-frame",
+      "title": "LT Info Page Prototypes",
+      "category": "monitoring",
+      "url": "https://trpa-agency.github.io/Monitoring/ltinfo/templates/_frame.html",
+      "thumbnail": "assets/thumbs/ltinfo-review-frame.svg",
+      "description": "Review mock of a monitoring.laketahoeinfo.org page around the prototype templates: a program dashboard, a section, a sites explorer, and a staff topic page, each in the slot where Lake Tahoe Info would show it. For ESA scoping and staff review; only the framed content ships.",
+      "tags": [
+        "LT Info",
+        "Design System",
+        "Prototype"
+      ],
+      "beta": true
+    },
+    {
       "id": "parcelexplorer",
       "title": "Parcel Change Explorer",
       "category": "permitting",
