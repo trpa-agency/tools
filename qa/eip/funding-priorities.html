@@ -623,7 +623,7 @@
         <li><strong>Filters.</strong> Filter by focus area, implementer, stage, funding status, Tracker LTRA history, program,
           tag, funding source, and state.</li>
         <li><strong>Available funding.</strong> Enter a dollar amount for the current list. Picked projects are funded in rank order by their
-          request (or unfunded need where none was given). Excluded projects leave the list.</li>
+          request (or unfunded need where none was given).</li>
         <li><strong>Print master sheet and Master sheet CSV.</strong> One section per working group, as the master sheet has one tab per group:
           the projects that group's own reviewers picked, combined across those reviewers, with Priority 1 and all-priority totals. A project
           picked by two groups appears under both and is marked. The print version opens as a clean page for printing or saving as PDF; the CSV
@@ -705,7 +705,9 @@
     // pins: fund-first pins. voting: combining lists across reviewers into Votes, Group priority, Group request, and a vote rank.
     // With voting off, each working group ranks together in its own meeting and sends one list; the table shows each group's
     // own priority side by side (Group picks) and orders by working group, then that group's priority.
-    const FEATURES = { pins: false, voting: false };
+    // exclude: a what-if Exclude button in the pop-up that dropped a project from this screen's ranking and funding test (never from
+    // sends, the master sheet, or print); off since the Oct. 2026 review, and share links that carry exclusions are ignored.
+    const FEATURES = { pins: false, voting: false, exclude: false };
     const LS_REVIEW = "eipPriorities.review", LS_IMPORTS = "eipPriorities.imports";
     // Survey123 round trip. Send posts a record straight to the survey's public submission layer (the same place
     // the form writes); the form stays as a fallback. Refresh reads everyone's latest submission back from a view
@@ -1022,7 +1024,7 @@
       "Unfunded need": "Estimated cost minus secured funding, as the Tracker computes it. An asterisk means secured funding is not reported and cost minus expenditures stands in.",
       "Spent": "Expenditures reported to the Tracker to date, all sources.",
       "Remaining": "Estimated total cost minus expenditures to date.",
-      "Funding": "Whether the available funding entered in the panel covers this project's request, going down the group ranking. Shown when an amount is set or a project is excluded.",
+      "Funding": `Whether the available funding entered in the panel covers this project's request, going down the group ranking. Shown when an amount is set${FEATURES.exclude ? " or a project is excluded" : ""}.`,
       "My priority": "Your working group's priority for this project on the list you are viewing: 1 (highest), 2, or 3. Click the project name to set or change it. A project can be on one of your two lists, not both.",
       "Request": "Your funding request for this project from this list, in dollars; click the project name to set it. An orange mark means it differs from what the Tracker shows; one of the two should be updated.",
       "Picks Received": "What the working group selected under Picks received in the panel gave this project: priority, request, and note. Click Show All Projects above the table to go back to the full list.",
@@ -1209,6 +1211,7 @@
       if (!FEATURES.voting && !fullView) show.delete("wg");   // Group picks already names each group
       if (focusPicks()) show.add("theirs"); else show.delete("theirs");
       if (fullView || envelope() > 0 || pins.size || excluded.size) { show.add("fund"); show.add("flags"); }
+      if (!FEATURES.pins && !FEATURES.exclude) show.delete("flags");   // nothing left to mark
       if (fullView || listKey === "ltra") show.add("tltra");
       gridApi.setColumnsVisible(all.filter(c => show.has(c)), true);
       gridApi.setColumnsVisible(all.filter(c => !show.has(c)), false);
@@ -1235,6 +1238,7 @@
     $("focusClear").addEventListener("click", () => setFocus(null));
     function toggleFlag(id, act) {
       if (act === "pin" && !FEATURES.pins) return;
+      if (act === "ex" && !FEATURES.exclude) return;
       if (act === "pin") { if (pins.has(id)) pins.delete(id); else { pins.add(id); excluded.delete(id); } }
       else { if (excluded.has(id)) excluded.delete(id); else { excluded.add(id); pins.delete(id); } }
       recompute();
@@ -1374,7 +1378,7 @@
           <calcite-button href="${escHtml(p.factUrl || p.url)}" target="_blank" rel="noopener noreferrer" icon-start="launch" appearance="outline" kind="brand" scale="s">Fact sheet</calcite-button>
           ${p.pt ? `<calcite-button id="dcZoom" icon-start="zoom-to-object" appearance="outline" kind="brand" scale="s" title="Zoom the map to this project">Zoom to</calcite-button>` : ""}
           ${FEATURES.pins ? `<calcite-button id="dcPin" icon-start="pin" appearance="${p.pinned ? "solid" : "outline"}" kind="brand" scale="s">${p.pinned ? "Unpin" : "Pin"}</calcite-button>` : ""}
-          <calcite-button id="dcEx" icon-start="x-circle" appearance="${p.excluded ? "solid" : "outline"}" kind="neutral" scale="s">${p.excluded ? "Restore" : "Exclude"}</calcite-button>
+          ${FEATURES.exclude ? `<calcite-button id="dcEx" icon-start="x-circle" appearance="${p.excluded ? "solid" : "outline"}" kind="neutral" scale="s">${p.excluded ? "Restore" : "Exclude"}</calcite-button>` : ""}
         </div>`;
       $("detailCard").hidden = !open && $("detailCard").hidden;
       // Done keeps focus where it is on press: a request or note saves on blur, and that save redraws the card, which would swallow the click.
@@ -1394,7 +1398,7 @@
       });
       $("dcDescBtn").addEventListener("click", (e) => { const open = $("dcDesc").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", String(open)); });
       if ($("dcPin")) $("dcPin").addEventListener("click", () => toggleFlag(p.id, "pin"));
-      $("dcEx").addEventListener("click", () => toggleFlag(p.id, "ex"));
+      if ($("dcEx")) $("dcEx").addEventListener("click", () => toggleFlag(p.id, "ex"));
       if ($("dcZoom")) $("dcZoom").addEventListener("click", zoomToSelected);
       if (!pickable) return;
       $("dcList").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; setMyPick(p.id, { l: b.dataset.v }); recompute(); });
@@ -1498,7 +1502,7 @@
         ["Estimated cost", (p) => p.cost ?? "", true], ["Secured funding", (p) => p.secured ?? "", true], ["Unfunded need", (p) => p.need ?? "", true], ["Need basis", (p) => p.needBasis ?? "", true],
         ["Tracker LTRA request", (p) => p.ltraAsk ?? "", true], ["Tracker LTRA secured", (p) => p.ltraSecured ?? "", true], ["Requested not secured", (p) => p.targeted ?? "", true],
         ["Funding status", (p) => p.fstatus, true], ["On 5-Year List", (p) => p.fiveYear ? "yes" : "", true], ["Expenditures to date", (p) => p.spent ?? "", true],
-        ["Funding test", (p) => p.fund, true], ["Pinned", (p) => p.pinned ? "yes" : "", FEATURES.pins], ["Excluded", (p) => p.excluded ? "yes" : "", true],
+        ["Funding test", (p) => p.fund, true], ["Pinned", (p) => p.pinned ? "yes" : "", FEATURES.pins], ["Excluded", (p) => p.excluded ? "yes" : "", FEATURES.exclude],
         ["My list", (p, tl, m) => m.t ? LISTS[m.l].label : "", true], ["My priority", (p, tl, m) => m.t ?? "", true], ["My request", (p, tl, m) => m.req != null ? Math.round(m.req) : "", true],
         ["My criteria", (p, tl, m) => critText(m.c), true], ["My note", (p, tl, m) => m.n ?? "", true],
         ["Threshold categories", (p) => p.thresholds.join(", "), true], ["Funding sources", (p) => p.funding.join("; "), true], ["Funding requests", (p) => p.requests, true],
@@ -1953,7 +1957,7 @@ ${summary}${sections}
       else if (typeof s.env === "number") envelopes = { ltra: s.env, other: s.env };
       fillMode = s.mode || "skip";
       $("modeSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === fillMode));
-      pins = new Set(FEATURES.pins ? (s.pins || []) : []); excluded = new Set(s.ex || []);
+      pins = new Set(FEATURES.pins ? (s.pins || []) : []); excluded = new Set(FEATURES.exclude ? (s.ex || []) : []);
       if (s.f) {
         $("searchInput").value = s.f.q || "";
         $("stageChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", (s.f.st || []).includes(b.dataset.v)));
