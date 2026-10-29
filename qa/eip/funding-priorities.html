@@ -11,9 +11,8 @@
   <!-- Calcite Design System -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
 
-  <!-- Plotly and AG Grid load BEFORE the ArcGIS SDK: once Dojo defines an AMD
+  <!-- AG Grid loads BEFORE the ArcGIS SDK: once Dojo defines an AMD
        loader, UMD bundles register as anonymous modules instead of globals. -->
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
 
   <!-- ArcGIS Maps SDK for JavaScript -->
@@ -120,6 +119,11 @@
     .toggle { display: flex; align-items: center; gap: 0.4rem; font-size: 0.76rem; color: var(--eip-navy); font-weight: 400; }
     .lbl { display: inline-flex; align-items: center; gap: 0.25rem; cursor: help; }
     .lbl .info-i { color: var(--gray-muted); flex: 0 0 auto; }
+    .lbl-row { display: inline-flex; align-items: center; gap: 0.25rem; }
+    .info-btn { border: none; background: none; padding: 0; margin: 0; min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center;
+      color: var(--blue-text); cursor: pointer; border-radius: 999px; }
+    .info-btn:hover, .info-btn[aria-expanded="true"] { background: var(--eip-blue-light); }
+    .dc-help { background: var(--eip-blue-light); border-radius: 6px; padding: 0.35rem 0.55rem; color: var(--eip-navy); }
     details.more { border-top: 1px dashed var(--gray-border); padding-top: 0.4rem; display: flex; flex-direction: column; gap: 0.55rem; }
     details.more > summary { cursor: pointer; font-size: 0.72rem; font-weight: 700; color: var(--blue-text); list-style: none; display: flex; align-items: center; gap: 0.3rem; min-height: 28px; }
     details.more > summary::before { content: ""; width: 0; height: 0; border-left: 5px solid currentColor; border-top: 4px solid transparent; border-bottom: 4px solid transparent; transition: transform 120ms; }
@@ -157,6 +161,13 @@
     .env-presets button:hover { border-color: var(--eip-blue); color: var(--eip-blue); }
 
     /* picks received */
+    .wglist { display: flex; flex-direction: column; gap: 0.3rem; }
+    .wgbtn { display: flex; align-items: center; gap: 0.5rem; width: 100%; text-align: left; border: 1px solid var(--gray-border); background: #fff;
+      color: var(--eip-navy); border-radius: 8px; padding: 0.4rem 0.65rem; min-height: 34px; font-family: var(--font); font-size: 0.76rem; font-weight: 600; cursor: pointer; }
+    .wgbtn span { margin-left: auto; font-size: 0.7rem; font-weight: 700; color: var(--gray-text); }
+    .wgbtn:hover { border-color: var(--blue-text); background: var(--gray-bg); }
+    .wgbtn.on { background: var(--eip-navy); border-color: var(--eip-navy); color: #fff; }
+    .wgbtn.on span { color: #fff; }
     .rlist { list-style: none; margin: 0; padding: 0; border: 1px solid var(--gray-border); border-radius: 8px; overflow: hidden; }
     .rrow { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.6rem; font-size: 0.76rem; border-top: 1px solid var(--gray-border); background: #fff; }
     .rrow:first-child { border-top: none; }
@@ -205,7 +216,6 @@
     #drawerBody { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
     #gridWrap { flex: 1 1 auto; min-height: 0; }
     #grid { height: 100%; width: 100%; }
-    #chartsWrap { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 0.6rem 0.8rem; }
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 0.45rem; margin-bottom: 0.6rem; }
     .tile { background: var(--gray-bg); border-radius: 10px; padding: 0.45rem 0.6rem; display: flex; flex-direction: column; gap: 0.1rem; }
     .tile b { font-size: 1.05rem; font-weight: 700; color: var(--eip-navy); line-height: 1.1; }
@@ -217,14 +227,10 @@
     .start-hint button { margin-left: auto; border: none; background: transparent; cursor: pointer; color: var(--gray-text); font-size: 1.1rem; line-height: 1; padding: 0.2rem 0.5rem; min-width: 28px; min-height: 28px; border-radius: 999px; }
     .start-hint button:hover { color: var(--blue-text); background: #fff; }
     .load-wrap { display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 2rem 1rem; color: var(--gray-text); font-size: 0.8rem; }
-    .charts-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; gap: 0.6rem; min-height: 260px; align-items: start; }
     .tier-key { display: flex; flex-wrap: wrap; gap: 0.2rem 0.8rem; padding: 0.2rem 0.3rem 0; font-size: 0.68rem; color: var(--gray-text); }
     .tier-key span { display: inline-flex; align-items: center; gap: 0.3rem; }
     .tier-key i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
     .tier-key .k1 { background: var(--t1); } .tier-key .k2 { background: var(--t2); } .tier-key .k3 { background: var(--t3); }
-    .chart-card { background: #fff; border: 1px solid var(--gray-border); border-radius: 10px; padding: 0.4rem 0.5rem 0.2rem; display: flex; flex-direction: column; min-width: 0; }
-    .chart-card h3 { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-text); padding: 0 0.3rem; }
-    .chart-card .plot { flex: 1 1 auto; min-height: 220px; }
 
     /* grid cell bits */
     .fdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.35rem; vertical-align: middle; }
@@ -323,7 +329,6 @@
     .send-h { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-text); margin: 0.5rem 0 0.2rem; }
     .send-err { font-size: 0.78rem; color: var(--alert-text); background: var(--eip-orange-light); border-radius: 8px; padding: 0.4rem 0.6rem; }
 
-    @media (max-width: 1100px) { .charts-grid { grid-template-columns: 1fr 1fr; } .charts-grid .chart-card:first-child { grid-column: 1 / -1; } }
     /* Below 1024 the columns stack (a 1024-wide laptop keeps the side-by-side layout) */
     @media (max-width: 1023px) {
       .hdr-back, .link-label, .hagency, .hdr-sep { display: none; }
@@ -339,7 +344,6 @@
       .hdr-brand { min-width: 0; flex: 1; }
       .hdr-links calcite-button { --calcite-button-padding-x: 0.2rem; }
       #detailCard { right: 6px; top: 6px; width: calc(100% - 12px); max-height: calc(100% - 12px); }
-      .charts-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) { .beta-chip, .htitle { display: none; } #appHeader { gap: 0.4rem; } }
   </style>
@@ -429,10 +433,10 @@
 
       <section class="panel-sec">
         <h2 class="sec-title">Filters
-          <button id="resetFiltersBtn" class="sec-tool" title="Reset the filters: EIP projects in planning or implementation">Reset</button>
+          <button id="resetFiltersBtn" class="sec-tool" title="Clear the search, the switches, and the working group">Reset</button>
         </h2>
-        <p class="sec-help">EIP projects in planning or implementation on the EIP Project Tracker, the same set as its 5-Year List. Use these
-          filters to shorten the table. A project that is not in the Tracker yet cannot be picked; ask its implementer to add it.</p>
+        <p class="sec-help">EIP projects in planning or implementation on the EIP Project Tracker, the same set as its 5-Year List. A project
+          that is not in the Tracker yet cannot be picked; ask its implementer to add it.</p>
         <div class="search-box">
           <calcite-icon icon="search" scale="s"></calcite-icon>
           <input id="searchInput" type="text" autocomplete="off" spellcheck="false" placeholder="Search projects" aria-label="Search projects"
@@ -442,84 +446,20 @@
           <calcite-switch id="pickedOnly" scale="s" label="Only picked projects"></calcite-switch>
           <span>Only picked projects</span>
         </label>
-        <label class="field"><span class="lbl" title="The EIP focus area the Tracker assigns each project. Click a focus area to turn it on or off. All projects turns every focus area back on.">Focus area <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <div class="chips" id="focusChips"></div>
-        </label>
-        <label class="field"><span class="lbl" title="The organization listed as lead implementer on the Tracker. Pick one or more; empty means any.">Lead implementer <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <calcite-combobox id="leadSel" label="Lead implementer" selection-mode="multiple" scale="s" placeholder="Any implementer" max-items="7" overlay-positioning="fixed"></calcite-combobox>
-        </label>
-        <label class="field"><span class="lbl" title="Project stage on the Tracker. The list holds the two forward-looking stages; turn one off to see the other alone.">Stage <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <div class="chips" id="stageChips">
-            <button data-v="Planning/Design" class="on">Planning / Design</button>
-            <button data-v="Implementation" class="on">Implementation</button>
-          </div>
-        </label>
-        <label class="field"><span class="lbl" title="From the Tracker: Unfunded has a cost and nothing secured; Partially funded has some secured and some needed; Fully funded has secured funding covering the cost; Unpriced has no cost estimate. Click to turn a status on or off.">Funding status <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <div class="chips" id="fundChips">
-            <button data-v="unfunded" class="on" title="Has a cost estimate and no secured funding yet">Unfunded</button>
-            <button data-v="partial" class="on" title="Some funding secured, some still needed">Partially funded</button>
-            <button data-v="fully" class="on" title="Secured funding covers the estimated cost">Fully funded</button>
-            <button data-v="unpriced" class="on" title="No estimated total cost on the Tracker">Unpriced</button>
-          </div>
-        </label>
         <label class="toggle" title="Projects whose Tracker record shows a Lake Tahoe Restoration Act request or past LTRA funding. A hint, not a rule: the LTRA list is whatever reviewers put on it.">
           <calcite-switch id="ltraHintOnly" scale="s" label="Only projects with LTRA history on the Tracker"></calcite-switch>
           <span>Only projects with LTRA history on the Tracker</span>
         </label>
-        <details class="more">
-          <summary>More filters</summary>
-          <label class="field"><span class="lbl" title="The program under the focus area (for example Stormwater Management, Forest Restoration, Transportation). Pick one or more; empty means any.">EIP program <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <calcite-combobox id="programSel" label="EIP program" selection-mode="multiple" scale="s" placeholder="Any program" max-items="7" overlay-positioning="fixed"></calcite-combobox>
-          </label>
-          <label class="field"><span class="lbl" title="Public tags applied on the Tracker, such as Climate Resilience or a corridor plan. Pick one or more; empty means any.">Tag <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <calcite-combobox id="tagSel" label="Tag" selection-mode="multiple" scale="s" placeholder="Any public tag" max-items="7" overlay-positioning="fixed"></calcite-combobox>
-          </label>
-          <label class="field"><span class="lbl" title="Funding sources with expenditures reported on the project. Pick one or more to see projects those sources have already invested in.">Funding source already on the project <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <calcite-combobox id="fundSel" label="Funding source already on the project" selection-mode="multiple" scale="s" placeholder="Any source" max-items="7" overlay-positioning="fixed"></calcite-combobox>
-          </label>
-          <label class="field"><span class="lbl" title="Where the project is. California and Nevada each include projects that span both states.">State <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <div class="seg" id="stateSeg" role="radiogroup" aria-label="State">
-              <button data-v="" class="active" role="radio" aria-checked="true">All</button>
-              <button data-v="CA" role="radio" aria-checked="false">California</button>
-              <button data-v="NV" role="radio" aria-checked="false">Nevada</button>
-            </div>
-          </label>
-        </details>
       </section>
 
       <section class="panel-sec" id="receivedSec">
         <h2 class="sec-title">Picks received</h2>
+        <calcite-button id="printBtn" icon-start="print" appearance="solid" kind="brand" scale="m" width="full" title="A readable version of this list's combined picks, one section per working group with totals, for printing or saving as PDF">Print master sheet</calcite-button>
         <div class="row" id="surveyRow" style="align-items:center">
           <div class="foot-status" id="surveyStatus" style="flex:1" hidden></div>
           <calcite-button id="refreshPicksBtn" icon-start="refresh" appearance="outline" kind="brand" scale="s" title="Reload everyone's sent picks" label="Refresh picks"></calcite-button>
         </div>
-        <div id="reviewerChips" aria-label="Working group lists received"></div>
-        <calcite-button id="printBtn" icon-start="print" appearance="solid" kind="brand" scale="m" width="full" title="A readable version of this list's combined picks, one section per working group with totals, for printing or saving as PDF">Print master sheet</calcite-button>
-      </section>
-
-      <section class="panel-sec collapsed" id="envSec">
-        <h2 class="sec-title">For working group leads: available funding
-          <button id="envToggle" class="sec-tool" title="Show or hide the available funding settings">Show</button>
-        </h2>
-        <p class="sec-help">Enter the dollars available for this list and the table shows which picked projects it covers, going down the
-          group ranking by each project's request (the middle value of reviewers' requests; unfunded need from the Tracker where no request
-          was given).</p>
-        <div class="pill-input">
-          <span class="pre">$</span>
-          <input id="envInput" type="number" min="0" step="1" placeholder="0" aria-label="Available funding in millions of dollars"
-                 title="Dollars available for this list, in millions. Picked projects are funded in rank order until this runs out." />
-          <span class="post">million</span>
-        </div>
-        <div class="env-presets" id="envPresets">
-          <button data-v="10">$10M</button><button data-v="25">$25M</button><button data-v="50">$50M</button>
-          <button data-v="100">$100M</button><button data-v="250">$250M</button><button data-v="">Clear</button>
-        </div>
-        <label class="field"><span class="lbl" title="Skip it and keep going funds smaller projects further down the ranking with what is left. Stop there funds nothing past the first project that does not fit.">When the next project does not fit <svg class="info-i" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <div class="seg" id="modeSeg" role="radiogroup" aria-label="When the next project does not fit">
-            <button data-v="skip" class="active" role="radio" aria-checked="true" title="Skip the project that does not fit and keep funding smaller ones further down">Skip it and keep going</button>
-            <button data-v="strict" role="radio" aria-checked="false" title="A strict cut line: nothing past the first project that does not fit">Stop there</button>
-          </div>
-        </label>
+        <div id="reviewerChips" aria-label="Show one working group's picks"></div>
       </section>
     </div><!-- /panelScroll -->
 
@@ -546,15 +486,13 @@
       <div class="toast" id="toast"></div>
       <div id="drawer">
         <div class="drawer-head">
-          <div class="dtabs" role="tablist" aria-label="Table or charts">
-            <button data-tab="list" class="active" role="tab" aria-selected="true" aria-controls="gridWrap">Ranked list</button>
-            <button data-tab="charts" role="tab" aria-selected="false" aria-controls="chartsWrap">Funding and charts</button>
+          <div class="dtabs" aria-label="Table">
+            <button data-tab="list" class="active" aria-current="true">Ranked list</button>
           </div>
           <span class="d-count" id="drawerCount"></span>
           <span class="spacer"></span>
           <div id="drawerTools">
             <input id="quickFilter" type="text" placeholder="Filter rows…" aria-label="Filter rows" />
-            <button class="d-txt" id="colsBtn" title="Show every column, including costs and Tracker details">All columns</button>
             <button class="d-txt" id="maxBtn" title="Show or hide the map above the table">Show map</button>
           </div>
           <button class="d-btn" id="drawerToggle" title="Collapse / expand"><calcite-icon icon="chevron-down" scale="s" id="drawerToggleIcon"></calcite-icon></button>
@@ -565,14 +503,6 @@
             criteria, and note in the pop-up; the table shows what you set.</div></calcite-notice></div>
           <div class="focus-bar" id="focusBar" hidden><span>Showing the <span id="focusCount"></span> sent by <b id="focusWho"></b> on this list, in their priority order.</span><button id="focusClear">Show All Projects</button></div>
           <div id="gridWrap"><div class="load-wrap" id="gridLoading"><calcite-loader inline scale="m" label="Loading EIP projects"></calcite-loader> Loading EIP projects from the Tracker snapshot</div><div id="grid" hidden></div></div>
-          <div id="chartsWrap" hidden>
-            <div class="tiles" id="tiles"></div>
-            <div class="charts-grid">
-              <div class="chart-card"><h3>Where the funding runs out</h3><div class="plot" id="chartCum"></div></div>
-              <div class="chart-card"><h3>Requests by working group and priority</h3><div class="tier-key" aria-hidden="true"><span><i class="k1"></i>Priority 1</span><span><i class="k2"></i>Priority 2</span><span><i class="k3"></i>Priority 3</span></div><div class="plot" id="chartWg"></div></div>
-              <div class="chart-card"><h3>Requests by lead implementer and priority</h3><div class="tier-key" aria-hidden="true"><span><i class="k1"></i>Priority 1</span><span><i class="k2"></i>Priority 2</span><span><i class="k3"></i>Priority 3</span></div><div class="plot" id="chartLead"></div></div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -612,18 +542,17 @@
           you choose <em>Edit Previous LTRA Priority Picks</em> in the confirmation, keeps the earlier picks and adds the new ones. The
           confirmation picks Replace when this browser already holds everything you sent before, and Edit Previous otherwise.
           <em>Load them</em> under your email pulls your earlier picks into the browser to edit first.</li>
-        <li><strong>Picks received.</strong> Everyone whose picks have arrived is listed in the panel. Click a name to see only that reviewer's
-          picks on the current list, with their priority, request, and note in a <em>Picks Received</em> column; click again, or <em>Show All Projects</em>, to go back.</li>
+        <li><strong>Picks received.</strong> The panel lists <em>All projects</em> and one button for each working group that has sent
+          picks on the current list. Click a group to see only its picks in the table; click <em>All projects</em> to see everything again.
+          <em>Print master sheet</em> sits above the list.</li>
         <li id="aboutCombine"><strong>How picks combine.</strong> For each project the tool counts how many reviewers called it Priority 1, Priority 2, and
           Priority 3. The ranking is by Priority 1 votes, then Priority 2, then Priority 3, then name. <em>Group priority</em> is the priority most
           reviewers gave (ties go to the higher priority); <em>Group request</em> is the median of their requests; <em>Working group</em> lists
           every group whose reviewers picked it. Projects nobody picked have no rank. The
           table opens grouped by working group, as the master sheet is. The working group leads settle the final priority and dollar figure
           from this picture.</li>
-        <li><strong>Filters.</strong> Filter by focus area, implementer, stage, funding status, Tracker LTRA history, program,
-          tag, funding source, and state.</li>
-        <li><strong>Available funding.</strong> Enter a dollar amount for the current list. Picked projects are funded in rank order by their
-          request (or unfunded need where none was given).</li>
+        <li><strong>Filters.</strong> Search by project name, EIP number, or lead implementer, or show only picked projects or projects
+          with LTRA history on the Tracker.</li>
         <li><strong>Print master sheet and Master sheet CSV.</strong> One section per working group, as the master sheet has one tab per group:
           the projects that group's own reviewers picked, combined across those reviewers, with Priority 1 and all-priority totals. A project
           picked by two groups appears under both and is marked. The print version opens as a clean page for printing or saving as PDF; the CSV
@@ -647,8 +576,6 @@
         <li><em>Unfunded need</em> is the estimated total cost minus the funding the implementer reports as secured. It, secured funding, and
           cost are self-reported by implementers and only as current as their last Tracker update.</li>
         <li>Your own picks count toward the group once they are sent. Picks and notes are also kept in this browser until you clear them.</li>
-        <li>The table opens in a reviewer view. <em>All columns</em> above the table adds focus area, stage, secured and spent amounts, and
-          the rest of the Tracker record.</li>
         <li>This tool does not write to the Tracker. Submitted picks live in TRPA's ArcGIS Online; the exports carry the lists forward.</li>
       </ul>
     </div>
@@ -666,8 +593,6 @@
       { key: "Science, Stewardship, and Accountability", short: "Science & Stewardship", color: C.navy },
       { key: "Unassigned", short: "Unassigned", color: C.gray },
     ];
-    // Unassigned keeps its color and legend entry but has no chip; All projects stands in for it (see passes)
-    const FOCUS_CHIPS = FOCUS.filter(f => f.key !== "Unassigned");
     const FOCUS_COLOR = Object.fromEntries(FOCUS.map(f => [f.key, f.color]));
     const JURIS = ["City of South Lake Tahoe", "Douglas County, NV", "El Dorado County, CA", "Placer County, CA", "Washoe County, NV",
       "Carson City County, NV", "Tahoe Regional Planning Agency", "U.S. Forest Service - Lake Tahoe Basin Management Unit", "Alpine County"];
@@ -787,10 +712,10 @@
     let review = loadLS(LS_REVIEW, { reviewer: "", email: "", agency: "", wg: "", picks: {} });
     let imports = loadLS(LS_IMPORTS, {});                              // CSV fallback: { reviewerName: { wg, picks } }
     let remote = {}, remoteLoadedAt = 0;                               // submissions: { key: { who, agency, wg, picks, when } }
-    let selectedId = null, activeTab = "list", snapshotDate = null, fullView = false;
+    let selectedId = null, snapshotDate = null;
     let focusWho = null;        // a reviewer label from Picks received; when set, the table shows only that reviewer's picks
     let map, view, ptLayer, hlLayer, Graphic, Point;
-    let gridApi = null, chartsDirty = true;
+    let gridApi = null;
     const myKey = () => review.email ? fnv(review.email.trim().toLowerCase()) : "";
     const envelope = () => envelopes[listKey];
 
@@ -918,22 +843,15 @@
     }
 
     // ───────────────────────── Filters ─────────────────────────
-    const chipsOn = (el) => [...el.querySelectorAll("button.on:not([data-all])")].map(b => b.dataset.v);
-    const comboVals = (el) => (el.selectedItems || []).map(i => i.value);
+    // The list is fixed to EIP projects in planning or implementation; the panel keeps only search and two switches
+    // (Oct. 2026 review removed the focus area, implementer, stage, funding status, program, tag, source, and state filters)
+    const STAGES = ["Planning/Design", "Implementation"];
     function passes(p) {
       const fp = focusPicks(); if (fp && !fp[p.id]) return false;
-      if (!p.isEip) return false;   // non-EIP Tracker projects cannot be picked and stay out (Oct. 2026 review removed the switch)
-      if (!chipsOn($("stageChips")).includes(p.stage)) return false;
+      if (!p.isEip) return false;   // non-EIP Tracker projects cannot be picked and stay out
+      if (!STAGES.includes(p.stage)) return false;
       if ($("pickedOnly").checked && !(p.tl.n || (myPick(p.id) || {}).l === listKey && myPick(p.id).t)) return false;
       if ($("ltraHintOnly").checked && !p.hasLtra) return false;
-      // Every EIP project has a focus area today; one that lacks it would still show while every focus area is on (All projects)
-      const fa = chipsOn($("focusChips")); if (!(fa.includes(p.focus) || p.focus === "Unassigned" && fa.length === FOCUS_CHIPS.length)) return false;
-      const prog = comboVals($("programSel")); if (prog.length && !prog.includes(p.program)) return false;
-      const lead = comboVals($("leadSel")); if (lead.length && !lead.includes(p.lead)) return false;
-      const fs = comboVals($("fundSel")); if (fs.length && !p.funding.some(f => fs.includes(f))) return false;
-      const tg = comboVals($("tagSel")); if (tg.length && !p.tags.some(t => tg.includes(t))) return false;
-      const st = $("stateSeg").querySelector("button.active").dataset.v; if (st && !p.state.includes(st)) return false;
-      if (!chipsOn($("fundChips")).includes(p.fstatus)) return false;
       const q = $("searchInput").value.trim().toLowerCase();
       if (q && !(p.name.toLowerCase().includes(q) || p.id.includes(q) || p.lead.toLowerCase().includes(q))) return false;
       return true;
@@ -956,8 +874,7 @@
       allocate(active);
       pool = [...active, ...list.filter(p => p.excluded).sort((a, b) => a.name.localeCompare(b.name))];
       renderListCounts(); syncAria();
-      renderGrid(); renderMap(); renderLegend(); renderStatus(); updateSendState(); chartsDirty = true;
-      if (activeTab === "charts") renderCharts();
+      renderGrid(); renderMap(); renderLegend(); renderStatus(); updateSendState(); renderReviewers();
       if (selectedId && !keepDetailCard) showDetail(selectedId, false);
       $("csvBtn").disabled = !pool.length;
     }
@@ -1157,16 +1074,16 @@
         ]),
         // Any click on a row, the project name included, opens the pop-up; the Project # link goes to the Tracker fact sheet instead
         onCellClicked: (e) => { if (!e.event.target.closest("a")) selectProject(e.data.id, true); },
-        onFilterChanged: () => renderDrawerCount(),
+        onFilterChanged: () => { renderDrawerCount(); renderReviewers(); },
         // Clicking # off the default two-column sort would clear every sort; fall back to plain rank order with the indicator showing
         // Clearing every sort falls back to plain rank order (voting) or the default working group order (no voting)
         onSortChanged: () => { if (!gridApi.getColumnState().some(c => c.sort)) { if (FEATURES.voting) gridApi.applyColumnState({ state: [{ colId: "rank", sort: "asc" }], defaultState: { sort: null } }); else applyDefaultSort(); } },
       });
       $("quickFilter").addEventListener("input", () => gridApi.setGridOption("quickFilterText", $("quickFilter").value));
-      $("colsBtn").addEventListener("click", () => { fullView = !fullView; $("colsBtn").classList.toggle("on", fullView); $("colsBtn").textContent = fullView ? "Fewer columns" : "All columns"; applyColumnVisibility(); });
     }
-    // Reviewer view shows what a reviewer needs; the rest appears with "All columns" or when it becomes relevant.
-    const REVIEWER_COLS = ["rank", "myTier", "myReq", "crit", "note", "name", "id", "lead", "cost", "need", "fstatus"];
+    // The table shows only what a reviewer needs (Oct. 2026 review dropped the cost, need, and funding status columns and the
+    // All columns view); the Tracker figures stay in the pop-up and the Ranked list CSV.
+    const REVIEWER_COLS = ["rank", "myTier", "myReq", "crit", "note", "name", "id", "lead"];
     // Count line above the table: the current list, the rows showing (after the quick filter), picked and excluded counts
     function renderDrawerCount() {
       if (!gridApi) return;
@@ -1205,14 +1122,14 @@
     function applyColumnVisibility() {
       if (!gridApi) return;
       const all = gridApi.getAllGridColumns().map(c => c.getColId());
-      const show = new Set(fullView ? all : REVIEWER_COLS);
-      if (fullView || reviewerCount() > 0) { show.add("votes"); show.add("gTier"); show.add("gReq"); show.add("wg"); show.add("gpicks"); }
+      const show = new Set(REVIEWER_COLS);
+      if (reviewerCount() > 0) { show.add("votes"); show.add("gTier"); show.add("gReq"); show.add("wg"); show.add("gpicks"); }
       if (FEATURES.voting) show.delete("gpicks"); else VOTING_COLS.forEach(c => show.delete(c));
-      if (!FEATURES.voting && !fullView) show.delete("wg");   // Group picks already names each group
+      if (!FEATURES.voting) show.delete("wg");   // Group picks already names each group
       if (focusPicks()) show.add("theirs"); else show.delete("theirs");
-      if (fullView || envelope() > 0 || pins.size || excluded.size) { show.add("fund"); show.add("flags"); }
+      if (pins.size || excluded.size) { show.add("fund"); show.add("flags"); }
       if (!FEATURES.pins && !FEATURES.exclude) show.delete("flags");   // nothing left to mark
-      if (fullView || listKey === "ltra") show.add("tltra");
+      if (listKey === "ltra") show.add("tltra");
       gridApi.setColumnsVisible(all.filter(c => show.has(c)), true);
       gridApi.setColumnsVisible(all.filter(c => !show.has(c)), false);
     }
@@ -1325,6 +1242,7 @@
       view.when(() => view.goTo({ center: [p.lon, p.lat], zoom: Math.max(view.zoom, 13) }, { duration: 500 })).catch(() => {});
     }
     function hideDetail() { selectedId = null; $("detailCard").hidden = true; renderHighlight(); if (gridApi) gridApi.redrawRows(); }
+    const openHelp = new Set();   // pop-up help lines the reviewer has opened (Priority, Note); kept across redraws
     function showDetail(id, open) {
       const p = pool.find(x => x.id === id); if (!p) { hideDetail(); return; }
       const f = FOCUS.find(x => x.key === p.focus) || FOCUS[4];
@@ -1342,10 +1260,11 @@
             <label class="field" style="flex:1">List
               <div class="seg" id="dcList" role="radiogroup" aria-label="List">${Object.keys(LISTS).map(l => `<button data-v="${l}" role="radio" aria-checked="${pickList === l}" class="${pickList === l ? "active" : ""}">${LISTS[l].label}</button>`).join("")}</div>
             </label>
-            <label class="field" style="flex:1.3">Priority
+            <div class="field" style="flex:1.3"><span class="lbl-row">Priority <button type="button" class="info-btn" data-help="helpTier" aria-controls="helpTier" aria-expanded="${openHelp.has("helpTier")}" title="What the priorities mean"><svg class="info-i" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></span>
               <div class="seg tiers" id="dcTier" role="radiogroup" aria-label="Priority">${[1, 2, 3].map(t => `<button data-v="${t}" role="radio" aria-checked="${mine.t === t}" class="${mine.t === t ? "active" : ""}">${t}</button>`).join("")}<button data-v="" role="radio" aria-checked="${!mine.t}" class="${mine.t ? "" : "active"}" title="No priority">None</button></div>
-            </label>
+            </div>
           </div>
+          <div class="field-help dc-help" id="helpTier"${openHelp.has("helpTier") ? "" : " hidden"}>Priority 1 to 3, where 1 is the highest. Choose None to remove the project from the ${LISTS[pickList].long}.</div>
           <label class="field">Request ($)${drift ? ` <span class="drift" title="${escHtml(drift)}">! differs from the Tracker</span>` : ""}
             <input id="dcReq" type="text" inputmode="decimal" class="plain" placeholder="e.g. 500000, 500k, or 1.5M" value="${mine.req != null ? Math.round(mine.req).toLocaleString("en-US") : ""}" />
           </label>
@@ -1353,9 +1272,10 @@
           <label class="field">LTRA criteria this project meets
             <div class="chips crit" id="dcCrit">${CRITERIA.map(c => `<button data-k="${c.k}" aria-pressed="${(mine.c || []).includes(c.k)}" class="${(mine.c || []).includes(c.k) ? "on" : ""}" title="${escHtml(c.d)}">${escHtml(c.s)}</button>`).join("")}</div>
           </label>
-          <label class="field">Note
-            <textarea id="dcNote" class="plain" rows="2" placeholder="How the criteria were considered, what changed from last year">${escHtml(mine.n || "")}</textarea>
-          </label>
+          <div class="field"><span class="lbl-row"><label for="dcNote">Note</label> <button type="button" class="info-btn" data-help="helpNote" aria-controls="helpNote" aria-expanded="${openHelp.has("helpNote")}" title="What to write in the note"><svg class="info-i" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></span>
+            <div class="field-help dc-help" id="helpNote"${openHelp.has("helpNote") ? "" : " hidden"}>Provide a short narrative or summary of how the criteria were considered for this project's ranking.</div>
+            <textarea id="dcNote" class="plain" rows="2" placeholder="How the criteria were considered for this ranking">${escHtml(mine.n || "")}</textarea>
+          </div>
         </div>
         <div class="dc-score"><span>${p.excluded ? "Excluded from the list" : p.tl.n ? "" : "No sent picks on this list yet"}</span>
           <span style="margin-left:auto">${fundBadge(p.fund, p.pinned)}</span></div>
@@ -1396,6 +1316,9 @@
         hideDetail(); if (changed) recompute();
         if (saved) toast("Saved. Press Send my picks when your list is ready.", 2500);
       });
+      $("detailCard").querySelectorAll(".info-btn").forEach(b => b.addEventListener("click", () => {
+        const h = $(b.dataset.help), show = h.hidden; h.hidden = !show; b.setAttribute("aria-expanded", String(show));
+        if (show) openHelp.add(b.dataset.help); else openHelp.delete(b.dataset.help); }));
       $("dcDescBtn").addEventListener("click", (e) => { const open = $("dcDesc").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", String(open)); });
       if ($("dcPin")) $("dcPin").addEventListener("click", () => toggleFlag(p.id, "pin"));
       if ($("dcEx")) $("dcEx").addEventListener("click", () => toggleFlag(p.id, "ex"));
@@ -1414,65 +1337,6 @@
       $("dcCrit").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; const c = new Set((myPick(p.id) || {}).c || []);
         if (c.has(b.dataset.k)) c.delete(b.dataset.k); else c.add(b.dataset.k); setMyPick(p.id, { c: [...c], l: mine.t ? mine.l : listKey }); b.classList.toggle("on"); b.setAttribute("aria-pressed", String(b.classList.contains("on"))); if (gridApi) gridApi.refreshCells({ force: true }); });
       $("dcNote").addEventListener("change", () => { setMyPick(p.id, { n: $("dcNote").value.trim(), l: mine.t ? mine.l : listKey }); if (gridApi) gridApi.refreshCells({ force: true }); });
-    }
-
-    // ───────────────────────── Charts ─────────────────────────
-    const PL = { font: { family: "Lexend Deca, system-ui, sans-serif", size: 11, color: C.navy }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
-      // Unified hover boxes take the paper color unless told otherwise, and the paper is transparent: give them a white box
-      margin: { l: 8, r: 8, t: 8, b: 30 }, hoverlabel: { bgcolor: "#FFFFFF", bordercolor: "#E1E5EC", font: { family: "Lexend Deca, system-ui, sans-serif", size: 11, color: C.navy } }, showlegend: false };
-    const PLC = { displayModeBar: false, responsive: true };
-    function renderTiles(active) {
-      const picked = active.filter(p => p.rank), withReq = picked.filter(p => p.tl.med != null);
-      const total = withReq.reduce((a, p) => a + p.tl.med, 0), p1 = picked.filter(p => p.tl.tier === 1), p1Total = p1.filter(p => p.tl.med != null).reduce((a, p) => a + p.tl.med, 0);
-      const funded = active.filter(p => p.fund === "funded"), fundedAmt = funded.reduce((a, p) => a + p.amt, 0);
-      const t = [[picked.length, `with sent picks, ${LISTS[listKey].long}`], [p1.length, FEATURES.voting ? "group Priority 1" : "Priority 1 on a group list"], [fmtAmt(total), "requested, all priorities"], [fmtAmt(p1Total), "requested, Priority 1"],
-        [picked.length - withReq.length, "picked without a request"]];
-      if (envelope() > 0) t.push([fmtAmt(envelope() * 1e6), "available"], [funded.length, "projects funded", "hi"], [fmtAmt(fundedAmt), "committed", "hi"], [fmtAmt(Math.max(allocate.left, 0)), "left over"]);
-      $("tiles").innerHTML = t.map(([v, l, cls]) => `<div class="tile ${cls || ""}"><b>${typeof v === "number" ? v.toLocaleString() : v}</b><span>${l}</span></div>`).join("");
-    }
-    function renderCharts() {
-      if (!chartsDirty) return; chartsDirty = false;
-      const active = pool.filter(p => !p.excluded);
-      renderTiles(active);
-      const env = envelope();
-      const ranked = active.filter(p => p.rank && p.amt > 0);
-      let cum = 0; const xs = [], ys = [], cols = [], txt = [];
-      const picksText = (tl) => FEATURES.voting ? `Priority ${tl.tier} by ${tl.n}` : tl.groups.map(g => `${escHtml(g.wg ? wgShort(g.wg) : "No group")} P${g.tier}`).join(", ");
-      ranked.forEach((p) => { cum += p.amt; xs.push(p.rank); ys.push(cum / 1e6); cols.push(p.fund === "funded" ? C.green : env > 0 ? "#C9CFD8" : (TIER_COLOR[FEATURES.voting ? p.tl.tier : p.tl.best] || C.blue));
-        txt.push(`<b>${escHtml(p.name.length > 48 ? p.name.slice(0, 46) + "…" : p.name)}</b><br>${picksText(p.tl)} · ${fmtUSD(p.amt)}${p.tl.med != null ? " requested" : " unfunded need"}<br>Running total ${fmtM(cum)}`); });
-      const total = ys.length ? ys[ys.length - 1] : 0;
-      const cap = env > 0 ? Math.min(total, Math.max(env * 2.5, ys[Math.min(11, ys.length - 1)] || 0)) : total;
-      const clipped = total > cap * 1.02;
-      const shapes = env > 0 ? [{ type: "line", xref: "paper", x0: 0, x1: 1, y0: env, y1: env, line: { color: C.orange, width: 2, dash: "dash" } }] : [];
-      const ann = env > 0 ? [{ xref: "paper", x: 1, y: env, text: `available ${fmtM(env * 1e6)}`, showarrow: false, xanchor: "right", yanchor: "bottom", font: { color: C.orange, size: 10 } }] : [];
-      if (clipped) ann.push({ xref: "paper", yref: "paper", x: 0.02, y: 0.98, text: `axis capped; the full ranking reaches ${fmtM(total * 1e6)}`, showarrow: false, xanchor: "left", yanchor: "top", font: { size: 10, color: "#5F6B7E" } });
-      Plotly.react("chartCum", [{ type: "bar", x: xs, y: ys, marker: { color: cols }, hovertext: txt, hovertemplate: "%{hovertext}<extra></extra>", textposition: "none", name: "" }],
-        { ...PL, hovermode: "x unified", shapes, annotations: ann, bargap: 0.1,
-          xaxis: { title: { text: ranked.length ? (FEATURES.voting ? "picked projects, in rank order" : "picked projects, highest priority first") : "no picked projects yet", font: { size: 10, color: "#5F6B7E" } }, showgrid: false, zeroline: false, hoverformat: "d" },
-          yaxis: { ticksuffix: "M", tickprefix: "$", gridcolor: "#EEF1F5", zeroline: false, automargin: true, range: [0, (cap || 1) * 1.08] } }, PLC);
-      const picked = active.filter(p => p.rank);
-      // Each stack adds requests at their priority. With voting off, every working group's own pick counts under that group's priority
-      // (the same way the master sheet totals add group lists); with voting on, the blended group priority and median.
-      const parts = (p) => FEATURES.voting ? (p.tl.med != null ? [{ wg: p.tl.wg, t: p.tl.tier, amt: p.tl.med }] : [])
-        : p.tl.groups.filter(g => g.med != null).map(g => ({ wg: g.wg, t: g.tier, amt: g.med }));
-      const stackBy = (keyFn, labelFn, top) => {
-        const agg = {};
-        for (const p of picked) for (const x of parts(p)) { const k = keyFn(p, x); agg[k] = agg[k] || { 1: 0, 2: 0, 3: 0 }; agg[k][x.t] += x.amt; }
-        let keys = Object.keys(agg).sort((a, b) => (agg[b][1] + agg[b][2] + agg[b][3]) - (agg[a][1] + agg[a][2] + agg[a][3])); if (top) keys = keys.slice(0, top);
-        keys.reverse(); const lab = keys.map(labelFn);
-        return [1, 2, 3].map(t => ({ type: "bar", orientation: "h", y: lab, x: keys.map(k => agg[k][t] / 1e6), name: `Priority ${t}`, marker: { color: TIER_COLOR[t] },
-          hovertemplate: `$%{x:.2f}M<extra></extra>` }));
-      };
-      // Horizontal bars: the unified hover runs along y, so one tooltip lists all three priorities for the hovered bar.
-      // The priority key is HTML in each card header (.tier-key), so Plotly's legend stays off and can never sit on the bars.
-      const ax = (h) => ({ ...PL, barmode: "stack", hovermode: "y unified", showlegend: false, height: h,
-        margin: { ...PL.margin, t: 6 },
-        xaxis: { ticksuffix: "M", tickprefix: "$", gridcolor: "#EEF1F5", zeroline: false, automargin: true }, yaxis: { automargin: true, tickfont: { size: 10 } } });
-      const wgTraces = stackBy((p, x) => x.wg || "No working group given", k => wgShort(k));
-      const leadTraces = stackBy((p) => p.lead, k => k.length > 24 ? k.slice(0, 22) + "…" : k, 12);
-      const hFor = (traces) => Math.max(220, 50 + 22 * (traces[0] ? traces[0].y.length : 0));   // about 22 px a bar, so 12 implementers are not squeezed
-      Plotly.react("chartWg", wgTraces, ax(hFor(wgTraces)), PLC);
-      Plotly.react("chartLead", leadTraces, ax(hFor(leadTraces)), PLC);
     }
 
     // ───────────────────────── Status + exports ─────────────────────────
@@ -1502,7 +1366,7 @@
         ["Estimated cost", (p) => p.cost ?? "", true], ["Secured funding", (p) => p.secured ?? "", true], ["Unfunded need", (p) => p.need ?? "", true], ["Need basis", (p) => p.needBasis ?? "", true],
         ["Tracker LTRA request", (p) => p.ltraAsk ?? "", true], ["Tracker LTRA secured", (p) => p.ltraSecured ?? "", true], ["Requested not secured", (p) => p.targeted ?? "", true],
         ["Funding status", (p) => p.fstatus, true], ["On 5-Year List", (p) => p.fiveYear ? "yes" : "", true], ["Expenditures to date", (p) => p.spent ?? "", true],
-        ["Funding test", (p) => p.fund, true], ["Pinned", (p) => p.pinned ? "yes" : "", FEATURES.pins], ["Excluded", (p) => p.excluded ? "yes" : "", FEATURES.exclude],
+        ["Funding test", (p) => p.fund, envelope() > 0], ["Pinned", (p) => p.pinned ? "yes" : "", FEATURES.pins], ["Excluded", (p) => p.excluded ? "yes" : "", FEATURES.exclude],
         ["My list", (p, tl, m) => m.t ? LISTS[m.l].label : "", true], ["My priority", (p, tl, m) => m.t ?? "", true], ["My request", (p, tl, m) => m.req != null ? Math.round(m.req) : "", true],
         ["My criteria", (p, tl, m) => critText(m.c), true], ["My note", (p, tl, m) => m.n ?? "", true],
         ["Threshold categories", (p) => p.thresholds.join(", "), true], ["Funding sources", (p) => p.funding.join("; "), true], ["Funding requests", (p) => p.requests, true],
@@ -1657,33 +1521,25 @@ ${summary}${sections}
       renderReviewers(); recompute();
       if (added) toast(`Imported ${added} pick${added === 1 ? "" : "s"}.`);
     });
-    // One line per list received, labeled by working group (Oct. 2026 review: groups rank together, so the group is the
-    // sender of record; the person who sent it is in the hover text). "you" marks your own submission.
+    // Picks received (Oct. 2026 review): All projects plus one button per working group with picks on the current list. A button
+    // filters the table to that group's picks through the Group picks column filter, so the buttons and the column menu agree.
+    // Who sent each list, and when, is in the button's hover text.
     const wgLabel = (wg) => wg || "No working group given";
     const focusLabel = (r) => r.key.startsWith("csv:") ? `${wgLabel(r.wg)} (CSV)` : wgLabel(r.wg);
+    const shownWg = () => { const m = gridApi && gridApi.getColumnFilterModel("gpicks"); return (m && m.value) || ""; };
+    function showWg(wg) { if (gridApi) gridApi.setColumnFilterModel("gpicks", wg ? { value: wg } : null).then(() => gridApi.onFilterChanged()); }
     function renderReviewers() {
-      const el = $("reviewerChips"); const rows = [];
-      // "LTRA: 2 P1, 1 P2 · Other: none"
-      const counts = (picks) => { const c = { ltra: [0, 0, 0, 0], other: [0, 0, 0, 0] }; for (const x of Object.values(picks)) if (x.t) c[x.l][x.t]++;
-        const f = (v) => [1, 2, 3].filter(t => v[t]).map(t => `${v[t]} P${t}`).join(", ") || "none"; return `LTRA: ${f(c.ltra)} · Other: ${f(c.other)}`; };
-      for (const [k, rv] of Object.entries(remote)) {
-        const me = k === myKey();
-        const when = rv.when ? apDate(rv.when, false) : "";
-        const sender = whoLabel(rv.who, rv.agency), focused = focusWho === k;
-        rows.push(`<li class="rrow pick${me ? " me" : ""}${focused ? " focus" : ""}" data-key="${escHtml(k)}" role="button" tabindex="0" aria-pressed="${focused}" title="Sent by ${escHtml(sender)}${rv.when ? " on " + new Date(rv.when).toLocaleString() : ""}. Click to show only these picks in the table. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(wgLabel(rv.wg))}${me ? ' <em>you</em>' : ""}<small>${counts(rv.picks)}</small></span><span class="r-when">${escHtml(when)}</span></li>`);
-      }
-      for (const [who, m] of Object.entries(imports)) {
-        const focused = focusWho === "csv:" + who;
-        rows.push(`<li class="rrow pick csv${focused ? " focus" : ""}" data-key="${escHtml("csv:" + who)}" role="button" tabindex="0" aria-pressed="${focused}" title="Imported from a CSV of ${escHtml(who)}'s picks${m.when ? " on " + new Date(m.when).toLocaleString() : ""}. Click to show only these picks in the table. P1, P2, P3 are Priority 1, 2, 3 picks."><span class="r-who">${escHtml(wgLabel(m.wg))} <em>CSV</em><small>${counts(m.picks || {})}</small></span>${m.when ? `<span class="r-when">${escHtml(apDate(m.when, false))}</span>` : ""}<button class="r-x" data-who="${escHtml(who)}" title="Remove this imported list" aria-label="Remove the imported list from ${escHtml(wgLabel(m.wg))}">&times;</button></li>`);
-      }
-      el.innerHTML = rows.length ? `<ul class="rlist">${rows.join("")}</ul><div class="r-hint">Click a working group to see only its picks in the table; click again, or Show All Projects, to go back.</div>` : "";
+      const el = $("reviewerChips"), cur = shownWg(), count = new Map(), sent = new Map();
+      for (const p of pool) for (const g of p.tl.groups) { const k = g.wg || NO_WG; count.set(k, (count.get(k) || 0) + 1); }
+      for (const r of reviewerLists()) { const k = r.wg || NO_WG, rv = remote[r.key];
+        (sent.get(k) || sent.set(k, []).get(k)).push(`${r.who}${rv && rv.when ? ", " + apDate(rv.when, false) : r.key.startsWith("csv:") ? ", CSV" : ""}`); }
+      const order = [...WORKING_GROUPS.filter(w => count.has(w)), ...[...count.keys()].filter(w => w !== NO_WG && !WORKING_GROUPS.includes(w)).sort(), ...(count.has(NO_WG) ? [NO_WG] : [])];
+      const btn = (wg, label, n, title) => `<button class="wgbtn${cur === wg ? " on" : ""}" data-wg="${escHtml(wg)}" aria-pressed="${cur === wg}" title="${escHtml(title)}">${escHtml(label)}<span>${n}</span></button>`;
+      el.innerHTML = `<div class="wglist">${btn("", "All projects", pool.length, "Every project on this list")}` +
+        order.map(w => btn(w, w === NO_WG ? wgLabel("") : w, count.get(w), `${count.get(w)} pick${count.get(w) === 1 ? "" : "s"} on this list. Sent by ${(sent.get(w) || ["unknown"]).join("; ")}`)).join("") + `</div>` +
+        (order.length ? "" : `<div class="r-hint">No working group has sent picks for this list yet.</div>`);
     }
-    $("reviewerChips").addEventListener("click", (e) => {
-      const b = e.target.closest(".r-x");
-      if (b) { if (focusWho === "csv:" + b.dataset.who) focusWho = null; delete imports[b.dataset.who]; saveLS(LS_IMPORTS, imports); renderReviewers(); recompute(); return; }
-      const row = e.target.closest(".rrow.pick"); if (row) setFocus(row.dataset.key);
-    });
-    $("reviewerChips").addEventListener("keydown", (e) => { if (e.key !== "Enter" && e.key !== " ") return; const row = e.target.closest(".rrow.pick"); if (row) { e.preventDefault(); setFocus(row.dataset.key); } });
+    $("reviewerChips").addEventListener("click", (e) => { const b = e.target.closest(".wgbtn"); if (b) showWg(b.dataset.wg); });
     $("clearReviewBtn").addEventListener("click", () => {
       if (!confirm("Clear your picks, requests, criteria, and notes on both lists, and remove imported CSV lists from this browser? Picks you already sent are not affected.")) return;
       review.picks = {}; imports = {};
@@ -1864,42 +1720,21 @@ ${summary}${sections}
 
     // ───────────────────────── Controls ─────────────────────────
     function buildControls() {
-      $("focusChips").innerHTML = `<button data-all="1" class="on">All projects</button>` +
-        FOCUS_CHIPS.map(f => `<button data-v="${escHtml(f.key)}" class="on" style="--c:${f.color}"><i></i>${escHtml(f.short)}</button>`).join("");
       $("reviewerWg").innerHTML = `<option value="">Choose your working group</option>` + WORKING_GROUPS.map(w => `<option value="${escHtml(w)}">${escHtml(w)}</option>`).join("");
-      const fill = (el, values) => { el.innerHTML = ""; for (const v of values) { const it = document.createElement("calcite-combobox-item"); it.value = v; it.heading = v; el.appendChild(it); } };
-      const uniq = (arr) => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b));
-      fill($("programSel"), uniq(projects.map(p => p.program)));
-      fill($("leadSel"), uniq(projects.map(p => p.lead)));
-      fill($("fundSel"), uniq(projects.flatMap(p => p.funding)));
-      fill($("tagSel"), uniq(projects.flatMap(p => p.tags)));
       $("deadline").textContent = SURVEY.deadline;
     }
-    function setCombo(el, values) { const set = new Set(values); el.querySelectorAll("calcite-combobox-item").forEach(it => { it.selected = set.has(it.value); }); }
     function setList(l) {
       listKey = l;
       $("listSwitch").querySelectorAll("button").forEach(b => { const on = b.dataset.v === l; b.classList.toggle("active", on); b.setAttribute("aria-checked", on ? "true" : "false"); });
-      $("envInput").value = envelope() ?? "";
       hideDetail(); recompute();
     }
     $("listSwitch").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && b.dataset.v !== listKey) setList(b.dataset.v); });
     $("listSwitch").addEventListener("keydown", (e) => { if (["ArrowLeft", "ArrowRight"].includes(e.key)) { e.preventDefault(); setList(listKey === "ltra" ? "other" : "ltra"); $("listSwitch").querySelector("button.active").focus(); } });
-    ["programSel", "leadSel", "fundSel", "tagSel"].forEach(id => $(id).addEventListener("calciteComboboxChange", recompute));
     ["pickedOnly", "ltraHintOnly"].forEach(id => $(id).addEventListener("calciteSwitchChange", recompute));
     $("searchInput").addEventListener("input", recomputeSoon);
     const syncChips = syncAria;
-    [$("stageChips"), $("focusChips"), $("fundChips")].forEach(el => el.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
-      if (b.dataset.all) el.querySelectorAll("button[data-v]").forEach(x => x.classList.add("on")); else b.classList.toggle("on"); syncChips(); recompute(); }));
-    const segClick = (id, fn) => $(id).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
-      $(id).querySelectorAll("button").forEach(x => { x.classList.toggle("active", x === b); x.setAttribute("aria-checked", String(x === b)); }); fn(b.dataset.v); });
-    segClick("stateSeg", () => recompute());
-    segClick("modeSeg", (v) => { fillMode = v; recompute(); });
-    $("envInput").addEventListener("input", () => { const v = num($("envInput").value); envelopes[listKey] = v != null && v > 0 ? v : null; recomputeSoon(); });
-    $("envPresets").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $("envInput").value = b.dataset.v; envelopes[listKey] = b.dataset.v ? +b.dataset.v : null; recompute(); });
     function resetFilters(skipRecompute) {
-      $("searchInput").value = ""; $("stageChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", ["Planning/Design", "Implementation"].includes(b.dataset.v)));
-      $("focusChips").querySelectorAll("button").forEach(b => b.classList.add("on")); ["programSel", "leadSel", "fundSel", "tagSel"].forEach(id => setCombo($(id), []));
-      $("stateSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === "")); $("fundChips").querySelectorAll("button").forEach(b => b.classList.add("on"));
+      $("searchInput").value = "";
       $("pickedOnly").checked = false; $("ltraHintOnly").checked = false;
       if (gridApi) gridApi.setFilterModel(null);   // column filters too, such as the Group picks working group
       if (!skipRecompute) recompute();
@@ -1913,11 +1748,10 @@ ${summary}${sections}
         ".\n\nYour name, working group, and email stay. Picks you already sent are not affected.";
       if (!confirm(msg)) return;
       resetFilters(true);
-      envelopes = { ltra: null, other: null }; $("envInput").value = ""; fillMode = "skip"; $("modeSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === "skip"));
+      envelopes = { ltra: null, other: null }; fillMode = "skip";
       pins = new Set(); excluded = new Set(); focusWho = null;
       review.picks = {}; saveLS(LS_REVIEW, review); imports = {}; saveLS(LS_IMPORTS, imports);
-      $("envSec").classList.add("collapsed"); $("envToggle").textContent = "Show";
-      if (fullView) $("colsBtn").click(); if (!document.body.classList.contains("drawer-max")) $("maxBtn").click();
+      if (!document.body.classList.contains("drawer-max")) $("maxBtn").click();
       $("quickFilter").value = ""; gridApi && gridApi.setGridOption("quickFilterText", "");
       if (location.hash) history.replaceState(null, "", location.pathname + location.search);
       hideDetail(); renderReviewers(); setList("ltra");
@@ -1926,13 +1760,6 @@ ${summary}${sections}
     });
     let recomputeT; function recomputeSoon() { clearTimeout(recomputeT); recomputeT = setTimeout(recompute, 180); }
 
-    // drawer
-    document.querySelector(".dtabs").addEventListener("click", (e) => {
-      const b = e.target.closest("button"); if (!b) return;
-      activeTab = b.dataset.tab; document.querySelectorAll(".dtabs button").forEach(x => { x.classList.toggle("active", x === b); x.setAttribute("aria-selected", String(x === b)); });
-      $("gridWrap").hidden = activeTab !== "list"; $("chartsWrap").hidden = activeTab !== "charts"; $("drawerTools").hidden = activeTab !== "list";
-      if (activeTab === "charts") { renderCharts(); setTimeout(() => ["chartCum", "chartWg", "chartLead"].forEach(id => Plotly.Plots.resize(id)), 50); }
-    });
     // Every visit opens table only (Oct. 2026 review); Show map is a per-visit choice and is not remembered
     $("maxBtn").addEventListener("click", () => { const on = document.body.classList.toggle("drawer-max"); $("maxBtn").classList.toggle("on", on); $("maxBtn").textContent = on ? "Show map" : "Table only";
       if (!on && view) setTimeout(() => window.dispatchEvent(new Event("resize")), 50); });
@@ -1941,33 +1768,22 @@ ${summary}${sections}
     $("drawerToggle").addEventListener("click", () => { document.body.classList.toggle("drawer-collapsed"); $("drawerToggleIcon").icon = document.body.classList.contains("drawer-collapsed") ? "chevron-up" : "chevron-down"; });
     $("panelToggle").addEventListener("click", () => { document.body.classList.toggle("panel-collapsed"); $("panelToggleIcon").icon = document.body.classList.contains("panel-collapsed") ? "chevron-right" : "chevron-left"; });
     $("aboutBtn").addEventListener("click", () => { $("aboutDialog").open = true; });
-    const collapsible = (secId, btnId) => $(btnId).addEventListener("click", () => { const c = $(secId).classList.toggle("collapsed"); $(btnId).textContent = c ? "Show" : "Hide"; });
-    collapsible("envSec", "envToggle");
-    const expandSec = (secId, btnId) => { $(secId).classList.remove("collapsed"); $(btnId).textContent = "Hide"; };
-    window.addEventListener("resize", () => { if (activeTab === "charts") ["chartCum", "chartWg", "chartLead"].forEach(id => { try { Plotly.Plots.resize(id); } catch {} }); });
 
     // ───────────────────────── Share link ─────────────────────────
+    // Share links carry the list, the search, the two switches, and the working group shown; older links' other filters and
+    // funding settings are ignored now that the panel has no controls for them (Oct. 2026 review)
     function scenario() {
-      return { v: 3, list: listKey, env: envelopes, mode: fillMode, pins: [...pins], ex: [...excluded],
-        f: { q: $("searchInput").value, st: chipsOn($("stageChips")), fa: chipsOn($("focusChips")), pr: comboVals($("programSel")), ld: comboVals($("leadSel")), fs: comboVals($("fundSel")), tg: comboVals($("tagSel")),
-          s: $("stateSeg").querySelector("button.active").dataset.v, fc: chipsOn($("fundChips")), po: $("pickedOnly").checked, lh: $("ltraHintOnly").checked } };
+      return { v: 4, list: listKey, pins: [...pins], ex: [...excluded],
+        f: { q: $("searchInput").value, po: $("pickedOnly").checked, lh: $("ltraHintOnly").checked, wg: shownWg() } };
     }
     function applyScenario(s) {
-      if (s.env && typeof s.env === "object") envelopes = { ltra: s.env.ltra ?? null, other: s.env.other ?? null };
-      else if (typeof s.env === "number") envelopes = { ltra: s.env, other: s.env };
-      fillMode = s.mode || "skip";
-      $("modeSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === fillMode));
+      envelopes = { ltra: null, other: null }; fillMode = "skip";
       pins = new Set(FEATURES.pins ? (s.pins || []) : []); excluded = new Set(FEATURES.exclude ? (s.ex || []) : []);
       if (s.f) {
         $("searchInput").value = s.f.q || "";
-        $("stageChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", (s.f.st || []).includes(b.dataset.v)));
-        $("focusChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", (s.f.fa || []).includes(b.dataset.v)));
-        setCombo($("programSel"), s.f.pr || []); setCombo($("leadSel"), s.f.ld || []); setCombo($("fundSel"), s.f.fs || []); setCombo($("tagSel"), s.f.tg || []);
-        $("stateSeg").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.v === (s.f.s || "")));
-        if (s.f.fc) $("fundChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", s.f.fc.includes(b.dataset.v)));
         $("pickedOnly").checked = !!s.f.po; $("ltraHintOnly").checked = !!s.f.lh;
+        if (s.f.wg && gridApi) gridApi.setColumnFilterModel("gpicks", { value: s.f.wg }).then(() => gridApi.onFilterChanged());
       }
-      if (envelopes.ltra > 0 || envelopes.other > 0) expandSec("envSec", "envToggle");
       setList(s.list === "other" ? "other" : "ltra");
     }
     const b64e = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
