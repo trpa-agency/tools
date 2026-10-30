@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 266" width="400" height="266" role="img"
+     aria-label="Monitoring Dashboard prototype: a hero band, threshold category cards, and a map of monitoring sites">
+  <defs>
+    <linearGradient id="hero" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#142030"/>
+      <stop offset="0.6" stop-color="#2b4f7a"/>
+      <stop offset="1" stop-color="#9cc3ea"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="266" fill="#f4f5f7"/>
+
+  <!-- Header and subnav -->
+  <rect width="400" height="26" fill="#2f3f56"/>
+  <rect x="12" y="8" width="90" height="10" rx="2" fill="#ffffff" opacity="0.9"/>
+  <rect y="26" width="400" height="12" fill="#263345"/>
+  <rect x="12" y="36" width="40" height="2" fill="#789440"/>
+
+  <!-- Hero -->
+  <rect y="38" width="400" height="58" fill="url(#hero)"/>
+  <text x="12" y="52" font-family="Lexend Deca, Arial, sans-serif" font-size="7" font-weight="700" fill="#cfe0a8" letter-spacing="0.8">LAKE TAHOE INFO</text>
+  <text x="12" y="67" font-family="Lexend Deca, Arial, sans-serif" font-size="13" font-weight="600" fill="#ffffff">Monitoring Programs</text>
+  <g fill="#ffffff"><rect x="12" y="76" width="18" height="8" rx="1"/><rect x="56" y="76" width="14" height="8" rx="1"/><rect x="96" y="76" width="22" height="8" rx="1"/><rect x="144" y="76" width="14" height="8" rx="1"/></g>
+  <g fill="#cdd7e3"><rect x="12" y="87" width="34" height="3" rx="1"/><rect x="56" y="87" width="30" height="3" rx="1"/><rect x="96" y="87" width="38" height="3" rx="1"/><rect x="144" y="87" width="34" height="3" rx="1"/></g>
+
+  <!-- Category cards, two across, five rows -->
+  <g>
+    <rect x="12" y="104" width="101" height="27" rx="3" fill="#ffffff"/><rect x="12" y="104" width="101" height="9" rx="3" fill="#0f3f6f"/><rect x="12" y="129" width="101" height="2" fill="#0f3f6f"/><rect x="20" y="118" width="60" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="119" y="104" width="101" height="27" rx="3" fill="#ffffff"/><rect x="119" y="104" width="101" height="9" rx="3" fill="#415414"/><rect x="119" y="129" width="101" height="2" fill="#415414"/><rect x="127" y="118" width="52" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="12" y="135" width="101" height="27" rx="3" fill="#ffffff"/><rect x="12" y="135" width="101" height="9" rx="3" fill="#675ea1"/><rect x="12" y="160" width="101" height="2" fill="#675ea1"/><rect x="20" y="149" width="44" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="119" y="135" width="101" height="27" rx="3" fill="#ffffff"/><rect x="119" y="135" width="101" height="9" rx="3" fill="#9a5710"/><rect x="119" y="160" width="101" height="2" fill="#9a5710"/><rect x="127" y="149" width="64" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="12" y="166" width="101" height="27" rx="3" fill="#ffffff"/><rect x="12" y="166" width="101" height="9" rx="3" fill="#9cc3ea"/><rect x="12" y="191" width="101" height="2" fill="#9cc3ea"/><rect x="20" y="180" width="56" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="119" y="166" width="101" height="27" rx="3" fill="#ffffff"/><rect x="119" y="166" width="101" height="9" rx="3" fill="#9e2220"/><rect x="119" y="191" width="101" height="2" fill="#9e2220"/><rect x="127" y="180" width="40" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="12" y="197" width="101" height="27" rx="3" fill="#ffffff"/><rect x="12" y="197" width="101" height="9" rx="3" fill="#b0a843"/><rect x="12" y="222" width="101" height="2" fill="#b0a843"/><rect x="20" y="211" width="66" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="119" y="197" width="101" height="27" rx="3" fill="#ffffff"/><rect x="119" y="197" width="101" height="9" rx="3" fill="#b94f41"/><rect x="119" y="222" width="101" height="2" fill="#b94f41"/><rect x="127" y="211" width="48" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="12" y="228" width="101" height="27" rx="3" fill="#ffffff"/><rect x="12" y="228" width="101" height="9" rx="3" fill="#db5b00"/><rect x="12" y="253" width="101" height="2" fill="#db5b00"/><rect x="20" y="242" width="50" height="4" rx="1" fill="#3d3d3d"/>
+    <rect x="119" y="228" width="101" height="27" rx="3" fill="#ffffff"/><rect x="119" y="228" width="101" height="9" rx="3" fill="#f78814"/><rect x="119" y="253" width="101" height="2" fill="#f78814"/><rect x="127" y="242" width="58" height="4" rx="1" fill="#3d3d3d"/>
+  </g>
+
+  <!-- Site map -->
+  <rect x="228" y="104" width="160" height="151" rx="3" fill="#dfe7ee"/>
+  <path d="M296 118 C318 114 336 124 338 146 C342 172 336 206 322 228 C312 242 290 244 282 230 C270 210 268 178 272 150 C274 130 282 120 296 118 Z" fill="#9cc3ea"/>
+  <g stroke="#ffffff" stroke-width="1.2">
+    <circle cx="262" cy="132" r="3.2" fill="#0f3f6f"/>
+    <circle cx="352" cy="140" r="3.2" fill="#415414"/>
+    <circle cx="300" cy="140" r="3.2" fill="#9cc3ea"/>
+    <circle cx="318" cy="170" r="3.2" fill="#675ea1"/>
+    <circle cx="258" cy="176" r="3.2" fill="#9a5710"/>
+    <circle cx="350" cy="196" r="3.2" fill="#db5b00"/>
+    <circle cx="292" cy="198" r="3.2" fill="#9e2220"/>
+    <circle cx="264" cy="222" r="3.2" fill="#b0a843"/>
+    <circle cx="330" cy="236" r="3.2" fill="#b94f41"/>
+    <circle cx="364" cy="226" r="3.2" fill="#f78814"/>
+    <circle cx="246" cy="150" r="3.2" fill="#415414"/>
+    <circle cx="370" cy="164" r="3.2" fill="#0f3f6f"/>
+  </g>
+</svg>
