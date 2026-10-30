@@ -41,6 +41,7 @@
     #panelScroll { flex: 1 1 auto; overflow: auto; padding: 0.8rem 0.9rem 1rem; display: flex; flex-direction: column; gap: 0.9rem; }
     .sec-title { display: flex; align-items: center; gap: 0.45rem; margin: 0; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-text); }
     .sec-help { font-size: 0.76rem; line-height: 1.45; color: var(--gray-text); }
+    .sec-steps { margin: 0; padding-left: 1.15rem; font-size: 0.76rem; line-height: 1.45; color: var(--gray-text); display: flex; flex-direction: column; gap: 0.3rem; }
     .panel-sec { display: flex; flex-direction: column; gap: 0.5rem; }
     .wglist { display: flex; flex-direction: column; gap: 0.3rem; }
     .wgbtn { display: flex; align-items: center; gap: 0.5rem; width: 100%; text-align: left; border: 1px solid var(--gray-border); background: #fff; color: var(--eip-navy);
@@ -134,26 +135,7 @@
     <aside id="sidePanel" aria-label="Priority list controls">
       <div id="panelScroll">
         <section class="panel-sec">
-          <h2 class="sec-title">1. Your working group</h2>
-          <div class="wglist" id="wgList"></div>
-        </section>
-
-        <section class="panel-sec">
-          <h2 class="sec-title">2. Which list</h2>
-          <div class="list-switch" id="listSwitch" role="radiogroup" aria-label="Which list">
-            <button data-v="ltra" class="active" role="radio" aria-checked="true">LTRA list<small id="ltraCount"></small></button>
-            <button data-v="other" role="radio" aria-checked="false">Other list<small id="otherCount"></small></button>
-          </div>
-          <calcite-notice open icon="calendar" kind="brand" scale="s" width="full"><div slot="message" id="deadline"></div></calcite-notice>
-        </section>
-
-        <section class="panel-sec">
-          <h2 class="sec-title">3. Change the list</h2>
-          <p class="sec-help">Click a project name in the table to set its priority, request, criteria, and note. Each save goes on the record right away. To add a project, search for it here.</p>
-          <div class="search-box">
-            <calcite-icon icon="search" scale="s"></calcite-icon>
-            <input id="searchInput" type="text" autocomplete="off" spellcheck="false" placeholder="Search all EIP projects to add one" aria-label="Search all EIP projects" />
-          </div>
+          <h2 class="sec-title">1. Your name and agency</h2>
           <div class="row">
             <label class="field" style="flex:1">Your name<input id="whoName" type="text" class="plain" placeholder="First Last" autocomplete="name" /></label>
             <label class="field" style="flex:1">Agency<input id="whoAgency" type="text" class="plain" placeholder="e.g. CTC, USFS, TRPA" autocomplete="organization" /></label>
@@ -161,7 +143,34 @@
         </section>
 
         <section class="panel-sec">
-          <h2 class="sec-title">4. Print or export</h2>
+          <h2 class="sec-title">2. Your working group</h2>
+          <div class="wglist" id="wgList"></div>
+        </section>
+
+        <section class="panel-sec">
+          <h2 class="sec-title">3. Which list</h2>
+          <div class="list-switch" id="listSwitch" role="radiogroup" aria-label="Which list">
+            <button data-v="ltra" class="active" role="radio" aria-checked="true">LTRA list<small id="ltraCount"></small></button>
+            <button data-v="other" role="radio" aria-checked="false">Other list<small id="otherCount"></small></button>
+          </div>
+          <calcite-notice open icon="calendar" kind="brand" scale="s" width="full"><div slot="message" id="deadline"></div></calcite-notice>
+          <ol class="sec-steps">
+            <li>In the table, click the name of each project your working group wants funded. Its pop-up opens.</li>
+            <li>In the pop-up, confirm or change the list and the priority (1, 2, or 3), enter the dollar request, tick the LTRA criteria the project meets, and write a note.</li>
+          </ol>
+        </section>
+
+        <section class="panel-sec">
+          <h2 class="sec-title">4. Add a project</h2>
+          <p class="sec-help">Search EIP projects or implementers in the search box. Click a project name in the table to set its priority, request, criteria, and note. Each save goes on the record right away.</p>
+          <div class="search-box">
+            <calcite-icon icon="search" scale="s"></calcite-icon>
+            <input id="searchInput" type="text" autocomplete="off" spellcheck="false" placeholder="Search all EIP projects to add one" aria-label="Search all EIP projects" />
+          </div>
+        </section>
+
+        <section class="panel-sec">
+          <h2 class="sec-title">5. Print or export</h2>
           <calcite-button id="printBtn" icon-start="print" appearance="solid" kind="brand" scale="m" width="full" title="Every working group's list with totals, for printing or saving as PDF">Print master sheet</calcite-button>
           <calcite-button id="docBtn" icon-start="file" appearance="outline" kind="brand" scale="m" width="full" title="A draft of the public LTRA Priority List, in the layout of the FY2027 document, with totals from the LTRA lists">Print LTRA priority list</calcite-button>
           <calcite-button id="csvBtn" icon-start="file-csv" appearance="outline" kind="brand" scale="s" width="full" title="Every working group's list in the master sheet column layout">Master sheet CSV</calcite-button>
@@ -177,7 +186,7 @@
         <h2 id="tableTitle">All projects</h2><span class="d-count" id="drawerCount"></span><span class="spacer"></span>
         <input id="quickFilter" type="text" placeholder="Filter rows…" aria-label="Filter rows" />
       </div>
-      <div class="hint"><calcite-notice id="startHint" icon="lightbulb" kind="brand" scale="s" width="full" closable><div slot="message"><b>Start here:</b> choose your working group in the panel. Its list opens. Click a project name to change it, or search above to add one.</div></calcite-notice></div>
+      <div class="hint"><calcite-notice id="startHint" icon="lightbulb" kind="brand" scale="s" width="full" closable><div slot="message"><b>Start here:</b> enter your name, then choose your working group in the panel. Its list opens. Click a project name to change it, or search in the panel to add one.</div></calcite-notice></div>
       <div id="gridWrap"><div class="load-wrap" id="gridLoading"><calcite-loader inline scale="m" label="Loading"></calcite-loader> Loading EIP projects from the Tracker snapshot</div><div id="grid" hidden></div></div>
       <div id="detailCard" hidden></div>
       <div class="toast" id="toast"></div>
@@ -526,9 +535,9 @@
         groups.map(g => `<tr><td>${escHtml(g.wg)}</td><td class="r">${fmtFull(g.all)}</td><td class="r">${fmtFull(g.p1)}</td><td class="r">${g.items.length}</td></tr>`).join("") +
         `<tr class="tot"><td>Total</td><td class="r">${fmtFull(all)}</td><td class="r">${fmtFull(p1)}</td><td class="r">${n}</td></tr></tbody></table>`;
       const sections = groups.map(g => `<section><h2>${escHtml(g.wg)} <small>${g.items.length} project${g.items.length === 1 ? "" : "s"} · ${fmtFull(g.all)} requested, ${fmtFull(g.p1)} in Priority 1</small></h2>
-        <table><thead><tr><th>Priority</th><th>Project</th><th>Implementer</th><th>EIP #</th><th class="r">${FY.current} request</th><th>Criteria</th><th>Note</th><th>Changed</th></tr></thead><tbody>` +
-        g.items.map(r => { const p = proj(r.eip) || {}; return `<tr><td>${tier(r.tier)}</td><td><b>${escHtml(nameOf(r))}</b>${p.active === false ? `<br><em class="warn">${escHtml(p.stage || "not in the Tracker")}</em>` : ""}</td><td>${escHtml(p.lead || "")}</td><td class="mono">${escHtml(r.eip)}</td><td class="r">${r.request != null ? fmtFull(r.request) : "<em>none given</em>"}</td><td><small>${escHtml(critText(r.criteria))}</small></td><td class="notes">${escHtml(r.note) || "<em>none</em>"}</td><td><small>${escHtml(apDate(r.when))}${r.who ? `<br>${escHtml(r.who)}` : ""}</small></td></tr>`; }).join("") +
-        `<tr class="tot"><td colspan="4">Total of all priorities</td><td class="r">${fmtFull(g.all)}</td><td colspan="3"></td></tr><tr class="tot"><td colspan="4">Total of Priority 1 projects</td><td class="r">${fmtFull(g.p1)}</td><td colspan="3"></td></tr></tbody></table></section>`).join("");
+        <table><thead><tr><th>Priority</th><th>Project</th><th>Implementer</th><th>EIP #</th><th class="r">${FY.current} request</th><th>Criteria</th><th>Note</th></tr></thead><tbody>` +
+        g.items.map(r => { const p = proj(r.eip) || {}; return `<tr><td>${tier(r.tier)}</td><td><b>${escHtml(nameOf(r))}</b>${p.active === false ? `<br><em class="warn">${escHtml(p.stage || "not in the Tracker")}</em>` : ""}</td><td>${escHtml(p.lead || "")}</td><td class="mono">${escHtml(r.eip)}</td><td class="r">${r.request != null ? fmtFull(r.request) : "<em>none given</em>"}</td><td><small>${escHtml(critText(r.criteria))}</small></td><td class="notes">${escHtml(r.note) || "<em>none</em>"}</td></tr>`; }).join("") +
+        `<tr class="tot"><td colspan="4">Total of all priorities</td><td class="r">${fmtFull(g.all)}</td><td colspan="2"></td></tr><tr class="tot"><td colspan="4">Total of Priority 1 projects</td><td class="r">${fmtFull(g.p1)}</td><td colspan="2"></td></tr></tbody></table></section>`).join("");
       openPrint(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>${escHtml(title)}</title><link rel="stylesheet" href="${fontCss()}"><style>
   @page { size: landscape; margin: 0.6in; } :root { color-scheme: light; }
   body { font-family: 'Lexend Deca', system-ui, sans-serif; color: #0B1F41; background: #fff; font-size: 10.5pt; margin: 1.2rem 1.5rem; }
@@ -597,9 +606,9 @@ ${summaryBox}<div class="explore"><b>Explore EIP funding, projects, and results 
     });
     $("csvBtn").addEventListener("click", () => {
       const groups = groupTotals(listKey); if (!groups.length) { toast(`Nothing on the ${LISTS[listKey].long} yet.`, 3500); return; }
-      const lines = [["Working group", "Federal Agency", "Implementer", "Project", `${FY.current} Request`, "EIP Tracker #", "Priority Ranking", "Project Type", "Criteria", "Notes", "Changed by", "Changed on", "Tracker LTRA request", "Tracker stage"].map(csvCell).join(",")];
+      const lines = [["Working group", "Federal Agency", "Implementer", "Project", `${FY.current} Request`, "EIP Tracker #", "Priority Ranking", "Project Type", "Criteria", "Notes", "Changed by", "Changed on", "Tracker stage"].map(csvCell).join(",")];
       for (const g of groups) {
-        for (const r of g.items) { const p = proj(r.eip) || {}; lines.push([g.wg, "", p.lead || "", nameOf(r), r.request != null ? Math.round(r.request) : "", r.eip, r.tier, "", critText(r.criteria), r.note, r.who, new Date(r.when).toISOString().slice(0, 10), p.ltraAsk ?? "", p.stage || ""].map(csvCell).join(",")); }
+        for (const r of g.items) { const p = proj(r.eip) || {}; lines.push([g.wg, "", p.lead || "", nameOf(r), r.request != null ? Math.round(r.request) : "", r.eip, r.tier, "", critText(r.criteria), r.note, r.who, new Date(r.when).toISOString().slice(0, 10), p.stage || ""].map(csvCell).join(",")); }
         lines.push([g.wg, "", "", "Total of all Priorities:", Math.round(g.all)].map(csvCell).join(",")); lines.push([g.wg, "", "", "Total of all Priority 1 Projects:", Math.round(g.p1)].map(csvCell).join(",")); lines.push("");
       }
       download(`eip-${listKey}-master-${FY.current}-${todayLocal()}.csv`, "﻿" + lines.join("\r\n") + "\r\n");
