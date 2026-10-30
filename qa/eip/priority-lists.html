@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="eip">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EIP Priority Lists - TRPA Tools</title>
+  <meta name="description" content="Each working group keeps its Lake Tahoe Restoration Act priority list current. Lists start from last year's baseline; every change is saved on the spot and nothing is overwritten." />
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
+  <link href="../../assets/fonts/fonts.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/trpa-tokens.css" />
+  <style>
+    :root {
+      --t1: #2F6B13; --t1-bg: #E8F5E0; --t2: #735A00; --t2-bg: #FFF4CC; --t3: #B5430E; --t3-bg: #FDE8DC;
+      --blue-text: var(--eip-blue-text); --alert-text: var(--eip-alert-text); --shadow: var(--brand-shadow); --font: var(--brand-font);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+    html, body { height: 100%; font-family: var(--font); color: var(--eip-navy); background: var(--gray-bg); overflow: hidden; }
+    body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; font-size: 14px; }
+    a { color: var(--blue-text); }
+    :focus-visible { outline: 2px solid var(--eip-blue); outline-offset: 2px; }
+    h1, h2, h3, h4 { font-weight: 700; }
+    calcite-button { border-radius: 999px; --calcite-button-corner-radius: 999px; }
+
+    #appHeader { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.45rem 1rem; background: var(--white);
+      border-bottom: 1px solid var(--gray-border); box-shadow: 0 1px 4px rgba(11,31,65,0.06); z-index: 20; }
+    .hdr-brand { display: flex; align-items: center; gap: 0.7rem; min-width: 0; }
+    .hdr-brand img { height: 38px; width: auto; }
+    .htitle { display: flex; flex-direction: column; line-height: 1.15; }
+    .hagency { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--blue-text); }
+    .hname { font-size: 0.98rem; font-weight: 700; color: var(--eip-navy); margin: 0; }
+    .hdr-back { font-size: 0.72rem; font-weight: 600; color: var(--gray-text); text-decoration: none; border-left: 1px solid var(--gray-border); padding-left: 0.7rem; white-space: nowrap; }
+    .hdr-links { display: flex; align-items: center; gap: 0.2rem; }
+    .beta-chip { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: var(--eip-orange); border-radius: 999px; padding: 0.15rem 0.5rem; margin-right: 0.4rem; }
+
+    #appBody { flex: 1 1 auto; display: flex; min-height: 0; }
+    #sidePanel { flex: 0 0 clamp(300px, 24vw, 380px); background: var(--white); border-right: 1px solid var(--gray-border); display: flex; flex-direction: column; min-height: 0; }
+    #panelScroll { flex: 1 1 auto; overflow: auto; padding: 0.8rem 0.9rem 1rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .sec-title { display: flex; align-items: center; gap: 0.45rem; margin: 0; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-text); }
+    .sec-help { font-size: 0.76rem; line-height: 1.45; color: var(--gray-text); }
+    .panel-sec { display: flex; flex-direction: column; gap: 0.5rem; }
+    .wglist { display: flex; flex-direction: column; gap: 0.3rem; }
+    .wgbtn { display: flex; align-items: center; gap: 0.5rem; width: 100%; text-align: left; border: 1px solid var(--gray-border); background: #fff; color: var(--eip-navy);
+      border-radius: 8px; padding: 0.42rem 0.65rem; min-height: 36px; font-family: var(--font); font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+    .wgbtn span { margin-left: auto; font-size: 0.7rem; font-weight: 700; color: var(--gray-text); }
+    .wgbtn:hover { border-color: var(--blue-text); background: var(--gray-bg); }
+    .wgbtn.on { background: var(--eip-navy); border-color: var(--eip-navy); color: #fff; }
+    .wgbtn.on span { color: #fff; }
+    .list-switch { display: flex; border: 1.5px solid var(--blue-text); border-radius: 999px; overflow: hidden; }
+    .list-switch button { flex: 1; border: none; background: #fff; cursor: pointer; font-family: var(--font); color: var(--eip-navy); font-size: 0.76rem; font-weight: 700; padding: 0.35rem 0.5rem; min-height: 32px; }
+    .list-switch button.active { background: var(--blue-text); color: #fff; }
+    .list-switch button small { display: block; font-size: 0.62rem; font-weight: 500; opacity: 0.85; }
+    .search-box { display: flex; align-items: center; gap: 0.5rem; background: var(--gray-bg); border: 1px solid var(--gray-border); border-radius: 999px; padding: 0.3rem 0.7rem; }
+    .search-box:focus-within { border-color: var(--eip-blue); background: #fff; }
+    .search-box input { flex: 1; border: none; outline: none; background: transparent; font-family: var(--font); font-size: 0.8rem; color: var(--eip-navy); min-width: 0; }
+    .field { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.72rem; font-weight: 600; color: var(--gray-text); }
+    .row { display: flex; gap: 0.5rem; }
+    input.plain, textarea.plain { font-family: var(--font); font-size: 0.8rem; color: var(--eip-navy); border: 1px solid var(--gray-border); border-radius: 8px; padding: 0.4rem 0.55rem; background: #fff; width: 100%; }
+    input.plain:focus, textarea.plain:focus { border-color: var(--eip-blue); outline: none; }
+    .status { font-size: 0.72rem; line-height: 1.45; color: var(--gray-text); }
+    .status b { color: var(--eip-navy); }
+    .testmode { font-size: 0.72rem; line-height: 1.4; background: var(--eip-blue-light); border-radius: 8px; padding: 0.4rem 0.6rem; color: var(--eip-navy); }
+
+    #main { flex: 1 1 auto; position: relative; display: flex; flex-direction: column; min-width: 0; background: #fff; }
+    .drawer-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.9rem; border-bottom: 1px solid var(--gray-border); flex-wrap: wrap; }
+    .drawer-head h2 { font-size: 0.86rem; }
+    .drawer-head .d-count { font-size: 0.74rem; color: var(--gray-text); font-weight: 600; }
+    .drawer-head .spacer { flex: 1; }
+    #quickFilter { font-family: var(--font); font-size: 0.76rem; border: 1px solid var(--gray-border); border-radius: 999px; padding: 0.3rem 0.7rem; min-width: 180px; }
+    .hint { margin: 0.5rem 0.9rem 0; }
+    #gridWrap { flex: 1 1 auto; min-height: 0; padding: 0.5rem 0.9rem 0.9rem; }
+    #grid { height: 100%; }
+    .load-wrap { display: flex; align-items: center; gap: 0.6rem; padding: 1rem; color: var(--gray-text); font-size: 0.8rem; }
+    .pname { border: none; background: none; padding: 0; margin: 0; max-width: 100%; font: inherit; font-weight: 600; color: var(--blue-text); cursor: pointer; text-align: left;
+      text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--blue-text) 40%, transparent); text-underline-offset: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tier { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; padding: 0 6px; }
+    .tier.t1 { background: var(--t1-bg); color: var(--t1); } .tier.t2 { background: var(--t2-bg); color: var(--t2); } .tier.t3 { background: var(--t3-bg); color: var(--t3); }
+    .cov { font-size: 0.68rem; color: var(--gray-text); }
+    .ag-row.row-selected-proj .ag-cell { background: var(--eip-blue-light) !important; }
+
+    /* pop-up, docked top right so the Project column stays visible */
+    #detailCard { position: absolute; right: 12px; top: 12px; z-index: 16; width: min(430px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto;
+      background: rgba(255,255,255,0.98); border-radius: 12px; box-shadow: var(--shadow); padding: 0.55rem 0.85rem 0.7rem; font-size: 0.78rem; }
+    .dc-head { display: flex; align-items: flex-start; gap: 0.5rem; }
+    .dc-head h3 { font-size: 0.9rem; line-height: 1.2; flex: 1; }
+    .dc-sub { font-size: 0.72rem; color: var(--gray-text); margin: 0.1rem 0 0.4rem; line-height: 1.4; }
+    .dc-pick { border: 1px solid var(--gray-border); border-radius: 10px; padding: 0.5rem 0.65rem; display: flex; flex-direction: column; gap: 0.45rem; margin: 0.3rem 0; }
+    .dc-pick h4 { font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--blue-text); }
+    .dc-pick .field { font-size: 0.7rem; }
+    .lbl-row { display: inline-flex; align-items: center; gap: 0.25rem; }
+    .info-btn { border: none; background: none; padding: 0; min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; color: var(--blue-text); cursor: pointer; border-radius: 999px; }
+    .info-btn:hover, .info-btn[aria-expanded="true"] { background: var(--eip-blue-light); }
+    .dc-help { font-weight: 400; background: var(--eip-blue-light); border-radius: 6px; padding: 0.35rem 0.55rem; color: var(--eip-navy); line-height: 1.4; }
+    .seg { display: flex; border: 1px solid var(--gray-border); border-radius: 8px; overflow: hidden; }
+    .seg button { flex: 1; border: none; background: #fff; cursor: pointer; font-family: var(--font); min-height: 30px; font-size: 0.76rem; font-weight: 600; color: var(--gray-text); }
+    .seg button.active { background: var(--blue-text); color: #fff; font-weight: 700; }
+    .seg.tiers button.active[data-v="1"] { background: var(--t1); } .seg.tiers button.active[data-v="2"] { background: var(--t2); } .seg.tiers button.active[data-v="3"] { background: var(--t3); }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.2rem; }
+    .chips button { border: 1.5px solid var(--gray-border); background: #fff; color: var(--gray-text); cursor: pointer; min-height: 22px; font-family: var(--font); font-size: 0.68rem; font-weight: 500; padding: 0.05rem 0.45rem; border-radius: 999px; }
+    .chips button.on { border-color: var(--eip-blue); color: var(--eip-navy); background: color-mix(in srgb, var(--eip-blue) 10%, #fff); }
+    .chips.req button { font-weight: 600; border-color: var(--blue-text); color: var(--blue-text); }
+    .dc-actions { display: flex; gap: 0.4rem; justify-content: flex-end; margin-top: 0.3rem; }
+    .dc-group { font-size: 0.72rem; color: var(--gray-text); line-height: 1.5; }
+    .dc-links { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 20px); opacity: 0; background: var(--eip-navy); color: #fff; padding: 0.55rem 1rem; border-radius: 999px;
+      font-size: 0.8rem; box-shadow: var(--shadow); transition: all 180ms; z-index: 50; pointer-events: none; max-width: min(90vw, 560px); text-align: center; }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+    .dlg { font-size: 0.82rem; line-height: 1.5; } .dlg p, .dlg li { margin-bottom: 0.4rem; } .dlg ol, .dlg ul { padding-left: 1.2rem; }
+    @media (max-width: 1023px) {
+      #appBody { flex-direction: column; } #sidePanel { flex: 0 0 auto; max-height: 45%; border-right: none; border-bottom: 1px solid var(--gray-border); }
+      #detailCard { right: 6px; top: 6px; width: calc(100% - 12px); max-height: calc(100% - 12px); }
+    }
+  </style>
+</head>
+<body>
+  <header id="appHeader">
+    <div class="hdr-brand">
+      <img src="../../assets/eip-logo-76.png" alt="Lake Tahoe Environmental Improvement Program" width="auto" height="38" />
+      <a href="index.html" class="hdr-back">&larr; EIP maps</a>
+      <div class="htitle"><span class="hagency">Environmental Improvement Program</span><h1 class="hname">Priority Lists</h1></div>
+    </div>
+    <div class="hdr-links">
+      <span class="beta-chip">Test</span>
+      <calcite-button id="refreshBtn" icon-start="refresh" appearance="transparent" kind="neutral" scale="s" title="Reload the lists" label="Reload the lists"></calcite-button>
+      <calcite-button id="aboutBtn" icon-start="information" appearance="transparent" kind="neutral" scale="s" title="About this tool" label="About this tool"></calcite-button>
+      <calcite-button href="../index.html" icon-start="apps" appearance="transparent" kind="neutral" scale="s" title="All TRPA maps" label="All TRPA maps"></calcite-button>
+    </div>
+  </header>
+
+  <div id="appBody">
+    <aside id="sidePanel" aria-label="Priority list controls">
+      <div id="panelScroll">
+        <section class="panel-sec">
+          <h2 class="sec-title">1. Your working group</h2>
+          <div class="wglist" id="wgList"></div>
+        </section>
+
+        <section class="panel-sec">
+          <h2 class="sec-title">2. Which list</h2>
+          <div class="list-switch" id="listSwitch" role="radiogroup" aria-label="Which list">
+            <button data-v="ltra" class="active" role="radio" aria-checked="true">LTRA list<small id="ltraCount"></small></button>
+            <button data-v="other" role="radio" aria-checked="false">Other list<small id="otherCount"></small></button>
+          </div>
+          <calcite-notice open icon="calendar" kind="brand" scale="s" width="full"><div slot="message" id="deadline"></div></calcite-notice>
+        </section>
+
+        <section class="panel-sec">
+          <h2 class="sec-title">3. Change the list</h2>
+          <p class="sec-help">Click a project name in the table to set its priority, request, criteria, and note. Each save goes on the record right away. To add a project, search for it here.</p>
+          <div class="search-box">
+            <calcite-icon icon="search" scale="s"></calcite-icon>
+            <input id="searchInput" type="text" autocomplete="off" spellcheck="false" placeholder="Search all EIP projects to add one" aria-label="Search all EIP projects" />
+          </div>
+          <div class="row">
+            <label class="field" style="flex:1">Your name<input id="whoName" type="text" class="plain" placeholder="First Last" autocomplete="name" /></label>
+            <label class="field" style="flex:1">Agency<input id="whoAgency" type="text" class="plain" placeholder="e.g. CTC, USFS, TRPA" autocomplete="organization" /></label>
+          </div>
+        </section>
+
+        <section class="panel-sec">
+          <h2 class="sec-title">4. Print or export</h2>
+          <calcite-button id="printBtn" icon-start="print" appearance="solid" kind="brand" scale="m" width="full" title="Every working group's list with totals, for printing or saving as PDF">Print master sheet</calcite-button>
+          <calcite-button id="docBtn" icon-start="file" appearance="outline" kind="brand" scale="m" width="full" title="A draft of the public LTRA Priority List, in the layout of the FY2027 document, with totals from the LTRA lists">Print LTRA priority list</calcite-button>
+          <calcite-button id="csvBtn" icon-start="file-csv" appearance="outline" kind="brand" scale="s" width="full" title="Every working group's list in the master sheet column layout">Master sheet CSV</calcite-button>
+        </section>
+
+        <div class="testmode" id="testMode" hidden></div>
+        <div class="status" id="status">Loading EIP projects…</div>
+      </div>
+    </aside>
+
+    <div id="main">
+      <div class="drawer-head">
+        <h2 id="tableTitle">All projects</h2><span class="d-count" id="drawerCount"></span><span class="spacer"></span>
+        <input id="quickFilter" type="text" placeholder="Filter rows…" aria-label="Filter rows" />
+      </div>
+      <div class="hint"><calcite-notice id="startHint" icon="lightbulb" kind="brand" scale="s" width="full" closable><div slot="message"><b>Start here:</b> choose your working group in the panel. Its list opens. Click a project name to change it, or search above to add one.</div></calcite-notice></div>
+      <div id="gridWrap"><div class="load-wrap" id="gridLoading"><calcite-loader inline scale="m" label="Loading"></calcite-loader> Loading EIP projects from the Tracker snapshot</div><div id="grid" hidden></div></div>
+      <div id="detailCard" hidden></div>
+      <div class="toast" id="toast"></div>
+    </div>
+  </div>
+
+  <calcite-dialog id="aboutDialog" modal heading="About EIP Priority Lists" width-scale="m">
+    <div class="dlg">
+      <p>Each working group keeps its own Environmental Improvement Program priority lists current here: an LTRA list for the annual Lake Tahoe
+        Restoration Act request and an Other list for every other funding source.</p>
+      <ol>
+        <li><strong>Baseline.</strong> The lists start where they ended last cycle: the latest list each working group sent through EIP Funding Priorities,
+          plus last year's master sheet. That baseline is kept as FY27 and never changes.</li>
+        <li><strong>Changes.</strong> Choose your working group, click a project, and save. Every save is one record: the group, the project, the list,
+          the priority, the request, the criteria, the note, and who saved it. The newest record for a project on a group's list is what counts, so
+          nothing is ever overwritten and there is nothing to resend. Priority <em>None</em> takes a project off the list.</li>
+        <li><strong>Who can change what.</strong> Anyone with the link can save to any group's list, and every save carries a name. The record history
+          shows what changed and when.</li>
+        <li><strong>Exports.</strong> <em>Print master sheet</em> is every group's list with totals. <em>Print LTRA priority list</em> drafts the public
+          priority list document in last year's layout, with amounts from the LTRA lists; the text can be edited on the page before printing.</li>
+      </ol>
+      <p>Project records come from the <a href="https://eip.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer">EIP Project Tracker</a> through the nightly
+        snapshot in <a href="https://github.com/trpa-agency/EIP" target="_blank" rel="noopener noreferrer">trpa-agency/EIP</a>. Only EIP projects in planning or implementation can be listed.</p>
+    </div>
+  </calcite-dialog>
+
+  <script>
+    // ───────────────────────── Config ─────────────────────────
+    const DATA_BASE = new URLSearchParams(location.search).get("data") || "https://trpa-agency.github.io/EIP/data/";
+    // The hosted table from scripts/eip_priority_lists_table.py (…/EIP_Priority_Lists/FeatureServer/0). Empty = test mode: the baseline
+    // is read straight from the survey view and changes stay in this browser.
+    const TABLE = { url: "" };
+    const SURVEY = { viewUrl: "https://services5.arcgis.com/fXXSUzHD5JjcOt1v/arcgis/rest/services/EIP_Funding_Priorities_picks_public_view/FeatureServer/0", round: "FY28" };
+    const FY = { baseline: "FY27", current: "FY28", label: "FY28 LTRA cycle",
+      deadline: "Working group lists are due to the EIP Coordinating Committee by Dec. 22, 2026. The LTRA request goes to the congressional delegation March 15, 2027." };
+    const LISTS = { ltra: { label: "LTRA", long: "LTRA list" }, other: { label: "Other", long: "Other list" } };
+    const WG_SHORT = { "Tahoe Fire and Fuels Team": "TFFT", "Water Infrastructure for Fire Suppression Working Group": "Water Infrastructure",
+      "Stormwater Quality Improvement Committee": "SWQIC", "Tahoe Watershed Improvement Group": "TWIG", "Aquatic Invasive Species Coordinating Committee": "AIS",
+      "Tahoe Basin Recovery Implementation Team (LCT)": "LCT", "Recreation Infrastructure Action Team": "Recreation", "EIP Coordinating Committee (Accountability)": "Accountability" };
+    const WORKING_GROUPS = Object.keys(WG_SHORT);
+    const wgShort = (w) => WG_SHORT[w] || w || "";
+    const EIP_ID = /^\d{2}\.\d{2}\.\d{2}\.\d{4}$/;
+    const CRITERIA = [
+      { k: "measure", s: "Measurable progress", d: "Progress or success of the program can be measured" },
+      { k: "contrib", s: "Threshold contribution", d: "Potential to significantly contribute to achieving and maintaining the environmental thresholds" },
+      { k: "multi", s: "Multiple benefits", d: "Provides multiple benefits" },
+      { k: "leverage", s: "Non-federal leverage", d: "Leverages non-federal contributions" },
+      { k: "support", s: "Stakeholder support", d: "Stakeholder support for the program" },
+      { k: "federal", s: "Federal nexus", d: "A federal nexus for the project: federal land, federal interest, or a federally listed species or resource" },
+      { k: "capacity", s: "Agency capacity", d: "The agency has the capacity to deliver" },
+      { k: "history", s: "Federal funding history", d: "Federal funding history" },
+      { k: "nhpa", s: "NHPA compliance", d: "National Historic Preservation Act (Section 106) compliance is complete or under way" },
+      { k: "esa", s: "ESA compliance", d: "Endangered Species Act compliance is complete or under way" },
+    ];
+    const CRIT_BY_S = Object.fromEntries(CRITERIA.map(c => [c.s.toLowerCase(), c.k]));
+    const critText = (keys) => (keys || []).map(k => (CRITERIA.find(c => c.k === k) || {}).s).filter(Boolean).join(", ");
+    // The public LTRA Priority List document (FY2027 layout). Each line's amount is the sum of the named working groups' LTRA requests;
+    // a line with no group is filled in by hand on the page. Groups with picks that no line names get a line of their own.
+    const G = WORKING_GROUPS;
+    const DOC = {
+      title: "Lake Tahoe Restoration Act Priority List", program: "Environmental Improvement Program", fy: "Federal Fiscal Year 2028",
+      intro1: "Since 1997, the Lake Tahoe Environmental Improvement Program (EIP) has been the driving force behind Tahoe's environmental restoration. From restoring meadows to improving bike and pedestrian paths, the EIP drives investments in projects that protect water quality, reduce wildfire risk, restore ecosystems, and support sustainable recreation.",
+      intro2: "With the support of federal, state, and local agencies, the Washoe Tribe of Nevada and California, scientists, non-profits, and the private sector, the EIP is one of the most successful large-scale conservation programs in the nation. To date, this collaboration of more than 80 public and private organizations has completed more than 900 projects to restore and enhance Lake Tahoe and its communities.",
+      act1: "The Lake Tahoe Restoration Act of 2016 authorized up to $415 million over 7 years for the Environmental Improvement Program. In 2024, Congress extended authorization of the Lake Tahoe Restoration Act for another 10 years to 2034. Federal funds through the restoration act serve as an anchor for the state, local, and private match necessary to fund EIP programs.",
+      act2: (total) => `The Federal Fiscal Year 2028 request is ${total} to advance our highest priority projects to protect Lake Tahoe. Continued commitment to the EIP is vital to protecting our investment and preserving this treasured region for future generations.`,
+      summary: [{ label: "Forest Health", wgs: [G[0]] }, { label: "Water Infrastructure", wgs: [G[1]] }, { label: "Aquatic Invasive Species", wgs: [G[4]] },
+        { label: "Watershed Restoration", wgs: [G[3], G[2], G[6]] }, { label: "Lahontan Cutthroat Trout", wgs: [G[5]] }, { label: "Accountability", wgs: [G[7]] }],
+      sections: [
+        { heading: "Forest Health and Fire Protection", blurb: "Increase the pace and scale of forest fuels treatments, restore areas burned by the Caldor Fire, increase Tribal capacity, support community resilience projects, and upgrade aging water infrastructure to protect communities.",
+          lines: [{ label: "Hazardous Fuels Reduction and Forest Restoration", wgs: [G[0]] }, { label: "Regional Water Infrastructure Upgrades to Protect Communities", wgs: [G[1]] }] },
+        { heading: "Aquatic Invasive Species", blurb: "Protect Lake Tahoe from harmful invasive species such as quagga, zebra, and golden mussels. Reduce and control the spread of invasive weeds that disrupt Lake Tahoe's water quality and clarity.",
+          lines: [{ label: "Aquatic Invasive Species Prevention and Control", wgs: [G[4]] }] },
+        { heading: "Watershed Restoration and Water Quality", blurb: "Reduce stormwater pollution and recreation impacts to high priority watersheds. Restore streams and meadows to increase biodiversity and resilience to extreme weather events.",
+          lines: [{ label: "River and Meadow Restoration", wgs: [G[3]] }, { label: "Water Quality, Stormwater, and Recreation Corridors", wgs: [G[2], G[6]] }] },
+        { heading: "Lahontan Cutthroat Trout", blurb: "Restore the iconic native Lahontan cutthroat trout in the Lake Tahoe basin through reintroduction in the lake and priority tributaries, while improving habitat and monitoring the population's comeback. This native trout is culturally significant to the Washoe Tribe and is prized by anglers.",
+          lines: [{ label: "Lahontan Cutthroat Trout Recovery", wgs: [G[5]] }] },
+        { heading: "Accountability", blurb: "Upgrade and maintain the online EIP Project Tracker to provide real-time information to the public on project funding and accomplishments. Connect online platforms with monitoring data to drive adaptive management and decision-making.",
+          lines: [{ label: "Program Oversight, Reporting, and Accountability", wgs: [G[7]] }, { label: "EIP Effectiveness Monitoring and Innovative Technology", wgs: [] }, { label: "Washoe Tribe Capacity Building", wgs: [] }] },
+      ],
+      footer: "In 1997, Executive Order 13057 established the Tahoe Federal Interagency Partnership including the Secretary of Agriculture, the Secretary of the Interior, the Secretary of Transportation, the Administrator of the Environmental Protection Agency, and the Secretary of the Army. Representation has been delegated to nine federal agencies: USDA Forest Service, Natural Resources Conservation Service, Bureau of Land Management, U.S. Geological Survey, Bureau of Reclamation, U.S. Fish and Wildlife Service, Federal Highway Administration, Environmental Protection Agency, and U.S. Army Corps of Engineers.",
+    };
+
+    // ───────────────────────── Helpers ─────────────────────────
+    const $ = (id) => document.getElementById(id);
+    const escHtml = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const fmtUSD = (v) => v == null ? "" : v >= 1e6 ? `$${(v / 1e6).toFixed(v >= 1e8 ? 0 : 1)}M` : v >= 1e3 ? `$${Math.round(v / 1e3)}K` : `$${Math.round(v)}`;
+    const fmtFull = (v) => v == null ? "" : `$${Math.round(v).toLocaleString()}`;
+    const num = (v) => (v == null || v === "" || isNaN(+v)) ? null : +v;
+    const splitList = (s, sep) => String(s || "").split(sep).map(x => x.trim()).filter(x => x && x !== "n/a");
+    const AP_MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+    const apDate = (d, withYear = true) => { d = d instanceof Date ? d : new Date(d); return `${AP_MONTHS[d.getMonth()]} ${d.getDate()}${withYear ? `, ${d.getFullYear()}` : ""}`; };
+    const todayLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+    const parseMoney = (s) => { if (s == null || s === "") return null; const m = String(s).replace(/,/g, "").match(/\$?\s*(\d+(?:\.\d+)?)\s*([MmKk])?/); if (!m) return null; return +m[1] * (m[2] ? (/m/i.test(m[2]) ? 1e6 : 1e3) : 1); };
+    const csvCell = (v) => { const s = v == null ? "" : String(v); return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+    function toast(msg, ms = 2800) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); if (ms) toast._t = setTimeout(() => t.classList.remove("show"), ms); }
+    function download(name, text, type = "text/csv") { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }
+    function loadLS(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch { return d; } }
+    function saveLS(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+    const tierBadge = (t) => t ? `<span class="tier t${t}" title="Priority ${t}">${t}</span>` : "";
+    // A print page in a new tab; downloaded instead when the browser blocks the tab
+    function openPrint(html, fileName) {
+      const url = URL.createObjectURL(new Blob([html], { type: "text/html" })), w = window.open(url, "_blank");
+      if (!w) { download(fileName, html, "text/html"); toast("The browser blocked the new tab, so the page was downloaded instead.", 6000); URL.revokeObjectURL(url); }
+    }
+
+    // ───────────────────────── State ─────────────────────────
+    const LS_WHO = "eipPriorityLists.who", LS_EDITS = "eipPriorityLists.edits.v1";
+    let projects = [], byId = new Map();
+    let rows = [];              // every record: { oid, fy, listkey, wg, eip, project, tier, request, criteria: [], note, who, agency, source, when }
+    let winners = new Map();    // "listkey|wg|eip" -> the newest row
+    let listKey = "ltra", wg = "", selectedId = null, gridApi = null, loadedAt = null;
+    const who = loadLS(LS_WHO, { name: "", agency: "" });
+    const proj = (id) => byId.get(id);
+    const key = (l, w, e) => `${l}|${w}|${e}`;
+    const winner = (l, w, e) => winners.get(key(l, w, e));
+    const onList = (l, w, e) => { const r = winner(l, w, e); return r && r.tier ? r : null; };
+
+    // ───────────────────────── Data ─────────────────────────
+    function normalize(p) {
+      const cost = num(p.EstimatedTotalCost), unfunded = num(p.UnfundedNeed), spent = num(p.TotalExpenditure), ltraAsk = num(p.LTRATargetedFunding), ltraSecured = num(p.LTRASecuredFunding);
+      return { id: p.EIPProjectNumber || String(p.ProjectID), name: (p.ProjectName || "").trim(), lead: (p.LeadImplementer || "").replace(/�/g, "-").trim(), stage: p.Stage || "",
+        program: p.EIPProgram || "", focus: p.EIPFocusArea || "", cost, need: unfunded != null ? Math.max(unfunded, 0) : cost != null ? Math.max(cost - (spent || 0), 0) : null,
+        ltraAsk, ltraSecured, hasLtra: !!p.HasLTRAFunding || ltraAsk > 0 || ltraSecured > 0, isEip: p.IsEIPProject !== false,
+        active: p.IsEIPProject !== false && ["Planning/Design", "Implementation"].includes(p.Stage || ""), url: p.ProjectFactSheetUrl || p.ProjectSummaryUrl || p.ProjectURL || "" };
+    }
+    async function loadProjects() {
+      const [r1, r2] = await Promise.all([fetch(DATA_BASE + "projects.geojson"), fetch(DATA_BASE + "projects_aspatial.json")]);
+      if (!r1.ok || !r2.ok) throw new Error("data fetch failed");
+      const gj = await r1.json(), asp = await r2.json();
+      projects = []; byId = new Map();
+      for (const p of [...(gj.features || []).map(f => f.properties), ...(asp || [])]) { const n = normalize(p); if (!byId.has(n.id)) { byId.set(n.id, n); projects.push(n); } }
+    }
+    async function queryAll(url, where) {
+      const out = []; let offset = 0;
+      for (;;) {
+        const q = new URLSearchParams({ where, outFields: "*", orderByFields: "CreationDate DESC", resultOffset: String(offset), resultRecordCount: "1000", f: "json" });
+        const r = await fetch(`${url}/query?${q}`).then(x => x.json());
+        if (r.error) throw new Error(r.error.message || "query error");
+        out.push(...(r.features || []));
+        if (!r.exceededTransferLimit || !(r.features || []).length) return out;
+        offset += r.features.length;
+      }
+    }
+    const toRow = (f) => { const a = f.attributes; return { oid: a.OBJECTID, fy: a.fy, listkey: a.listkey, wg: a.wg, eip: a.eip, project: a.project || "", tier: a.tier || 0, request: num(a.request),
+      criteria: splitList(a.criteria, ","), note: a.note || "", who: a.who || "", agency: a.agency || "", source: a.source || "", when: a.CreationDate || 0 }; };
+    // Test mode baseline: the newest survey record per working group, parsed the way the first tool wrote it
+    // ("Working group: <name>" then "LTRA P1 $500,000 01.02.01.0005 Name" lines; notes as "number: text")
+    function surveyBaseline(features) {
+      const out = [], seen = new Set(); let n = 0;
+      for (const f of features) {
+        const a = f.attributes, lines = String(a.picks_text || a.your_ranked_picks_project_numbe || "").split(/\r?\n/);
+        const wm = (lines[0] || "").match(/^\s*Working group:\s*(.+)$/i), group = wm ? wm[1].trim() : "";
+        if (!group || /^Other/.test(group) || seen.has(group)) continue;
+        seen.add(group);
+        const notes = {}; for (const ln of String(a.notes_text || a.notes || "").split(/\r?\n/)) { const m = ln.match(/^\s*(\d{2}\.\d{2}\.\d{2}\.\d{4})\s*:\s*(.*)$/); if (m) notes[m[1]] = m[2].trim(); }
+        for (const ln of lines.slice(1)) {
+          const m = ln.match(/^\s*(LTRA|Other)\b.*?\bP([123])\b(?:\s*\$\s*([\d,]+(?:\.\d+)?)\s*([MK])?)?\s*(\d{2}\.\d{2}\.\d{2}\.\d{4})\s*(.*)$/i); if (!m) continue;
+          let note = notes[m[5]] || "", crit = [];
+          const cm = note.match(/^\s*Criteria addressed:\s*([^.]*)\.?\s*(.*)$/is);
+          if (cm) { crit = cm[1].split(/[,;]/).map(s => CRIT_BY_S[s.trim().toLowerCase()]).filter(Boolean); if (crit.length) note = cm[2].trim(); }
+          out.push({ oid: -(++n), fy: FY.baseline, listkey: m[1].toLowerCase(), wg: group, eip: m[5], project: m[6].trim(), tier: +m[2], request: m[3] ? parseMoney(m[3] + (m[4] || "")) : null,
+            criteria: crit, note, who: a.reviewer_name || "", agency: a.agency || "", source: "survey", when: a.CreationDate || 0 });
+        }
+      }
+      return out;
+    }
+    async function loadRows() {
+      if (TABLE.url) rows = (await queryAll(TABLE.url, "1=1")).map(toRow);
+      else {
+        const feats = await queryAll(SURVEY.viewUrl, `funding_round_filled_in_by_the='${SURVEY.round}'`);
+        rows = [...surveyBaseline(feats), ...loadLS(LS_EDITS, [])];
+      }
+      loadedAt = new Date(); compute();
+    }
+    function compute() {
+      winners = new Map();
+      for (const r of [...rows].sort((a, b) => (b.when - a.when) || (b.oid - a.oid))) { const k = key(r.listkey, r.wg, r.eip); if (!winners.has(k)) winners.set(k, r); }
+    }
+    const listOf = (l, w) => [...winners.values()].filter(r => r.listkey === l && r.wg === w && r.tier).sort((a, b) => a.tier - b.tier || nameOf(a).localeCompare(nameOf(b)));
+    const nameOf = (r) => (proj(r.eip) || {}).name || r.project || r.eip;
+    const groupsWithPicks = (l) => WORKING_GROUPS.filter(w => listOf(l, w).length);
+    async function saveRow(r) {
+      if (TABLE.url) {
+        const attrs = { fy: FY.current, listkey: r.listkey, wg: r.wg, eip: r.eip, project: r.project, tier: r.tier, request: r.request, criteria: r.criteria.join(","), note: r.note, who: r.who, agency: r.agency, source: "tool" };
+        const body = new URLSearchParams({ f: "json", adds: JSON.stringify([{ attributes: attrs }]), rollbackOnFailure: "true" });
+        const res = await fetch(`${TABLE.url}/applyEdits`, { method: "POST", body }).then(x => x.json());
+        const a = res.addResults && res.addResults[0];
+        if (res.error || !a || !a.success) throw new Error((res.error && res.error.message) || (a && a.error && a.error.description) || "not saved");
+        rows.push({ ...r, fy: FY.current, oid: a.objectId, source: "tool", when: Date.now() });
+      } else {
+        const edits = loadLS(LS_EDITS, []);
+        const row = { ...r, fy: FY.current, oid: 1e9 + edits.length, source: "tool", when: Date.now() };
+        edits.push(row); saveLS(LS_EDITS, edits); rows.push(row);
+      }
+      compute();
+    }
+
+    // ───────────────────────── Panel ─────────────────────────
+    function renderGroups() {
+      const btn = (w, label, n, title) => `<button class="wgbtn${wg === w ? " on" : ""}" data-wg="${escHtml(w)}" aria-pressed="${wg === w}" title="${escHtml(title)}">${escHtml(label)}<span>${n}</span></button>`;
+      $("wgList").innerHTML = WORKING_GROUPS.map(w => { const n = listOf(listKey, w).length; return btn(w, w, n, `${n} project${n === 1 ? "" : "s"} on this group's ${LISTS[listKey].long}`); }).join("") +
+        btn("", "All projects", projects.filter(p => p.active).length, "Every EIP project in planning or implementation");
+      for (const l of Object.keys(LISTS)) { const n = [...winners.values()].filter(r => r.listkey === l && r.tier).length; $(l + "Count").textContent = `${n} pick${n === 1 ? "" : "s"}`; }
+    }
+    $("wgList").addEventListener("click", (e) => { const b = e.target.closest(".wgbtn"); if (!b) return; wg = b.dataset.wg; $("searchInput").value = ""; hideDetail(); render(); });
+    function setList(l) { listKey = l; $("listSwitch").querySelectorAll("button").forEach(b => { const on = b.dataset.v === l; b.classList.toggle("active", on); b.setAttribute("aria-checked", String(on)); }); hideDetail(); render(); }
+    $("listSwitch").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && b.dataset.v !== listKey) setList(b.dataset.v); });
+    let searchT; $("searchInput").addEventListener("input", () => { clearTimeout(searchT); searchT = setTimeout(render, 160); });
+    $("whoName").value = who.name; $("whoAgency").value = who.agency;
+    $("whoName").addEventListener("change", () => { who.name = $("whoName").value.trim(); saveLS(LS_WHO, who); });
+    $("whoAgency").addEventListener("change", () => { who.agency = $("whoAgency").value.trim(); saveLS(LS_WHO, who); });
+    function renderStatus() {
+      const base = rows.filter(r => r.fy === FY.baseline).length, edits = rows.filter(r => r.fy !== FY.baseline).length, groups = groupsWithPicks("ltra").length;
+      $("status").innerHTML = `<b>${FY.baseline} baseline:</b> ${base} pick${base === 1 ? "" : "s"} across ${groups} working group${groups === 1 ? "" : "s"}. <b>${FY.current} changes:</b> ${edits}.` +
+        (loadedAt ? ` Loaded ${loadedAt.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.` : "");
+      $("testMode").hidden = !!TABLE.url;
+      $("testMode").textContent = TABLE.url ? "" : "Test mode: the baseline is read from the survey each time, and changes are kept in this browser only. Once the hosted table exists, changes are shared.";
+    }
+
+    // ───────────────────────── Table ─────────────────────────
+    const HEADER_TIPS = { "Project": "Click the name to set this group's priority, request, criteria, and note.", "Priority": "This working group's priority on the list shown: 1 (highest), 2, or 3.",
+      "Request": "This working group's funding request for the project, in dollars.", "Criteria": "How many of the LTRA criteria the group ticked.", "Note": "The group's note: how the criteria were considered.",
+      "Changed": "Who last saved this project on the list, and when.", "On lists": "Working groups that have this project on the list shown, with their priority." };
+    function initGrid() {
+      const theme = agGrid.themeQuartz.withParams({ accentColor: "#007DC3", fontFamily: "Lexend Deca, system-ui, sans-serif", fontSize: 12, headerFontSize: 11, headerFontWeight: 700, rowHeight: 36, headerHeight: 32, borderColor: "#E1E5EC", foregroundColor: "#0B1F41" });
+      const pinL = (window.innerWidth || 1024) > 700 ? "left" : null;
+      gridApi = agGrid.createGrid($("grid"), {
+        theme, rowData: [], getRowId: (p) => p.data.id, animateRows: false, suppressCellFocus: true, tooltipShowDelay: 300, tooltipInteraction: true,
+        overlayNoRowsTemplate: '<span style="padding:1rem;color:#5F6B7E">Nothing on this list yet. Search above to add a project.</span>',
+        rowClassRules: { "row-selected-proj": (p) => p.data.id === selectedId },
+        defaultColDef: { sortable: true, filter: true, resizable: true, suppressMovable: true, wrapHeaderText: true, autoHeaderHeight: true, tooltipValueGetter: (p) => p.valueFormatted ?? p.value },
+        columnDefs: [
+          { headerName: "Project", field: "name", width: 290, pinned: pinL, headerTooltip: HEADER_TIPS.Project, cellRenderer: (p) => `<button class="pname" title="Open this project">${escHtml(p.value)}</button>` },
+          { headerName: "Project #", field: "id", width: 112, cellRenderer: (p) => p.data.url ? `<a href="${escHtml(p.data.url)}" target="_blank" rel="noopener noreferrer" title="On the EIP Project Tracker">${escHtml(p.value)}</a>` : escHtml(p.value) },
+          { headerName: "Lead implementer", field: "lead", flex: 1.2, minWidth: 150 },
+          { headerName: "Priority", colId: "tier", width: 92, headerTooltip: HEADER_TIPS.Priority, valueGetter: (p) => p.data.pick ? p.data.pick.tier : null, comparator: (a, b) => (a || 9) - (b || 9), sortingOrder: ["asc", "desc", null],
+            cellRenderer: (p) => p.value ? `${tierBadge(p.value)} Priority ${p.value}` : "" },
+          { headerName: "Request", colId: "request", width: 110, type: "rightAligned", headerTooltip: HEADER_TIPS.Request, valueGetter: (p) => p.data.pick ? p.data.pick.request : null, valueFormatter: (p) => p.value == null ? "" : fmtFull(p.value), comparator: (a, b) => (a ?? -1) - (b ?? -1) },
+          { headerName: "Criteria", colId: "crit", width: 90, type: "rightAligned", headerTooltip: HEADER_TIPS.Criteria, valueGetter: (p) => p.data.pick ? p.data.pick.criteria.length : 0, valueFormatter: (p) => p.value ? `${p.value} of ${CRITERIA.length}` : "",
+            tooltipValueGetter: (p) => p.data.pick ? critText(p.data.pick.criteria) : "" },
+          { headerName: "Note", colId: "note", width: 200, headerTooltip: HEADER_TIPS.Note, valueGetter: (p) => p.data.pick ? p.data.pick.note : "" },
+          { headerName: "Changed", colId: "changed", width: 150, headerTooltip: HEADER_TIPS.Changed, valueGetter: (p) => p.data.pick ? p.data.pick.when : null, comparator: (a, b) => (a || 0) - (b || 0),
+            cellRenderer: (p) => p.data.pick ? `${escHtml(apDate(p.data.pick.when, false))} <span class="cov">${escHtml(p.data.pick.who || p.data.pick.source)}${p.data.pick.fy === FY.baseline ? ` (${FY.baseline})` : ""}</span>` : "" },
+          { headerName: "On lists", colId: "lists", width: 230, headerTooltip: HEADER_TIPS["On lists"], valueGetter: (p) => p.data.lists.length, comparator: (a, b) => b - a,
+            cellRenderer: (p) => p.data.lists.map(r => `<span style="white-space:nowrap">${escHtml(wgShort(r.wg))} ${tierBadge(r.tier)}${r.request != null ? ` ${fmtUSD(r.request)}` : ""}</span>`).join(" &nbsp;") },
+        ],
+        onCellClicked: (e) => { if (!e.event.target.closest("a")) selectProject(e.data.id); },
+        onFilterChanged: () => renderCount(),
+      });
+      $("quickFilter").addEventListener("input", () => gridApi.setGridOption("quickFilterText", $("quickFilter").value));
+    }
+    function tableRows() {
+      const q = $("searchInput").value.trim().toLowerCase();
+      const listsOf = (id) => WORKING_GROUPS.map(w => onList(listKey, w, id)).filter(Boolean);
+      const withPick = (p) => ({ ...p, pick: wg ? onList(listKey, wg, p.id) : null, lists: listsOf(p.id) });
+      if (q) return projects.filter(p => p.active && (p.name.toLowerCase().includes(q) || p.id.includes(q) || p.lead.toLowerCase().includes(q))).map(withPick);
+      if (wg) return listOf(listKey, wg).map(r => withPick(proj(r.eip) || { id: r.eip, name: r.project || r.eip, lead: "", stage: "", active: false, url: "" }));
+      return projects.filter(p => p.active).map(withPick);
+    }
+    function renderGrid() {
+      if (!gridApi) return;
+      const q = $("searchInput").value.trim(), data = tableRows();
+      gridApi.setGridOption("rowData", data);
+      const showPick = !!wg, showLists = !wg || !!q;
+      gridApi.setColumnsVisible(["tier", "request", "crit", "note", "changed"], showPick && !q);
+      gridApi.setColumnsVisible(["tier"], showPick);
+      gridApi.setColumnsVisible(["lists"], showLists);
+      if (wg && !q) gridApi.applyColumnState({ state: [{ colId: "tier", sort: "asc" }], defaultState: { sort: null } }); else gridApi.applyColumnState({ state: [{ colId: "name", sort: "asc" }], defaultState: { sort: null } });
+      $("tableTitle").textContent = q ? `Search results, ${LISTS[listKey].long}` : wg ? `${wg}: ${LISTS[listKey].long}` : `All projects, ${LISTS[listKey].long}`;
+      renderCount();
+    }
+    function renderCount() {
+      if (!gridApi) return;
+      const n = gridApi.getDisplayedRowCount(), total = listOf(listKey, wg).reduce((a, r) => a + (r.request || 0), 0);
+      $("drawerCount").textContent = `${n} project${n === 1 ? "" : "s"}` + (wg && !$("searchInput").value.trim() ? ` · ${fmtFull(total)} requested` : "");
+    }
+    function render() { renderGroups(); renderStatus(); renderGrid(); if (selectedId) showDetail(selectedId); }
+
+    // ───────────────────────── Pop-up ─────────────────────────
+    const openHelp = new Set();
+    function hideDetail() { selectedId = null; $("detailCard").hidden = true; if (gridApi) gridApi.redrawRows(); }
+    function selectProject(id) { selectedId = id; showDetail(id); if (gridApi) gridApi.redrawRows(); }
+    function showDetail(id) {
+      const p = proj(id) || { id, name: id, lead: "", stage: "", active: false, url: "" };
+      const pickable = EIP_ID.test(id) && !!wg;
+      const cur = wg ? onList(listKey, wg, id) : null, otherKey = listKey === "ltra" ? "other" : "ltra", onOther = wg ? onList(otherKey, wg, id) : null;
+      const draft = cur ? { tier: cur.tier, request: cur.request, criteria: [...cur.criteria], note: cur.note } : onOther ? { tier: onOther.tier, request: onOther.request, criteria: [...onOther.criteria], note: onOther.note } : { tier: null, request: null, criteria: [], note: "" };
+      const info = (hid, title) => `<button type="button" class="info-btn" data-help="${hid}" aria-expanded="${openHelp.has(hid)}" title="${title}"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>`;
+      const others = WORKING_GROUPS.filter(w => w !== wg).map(w => ({ w, r: onList(listKey, w, id) })).filter(x => x.r);
+      const chips = [p.ltraAsk > 0 ? [p.ltraAsk, `Tracker LTRA request ${fmtUSD(p.ltraAsk)}`] : null, p.need > 0 ? [p.need, `Unfunded need ${fmtUSD(p.need)}`] : null].filter(Boolean);
+      $("detailCard").innerHTML = `
+        <div class="dc-head"><h3>${escHtml(p.name)}</h3><calcite-button id="dcClose" icon-start="x" appearance="transparent" kind="neutral" scale="s" title="Close" label="Close"></calcite-button></div>
+        <div class="dc-sub">${escHtml(p.id)}${p.lead ? ` · ${escHtml(p.lead)}` : ""}${p.stage ? ` · ${escHtml(p.stage)}` : ""}${p.need != null ? ` · <b>${fmtUSD(p.need)}</b> unfunded need` : ""}${p.ltraAsk > 0 ? `<br>Tracker LTRA request: ${fmtFull(p.ltraAsk)}` : ""}${p.active ? "" : `<br><span style="color:var(--alert-text)">Not in planning or implementation on the Tracker.</span>`}</div>
+        ${!wg ? `<calcite-notice open icon="users" kind="brand" scale="s" width="full"><div slot="message">Choose your working group in the panel to change its list.</div></calcite-notice>` : !EIP_ID.test(id) ? `<calcite-notice open kind="warning" scale="s" width="full"><div slot="message">Not an EIP project, so it has no Tracker number and cannot be listed.</div></calcite-notice>` : `
+        <div class="dc-pick">
+          <h4>${escHtml(wgShort(wg))} · ${cur ? `on the ${LISTS[listKey].long}` : onOther ? `on the ${LISTS[otherKey].long}; saving moves it here` : `not on the ${LISTS[listKey].long}`}</h4>
+          <div class="field"><span class="lbl-row">Priority ${info("helpTier", "What the priorities mean")}</span>
+            <div class="seg tiers" id="dcTier" role="radiogroup" aria-label="Priority">${[1, 2, 3].map(t => `<button data-v="${t}" role="radio" aria-checked="${draft.tier === t}" class="${draft.tier === t ? "active" : ""}">${t}</button>`).join("")}<button data-v="" role="radio" aria-checked="${!draft.tier}" class="${draft.tier ? "" : "active"}">None</button></div>
+            <div class="dc-help" id="helpTier"${openHelp.has("helpTier") ? "" : " hidden"}>Priority 1 to 3, where 1 is the highest. Choose None to remove the project from the ${LISTS[listKey].long}.</div></div>
+          <label class="field">Request ($)<input id="dcReq" type="text" inputmode="decimal" class="plain" placeholder="e.g. 500000, 500k, or 1.5M" value="${draft.request != null ? Math.round(draft.request).toLocaleString("en-US") : ""}" /></label>
+          ${chips.length ? `<div class="chips req" id="dcReqChips">${chips.map(([v, l]) => `<button type="button" data-v="${v}">${escHtml(l)}</button>`).join("")}</div>` : ""}
+          <div class="field">LTRA criteria this project meets<div class="chips" id="dcCrit">${CRITERIA.map(c => `<button type="button" data-k="${c.k}" aria-pressed="${draft.criteria.includes(c.k)}" class="${draft.criteria.includes(c.k) ? "on" : ""}" title="${escHtml(c.d)}">${escHtml(c.s)}</button>`).join("")}</div></div>
+          <div class="field"><span class="lbl-row"><label for="dcNote">Note</label> ${info("helpNote", "What to write in the note")}</span>
+            <div class="dc-help" id="helpNote"${openHelp.has("helpNote") ? "" : " hidden"}>Provide a short narrative or summary of how the criteria were considered for this project's ranking.</div>
+            <textarea id="dcNote" class="plain" rows="2" placeholder="How the criteria were considered for this ranking">${escHtml(draft.note)}</textarea></div>
+          <div class="dc-actions"><calcite-button id="dcCancel" appearance="outline" kind="neutral" scale="s">Cancel</calcite-button><calcite-button id="dcSave" icon-start="check" appearance="solid" kind="brand" scale="s">Save</calcite-button></div>
+        </div>
+        ${cur ? `<div class="dc-group">Last saved ${escHtml(apDate(cur.when))}${cur.who ? ` by ${escHtml(cur.who)}` : ""}${cur.fy === FY.baseline ? ` (${FY.baseline} baseline)` : ""}.</div>` : ""}`}
+        ${others.length ? `<div class="dc-group">Also on the ${LISTS[listKey].long} of ${others.map(x => `${escHtml(wgShort(x.w))} ${tierBadge(x.r.tier)}${x.r.request != null ? ` ${fmtUSD(x.r.request)}` : ""}`).join(", ")}.</div>` : ""}
+        ${p.url ? `<div class="dc-links"><calcite-button href="${escHtml(p.url)}" target="_blank" rel="noopener noreferrer" icon-start="launch" appearance="outline" kind="brand" scale="s">Fact sheet</calcite-button></div>` : ""}`;
+      $("detailCard").hidden = false;
+      $("dcClose").addEventListener("click", hideDetail);
+      $("detailCard").querySelectorAll(".info-btn").forEach(b => b.addEventListener("click", () => { const h = $(b.dataset.help), show = h.hidden; h.hidden = !show; b.setAttribute("aria-expanded", String(show)); if (show) openHelp.add(b.dataset.help); else openHelp.delete(b.dataset.help); }));
+      if (!pickable) return;
+      $("dcTier").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; draft.tier = b.dataset.v ? +b.dataset.v : null; $("dcTier").querySelectorAll("button").forEach(x => { x.classList.toggle("active", x === b); x.setAttribute("aria-checked", String(x === b)); }); });
+      if ($("dcReqChips")) $("dcReqChips").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) $("dcReq").value = Math.round(+b.dataset.v).toLocaleString("en-US"); });
+      $("dcCrit").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; const on = b.classList.toggle("on"); b.setAttribute("aria-pressed", String(on)); });
+      $("dcCancel").addEventListener("click", hideDetail);
+      $("dcSave").addEventListener("click", async () => {
+        const tier = draft.tier || 0, request = parseMoney($("dcReq").value), criteria = [...$("dcCrit").querySelectorAll("button.on")].map(b => b.dataset.k), note = $("dcNote").value.replace(/\s*[\r\n]+\s*/g, " ").trim();
+        if (!tier && !cur) { toast("Choose a priority to put the project on the list.", 3500); return; }
+        if (!who.name) { toast("Enter your name in the panel first, so the change carries a name.", 4000); $("whoName").focus(); return; }
+        const base = { wg, eip: id, project: p.name, request: request != null && request >= 0 ? Math.round(request) : null, criteria, note, who: who.name, agency: who.agency };
+        $("dcSave").loading = true;
+        try {
+          await saveRow({ ...base, listkey: listKey, tier });
+          if (tier && onOther) await saveRow({ ...base, listkey: otherKey, tier: 0 });   // one list per group per project
+          toast(tier ? `Saved: ${wgShort(wg)} Priority ${tier} on the ${LISTS[listKey].long}.` : `Removed from the ${wgShort(wg)} ${LISTS[listKey].long}.`, 3500);
+          hideDetail(); render();
+        } catch (e) { console.warn(e); $("dcSave").loading = false; toast(`Could not save: ${e.message}`, 6000); }
+      });
+    }
+
+    // ───────────────────────── Exports ─────────────────────────
+    const fontCss = () => new URL("../../assets/fonts/fonts.css", location.href).href;
+    const logoUrl = () => new URL("../../assets/eip-logo-76.png", location.href).href;
+    function groupTotals(l) {
+      return groupsWithPicks(l).map(w => { const items = listOf(l, w); const all = items.reduce((a, r) => a + (r.request || 0), 0), p1 = items.filter(r => r.tier === 1).reduce((a, r) => a + (r.request || 0), 0); return { wg: w, items, all, p1 }; });
+    }
+    $("printBtn").addEventListener("click", () => {
+      const groups = groupTotals(listKey); if (!groups.length) { toast(`Nothing on the ${LISTS[listKey].long} yet.`, 3500); return; }
+      const all = groups.reduce((a, g) => a + g.all, 0), p1 = groups.reduce((a, g) => a + g.p1, 0), n = groups.reduce((a, g) => a + g.items.length, 0);
+      const title = `${FY.current} ${listKey === "ltra" ? "LTRA Priority List" : "EIP Priority List, other funding"} master sheet`;
+      const tier = (t) => `<span class="t t${t}">Priority ${t}</span>`;
+      const summary = `<table class="sum"><thead><tr><th>Working group</th><th class="r">All priorities</th><th class="r">Priority 1</th><th class="r">Projects</th></tr></thead><tbody>` +
+        groups.map(g => `<tr><td>${escHtml(g.wg)}</td><td class="r">${fmtFull(g.all)}</td><td class="r">${fmtFull(g.p1)}</td><td class="r">${g.items.length}</td></tr>`).join("") +
+        `<tr class="tot"><td>Total</td><td class="r">${fmtFull(all)}</td><td class="r">${fmtFull(p1)}</td><td class="r">${n}</td></tr></tbody></table>`;
+      const sections = groups.map(g => `<section><h2>${escHtml(g.wg)} <small>${g.items.length} project${g.items.length === 1 ? "" : "s"} · ${fmtFull(g.all)} requested, ${fmtFull(g.p1)} in Priority 1</small></h2>
+        <table><thead><tr><th>Priority</th><th>Project</th><th>Implementer</th><th>EIP #</th><th class="r">${FY.current} request</th><th>Criteria</th><th>Note</th><th>Changed</th></tr></thead><tbody>` +
+        g.items.map(r => { const p = proj(r.eip) || {}; return `<tr><td>${tier(r.tier)}</td><td><b>${escHtml(nameOf(r))}</b>${p.active === false ? `<br><em class="warn">${escHtml(p.stage || "not in the Tracker")}</em>` : ""}</td><td>${escHtml(p.lead || "")}</td><td class="mono">${escHtml(r.eip)}</td><td class="r">${r.request != null ? fmtFull(r.request) : "<em>none given</em>"}</td><td><small>${escHtml(critText(r.criteria))}</small></td><td class="notes">${escHtml(r.note) || "<em>none</em>"}</td><td><small>${escHtml(apDate(r.when))}${r.who ? `<br>${escHtml(r.who)}` : ""}</small></td></tr>`; }).join("") +
+        `<tr class="tot"><td colspan="4">Total of all priorities</td><td class="r">${fmtFull(g.all)}</td><td colspan="3"></td></tr><tr class="tot"><td colspan="4">Total of Priority 1 projects</td><td class="r">${fmtFull(g.p1)}</td><td colspan="3"></td></tr></tbody></table></section>`).join("");
+      openPrint(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>${escHtml(title)}</title><link rel="stylesheet" href="${fontCss()}"><style>
+  @page { size: landscape; margin: 0.6in; } :root { color-scheme: light; }
+  body { font-family: 'Lexend Deca', system-ui, sans-serif; color: #0B1F41; background: #fff; font-size: 10.5pt; margin: 1.2rem 1.5rem; }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; border-bottom: 3px solid #007DC3; padding-bottom: 0.4rem; margin-bottom: 0.8rem; }
+  h1 { font-size: 18pt; margin: 0; } header small, .note { color: #5F6B7E; font-size: 9.5pt; } .note { margin: 0.3rem 0 1rem; line-height: 1.45; }
+  h2 { font-size: 13pt; margin: 1.4rem 0 0.4rem; color: #007DC3; break-after: avoid; } h2 small { color: #5F6B7E; font-size: 9.5pt; font-weight: 400; margin-left: 0.5rem; }
+  table { width: 100%; border-collapse: collapse; } th, td { text-align: left; vertical-align: top; padding: 5px 7px; border-bottom: 1px solid #E1E5EC; }
+  th { font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; color: #5F6B7E; border-bottom: 2px solid #E1E5EC; } thead { display: table-header-group; }
+  tr { break-inside: avoid; } .r { text-align: right; white-space: nowrap; } .mono { white-space: nowrap; font-size: 9.5pt; } small { font-size: 8.5pt; color: #5F6B7E; }
+  .notes { font-size: 9pt; min-width: 18em; max-width: 34em; } .warn { color: #B5430E; font-size: 8.5pt; } th:nth-child(2) { width: 24%; } th:nth-child(3) { width: 13%; }
+  .tot td { font-weight: 700; background: #F4F6F9; border-bottom: 2px solid #E1E5EC; } .sum { width: auto; min-width: 50%; margin-bottom: 0.4rem; } .sum td, .sum th { padding: 4px 14px 4px 7px; }
+  .t { display: inline-block; font-size: 8.5pt; font-weight: 700; padding: 1px 8px; border-radius: 999px; white-space: nowrap; } .t1 { background: #E8F5E0; color: #2F6B13; } .t2 { background: #FFF4CC; color: #735A00; } .t3 { background: #FDE8DC; color: #B5430E; }
+  .toolbar { position: fixed; top: 10px; right: 14px; } .toolbar button { font: inherit; font-weight: 700; color: #fff; background: #007DC3; border: none; border-radius: 999px; padding: 0.4rem 1rem; cursor: pointer; }
+  @media print { .toolbar { display: none; } body { margin: 0; } }
+</style></head><body><div class="toolbar"><button onclick="window.print()">Print or save as PDF</button></div>
+<header><h1>${escHtml(title)}</h1><small>Environmental Improvement Program · ${escHtml(apDate(new Date()))}</small></header>
+<p class="note">Each section is one working group's ${LISTS[listKey].long} as it stands today: the ${FY.baseline} baseline plus every change saved since. Totals add each group's requests. Criteria are the Lake Tahoe Restoration Act criteria the group ticked.</p>
+${summary}${sections}<p class="note">EIP Priority Lists, ${escHtml(location.origin + location.pathname)} · project records from the EIP Project Tracker (eip.laketahoeinfo.org) · ${escHtml(FY.label)}</p></body></html>`, `eip-${listKey}-master-${FY.current}-${todayLocal()}.html`);
+    });
+    // The public LTRA Priority List document in last year's layout. Amounts come from the LTRA lists; every text block is editable on the page.
+    $("docBtn").addEventListener("click", () => {
+      const totals = Object.fromEntries(groupTotals("ltra").map(g => [g.wg, g.all]));
+      const sum = (wgs) => wgs.reduce((a, w) => a + (totals[w] || 0), 0);
+      const named = new Set(DOC.sections.flatMap(s => s.lines.flatMap(l => l.wgs)));
+      const extra = Object.keys(totals).filter(w => !named.has(w));
+      const sections = [...DOC.sections, ...(extra.length ? [{ heading: "Other working groups", blurb: "Lists from working groups the FY2027 layout did not name. Move each line into the section where it belongs, or delete it.", lines: extra.map(w => ({ label: w, wgs: [w] })) }] : [])];
+      const grand = sum(Object.keys(totals));
+      const money = (v) => v ? fmtFull(v) : "$0";
+      const line = (l) => `<div class="line"><span contenteditable="true">- ${escHtml(l.label)}</span><span class="amt" contenteditable="true">${l.wgs.length ? money(sum(l.wgs)) : "$"}</span></div>`;
+      const sec = (s) => `<section><div class="band"><h2 contenteditable="true">${escHtml(s.heading)}</h2><span class="amt" contenteditable="true">${money(sum(s.lines.flatMap(l => l.wgs)))}</span></div>
+        <p contenteditable="true">${escHtml(s.blurb)}</p><div class="lines">${s.lines.map(line).join("")}<div class="line total"><span>Total Request:</span><span class="amt" contenteditable="true">${money(sum(s.lines.flatMap(l => l.wgs)))}</span></div></div></section>`;
+      const summaryBox = `<div class="sumbox"><h3>Priority List Summary<br><span contenteditable="true">${escHtml(DOC.fy)}</span></h3>${DOC.summary.map(s => `<div class="line"><span contenteditable="true">${escHtml(s.label)}</span><span class="amt" contenteditable="true">${money(sum(s.wgs))}</span></div>`).join("")}<div class="line total"><span>TOTAL</span><span class="amt" contenteditable="true">${money(grand)}</span></div></div>`;
+      openPrint(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>${escHtml(DOC.title)} ${escHtml(DOC.fy)}</title><link rel="stylesheet" href="${fontCss()}"><style>
+  @page { size: letter; margin: 0.55in; } :root { color-scheme: light; }
+  body { font-family: 'Lexend Deca', system-ui, sans-serif; color: #0B1F41; background: #fff; font-size: 11pt; line-height: 1.45; margin: 0 auto; max-width: 7.4in; }
+  [contenteditable]:hover { outline: 1px dashed #007DC3; outline-offset: 2px; } [contenteditable]:focus { outline: 2px solid #007DC3; outline-offset: 2px; }
+  .cover { background: #0B1F41; color: #fff; padding: 1.2rem 1.4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .cover img { height: 46px; } .cover .date { text-align: right; font-weight: 700; font-size: 12pt; line-height: 1.2; border-left: 2px solid rgba(255,255,255,0.5); padding-left: 0.9rem; }
+  .cover .date small { display: block; font-size: 9pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .titleblock { background: #0B1F41; color: #fff; text-align: center; padding: 1.4rem 1rem 1.5rem; margin-top: 2px; }
+  .titleblock h1 { font-size: 24pt; letter-spacing: 0.04em; margin: 0; } .titleblock .sub { font-size: 15pt; font-weight: 700; letter-spacing: 0.08em; }
+  .titleblock .fy { border-top: 1px solid rgba(255,255,255,0.5); margin: 0.8rem auto 0; padding-top: 0.7rem; max-width: 80%; font-size: 12pt; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .intro { padding: 1.2rem 0.2rem 0; } .intro h2 { font-size: 15pt; color: #0B1F41; margin: 0 0 0.3rem; } .intro p { margin: 0 0 0.7rem; } .rule { border: none; border-top: 1px solid #B4CBE8; margin: 0.8rem 0; }
+  .sumbox { background: #007DC3; color: #fff; border-radius: 12px; padding: 1rem 1.2rem; width: 3.6in; margin: 0.6rem 0 1rem; } .sumbox h3 { font-size: 13pt; margin: 0 0 0.5rem; line-height: 1.25; }
+  .sumbox .line { display: flex; justify-content: space-between; gap: 1rem; padding: 0.1rem 0; } .sumbox .total { border-top: 1px solid rgba(255,255,255,0.6); margin-top: 0.5rem; padding-top: 0.45rem; font-weight: 700; }
+  .explore { margin: 0.4rem 0 0; } .explore b { display: block; font-size: 12pt; } .explore .url { font-size: 18pt; font-weight: 700; }
+  section { break-inside: avoid; margin-top: 1rem; } .band { background: #007DC3; color: #fff; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.55rem 1rem; }
+  .band h2 { font-size: 15pt; margin: 0; letter-spacing: 0.04em; text-transform: uppercase; } .band .amt { font-size: 15pt; font-weight: 700; white-space: nowrap; }
+  section p { margin: 0.6rem 0.2rem; } .lines { margin: 0.4rem 0.2rem 0 1.4rem; } .line { display: flex; justify-content: space-between; gap: 1rem; padding: 0.12rem 0; } .line .amt { white-space: nowrap; }
+  .lines .total { border-top: 1px solid #0B1F41; margin-top: 0.3rem; padding-top: 0.35rem; }
+  .footer { background: #0B1F41; color: #fff; padding: 0.9rem 1.2rem; margin-top: 1.2rem; font-size: 9pt; line-height: 1.5; break-inside: avoid; }
+  .pub { text-align: right; color: #5F6B7E; font-size: 8.5pt; margin-top: 0.5rem; font-style: italic; }
+  .toolbar { position: fixed; top: 10px; right: 14px; display: flex; gap: 0.5rem; align-items: center; } .toolbar button { font: inherit; font-weight: 700; color: #fff; background: #007DC3; border: none; border-radius: 999px; padding: 0.4rem 1rem; cursor: pointer; }
+  .toolbar small { background: #FFF4CC; color: #735A00; border-radius: 999px; padding: 0.3rem 0.7rem; font-size: 9pt; }
+  .pagebreak { break-after: page; } @media print { .toolbar { display: none; } }
+</style></head><body>
+<div class="toolbar"><small>Draft: click any text to edit it before printing. Amounts are the sum of each working group's ${FY.current} LTRA requests. Photos are added in layout.</small><button onclick="window.print()">Print or save as PDF</button></div>
+<div class="cover"><img src="${logoUrl()}" alt="Lake Tahoe Environmental Improvement Program"><div class="date" contenteditable="true"><small>Draft</small>${escHtml(AP_MONTHS[new Date().getMonth()].replace(".", "").toUpperCase())}<br>${new Date().getFullYear()}</div></div>
+<div class="titleblock"><h1 contenteditable="true">${escHtml(DOC.title.toUpperCase())}</h1><div class="sub" contenteditable="true">${escHtml(DOC.program.toUpperCase())}</div><div class="fy" contenteditable="true">${escHtml(DOC.fy)}</div></div>
+<div class="intro"><h2>Lake Tahoe Environmental Improvement Program</h2><p contenteditable="true">${escHtml(DOC.intro1)}</p><p contenteditable="true">${escHtml(DOC.intro2)}</p>
+<hr class="rule"><h2>Lake Tahoe Restoration Act</h2><p contenteditable="true">${escHtml(DOC.act1)}</p><p contenteditable="true">${escHtml(DOC.act2(money(grand)))}</p>
+${summaryBox}<div class="explore"><b>Explore EIP funding, projects, and results at:</b><span class="url">eip.laketahoeinfo.org</span></div></div>
+<div class="pagebreak"></div>${sections.map(sec).join("")}
+<div class="footer" contenteditable="true">${escHtml(DOC.footer)}</div><p class="pub">Published by the Tahoe Regional Planning Agency · draft ${escHtml(apDate(new Date()))} · EIP Priority Lists</p>
+</body></html>`, `ltra-priority-list-${FY.current}-draft-${todayLocal()}.html`);
+    });
+    $("csvBtn").addEventListener("click", () => {
+      const groups = groupTotals(listKey); if (!groups.length) { toast(`Nothing on the ${LISTS[listKey].long} yet.`, 3500); return; }
+      const lines = [["Working group", "Federal Agency", "Implementer", "Project", `${FY.current} Request`, "EIP Tracker #", "Priority Ranking", "Project Type", "Criteria", "Notes", "Changed by", "Changed on", "Tracker LTRA request", "Tracker stage"].map(csvCell).join(",")];
+      for (const g of groups) {
+        for (const r of g.items) { const p = proj(r.eip) || {}; lines.push([g.wg, "", p.lead || "", nameOf(r), r.request != null ? Math.round(r.request) : "", r.eip, r.tier, "", critText(r.criteria), r.note, r.who, new Date(r.when).toISOString().slice(0, 10), p.ltraAsk ?? "", p.stage || ""].map(csvCell).join(",")); }
+        lines.push([g.wg, "", "", "Total of all Priorities:", Math.round(g.all)].map(csvCell).join(",")); lines.push([g.wg, "", "", "Total of all Priority 1 Projects:", Math.round(g.p1)].map(csvCell).join(",")); lines.push("");
+      }
+      download(`eip-${listKey}-master-${FY.current}-${todayLocal()}.csv`, "﻿" + lines.join("\r\n") + "\r\n");
+    });
+
+    // ───────────────────────── Start ─────────────────────────
+    $("aboutBtn").addEventListener("click", () => { $("aboutDialog").open = true; });
+    $("refreshBtn").addEventListener("click", async () => { try { await loadRows(); render(); toast("Lists reloaded."); } catch (e) { toast(`Could not reload: ${e.message}`, 5000); } });
+    $("deadline").textContent = FY.deadline;
+    (async () => {
+      try {
+        await loadProjects(); initGrid(); $("gridLoading").hidden = true; $("grid").hidden = false;
+        try { await loadRows(); } catch (e) { console.warn(e); toast(`Could not load the lists: ${e.message}`, 6000); }
+        render();
+      } catch (e) { console.error(e); $("gridLoading").textContent = "Could not load EIP projects. Check the connection and reload."; $("status").textContent = ""; }
+    })();
+  </script>
+</body>
+</html>

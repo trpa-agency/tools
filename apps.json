@@ -230,6 +230,20 @@
       "beta": true
     },
     {
+      "id": "eippriorlists",
+      "title": "EIP Priority Lists (test)",
+      "category": "eip",
+      "url": "qa/eip/priority-lists.html",
+      "thumbnail": "assets/thumbs/eip-priorities.svg",
+      "description": "Test of a simpler way to keep the LTRA priority lists current: each working group opens its list, changes a project, and the change is on the record at once. Lists start from the FY27 baseline and nothing is overwritten. Prints the master sheet and a draft of the public LTRA Priority List.",
+      "tags": [
+        "EIP",
+        "Funding",
+        "Prioritization"
+      ],
+      "beta": true
+    },
+    {
       "id": "eiptracker",
       "title": "EIP Project Tracker",
       "category": "eip",
