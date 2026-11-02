@@ -1,0 +1,419 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Hourglass Timer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one screen, hourglass beside a large readout on wide screens, stacked on phones */
+:root {
+  --bg: #eef1f1;
+  --panel: #f8faf9;
+  --fg: #1b2427;
+  --muted: #5d6b70;
+  --line: #c9d2d3;
+  --glass: rgba(120, 160, 170, 0.10);
+  --glass-edge: #8fa3a8;
+  --sand: #c98f2c;
+  --sand-deep: #a8731c;
+  --wood: #5e4332;
+  --wood-hi: #7c5a44;
+  --accent: #1f5f66;
+  --accent-fg: #f3f7f7;
+  --done: #b2442f;
+  --font-num: "Azeret Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-ui: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111719; --panel: #172024; --fg: #e4ebec; --muted: #93a3a7; --line: #2c393d;
+    --glass: rgba(150, 200, 210, 0.07); --glass-edge: #5f7a80;
+    --sand: #e0aa4c; --sand-deep: #c38b2e; --wood: #6f4f3b; --wood-hi: #8e6a51;
+    --accent: #6fbac2; --accent-fg: #0e1517; --done: #e2735c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111719; --panel: #172024; --fg: #e4ebec; --muted: #93a3a7; --line: #2c393d;
+  --glass: rgba(150, 200, 210, 0.07); --glass-edge: #5f7a80;
+  --sand: #e0aa4c; --sand-deep: #c38b2e; --wood: #6f4f3b; --wood-hi: #8e6a51;
+  --accent: #6fbac2; --accent-fg: #0e1517; --done: #e2735c; color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+}
+.app {
+  width: 100%;
+  max-width: 820px;
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+}
+.glass-wrap { display: grid; place-items: center; }
+#hourglass {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  overflow: visible;
+  transform-origin: 50% 50%;
+}
+#hourglass.flip { transition: transform 700ms cubic-bezier(.6, 0, .3, 1); transform: rotate(180deg); }
+
+.readout { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.status {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.status[data-state="running"] { color: var(--accent); }
+.status[data-state="done"] { color: var(--done); }
+#time {
+  font-family: var(--font-num);
+  font-weight: 300;
+  font-size: clamp(64px, 14vw, 128px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+#time.done { color: var(--done); animation: pulse 1.2s ease-in-out 3; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button {
+  font: inherit;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--fg);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: border-color 120ms, background 120ms;
+}
+button:hover:not(:disabled) { border-color: var(--glass-edge); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: 0.4; cursor: default; }
+#toggle {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+  min-width: 112px;
+  font-weight: 600;
+}
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.chips button { font-family: var(--font-num); font-weight: 500; padding: 8px 12px; font-variant-numeric: tabular-nums; }
+.chips button[aria-pressed="true"] { border-color: var(--sand); box-shadow: inset 0 0 0 1px var(--sand); }
+.step { font-family: var(--font-num); min-width: 64px; }
+.hint { color: var(--muted); font-size: 13px; }
+kbd {
+  font-family: var(--font-num);
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+@media (max-width: 620px) {
+  .app { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  #hourglass { max-width: 190px; }
+  .readout { align-items: center; }
+  .row { justify-content: center; }
+  .hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hourglass.flip { transition: none; }
+  #time.done { animation: none; }
+}
+</style>
+
+<main class="app">
+  <div class="glass-wrap">
+    <svg id="hourglass" viewBox="0 0 200 320" role="img" aria-label="Hourglass showing time remaining">
+      <defs>
+        <linearGradient id="woodGrad" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" style="stop-color:var(--wood-hi)"/>
+          <stop offset="1" style="stop-color:var(--wood)"/>
+        </linearGradient>
+      </defs>
+      <!-- posts -->
+      <rect x="22" y="30" width="7" height="260" rx="3" style="fill:var(--wood)"/>
+      <rect x="171" y="30" width="7" height="260" rx="3" style="fill:var(--wood)"/>
+      <!-- glass -->
+      <path id="glassFill" style="fill:var(--glass)"/>
+      <path id="sandTop" style="fill:var(--sand)"/>
+      <line id="stream" x1="100" x2="100" y1="160" y2="160" style="stroke:var(--sand)" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+      <path id="sandBottom" style="fill:var(--sand)"/>
+      <path id="glassEdge" fill="none" style="stroke:var(--glass-edge)" stroke-width="1.6"/>
+      <!-- plates -->
+      <rect x="14" y="16" width="172" height="18" rx="5" fill="url(#woodGrad)"/>
+      <rect x="14" y="286" width="172" height="18" rx="5" fill="url(#woodGrad)"/>
+    </svg>
+  </div>
+
+  <section class="readout">
+    <div>
+      <div class="status" id="status" data-state="ready">Ready</div>
+      <p id="time" aria-live="off">5:00</p>
+    </div>
+
+    <div class="row">
+      <button id="toggle" type="button">Start</button>
+      <button id="reset" type="button">Reset</button>
+    </div>
+
+  </section>
+</main>
+
+<script>
+(() => {
+  const DEFAULT_MIN = 5;
+  const MAX_MIN = 180;
+
+  // Hourglass geometry. u runs 0 at the neck to 1 at the wide end of a bulb.
+  const CX = 100, NECK = 160, H = 124, INSET = 2.2, FILL = 0.82;
+  const halfW = u => 3.2 + 60 * Math.pow(Math.sin(u * Math.PI / 2), 0.72);
+
+  // Cumulative bulb area from the neck, used to map sand volume to sand height.
+  const N = 300;
+  const cum = new Float64Array(N + 1);
+  for (let i = 1; i <= N; i++) {
+    const u0 = (i - 1) / N, u1 = i / N;
+    cum[i] = cum[i - 1] + (halfW(u0) + halfW(u1)) * (u1 - u0);
+  }
+  const TOTAL_AREA = cum[N];
+  const uForArea = a => {
+    if (a <= 0) return 0;
+    if (a >= TOTAL_AREA) return 1;
+    let lo = 0, hi = N;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; (cum[m] < a ? lo = m : hi = m); }
+    return (lo + (a - cum[lo]) / (cum[hi] - cum[lo])) / N;
+  };
+
+  const $ = id => document.getElementById(id);
+  const svg = $("hourglass");
+  const sandTop = $("sandTop"), sandBottom = $("sandBottom"), stream = $("stream");
+
+  // Glass outline
+  (() => {
+    const pts = [];
+    for (let i = N; i >= 0; i -= 5) { const u = i / N; pts.push([CX + halfW(u), NECK - u * H]); }
+    for (let i = 0; i <= N; i += 5) { const u = i / N; pts.push([CX + halfW(u), NECK + u * H]); }
+    for (let i = N; i >= 0; i -= 5) { const u = i / N; pts.push([CX - halfW(u), NECK + u * H]); }
+    for (let i = 0; i <= N; i += 5) { const u = i / N; pts.push([CX - halfW(u), NECK - u * H]); }
+    const d = "M" + pts.map(p => p[0].toFixed(2) + "," + p[1].toFixed(2)).join("L") + "Z";
+    $("glassFill").setAttribute("d", d);
+    $("glassEdge").setAttribute("d", d);
+  })();
+
+  function edgePath(uFrom, uTo, dir) {
+    // dir -1 = top bulb (y above neck), +1 = bottom bulb
+    const steps = 48, right = [], left = [];
+    for (let k = 0; k <= steps; k++) {
+      const u = uFrom + (uTo - uFrom) * k / steps;
+      const w = Math.max(0, halfW(u) - INSET);
+      const y = NECK + dir * u * H;
+      right.push([CX + w, y]);
+      left.unshift([CX - w, y]);
+    }
+    return { right, left };
+  }
+  const toD = pts => "M" + pts.map(p => p[0].toFixed(2) + "," + p[1].toFixed(2)).join("L") + "Z";
+
+  function drawSand(f, running) {
+    const sand = FILL * TOTAL_AREA;
+    // Top bulb: sand sits from the neck up to uTop.
+    const uTop = uForArea(f * sand);
+    if (f > 0.0005) {
+      const e = edgePath(0.02, uTop, -1);
+      // Small dip in the centre of the top surface while sand drains.
+      const yTop = NECK - uTop * H;
+      const dip = running ? Math.min(5, uTop * H * 0.25) : 0;
+      sandTop.setAttribute("d", toD([...e.right, [CX, yTop + dip], ...e.left]));
+    } else {
+      sandTop.setAttribute("d", "");
+    }
+
+    // Bottom bulb: sand piles from the base up to uB.
+    const fallen = (1 - f) * sand;
+    if (fallen > 0.5) {
+      const uB = uForArea(TOTAL_AREA - fallen);
+      const e = edgePath(1, uB, 1);
+      const ySurf = NECK + uB * H;
+      const mound = Math.min(9, (1 - f) * 40);
+      sandBottom.setAttribute("d", toD([...e.right, [CX, ySurf - mound], ...e.left]));
+      stream.setAttribute("y2", (ySurf - mound).toFixed(2));
+    } else {
+      sandBottom.setAttribute("d", "");
+      stream.setAttribute("y2", (NECK + H - 2).toFixed(2));
+    }
+    stream.style.visibility = running && f > 0 && f < 1 ? "visible" : "hidden";
+  }
+
+  // Timer state
+  let totalMs = DEFAULT_MIN * 60000;
+  let remainingMs = totalMs;
+  let endAt = 0;
+  let running = false;
+  let raf = 0;
+  let wakeLock = null;
+  let audio = null;
+  let streamOffset = 0;
+
+  const timeEl = $("time"), statusEl = $("status"), toggleBtn = $("toggle");
+
+  function fmt(ms) {
+    const s = Math.ceil(ms / 1000);
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    const ss = String(sec).padStart(2, "0");
+    return h ? `${h}:${String(m).padStart(2, "0")}:${ss}` : `${m}:${ss}`;
+  }
+
+  function setStatus(state, text) {
+    statusEl.dataset.state = state;
+    statusEl.textContent = text;
+  }
+
+  function render() {
+    timeEl.textContent = fmt(remainingMs);
+    drawSand(totalMs ? remainingMs / totalMs : 0, running);
+  }
+
+  function loop() {
+    remainingMs = Math.max(0, endAt - Date.now());
+    streamOffset = (streamOffset + 0.6) % 6;
+    stream.setAttribute("stroke-dashoffset", (-streamOffset).toFixed(2));
+    render();
+    if (remainingMs <= 0) return finish();
+    raf = requestAnimationFrame(loop);
+  }
+
+  async function requestWake() {
+    try { if ("wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen"); } catch (_) { wakeLock = null; }
+  }
+  function releaseWake() {
+    try { wakeLock && wakeLock.release(); } catch (_) {}
+    wakeLock = null;
+  }
+
+  function start() {
+    if (remainingMs <= 0) resetTimer(false);
+    if (!audio) {
+      try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) { audio = null; }
+    } else if (audio.state === "suspended") { audio.resume().catch(() => {}); }
+    running = true;
+    endAt = Date.now() + remainingMs;
+    toggleBtn.textContent = "Pause";
+    timeEl.classList.remove("done");
+    setStatus("running", "Running");
+    requestWake();
+    raf = requestAnimationFrame(loop);
+  }
+
+  function pause() {
+    running = false;
+    cancelAnimationFrame(raf);
+    remainingMs = Math.max(0, endAt - Date.now());
+    toggleBtn.textContent = "Resume";
+    setStatus("paused", "Paused");
+    releaseWake();
+    render();
+  }
+
+  function finish() {
+    running = false;
+    remainingMs = 0;
+    toggleBtn.textContent = "Start";
+    timeEl.classList.add("done");
+    setStatus("done", "Time is up");
+    releaseWake();
+    render();
+    chime();
+  }
+
+  function chime() {
+    if (!audio) return;
+    const now = audio.currentTime;
+    [880, 1174.7, 1318.5].forEach((freq, i) => {
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      const t = now + i * 0.28;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
+      o.connect(g).connect(audio.destination);
+      o.start(t);
+      o.stop(t + 1.3);
+    });
+  }
+
+  function resetTimer(animate = true) {
+    const wasLow = totalMs && remainingMs / totalMs < 0.5;
+    running = false;
+    cancelAnimationFrame(raf);
+    releaseWake();
+    timeEl.classList.remove("done");
+    toggleBtn.textContent = "Start";
+    setStatus("ready", "Ready");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (animate && wasLow && !reduce) {
+      // Turn the hourglass over, then swap in a full top bulb.
+      svg.classList.add("flip");
+      svg.addEventListener("transitionend", function done() {
+        svg.removeEventListener("transitionend", done);
+        svg.classList.remove("flip");
+        remainingMs = totalMs;
+        render();
+      });
+      timeEl.textContent = fmt(totalMs);
+      return;
+    }
+    remainingMs = totalMs;
+    render();
+  }
+
+  toggleBtn.addEventListener("click", () => (running ? pause() : start()));
+  $("reset").addEventListener("click", () => resetTimer(true));
+
+  document.addEventListener("keydown", e => {
+    if (e.target.closest("button, input, textarea")) return;
+    if (e.code === "Space") { e.preventDefault(); running ? pause() : start(); }
+    else if (e.key === "r" || e.key === "R") resetTimer(true);
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && running) requestWake();
+  });
+
+  // Browsers keep audio muted until the first click or key press.
+  const unlockAudio = () => { if (audio && audio.state === "suspended") audio.resume().catch(() => {}); };
+  document.addEventListener("pointerdown", unlockAudio);
+  document.addEventListener("keydown", unlockAudio);
+
+  render();
+  start();
+})();
+</script>
+
+</body></html>

@@ -946,7 +946,7 @@
       addNotice('brand', 'information', '',
         `Updated ${fmtDateTime(DATA.generated_at)} Past meetings and press cover ${fmtDate(DATA.window.start)} to ${fmtDate(DATA.window.end)}; ` +
         `upcoming meetings cover agendas posted through ${fmtDate(DATA.meeting_window.end)}.`);
-      if (ageDays > 2) {   // the data is refreshed daily
+      if (ageDays > 5) {   // refreshed Sunday and Wednesday nights; the longest gap is about 4 days
         addNotice('warning', 'clock', 'This data is out of date',
           `It was last updated ${count(Math.floor(ageDays), 'day')} ago. Run the collector to refresh it.`);
       }
