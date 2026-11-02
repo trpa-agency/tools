@@ -124,7 +124,7 @@
       <div class="htitle"><span class="hagency">Environmental Improvement Program</span><h1 class="hname">Priority Lists</h1></div>
     </div>
     <div class="hdr-links">
-      <span class="beta-chip">Beta</span>
+      <span class="beta-chip" id="modeChip" hidden>Test copy</span>
       <calcite-button id="refreshBtn" icon-start="refresh" appearance="transparent" kind="neutral" scale="s" title="Reload the lists" label="Reload the lists"></calcite-button>
       <calcite-button href="../index.html" icon-start="apps" appearance="transparent" kind="neutral" scale="s" title="All TRPA maps" label="All TRPA maps"></calcite-button>
     </div>
@@ -216,9 +216,12 @@
   <script>
     // ───────────────────────── Config ─────────────────────────
     const DATA_BASE = new URLSearchParams(location.search).get("data") || "https://trpa-agency.github.io/EIP/data/";
-    // The hosted table from scripts/eip_priority_lists_table.py (…/EIP_Priority_Lists/FeatureServer/0). Empty = test mode: the baseline
+    // Two copies of this page share one code base. eip/ is the live page and writes to the hosted table; qa/eip/ is the test copy,
+    // which reads the same table but keeps changes in this browser. Promote by copying qa/eip/ over eip/ and changing ../../assets/ to ../assets/.
+    const IS_QA = /\/qa\//.test(location.pathname);
+    // The hosted table from scripts/eip_priority_lists_table.py (…/EIP_Priority_Lists/FeatureServer/0). Empty url = survey mode: the baseline
     // is read straight from the survey view and changes stay in this browser.
-    const TABLE = { url: "https://services5.arcgis.com/fXXSUzHD5JjcOt1v/arcgis/rest/services/EIP_Priority_Lists/FeatureServer/0" };
+    const TABLE = { url: "https://services5.arcgis.com/fXXSUzHD5JjcOt1v/arcgis/rest/services/EIP_Priority_Lists/FeatureServer/0", write: !IS_QA };
     const SURVEY = { viewUrl: "https://services5.arcgis.com/fXXSUzHD5JjcOt1v/arcgis/rest/services/EIP_Funding_Priorities_picks_public_view/FeatureServer/0", round: "FY28" };
     const FY = { baseline: "FY27", current: "FY28", label: "FY28 LTRA cycle",
       deadline: "Working group lists are due to the EIP Coordinating Committee by Dec. 18, 2026. Follow steps 1-5 below to create your LTRA list." };
@@ -354,7 +357,7 @@
       return out;
     }
     async function loadRows() {
-      if (TABLE.url) rows = (await queryAll(TABLE.url, "1=1")).map(toRow);
+      if (TABLE.url) rows = [...(await queryAll(TABLE.url, "1=1")).map(toRow), ...(TABLE.write ? [] : loadLS(LS_EDITS, []))];
       else {
         const feats = await queryAll(SURVEY.viewUrl, `funding_round_filled_in_by_the='${SURVEY.round}'`);
         rows = [...surveyBaseline(feats), ...loadLS(LS_EDITS, [])];
@@ -369,7 +372,7 @@
     const nameOf = (r) => (proj(r.eip) || {}).name || r.project || r.eip;
     const groupsWithPicks = (l) => WORKING_GROUPS.filter(w => listOf(l, w).length);
     async function saveRow(r) {
-      if (TABLE.url) {
+      if (TABLE.url && TABLE.write) {
         const attrs = { fy: FY.current, listkey: r.listkey, wg: r.wg, eip: r.eip, project: r.project, tier: r.tier, request: r.request, criteria: r.criteria.join(","), note: r.note, who: r.who, agency: r.agency, source: "tool" };
         const body = new URLSearchParams({ f: "json", adds: JSON.stringify([{ attributes: attrs }]), rollbackOnFailure: "true" });
         const res = await fetch(`${TABLE.url}/applyEdits`, { method: "POST", body }).then(x => x.json());
@@ -402,8 +405,10 @@
       const base = rows.filter(r => r.fy === FY.baseline).length, edits = rows.filter(r => r.fy !== FY.baseline).length, groups = groupsWithPicks("ltra").length;
       $("status").innerHTML = `<b>${FY.baseline} baseline:</b> ${base} pick${base === 1 ? "" : "s"} across ${groups} working group${groups === 1 ? "" : "s"}. <b>${FY.current} changes:</b> ${edits}.` +
         (loadedAt ? ` Loaded ${loadedAt.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.` : "");
-      $("testMode").hidden = !!TABLE.url;
-      $("testMode").textContent = TABLE.url ? "" : "Test mode: the baseline is read from the survey each time, and changes are kept in this browser only. Once the hosted table exists, changes are shared.";
+      $("modeChip").hidden = !IS_QA;
+      $("testMode").hidden = !!TABLE.url && TABLE.write;
+      $("testMode").innerHTML = !TABLE.url ? "Survey mode: the baseline is read from the survey each time, and changes are kept in this browser only."
+        : TABLE.write ? "" : `Test copy: the lists are read from the shared table, but changes saved here stay in this browser. The live page is <a href="../../eip/funding-priorities.html">eip/funding-priorities.html</a>.`;
     }
 
     // ───────────────────────── Table ─────────────────────────
