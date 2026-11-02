@@ -1,4 +1,4 @@
-"""Create and seed the hosted table behind EIP Priority Lists (qa/eip/priority-lists.html).
+"""Create and seed the hosted table behind EIP Priority Lists (qa/eip/funding-priorities.html).
 
 The table holds one row per change to one project on one working group's list. Rows are
 only ever added; for each (list, working group, project) the newest row wins, and a row
@@ -15,7 +15,7 @@ Run with the ArcGIS Pro environment, signed in to TRPA's ArcGIS Online in Pro:
   ... --seed                                write the baseline rows (survey, newest list per group)
   ... --seed --sheet "FY27 master sheet.xlsx"   also load last year's master sheet (survey rows win)
 
-Then paste the printed table URL into TABLE.url in qa/eip/priority-lists.html. Sharing:
+Then paste the printed table URL into TABLE.url in qa/eip/funding-priorities.html. Sharing:
 the script shares the item with everyone; check Settings on the item in ArcGIS Online
 if adds from the page fail.
 """
@@ -263,7 +263,7 @@ def main():
         sys.exit("Table not found; run with --create first.")
     if a.seed:
         seed(item, a.sheet, a.dry_run)
-    log(f"\nTable URL for TABLE.url in qa/eip/priority-lists.html:\n  {table_of(item).url}\nItem: {item.homepage}")
+    log(f"\nTable URL for TABLE.url in qa/eip/funding-priorities.html:\n  {table_of(item).url}\nItem: {item.homepage}")
 
 
 if __name__ == "__main__":
