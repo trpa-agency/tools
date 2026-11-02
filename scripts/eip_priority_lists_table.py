@@ -22,7 +22,7 @@ if adds from the page fail.
 import argparse
 import re
 import sys
-from datetime import datetime, timezone
+import time
 
 SERVICE_NAME = "EIP_Priority_Lists"
 TITLE = "EIP Priority Lists"
@@ -94,6 +94,11 @@ EDITOR_TRACKING = {"enableEditorTracking": True, "enableOwnershipAccessControl":
 
 def log(msg):
     print(msg, flush=True)
+
+
+def ymd(ms):
+    """An ArcGIS epoch-millisecond date as YYYY-MM-DD (UTC)."""
+    return time.strftime("%Y-%m-%d", time.gmtime(ms / 1000))
 
 
 def connect(user):
@@ -225,9 +230,9 @@ def seed(item, sheet, dry_run):
     extra = sheet_rows(sheet) if sheet else []
     log(f"Survey baseline: {len(newest)} working groups, {len(survey_rows)} picks")
     for wg, g in newest.items():
-        log(f"  {wg}: {len(g['rows'])} picks, sent by {g['who']} on {datetime.fromtimestamp(g['when'] / 1000, timezone.utc):%Y-%m-%d}")
+        log(f"  {wg}: {len(g['rows'])} picks, sent by {g['who']} on {ymd(g['when'])}")
     for wg, who, when in dropped:
-        log(f"  older list for {wg} by {who} ({datetime.fromtimestamp(when / 1000, timezone.utc):%Y-%m-%d}) not used")
+        log(f"  older list for {wg} by {who} ({ymd(when)}) not used")
     if sheet:
         log(f"Master sheet: {len(extra)} rows from {sheet}")
     if dry_run:

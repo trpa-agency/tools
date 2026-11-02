@@ -218,7 +218,7 @@
     const DATA_BASE = new URLSearchParams(location.search).get("data") || "https://trpa-agency.github.io/EIP/data/";
     // The hosted table from scripts/eip_priority_lists_table.py (…/EIP_Priority_Lists/FeatureServer/0). Empty = test mode: the baseline
     // is read straight from the survey view and changes stay in this browser.
-    const TABLE = { url: "" };
+    const TABLE = { url: "https://services5.arcgis.com/fXXSUzHD5JjcOt1v/arcgis/rest/services/EIP_Priority_Lists/FeatureServer/0" };
     const SURVEY = { viewUrl: "https://services5.arcgis.com/fXXSUzHD5JjcOt1v/arcgis/rest/services/EIP_Funding_Priorities_picks_public_view/FeatureServer/0", round: "FY28" };
     const FY = { baseline: "FY27", current: "FY28", label: "FY28 LTRA cycle",
       deadline: "Working group lists are due to the EIP Coordinating Committee by Dec. 18, 2026. Follow steps 1-5 below to create your LTRA list." };

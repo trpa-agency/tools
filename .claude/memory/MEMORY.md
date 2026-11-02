@@ -2,7 +2,7 @@
 
 One line per note. Each note is a markdown file in this folder.
 
-- [EIP Priority Lists](eip-priorities-survey123.md): qa/eip/funding-priorities.html (row-based app since Nov. 1, 2026; priority-lists.html redirects); one appended row per change, newest wins; FY27 baseline from the Survey123 view (form 06f26df8…, frozen field names, line format); hosted table from scripts/eip_priority_lists_table.py, TABLE.url empty = test mode; earlier send-whole-list app at commit 60bdc2f
+- [EIP Priority Lists](eip-priorities-survey123.md): qa/eip/funding-priorities.html (row-based app since Nov. 1, 2026; priority-lists.html redirects); one appended row per change, newest wins; FY27 baseline from the Survey123 view (form 06f26df8…, frozen field names, line format); hosted table EIP_Priority_Lists (item 5f2e41e7…, seeded Nov. 1, 2026 by scripts/eip_priority_lists_table.py, TABLE.url set); earlier send-whole-list app at commit 60bdc2f
 - [EIP data snapshot](eip-data-snapshot.md): EIP tools read trpa-agency.github.io/EIP/data; LT Info moved to internalapi.laketahoeinfo.org (anonymous, no key), old WebServices routes dead; keep legacy field names
 - [TRPA Tools site](trpa-tools-site.md): trpa-agency/tools at trpa-agency.github.io/tools (tools.trpa.gov, no DNS yet); beta under qa/, apps.json registry; maps repo merged in Oct. 14, 2026, github.io/maps 404s; work on mtb-edits, merge to main
 - [Internal CORS issue](internal-cors-issue.md): office-network fetches to maps.trpa.org fail on CORS; JSONP callback= works around it, locator uses it as a fallback
