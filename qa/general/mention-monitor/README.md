@@ -112,15 +112,28 @@ python -m venv .venv
 Or double-click `update_data.bat`. A full run takes about five minutes and rewrites
 `data/`. Commit `data/` to publish the update.
 
-### Daily updates
+### Scheduled updates (GitHub Actions)
 
-Agencies post agendas three to 10 days ahead, so refresh daily. `run_daily.bat` does an
+`.github/workflows/refresh-mentions.yml` at the repo root runs the collector Sunday and
+Wednesday nights (05:00 UTC Monday and Thursday: 9 p.m. Pacific in winter, 10 p.m. in
+summer) and commits `data/` to `main` when it changed. Run it on demand from the Actions
+tab ("Refresh TRPA Mention Monitor" → Run workflow). The schedule only fires from `main`.
+
+If an agency site or news feed refuses GitHub's servers, its results from the last
+successful run are kept and flagged on the "Sources checked" tab. Check that tab after the
+first few runs, and use a local run for any source that only works from the office.
+
+### Local scheduled updates
+
+Agencies post agendas three to 10 days ahead. To refresh from your own machine instead of
+GitHub Actions (don't use both with `-Publish`), `run_daily.bat` does an
 unattended run (no window, no key press) and logs to `logs/update_YYYY-MM-DD.log`. To
 schedule it with Windows Task Scheduler, run once in PowerShell from this folder:
 
 ```powershell
 .\schedule_daily.ps1                 # every day at 6:00 a.m.
 .\schedule_daily.ps1 -At 5:30am      # a different time
+.\schedule_daily.ps1 -Days Sunday,Wednesday -At 9:00pm   # only on those days
 .\schedule_daily.ps1 -Publish        # also commit and push data/ so GitHub Pages updates
 .\schedule_daily.ps1 -Remove         # stop the daily run
 ```
@@ -128,7 +141,7 @@ schedule it with Windows Task Scheduler, run once in PowerShell from this folder
 The task runs as you while you're logged on, and catches up if the computer was off or
 asleep at the set time. `-Publish` commits only `data/` and pushes to whatever branch is
 checked out, so use it on the branch GitHub Pages serves. The app warns when its data is
-more than two days old.
+more than five days old.
 
 Useful options:
 
