@@ -30,7 +30,7 @@ defaults:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 120   # every agency's full packets are scanned, some run past 100 MB
     steps:
       - uses: actions/checkout@v4
         with:

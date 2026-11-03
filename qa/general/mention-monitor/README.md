@@ -32,6 +32,12 @@ one, but agenda items aren't ranked above other mentions. Each record still gets
 - **On the agenda:** TRPA or a keyword is part of an agendized item.
 - **In meeting materials:** only in staff reports, attachments, or minutes.
 - **Public comment only:** flagged as lower priority, shown muted, and listed last.
+- **Outside the Basin:** a department keyword matched (no TRPA mention) in a meeting from a
+  source marked `basin = false` in `sources.toml` (El Dorado, Placer, Washoe, and Douglas
+  counties and the Town of Truckee), and neither the pages that match nor the meeting or
+  document name mention a Basin place in `basin_place_patterns`. These are kept but shown
+  muted and listed after public comment. Only department views show them, since the default
+  view is TRPA-only.
 
 To change how contexts are ordered within a document, edit `PRIORITY` in
 `trpa_monitor/classify.py`, then run `python -m trpa_monitor --rebuild`. That regenerates the app data, table, and PDF from the
@@ -148,9 +154,21 @@ Useful options:
 ```text
 --days N        look back N days (default 30)
 --ahead N       include agendas for meetings up to N days ahead (default 30)
---packets       scan full agenda packets for every agency (slower)
+--no-packets    skip full agenda packets for a quicker run (packets are scanned for
+                every agency by default; sources with packets = true in
+                sources.toml are still scanned)
 --only "Placer,Truckee"   test specific sources (does not update data/)
 ```
+
+There's no size limit on documents: big packets (South Lake Tahoe's run to hundreds of
+pages and over 100 MB) are spooled to a temp file and read in full, which can add a few
+minutes to a run.
+
+**Unreadable documents:** every full run writes `data/unreadable_documents.csv`, a
+reference list of the documents that couldn't be searched: scanned images with no text
+layer (they would need OCR) and any download or read errors. It lists the source, meeting,
+date, document, reason, and link. The app doesn't show it; the "Sources checked" tab only
+gives each source's count.
 
 Partial runs (`--only`, `--meetings-only`, `--press-only`) don't touch `data/`, so the
 app never shows a half-updated picture. If a source can't be reached during a full run,
