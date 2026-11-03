@@ -103,6 +103,7 @@
     .chips button { border: 1.5px solid var(--gray-border); background: #fff; color: var(--gray-text); cursor: pointer; min-height: 22px; font-family: var(--font); font-size: 0.68rem; font-weight: 500; padding: 0.05rem 0.45rem; border-radius: 999px; }
     .chips button.on { border-color: var(--eip-blue); color: var(--eip-navy); background: color-mix(in srgb, var(--eip-blue) 10%, #fff); }
     .chips.req button { font-weight: 600; border-color: var(--blue-text); color: var(--blue-text); }
+    .chips.req .need { align-self: center; font-size: 0.68rem; color: var(--gray-text); padding: 0.05rem 0.2rem; }
     .dc-actions { display: flex; gap: 0.4rem; justify-content: flex-end; margin-top: 0.3rem; }
     .dc-group { font-size: 0.72rem; color: var(--gray-text); line-height: 1.5; }
     .dc-links { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
@@ -465,8 +466,8 @@
     }
     function renderCount() {
       if (!gridApi) return;
-      const n = gridApi.getDisplayedRowCount(), total = listOf(listKey, wg).reduce((a, r) => a + (r.request || 0), 0);
-      $("drawerCount").textContent = `${n} project${n === 1 ? "" : "s"}` + (wg && !$("searchInput").value.trim() ? ` · ${fmtFull(total)} requested` : "");
+      const n = gridApi.getDisplayedRowCount(), items = listOf(listKey, wg), sum = (rs) => rs.reduce((a, r) => a + (r.request || 0), 0);
+      $("drawerCount").textContent = `${n} project${n === 1 ? "" : "s"}` + (wg && !$("searchInput").value.trim() ? ` · ${fmtFull(sum(items))} requested · ${fmtFull(sum(items.filter(r => r.tier === 1)))} in Priority 1` : "");
     }
     function render() { renderGroups(); renderStatus(); renderGrid(); if (selectedId) showDetail(selectedId); }
 
@@ -481,7 +482,7 @@
       const draft = cur ? { tier: cur.tier, request: cur.request, criteria: [...cur.criteria], note: cur.note } : onOther ? { tier: onOther.tier, request: onOther.request, criteria: [...onOther.criteria], note: onOther.note } : { tier: null, request: null, criteria: [], note: "" };
       const info = (hid, title) => `<button type="button" class="info-btn" data-help="${hid}" aria-expanded="${openHelp.has(hid)}" title="${title}"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>`;
       const others = WORKING_GROUPS.filter(w => w !== wg).map(w => ({ w, r: onList(listKey, w, id) })).filter(x => x.r);
-      const chips = [p.ltraAsk > 0 ? [p.ltraAsk, `Tracker LTRA request ${fmtUSD(p.ltraAsk)}`] : null, p.need > 0 ? [p.need, `Unfunded need ${fmtUSD(p.need)}`] : null].filter(Boolean);
+      const chips = p.ltraAsk > 0 ? [[p.ltraAsk, `Tracker LTRA request ${fmtUSD(p.ltraAsk)}`]] : [], needText = p.need > 0 ? `<span class="need">Unfunded need ${fmtUSD(p.need)}</span>` : "";
       $("detailCard").innerHTML = `
         <div class="dc-head"><h3>${escHtml(p.name)}</h3><calcite-button id="dcClose" icon-start="x" appearance="transparent" kind="neutral" scale="s" title="Close" label="Close"></calcite-button></div>
         <div class="dc-sub">${escHtml(p.id)}${p.lead ? ` · ${escHtml(p.lead)}` : ""}${p.stage ? ` · ${escHtml(p.stage)}` : ""}${p.need != null ? ` · <b>${fmtUSD(p.need)}</b> unfunded need` : ""}${p.ltraAsk > 0 ? `<br>Tracker LTRA request: ${fmtFull(p.ltraAsk)}` : ""}${p.active ? "" : `<br><span style="color:var(--alert-text)">Not in planning or implementation on the Tracker.</span>`}</div>
@@ -492,7 +493,7 @@
             <div class="seg tiers" id="dcTier" role="radiogroup" aria-label="Priority">${[1, 2, 3].map(t => `<button data-v="${t}" role="radio" aria-checked="${draft.tier === t}" class="${draft.tier === t ? "active" : ""}">${t}</button>`).join("")}<button data-v="" role="radio" aria-checked="${!draft.tier}" class="${draft.tier ? "" : "active"}">None</button></div>
             <div class="dc-help" id="helpTier"${openHelp.has("helpTier") ? "" : " hidden"}>Priority 1 to 3, where 1 is the highest. Choose None to remove the project from the ${LISTS[listKey].long}.</div></div>
           <label class="field">Request ($)<input id="dcReq" type="text" inputmode="decimal" class="plain" placeholder="e.g. 500000, 500k, or 1.5M" value="${draft.request != null ? Math.round(draft.request).toLocaleString("en-US") : ""}" /></label>
-          ${chips.length ? `<div class="chips req" id="dcReqChips">${chips.map(([v, l]) => `<button type="button" data-v="${v}">${escHtml(l)}</button>`).join("")}</div>` : ""}
+          ${chips.length || needText ? `<div class="chips req" id="dcReqChips">${chips.map(([v, l]) => `<button type="button" data-v="${v}">${escHtml(l)}</button>`).join("")}${needText}</div>` : ""}
           <div class="field">LTRA criteria this project meets<div class="chips" id="dcCrit">${CRITERIA.map(c => `<button type="button" data-k="${c.k}" aria-pressed="${draft.criteria.includes(c.k)}" class="${draft.criteria.includes(c.k) ? "on" : ""}" title="${escHtml(c.d)}">${escHtml(c.s)}</button>`).join("")}</div></div>
           <div class="field"><span class="lbl-row"><label for="dcNote">Note</label> ${info("helpNote", "What to write in the note")}</span>
             <div class="dc-help" id="helpNote"${openHelp.has("helpNote") ? "" : " hidden"}>Provide a short narrative or summary of how the criteria were considered for this project's ranking.</div>
