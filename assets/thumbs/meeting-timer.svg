@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 266" width="400" height="266" role="img"
+     aria-label="Meeting timer: an hourglass with sand running beside a large countdown readout">
+  <!-- Background -->
+  <rect width="400" height="266" fill="#EEF1F5"/>
+
+  <!-- Hourglass frame -->
+  <rect x="78" y="34" width="112" height="12" rx="4" fill="#003B71"/>
+  <rect x="78" y="220" width="112" height="12" rx="4" fill="#003B71"/>
+  <rect x="84" y="46" width="6" height="174" fill="#003B71"/>
+  <rect x="178" y="46" width="6" height="174" fill="#003B71"/>
+
+  <!-- Glass -->
+  <path d="M98 48 H170 Q170 100 134 128 Q170 156 170 218 H98 Q98 156 134 128 Q98 100 98 48 Z"
+        fill="#FFFFFF" stroke="#B4CBE8" stroke-width="3"/>
+
+  <!-- Sand, top bulb (remaining) -->
+  <path d="M106 74 H162 Q158 104 134 126 Q110 104 106 74 Z" fill="#E87722"/>
+  <!-- Sand stream -->
+  <rect x="133" y="126" width="2.5" height="60" fill="#E87722"/>
+  <!-- Sand, bottom bulb (elapsed) -->
+  <path d="M100 216 H168 Q164 194 134 180 Q104 194 100 216 Z" fill="#E87722"/>
+
+  <!-- Readout -->
+  <text x="216" y="96" font-family="Open Sans, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2" fill="#0072CE">RUNNING</text>
+  <text x="214" y="160" font-family="Open Sans, Arial, sans-serif" font-size="64" font-weight="700" fill="#003B71">4:41</text>
+
+  <!-- Buttons -->
+  <rect x="216" y="184" width="68" height="28" rx="6" fill="#0072CE"/>
+  <text x="250" y="203" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Pause</text>
+  <rect x="292" y="184" width="66" height="28" rx="6" fill="#FFFFFF" stroke="#B4CBE8" stroke-width="2"/>
+  <text x="325" y="203" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="12" font-weight="700" fill="#003B71">Reset</text>
+</svg>
