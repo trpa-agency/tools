@@ -27,7 +27,7 @@ Three roles, usually one or two people plus Claude:
 - The intake doc is the source of truth for an engagement. Decisions, dates, and the final graduate-or-archive call are recorded there.
 - Public repo: no secrets, no credentials, no staff names, no case or enforcement records.
 - Data access gets answered at intake, not at build. Known traps: office-network CORS on maps.trpa.org (see `.claude/memory/internal-cors-issue.md`), SDE is not reachable from GitHub Pages, LT Info tabular data comes from `internalapi.laketahoeinfo.org`.
-- Betas carry the QA banner and live under `qa/` until promoted.
+- Betas carry the QA banner and the shared QA password gate (`assets/qa-gate.js`) and live under `qa/` until promoted.
 
 ## Folders
 

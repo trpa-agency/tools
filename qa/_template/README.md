@@ -16,6 +16,6 @@ The starting point for every pod-built beta app. Single-file HTML on the TRPA st
 - Plotly: `displayModeBar: false`, `responsive: true`, `hovermode: 'x unified'`, transparent backgrounds, brand colorway.
 - AG Grid 33 Theming API (`themeQuartz.withParams`), no legacy theme CSS. Pagination on for reporting tables, off for working surfaces.
 - `queryFeatures` handles ArcGIS REST pagination. Office-network CORS on maps.trpa.org has a JSONP workaround; see `.claude/memory/internal-cors-issue.md`.
-- `noindex` and the BETA chip stay until the app is promoted out of `qa/`.
+- `noindex`, the BETA chip, and the `assets/qa-gate.js` script tag (the shared QA password gate, see `.claude/memory/qa-gate.md`) stay until the app is promoted out of `qa/`; drop all three on promotion.
 
 The pod process that uses this template is in `pods/README.md`.
