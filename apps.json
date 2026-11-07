@@ -496,6 +496,19 @@
       "beta": true
     },
     {
+      "id": "meetingtimer",
+      "title": "Meeting Timer",
+      "category": "general",
+      "url": "qa/general/meeting-timer/Hourglass%20Timer.html",
+      "thumbnail": "assets/thumbs/meeting-timer.svg",
+      "description": "Full-screen five-minute hourglass for public comment and timed agenda items. Starts on open, pauses with the space bar, resets with R, chimes when time is up, and keeps the screen awake while it runs.",
+      "tags": [
+        "Meetings",
+        "Timer"
+      ],
+      "beta": true
+    },
+    {
       "id": "nearmap",
       "title": "Nearmap Imagery",
       "category": "general",
