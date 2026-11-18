@@ -311,6 +311,41 @@
     #ltinfo-monitoring .lti-popup-mock .pm-chart { width: 100%; height: auto; display: block; }
     #ltinfo-monitoring .lti-popup-mock .pm-axis { display: flex; justify-content: space-between; font-size: 0.68rem; color: #6a6a6a; margin-top: 0.15rem; }
     #ltinfo-monitoring .lti-popup-mock .pm-cap { font-size: 0.7rem; color: #6a6a6a; margin-top: 0.25rem; }
+    /* LT Info module cards (section 18) */
+    .mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin: 0.8rem 0 1.2rem; }
+    .mod { border: 1px solid var(--gray-border); border-radius: 8px; overflow: hidden; background: #fff; font-size: 0.8rem; display: flex; flex-direction: column; }
+    .mod-nav { background: #0b1f41; color: #fff; font-family: 'Lexend Deca', sans-serif; font-size: 0.78rem; padding: 0.45rem 0.7rem; display: flex; gap: 0.6rem; align-items: baseline; }
+    .mod-nav b { font-weight: 600; }
+    .mod-nav span { opacity: 0.7; font-size: 0.7rem; }
+    .mod-crumb { font-family: 'Lexend Deca', sans-serif; font-size: 0.66rem; font-weight: 700; text-transform: uppercase; padding: 0.3rem 0.7rem; color: #fff; }
+    .mod-stage { font-family: 'Lexend Deca', sans-serif; padding: 0.6rem 0.7rem; color: #333; }
+    .mod-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.45rem; }
+    .mod-card { border-radius: 4px; overflow: hidden; border: 1px solid #efefef; }
+    .mod-ch { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.35rem 0.6rem; }
+    .mod-cb { background: #f7f7f7; padding: 0.5rem 0.6rem; display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+    .mod-btn { color: #fff; border-radius: 6px; padding: 0.2rem 0.6rem; font-size: 0.7rem; }
+    .mod-chips { display: flex; height: 22px; margin-top: 0.55rem; border-radius: 4px; overflow: hidden; border: 1px solid #e3e3e3; }
+    .mod-chips i { flex: 1; cursor: copy; }
+    .mod-meta { padding: 0.55rem 0.7rem 0.7rem; border-top: 1px solid var(--gray-border); color: var(--brand-text); line-height: 1.45; margin-top: auto; }
+    .mod-meta p { margin: 0 0 0.3rem; max-width: none; }
+    .mod-meta code { font-size: 0.72rem; }
+    .pal-group { margin: 0.9rem 0 0.4rem; }
+    .pal-group h4 { margin: 0 0 0.3rem; }
+    .pal-row { cursor: copy; }
+    .pal-row:hover .ramp { outline: 2px solid var(--brand-primary); outline-offset: 1px; }
+    .pal-row.copied span::after { content: ' copied'; color: var(--status-success); font-weight: 600; }
+    .biv-wrap { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 0.4rem 0; }
+    .biv { display: grid; grid-template-columns: auto repeat(3, 34px); grid-template-rows: repeat(3, 34px) auto; gap: 2px; font-size: 0.7rem; cursor: copy; }
+    .biv i { display: block; border-radius: 2px; }
+    .biv .ax-y { grid-row: 1 / 4; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; color: var(--gray-text); padding-right: 0.25rem; }
+    .biv .ax-x { grid-column: 2 / 5; text-align: center; color: var(--gray-text); padding-top: 0.2rem; }
+    .biv-name { font-weight: 600; font-size: 0.8rem; margin-bottom: 0.3rem; }
+    #ltiEmbedSpec[data-brand="ltinfo"] .kpi:first-child { border-top-color: var(--lti-accent); }
+    #ltiEmbedSpec[data-brand="ltinfo"] .sec-title { color: var(--lti-accent); }
+    .site-pick { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.8rem 0 0.9rem; }
+    .site-pick button { font: inherit; font-size: 0.75rem; border: 1px solid var(--gray-border); background: #fff; border-radius: 999px; padding: 0.2rem 0.7rem 0.2rem 0.45rem; cursor: pointer; display: inline-flex; gap: 0.35rem; align-items: center; color: var(--brand-text); }
+    .site-pick button i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+    .site-pick button.active { border-color: var(--c); box-shadow: inset 0 0 0 1px var(--c); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -965,17 +1000,48 @@ const PLOT_CONFIG = { displayModeBar: false, responsive: true };</code></pre>
       <p>Sampled from the live sites on Oct. 13, 2026. The full token set, the API routes, and each dashboard's page anatomy live in the skills listed under <a href="#tokens">Tokens and snippets</a>: <code>ltinfo-platform</code> plus one skill per dashboard. The token file carries the same values as a preview layer, <code>data-brand="ltinfo"</code>, which the brand switcher uses.</p>
       <h3>Platform palette</h3>
       <div class="swatches" data-palette="ltinfo"></div>
-      <h4>Card header color by dashboard</h4>
-      <p>Each dashboard overrides the card header. An embed that draws its own section bars uses its host's color.</p>
-      <div class="cat-row">
-        <span class="cat-pill" style="--c:#6c91a4">Threshold Dashboard<code>#6c91a4</code></span>
-        <span class="cat-pill" style="--c:#789440">Monitoring Dashboard<code>#789440</code></span>
-        <span class="cat-pill" style="--c:#2c5282">Transportation Tracker<code>#2c5282</code></span>
-        <span class="cat-pill" style="--c:#A9BCB0">Climate, goal colors instead<code>#A9BCB0 #E88670 #384960 #4C7D60</code></span>
-      </div>
+      <h3 id="ltinfo-modules">Modules</h3>
+      <p>Every module shares the shell: a header photo with the white LT Info logo, the dashboard nav bar in <code>#0b1f41</code>, Lexend Deca, white page, <code>#f7f7f7</code> card bodies, and the navy footer. What changes per module is the accent: card headers, breadcrumb, buttons, and the module's own data colors. Sampled from each live site on Nov. 18, 2026; colors that survived from the May 2019 LT Info Style Guide are marked. The 2019 fonts (Open Sans and Montserrat) and Bootstrap 3 layout are gone.</p>
+      <p>Set the module with <code>data-site</code> next to <code>data-brand="ltinfo"</code>. That sets <code>--lti-accent</code> and, for climate, EIP, and stormwater, the <code>--chart-*</code> sequence.</p>
+      <div class="mods" id="ltiModules"></div>
       <h4>Threshold category theme colors</h4>
       <div class="ramp-row"><span>Ten categories</span><div class="ramp" data-ramp="#9CC3EA,#B94F41,#F78814,#B0A843,#9A5710,#415414,#0F3F6F,#9E2220,#675EA1,#DB5B00"></div></div>
       <p class="note">Air Quality, Fisheries, Recreation, Scenic Resources, Soil Conservation, Vegetation Preservation, Water Quality, Wildlife, Noise, Transportation and Sustainable Communities. Use a category's color for its series in a cross-category chart.</p>
+      <h3 id="ltinfo-climate">Climate Resilience Dashboard</h3>
+      <p>The climate site is built differently from the other modules: outcome pages have no colored card headers. The four goal colors carry the home page, section titles are <code>#656565</code> on <code>#efefef</code> bars, the outcome nav is <code>#384960</code>, and each outcome opens with an italic intro callout on <code>#f5f5f5</code>. Charts and maps are iframes from <code>trpa-agency/ClimateResilienceDashboard</code> on GitHub Pages, classed <code>primary-chart</code>, <code>map</code>, and <code>secondary-chart</code>.</p>
+      <div class="cat-row">
+        <span class="cat-pill" style="--c:#a9bcb0">Goal 1, Track Changing Climate Conditions<code>#a9bcb0</code></span>
+        <span class="cat-pill" style="--c:#e88670">Goal 2, Support a Resilient Environment<code>#e88670</code></span>
+        <span class="cat-pill" style="--c:#384960">Goal 3, Promote a Resilient Built Environment<code>#384960</code></span>
+        <span class="cat-pill" style="--c:#4c7d60">Goal 4, Increase Community Resilience<code>#4c7d60</code></span>
+      </div>
+      <h4>Chart colors in use</h4>
+      <p>The 2024 climate style guide document does not describe what shipped: its example palette appears in no chart. The values below come from the Python that writes every chart (<code>*_systems.py</code> in the repo), counted by use. The token layer's climate <code>--chart-*</code> order puts the strong colors first.</p>
+      <div class="ramp-row"><span>Climate sequence</span><div class="ramp" data-ramp="#023f64,#208385,#fc9a62,#632e5a,#a48352,#b83f5d,#7ebfb5,#f9c63e"></div></div>
+      <table class="ds">
+        <tr><th>Color</th><th>Token</th><th>Where the charts use it</th></tr>
+        <tr><td><span class="status-dot"><i style="background:#023f64"></i>#023f64</span></td><td><code>--lti-cl-water</code></td><td>Most used, 27 times: single-series default, lake and water series, first of <code>water, seafoam, umber</code></td></tr>
+        <tr><td><span class="status-dot"><i style="background:#208385"></i>#208385</span></td><td><code>--lti-cl-forest</code></td><td>Forest and fuel treatment series; first of <code>forest, peach, plum</code></td></tr>
+        <tr><td><span class="status-dot"><i style="background:#fc9a62"></i>#fc9a62</span></td><td><code>--lti-cl-peach</code></td><td>Second series beside forest</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#632e5a"></i>#632e5a</span></td><td><code>--lti-cl-plum</code></td><td>Third series; management zones</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#a48352"></i>#a48352</span></td><td><code>--lti-cl-umber</code></td><td>Third series beside water</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#7ebfb5"></i>#7ebfb5</span></td><td><code>--lti-cl-seafoam</code></td><td>Second series beside water. 1.9 to 1 on white, so fill only</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#b83f5d"></i>#b83f5d</span></td><td><code>--lti-cl-rose</code></td><td>Sixth series in long sequences</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#f9c63e"></i>#f9c63e</span> <span class="status-dot"><i style="background:#bcedb8"></i>#bcedb8</span></td><td><code>--lti-cl-gold</code>, <code>--lti-cl-mint</code></td><td>Management zones. Fill only</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#fcb42c"></i>#fcb42c</span></td><td><code>--lti-cl-risk</code></td><td>Risk highlight beside forest</td></tr>
+        <tr><td><span class="status-dot"><i style="background:#bfd7ed"></i>#bfd7ed</span> <span class="status-dot"><i style="background:#60a3d9"></i>#60a3d9</span></td><td><code>--lti-cl-precip-*</code></td><td>Precipitation, light then dark</td></tr>
+      </table>
+      <p class="note">The shipped charts use Plotly's <code>plotly_white</code> template with no font set, so they render in Open Sans, not the host's Lexend Deca, and each weighs 3 to 4 MB because Plotly is inlined. A rebuilt climate chart keeps these colors and fixes both: Lexend Deca in the layout and Plotly from a CDN. Maps are ArcGIS Maps SDK 4.28 and 4.29 pages with Calcite 1.9.2.</p>
+      <pre><code><span class="cmt">// Plotly layout for a climate.laketahoeinfo.org chart</span>
+const CLIMATE_COLORS = ['#023f64', '#208385', '#fc9a62', '#632e5a', '#a48352', '#b83f5d', '#7ebfb5', '#f9c63e'];
+const CLIMATE_LAYOUT = {
+  font: { family: 'Lexend Deca, sans-serif', color: '#333333', size: 13 },
+  paper_bgcolor: 'white', plot_bgcolor: 'white', colorway: CLIMATE_COLORS,
+  xaxis: { showgrid: false, linecolor: '#dcdcdc' }, yaxis: { gridcolor: '#dcdcdc', zeroline: false },
+  hovermode: 'x unified', dragmode: false, legend: { orientation: 'h', y: -0.2, title: null }
+};
+<span class="cmt">// Hover text pattern the shipped charts use</span>
+hovertemplate: '&lt;b&gt;%{y:,.1f}&lt;/b&gt; acres of forest fuel treatment&lt;br&gt;in the &lt;em&gt;%{customdata[0]}&lt;/em&gt; zone&lt;extra&gt;&lt;/extra&gt;'</code></pre>
       <h3>Three kinds of embed, one contract</h3>
       <table class="ds">
         <tr><th>Kind</th><th>Host slot</th><th>What it is</th><th>Size it lives in</th></tr>
@@ -992,7 +1058,8 @@ const PLOT_CONFIG = { displayModeBar: false, responsive: true };</code></pre>
         <li><b>Every chart has a table view and a CSV download.</b> Load Plotly from a CDN, never the 3.6 MB inlined export.</li>
         <li><b>Status colors</b> are the platform scale on both the threshold and climate sites: on track <code>#188c16</code>, caution <code>#efd13d</code>, off track <code>#be4c4c</code>, no target <code>#3e72b0</code>.</li>
       </ul>
-      <div class="brand-scope frame" data-label="Embed specimen on the monitoring card body" data-brand="ltinfo">
+      <div class="site-pick" role="radiogroup" aria-label="Host module for the specimen" id="ltiSitePick"></div>
+      <div class="brand-scope frame" data-label="Embed specimen on the card body" data-brand="ltinfo" id="ltiEmbedSpec" data-site="monitoring">
         <div class="two">
           <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
             <div class="kpi"><div class="v">13,350</div><div class="l">Acres of subalpine conifer</div></div>
@@ -1051,6 +1118,26 @@ const LTI_LAYOUT = {
         <tr><td>Selection ring</td><td><span class="status-dot"><i style="background:#e49937"></i>#e49937</span></td><td>The selected site on a map, one at a time</td></tr>
         <tr><td>Standard or target</td><td><span class="status-dot"><i style="background:#4e4e4e"></i>#4e4e4e dashed</span></td><td>A labeled dashed line on the chart, never a legend entry alone</td></tr>
       </table>
+
+      <h3 id="ltinfo-monitoring-palettes">Chart and map palettes</h3>
+      <p>The recommended set for new Monitoring Dashboard charts and maps: qualitative, sequential, and diverging palettes in 3, 5, 7, and 10 classes, plus two 3 by 3 bivariate grids. Every palette starts from the dashboard's own colors (the <code>#789440</code> card header green, the host blue scale, and the LT Info orange). The ramps are interpolated in OKLab with the lightness straightened, which is the method behind Joshua Stevens' <a href="https://www.joshuastevens.net/phosphor/" target="_blank" rel="noopener">Phosphor</a>. The qualitative order was found by search and checked with the dataviz validator on the <code>#f7f7f7</code> card body. Click a row to copy its hex list. All values are in <code>assets/ltinfo-monitoring-palettes.json</code>; the 10 categories are also tokens <code>--lti-mon-cat-1</code> to <code>-10</code>.</p>
+      <p class="note">The kit's current series above fails two checks: <code>#2f3f56</code> and <code>#89cad7</code> fall outside the lightness band, and four colors read as gray. It also puts the LT Info orange next to the monitoring green in some charts, a pair that red-green colorblind readers cannot tell apart (ΔE 2.1). The qualitative set below keeps the green first and fixes both. Switching the kit means editing <code>ltinfo/kit</code> in the Monitoring repo.</p>
+      <div id="monPalettes"></div>
+      <table class="ds">
+        <tr><th>Palette</th><th>Use it for</th><th>Checks</th></tr>
+        <tr><td><b>Qualitative</b></td><td>Named groups with no order: species, programs, sites, land ownership. Take the first N in order and never skip a slot. More than 10 groups fold into Other or become small multiples.</td><td>3, 5, 7, 10 all pass. Neighboring colors differ by ΔE 12.6 or more for protanopia and deuteranopia (target 8) and 17.3 or more for full color vision. The first three also pass for every pair, so a map can use them without labels. Maps with 5 or more categories need labels or a table. Orange <code>#d4862a</code> and gold <code>#b09a1e</code> sit below 3 to 1 on <code>#f7f7f7</code>; keep the table view.</td></tr>
+        <tr><td><b>Sequential green</b></td><td>Vegetation and forest amounts: canopy cover, density, acres treated</td><td rowspan="3">One hue each, lightness linear from light to dark. The lightest class is nearly the card body color, so give choropleth polygons a <code>#bdbdbd</code> outline.</td></tr>
+        <tr><td><b>Sequential blue</b></td><td>Water: clarity, depth, discharge, precipitation. Built on the host's own <code>--blue-50</code> to <code>--blue-950</code> scale.</td></tr>
+        <tr><td><b>Sequential orange</b></td><td>Heat, fire, and risk: burn severity, fire probability, temperature</td></tr>
+        <tr><td><b>Diverging blue to orange</b></td><td>Change from a baseline or departure from a standard: gain against loss, above against below</td><td rowspan="2">Two hues around a neutral <code>#ededed</code> midpoint, equal steps per arm. Odd class counts keep the midpoint; 10 classes split at zero. The 3 and 5 class versions use shorter arms.</td></tr>
+        <tr><td><b>Diverging teal to brown</b></td><td>Wet against dry, and gain against loss when blue and orange are already in use on the page</td></tr>
+        <tr><td><b>Bivariate</b></td><td>Two measures at once on a map, such as canopy cover by soil moisture. Always show the 3 by 3 legend with both axis labels.</td><td>The corners follow Stevens' layout: gray low corner, two pure hues, a dark both-high corner. Blue and gold-purple stay apart for red-green colorblind readers.</td></tr>
+      </table>
+      <pre><code><span class="cmt">// Load once, pick by kind and class count</span>
+const PAL = await fetch('https://trpa-agency.github.io/tools/assets/ltinfo-monitoring-palettes.json').then(r =&gt; r.json());
+const species = PAL.qualitative[5];          <span class="cmt">// five named groups</span>
+const canopy  = PAL.sequential.green[7];     <span class="cmt">// seven classes, light to dark</span>
+const change  = PAL.diverging.blueOrange[7]; <span class="cmt">// loss, no change, gain</span></code></pre>
 
       <h3>Specimen: a fragment, styled by the kit</h3>
       <p>The block below is plain markup inside <code>&lt;section class="lti" data-site="monitoring"&gt;</code>, styled by the real kit stylesheet loaded into this page. Switch the site to see the accent and the chart palette follow <code>data-site</code>. The numbers are Tahoe yellow cress, from the program dashboard template's snapshot.</p>
@@ -1453,7 +1540,9 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
     ],
     'ltinfo': [
       { name: 'Primary', hex: '#3e72b0', tok: '--primary', role: 'Page titles, links in nav, first chart series.' },
-      { name: 'Navy', hex: '#2f3f56', tok: '--ltinfo-blue', role: 'Header, footer, primary buttons.' },
+      { name: 'Nav bar', hex: '#0b1f41', tok: '--lti-nav', role: 'Dashboard nav bar on every module; EIP primary buttons.' },
+      { name: 'Navy', hex: '#2f3f56', tok: '--ltinfo-blue', role: 'Primary buttons (hover #305d8e). Was the 2019 header navy.' },
+      { name: 'Slate', hex: '#6680a8', tok: '--lti-slate', role: 'Home page body band. Carried over from the 2019 palette.' },
       { name: 'Green', hex: '#89bf40', tok: '--ltinfo-green', role: 'Platform green; Monitoring card headers use #789440.' },
       { name: 'Orange', hex: '#e49937', tok: '--ltinfo-orange', role: 'Highlights, second series, warning.' },
       { name: 'Teal', hex: '#5a9cb0', tok: '--secondary', role: 'Secondary series.' },
@@ -1487,6 +1576,68 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
   }
   document.querySelectorAll('.swatches[data-palette]').forEach(el => { el.innerHTML = PALETTES[el.dataset.palette].map(swatch).join(''); });
   document.querySelectorAll('.ramp[data-ramp]').forEach(el => { el.innerHTML = el.dataset.ramp.split(',').map(h => `<i style="background:${h}" title="${h}"></i>`).join(''); });
+
+  /* ── LT Info modules: sampled from the live sites Nov. 18, 2026. carry = 2019 style guide colors still in use. ── */
+  const LTI_MODULES = [
+    { site: 'monitoring', name: 'Monitoring Dashboard', host: 'monitoring', crumb: '#789440', crumbText: 'Monitoring programs', title: 'Air Quality', titleColor: '#3d3d3d',
+      ch: '#789440', chText: '#fff', chLabel: 'Program overview', btn: '#789440', chips: ['#789440', '#616049', '#5b7031', '#f7f7f7', '#efefef'],
+      carry: '#789440 card headers and buttons, #616049 current breadcrumb item', embed: 'Dashboard card on a program page: one full dashboard, about 980 px, on #f7f7f7. Kit in <a href="#ltinfo-monitoring">LT Info Monitoring</a>.' },
+    { site: 'thresholds', name: 'Threshold Dashboard', host: 'thresholds', crumb: '#6c91a4', crumbText: 'Threshold category', title: 'WATER QUALITY', titleColor: '#666',
+      ch: '#6c91a4', chText: '#fff', chLabel: 'Status', btn: '#7a8190', chips: ['#6c91a4', '#6298cb', '#8a7121', '#f0f8ff', '#eeeeee', '#7a8190'],
+      carry: '#8a7121 tile overlay, #f0f8ff evaluation tree, #337ab7 links, #333 text', embed: 'Status panel chart about 400 by 400 px, Evaluation Map about 435 by 300 px, on white. Category colors below.' },
+    { site: 'transportation', name: 'Transportation Tracker', host: 'transportation', crumb: '#2c5282', crumbText: 'Data trends', title: 'Transportation Tracker', titleColor: '#2c5282',
+      ch: '#2c5282', chText: '#fff', chLabel: 'Transportation projects', btn: '#817dae', chips: ['#2c5282', '#817dae', '#324a5e', '#4cdbc4', '#ff7058', '#7a8190'],
+      carry: '#817dae primary button, #324a5e Funding tile; 2019 aqua #49cfbb is now #4cdbc4', embed: 'Data Trends take an EmbedUrl like a monitoring dashboard: full card width.' },
+    { site: 'climate', name: 'Climate Resilience Dashboard', host: 'climate', crumb: '#384960', crumbText: 'Goal 2 > Outcome 2.1', title: 'Forest Resilience and Wildfire Risk', titleColor: '#656565',
+      ch: '#efefef', chText: '#656565', chLabel: 'Acres of forest fuels treatment', btn: '#384960', chips: ['#a9bcb0', '#e88670', '#384960', '#4c7d60', '#023f64', '#208385', '#fc9a62', '#632e5a'],
+      carry: 'none. The 2019 Sustainability Dashboard palette (#a37c00, #5f7600) and FF Meta Serif are gone', embed: 'One chart or map per iframe, full column, on white. See <a href="#ltinfo-climate">Climate Resilience Dashboard</a>.' },
+    { site: 'eip', name: 'EIP Project Tracker', host: 'eip', crumb: '#007dc3', crumbText: 'EIP overview | Basin-wide', title: 'EIP OVERVIEW', titleColor: '#007dc3',
+      ch: '#eaeaea', chText: '#007dc3', chLabel: 'EIP projects', btn: '#0b1f41', chips: ['#007dc3', '#6ebe44', '#f16022', '#0b1f41', '#eaeaea'],
+      carry: 'none. 2019 EIP blue #0069bc is now #007dc3, the EIP brand blue; the 2026 EIP outreach brand is a separate layer', embed: 'No TRPA embeds today. Project data reaches TRPA tools through the EIP snapshot on GitHub Pages.' },
+    { site: 'clarity', name: 'Lake Clarity Tracker', host: 'clarity', crumb: '#405d74', crumbText: 'Lake Tahoe TMDL program', title: 'Lake Clarity Tracker', titleColor: '#405d74',
+      ch: '#f5f5f5', chText: '#333', chLabel: 'News and announcements', btn: '#7e8d98', chips: ['#7e8d98', '#679ab8', '#405d74', '#f5f5f5'],
+      carry: '#7e8d98 buttons; #679ab8 and #405d74 kept as the accent pair', embed: 'No TRPA embeds today. Card headers are light gray with dark text, not a color bar.' },
+    { site: 'parcels', name: 'Parcel Tracker', host: 'parcels', crumb: '#1a3d5c', crumbText: 'Find a parcel', title: 'PARCEL TRACKER', titleColor: '#1a3d5c',
+      ch: '#1a3d5c', chText: '#fff', chLabel: 'Find a parcel', btn: '#7e9852', chips: ['#1a3d5c', '#7e9852', '#f1eee1', '#f7f7f7'],
+      carry: 'only the #f1eee1 sand tint; the 2019 olive and brown set is gone', embed: 'No TRPA embeds today. Titles and section labels are #1a3d5c uppercase.' },
+    { site: 'stormwater', name: 'Stormwater Tools', host: 'stormwater', crumb: '#405d74', crumbText: 'Stormwater tools', title: 'Stormwater Tools', titleColor: '#405d74',
+      ch: '#405d74', chText: '#fff', chLabel: 'Catchments', btn: '#935f59', chips: ['#405d74', '#b09763', '#935f59', '#679ab8', '#8e8971', '#ce7451', '#44455b', '#7e8d98'],
+      carry: 'all of it: every module still ships the 2019 stormwater set as --sw-color-*', embed: 'Map feature colors: BMP, catchment, road, parcel, jurisdiction. Site chrome not resampled.' }
+  ];
+  $('ltiModules').innerHTML = LTI_MODULES.map(m => `<article class="mod">
+      <div class="mod-nav"><b>${m.name}</b><span>${m.host}.laketahoeinfo.org</span></div>
+      <div class="mod-crumb" style="background:${m.crumb}">${m.crumbText}</div>
+      <div class="mod-stage">
+        <div class="mod-title" style="color:${m.titleColor}">${m.title}</div>
+        <div class="mod-card"><div class="mod-ch" style="background:${m.ch};color:${m.chText}">${m.chLabel}</div>
+          <div class="mod-cb"><span class="mod-btn" style="background:${m.btn}">Button</span><span style="color:#337ab7">Link</span></div></div>
+        <div class="mod-chips">${m.chips.map(h => `<i style="background:${h}" title="${h}" data-hex="${h}"></i>`).join('')}</div>
+      </div>
+      <div class="mod-meta"><p><code>data-site="${m.site}"</code></p><p><b>From 2019:</b> ${m.carry}.</p><p>${m.embed}</p></div>
+    </article>`).join('');
+  $('ltiModules').addEventListener('click', e => { const h = e.target.dataset && e.target.dataset.hex; if (h && navigator.clipboard) navigator.clipboard.writeText(h).catch(() => {}); });
+  /* ── Monitoring chart and map palettes (section 19), from assets/ltinfo-monitoring-palettes.json ── */
+  fetch('../../assets/ltinfo-monitoring-palettes.json').then(r => r.json()).then(P => {
+    const row = (label, hexes) => `<div class="ramp-row pal-row" data-copy='${JSON.stringify(hexes)}' title="Copy ${hexes.length} colors"><span>${label}</span><div class="ramp">${hexes.map(h => `<i style="background:${h}" title="${h}"></i>`).join('')}</div></div>`;
+    const group = (title, obj) => `<div class="pal-group"><h4>${title}</h4>${Object.entries(obj).map(([n, h]) => row(n + ' classes', h)).join('')}</div>`;
+    const NAMES = { green: 'Sequential green', blue: 'Sequential blue', orange: 'Sequential orange', blueOrange: 'Diverging blue to orange', tealBrown: 'Diverging teal to brown' };
+    let html = group('Qualitative', P.qualitative);
+    for (const [k, v] of Object.entries(P.sequential)) html += group(NAMES[k], v);
+    for (const [k, v] of Object.entries(P.diverging)) html += group(NAMES[k], v);
+    html += `<div class="pal-group"><h4>Bivariate, 3 by 3</h4><div class="biv-wrap">${Object.entries(P.bivariate).map(([k, b]) =>
+      `<div><div class="biv-name">${k === 'greenBlue' ? 'Green and blue' : 'Gold and purple'}</div><div class="biv pal-row" data-copy='${JSON.stringify(b.grid)}' title="Copy grid, rows low to high">
+        <span class="ax-y">${b.y.split(' ')[0]} &rarr;</span>${b.grid.slice().reverse().map(r => r.map(h => `<i style="background:${h}" title="${h}"></i>`).join('')).join('')}<span></span><span class="ax-x">${b.x.split(' ')[0]} &rarr;</span></div></div>`).join('')}</div></div>`;
+    $('monPalettes').innerHTML = html;
+    $('monPalettes').addEventListener('click', e => { const r = e.target.closest('.pal-row'); if (!r) return;
+      if (navigator.clipboard) navigator.clipboard.writeText(r.dataset.copy).catch(() => {});
+      r.classList.add('copied'); setTimeout(() => r.classList.remove('copied'), 1200); });
+  }).catch(() => { $('monPalettes').innerHTML = '<p class="note">Palettes could not load. They are in assets/ltinfo-monitoring-palettes.json.</p>'; });
+
+  const sitePick = $('ltiSitePick');
+  sitePick.innerHTML = LTI_MODULES.map((m, i) => `<button type="button" role="radio" aria-checked="${i === 0}" class="${i === 0 ? 'active' : ''}" data-site="${m.site}" style="--c:${m.site === 'climate' ? '#384960' : m.ch === '#f5f5f5' || m.ch === '#eaeaea' ? m.crumb : m.ch}"><i></i>${m.name}</button>`).join('');
+  sitePick.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+    sitePick.querySelectorAll('button').forEach(x => { x.classList.toggle('active', x === b); x.setAttribute('aria-checked', x === b); });
+    $('ltiEmbedSpec').dataset.site = b.dataset.site; });
 
   function flash(el, text) { const old = el.dataset.flash || el.textContent; el.dataset.flash = old; el.textContent = text; setTimeout(() => { el.textContent = old; }, 1200); }
   document.addEventListener('click', (e) => {

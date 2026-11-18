@@ -1,0 +1,63 @@
+{
+ "_about": "LT Info Monitoring Dashboard chart and map palettes. Built Nov. 18, 2026: OKLab interpolation with linear lightness (the Phosphor method, joshuastevens.net/phosphor), anchored on the Monitoring Dashboard colors, validated with the dataviz skill checks on #f7f7f7. Documented in qa/data/design-system.html, section 19.",
+ "qualitative": {
+  "3": ["#789440", "#6a4c9c", "#3592c7"],
+  "5": ["#789440", "#6a4c9c", "#3592c7", "#d4862a", "#2f5f9e"],
+  "7": ["#789440", "#6a4c9c", "#3592c7", "#d4862a", "#2f5f9e", "#b09a1e", "#c2627a"],
+  "10": ["#789440", "#6a4c9c", "#3592c7", "#d4862a", "#2f5f9e", "#b09a1e", "#c2627a", "#87520a", "#a8458f", "#4e7d2f"]
+ },
+ "sequential": {
+  "green": {
+   "3": ["#e4ecca", "#75903f", "#26330f"],
+   "5": ["#e4ecca", "#a6c16c", "#75903f", "#4b5f2e", "#26330f"],
+   "7": ["#e4ecca", "#bad08a", "#95b05c", "#75903f", "#596f34", "#3f5023", "#26330f"],
+   "10": ["#e4ecca", "#c8d9a0", "#acc674", "#95b05c", "#7f9b47", "#6b853b", "#596f34", "#475a2a", "#36461c", "#26330f"]
+  },
+  "blue": {
+   "3": ["#d3ecf1", "#368da3", "#162b36"],
+   "5": ["#d3ecf1", "#7bbfce", "#368da3", "#2a596b", "#162b36"],
+   "7": ["#d3ecf1", "#94cfdb", "#65aebf", "#368da3", "#2f6a7e", "#234959", "#162b36"],
+   "10": ["#d3ecf1", "#a9d9e2", "#82c4d2", "#65aebf", "#4698ad", "#348197", "#2f6a7e", "#275465", "#1f3f4d", "#162b36"]
+  },
+  "orange": {
+   "3": ["#ffe4bf", "#cd6a48", "#5c1f1f"],
+   "5": ["#ffe4bf", "#eda84f", "#cd6a48", "#993b3b", "#5c1f1f"],
+   "7": ["#ffe4bf", "#f8bb69", "#e29539", "#cd6a48", "#af4545", "#843131", "#5c1f1f"],
+   "10": ["#ffe4bf", "#ffc879", "#f0af58", "#e29539", "#d47845", "#c55b4a", "#af4545", "#923838", "#762b2b", "#5c1f1f"]
+  }
+ },
+ "diverging": {
+  "blueOrange": {
+   "3": ["#3e72b0", "#ededed", "#e49937"],
+   "5": ["#2e5789", "#84a0c5", "#ededed", "#dda96f", "#ae6e23"],
+   "7": ["#1f3d63", "#4274b1", "#96b0d2", "#ededed", "#e9a95d", "#b57426", "#7a4610"],
+   "10": ["#1f3d63", "#325e92", "#5380b8", "#85a4cc", "#b8c8de", "#efc493", "#e59b3d", "#c17d2a", "#9d611d", "#7a4610"]
+  },
+  "tealBrown": {
+   "3": ["#2c5f72", "#ededed", "#9a5710"],
+   "5": ["#214d5c", "#65a0b0", "#ededed", "#ba9263", "#72410c"],
+   "7": ["#163b47", "#407688", "#77b7c7", "#ededed", "#cda270", "#9c5a17", "#4d2c08"],
+   "10": ["#163b47", "#2b5e70", "#4b8395", "#6ca9ba", "#a6cdd7", "#debf96", "#c49360", "#a6692d", "#7c470d", "#4d2c08"]
+  }
+ },
+ "bivariate": {
+  "greenBlue": {
+   "x": "green (vegetation, canopy)",
+   "y": "blue (water, moisture)",
+   "grid": [
+    ["#e8e8e8", "#c1d4a4", "#9cbf5a"],
+    ["#a3c2cc", "#82a28c", "#63834c"],
+    ["#5a9cb0", "#447273", "#2f4b3a"]
+   ]
+  },
+  "goldPurple": {
+   "x": "gold",
+   "y": "purple",
+   "grid": [
+    ["#e8e8e8", "#e5c69a", "#e0a33a"],
+    ["#b1a4c9", "#9e868b", "#8b674e"],
+    ["#7d63a8", "#5d4776", "#3f2d47"]
+   ]
+  }
+ }
+}
