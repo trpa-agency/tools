@@ -17,6 +17,12 @@
   <!-- UMD libraries first, then Calcite (ESM) -->
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@33.3.2/dist/ag-grid-community.min.js"></script>
+  <!-- Monitoring Dashboard stack (section 19): Leaflet maps, Vega-Lite charts -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
 
   <!-- Design tokens: the file this page documents -->
@@ -1089,6 +1095,7 @@ const LTI_LAYOUT = {
     <section class="ds" id="ltinfo-monitoring">
       <h2><span class="num">19</span>LT Info Monitoring Dashboard</h2>
       <p class="lead">The look of monitoring.laketahoeinfo.org and of every chart, map, and dashboard on it. Lake Tahoe Info sets the frame: Lexend Deca, white pages, light gray cards, and the Monitoring Dashboard's green. Everything on a monitoring page follows it, never a TRPA, EIP, or Tahoe Living brand.</p>
+      <p>Maps are Leaflet on the Esri Light Gray basemap with terrain. Charts are Vega-Lite, styled by one shared config that carries the type and the palettes below.</p>
 
       <h3>Color roles</h3>
       <table class="ds">
@@ -1145,17 +1152,51 @@ const LTI_LAYOUT = {
         <div class="mon-card">
           <div class="mon-card-head"><span>Occupied sites by year</span>
             <div class="mon-seg" id="monSpecSeg" role="radiogroup" aria-label="Chart or table"><button type="button" class="active" data-view="chart" role="radio" aria-checked="true">Chart</button><button type="button" data-view="table" role="radio" aria-checked="false">Table</button></div></div>
-          <div id="monSpecPlot" style="height:280px"></div>
+          <div style="padding:0.6rem 1rem 0"><div id="monSpecPlot" style="width:100%"></div></div>
           <div id="monSpecTable" hidden></div>
           <p class="mon-cap">Bars are sites where plants were found. The dashed line is the standard.</p>
           <p class="mon-cap">Source: TRPA monitoring data, Tahoe yellow cress surveys.</p>
         </div>
       </div>
 
+      <h3>Charts</h3>
+      <p>Every chart is Vega-Lite with the config below. It sets Lexend Deca, the text and grid grays, the accent green as the default mark color, and the palettes as Vega-Lite's named ranges, so a spec only says what kind of color it needs: <code>category</code> for named groups, <code>ramp</code> for amounts, <code>diverging</code> for change. The specimen above is drawn with it.</p>
+      <pre><code><span class="cmt">// Vega-Lite config for the Monitoring Dashboard</span>
+const MON_VL_CONFIG = {
+  font: 'Lexend Deca', background: '#ffffff', view: { stroke: null },
+  title:  { color: '#3d3d3d', fontSize: 16, fontWeight: 600, anchor: 'start' },
+  axis:   { labelColor: '#333333', titleColor: '#3d3d3d', labelFontSize: 12, titleFontSize: 12, titleFontWeight: 600,
+            gridColor: '#dcdcdc', domainColor: '#bdbdbd', tickColor: '#bdbdbd' },
+  axisX:  { grid: false },
+  legend: { orient: 'bottom', labelColor: '#333333', titleColor: '#3d3d3d', labelFontSize: 12, titleFontSize: 12 },
+  mark:   { color: '#789440' },
+  bar:    { color: '#789440', cornerRadiusEnd: 2 },
+  line:   { color: '#789440', strokeWidth: 2 },
+  point:  { color: '#789440', filled: true, size: 60 },
+  rule:   { color: '#4e4e4e' },
+  range: {
+    category:  ['#789440', '#6a4c9c', '#3592c7', '#d4862a', '#2f5f9e', '#b09a1e', '#c2627a', '#87520a', '#a8458f', '#4e7d2f'],
+    ramp:      ['#e4ecca', '#bad08a', '#95b05c', '#75903f', '#596f34', '#3f5023', '#26330f'],
+    heatmap:   ['#e4ecca', '#bad08a', '#95b05c', '#75903f', '#596f34', '#3f5023', '#26330f'],
+    diverging: ['#1f3d63', '#4274b1', '#96b0d2', '#ededed', '#e9a95d', '#b57426', '#7a4610']
+  }
+};
+vegaEmbed('#chart', spec, { config: MON_VL_CONFIG, actions: false, renderer: 'svg' });
+
+<span class="cmt">// A standard or target: a dashed rule with its label, in a layer</span>
+{ mark: { type: 'rule', strokeDash: [6, 4], strokeWidth: 1.5 }, encoding: { y: { datum: 26 } } }</code></pre>
+      <p class="note">For a different sequential hue or class count, set it on the scale: <code>scale: { range: [...] }</code> with a list from the palettes above.</p>
+
       <h3>Maps and popups</h3>
+      <div class="frame" data-label="Basemap: Esri Light Gray with hillshade" style="padding:0;overflow:hidden">
+        <div id="monMap" style="height:360px;border-radius:10px" role="img" aria-label="Map of Lake Tahoe on the Esri Light Gray basemap with hillshade terrain, with one selected site at Baldwin Beach"></div>
+      </div>
       <div class="two">
         <ul style="margin-left:1.25rem">
-          <li><b>Basemap.</b> Esri Human Geography, with the data drawn above the roads and labels. A terrain switch under the zoom buttons adds a hillshade, off by default.</li>
+          <li><b>Library.</b> Leaflet.</li>
+          <li><b>Basemap.</b> Esri Light Gray Canvas with the World Hillshade blended over it for terrain, on by default. The light gray reference layer, with the place names, sits above the data. All three are public Esri tile services, no key needed.</li>
+          <li><b>Layer order.</b> Light gray base, hillshade at 60 percent opacity with a multiply blend, the data, then the labels.</li>
+          <li><b>Scroll.</b> Wheel zoom off until the map is clicked, so the page scrolls past it.</li>
           <li><b>Selection.</b> One orange ring, <code>#e49937</code>, on the selected site. Hover highlights.</li>
           <li><b>Legend.</b> Bottom left. The top right belongs to the popup.</li>
           <li><b>Popup.</b> Docked top right. It leads with the sentence a reader wants, then the record, then a small column chart in the accent green. No field lists.</li>
@@ -1177,10 +1218,29 @@ const LTI_LAYOUT = {
           </div>
         </div>
       </div>
+      <pre><code><span class="cmt">// Leaflet basemap for the Monitoring Dashboard: light gray, hillshade, data, labels</span>
+const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/';
+const tile = (path, opts) =&gt; L.tileLayer(ESRI + path + '/MapServer/tile/{z}/{y}/{x}',
+  { maxNativeZoom: 16, maxZoom: 18, attribution: 'Esri, HERE, Garmin, USGS', ...opts });
+
+const map = L.map('map', { scrollWheelZoom: false }).setView([39.09, -120.04], 10);
+map.on('click', () =&gt; map.scrollWheelZoom.enable());
+map.createPane('hillshade').style.zIndex = 250;   <span class="cmt">// above the base, below the data</span>
+map.getPane('hillshade').style.mixBlendMode = 'multiply';
+map.createPane('labels').style.zIndex = 650;      <span class="cmt">// above the data</span>
+map.getPane('labels').style.pointerEvents = 'none';
+
+tile('Canvas/World_Light_Gray_Base').addTo(map);
+tile('Elevation/World_Hillshade', { pane: 'hillshade', opacity: 0.6 }).addTo(map);
+tile('Canvas/World_Light_Gray_Reference', { pane: 'labels' }).addTo(map);
+
+<span class="cmt">// Selected site: one orange ring</span>
+L.circleMarker([38.943, -120.067], { radius: 9, color: '#e49937', weight: 3, fill: false }).addTo(map);</code></pre>
 
       <h3>Rules</h3>
       <div class="do-dont">
         <div class="do"><b>Do</b><ul>
+          <li>Draw charts in Vega-Lite with the shared config and maps in Leaflet on light gray with terrain.</li>
           <li>Lead with the accent green, then take colors from the palettes above in order.</li>
           <li>Use Lexend Deca everywhere, including charts and tables.</li>
           <li>Put dashboards on <code>#f7f7f7</code>, and cards on white with a <code>#efefef</code> title bar.</li>
@@ -1201,7 +1261,7 @@ const LTI_LAYOUT = {
 <section class="ds" id="maps">
       <h2><span class="num">20</span>Map conventions</h2>
       <ul>
-        <li><b>Basemap</b> <code>gray-vector</code>. Imagery only on explicit toggle. Monitoring Dashboard maps use Human Geography with a terrain switch instead; see <a href="#ltinfo-monitoring">LT Info Monitoring Dashboard</a>.</li>
+        <li><b>Basemap</b> <code>gray-vector</code>. Imagery only on explicit toggle. Monitoring Dashboard maps use Leaflet on Esri Light Gray with hillshade terrain instead; see <a href="#ltinfo-monitoring">LT Info Monitoring Dashboard</a>.</li>
         <li><b>Initial view</b> centered on the lake, <code>[-120.04, 39.09]</code>, zoom 10, unless the tool opens on a feature.</li>
         <li><b>Widgets</b> Home always. Legend when more than one symbol is on the map. Attribution stays on. No Zoom widget on phones.</li>
         <li><b>Selection</b> brand primary, 28 percent fill, 2px outline. <b>Subject</b> accent, 50 percent fill, 3px outline. <b>Buffers</b> dashed accent, no fill.</li>
@@ -1511,23 +1571,53 @@ const BUFFER  = { type: "simple-fill", color: [0, 0, 0, 0], outline: { color: "#
   (function monSpec() {
     const YEARS = ['2009', '2011', '2012', '2014', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
     const OCC = [44, 23, 29, 39, 41, 21, 24, 22, 17, 8, 30, 20];
-    if (window.Plotly) Plotly.newPlot('monSpecPlot', [
-      { type: 'bar', name: 'Occupied sites', x: YEARS, y: OCC, marker: { color: '#789440' }, hovertemplate: '%{x}: %{y} occupied sites<extra></extra>' }
-    ], {
-      height: 280, font: { family: 'Lexend Deca, sans-serif', color: '#333333', size: 12 }, paper_bgcolor: '#ffffff', plot_bgcolor: '#ffffff',
-      showlegend: false, margin: { t: 14, r: 16, b: 36, l: 46 }, bargap: 0.35,
-      xaxis: { type: 'category', linecolor: '#bdbdbd' }, yaxis: { gridcolor: '#dcdcdc', zeroline: false, rangemode: 'tozero', title: { text: 'Occupied sites', font: { size: 11 } } },
-      shapes: [{ type: 'line', xref: 'paper', x0: 0, x1: 1, y0: 26, y1: 26, line: { color: '#4e4e4e', width: 1.5, dash: 'dash' } }],
-      annotations: [{ xref: 'paper', x: 1, y: 26, text: 'Standard: 26 sites', showarrow: false, xanchor: 'right', yanchor: 'bottom', font: { size: 11, color: '#4e4e4e' } }],
-      hoverlabel: { font: { family: 'Lexend Deca, sans-serif' }, bgcolor: '#fff', bordercolor: '#bdbdbd' }
-    }, { displayModeBar: false, responsive: true });
+    const QUAL = ['#789440', '#6a4c9c', '#3592c7', '#d4862a', '#2f5f9e', '#b09a1e', '#c2627a', '#87520a', '#a8458f', '#4e7d2f'];
+    const RAMP = ['#e4ecca', '#bad08a', '#95b05c', '#75903f', '#596f34', '#3f5023', '#26330f'];
+    const MON_VL_CONFIG = {
+      font: 'Lexend Deca', background: '#ffffff', view: { stroke: null },
+      title: { color: '#3d3d3d', fontSize: 16, fontWeight: 600, anchor: 'start' },
+      axis: { labelColor: '#333333', titleColor: '#3d3d3d', labelFontSize: 12, titleFontSize: 12, titleFontWeight: 600, gridColor: '#dcdcdc', domainColor: '#bdbdbd', tickColor: '#bdbdbd' },
+      axisX: { grid: false },
+      legend: { orient: 'bottom', labelColor: '#333333', titleColor: '#3d3d3d', labelFontSize: 12, titleFontSize: 12 },
+      mark: { color: '#789440' }, bar: { color: '#789440', cornerRadiusEnd: 2 }, line: { color: '#789440', strokeWidth: 2 },
+      point: { color: '#789440', filled: true, size: 60 }, rule: { color: '#4e4e4e' },
+      range: { category: QUAL, ramp: RAMP, heatmap: RAMP, diverging: ['#1f3d63', '#4274b1', '#96b0d2', '#ededed', '#e9a95d', '#b57426', '#7a4610'] }
+    };
+    const spec = {
+      $schema: 'https://vega.github.io/schema/vega-lite/v5.json', width: 'container', height: 250, autosize: { type: 'fit', contains: 'padding' },
+      data: { values: YEARS.map((y, i) => ({ year: y, sites: OCC[i] })) },
+      layer: [
+        { mark: { type: 'bar', width: { band: 0.65 } }, encoding: {
+            x: { field: 'year', type: 'ordinal', title: null, axis: { labelAngle: 0, labelOverlap: 'parity' } },
+            y: { field: 'sites', type: 'quantitative', title: 'Occupied sites' },
+            tooltip: [{ field: 'year', title: 'Year' }, { field: 'sites', title: 'Occupied sites' }] } },
+        { mark: { type: 'rule', strokeDash: [6, 4], strokeWidth: 1.5 }, encoding: { y: { datum: 26 } } },
+        { mark: { type: 'text', align: 'right', baseline: 'bottom', dy: -4, dx: -2, color: '#4e4e4e', fontSize: 11 },
+          encoding: { x: { value: { expr: 'width' } }, y: { datum: 26 }, text: { value: 'Standard: 26' } } }
+      ]
+    };
+    if (window.vegaEmbed) vegaEmbed('#monSpecPlot', spec, { config: MON_VL_CONFIG, actions: false, renderer: 'svg' }).catch(err => console.error(err));
+
+    /* Leaflet basemap specimen: light gray, hillshade, labels, one selected site */
+    if (window.L) {
+      const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/';
+      const tile = (path, opts) => L.tileLayer(ESRI + path + '/MapServer/tile/{z}/{y}/{x}', Object.assign({ maxNativeZoom: 16, maxZoom: 18, attribution: 'Esri, HERE, Garmin, USGS' }, opts));
+      const map = L.map('monMap', { scrollWheelZoom: false }).setView([39.09, -120.04], 10);
+      map.on('click', () => map.scrollWheelZoom.enable());
+      map.createPane('hillshade').style.zIndex = 250; map.getPane('hillshade').style.mixBlendMode = 'multiply';
+      map.createPane('labels').style.zIndex = 650; map.getPane('labels').style.pointerEvents = 'none';
+      tile('Canvas/World_Light_Gray_Base').addTo(map);
+      tile('Elevation/World_Hillshade', { pane: 'hillshade', opacity: 0.6 }).addTo(map);
+      tile('Canvas/World_Light_Gray_Reference', { pane: 'labels' }).addTo(map);
+      L.circleMarker([38.943, -120.067], { radius: 9, color: '#e49937', weight: 3, fill: false }).bindTooltip('Baldwin Beach, selected site').addTo(map);
+    }
     $('monSpecTable').innerHTML = `<table class="ds" style="margin:0"><tr><th>Year</th><th>Occupied sites</th><th>Standard</th></tr>${YEARS.map((y, i) => `<tr><td>${y}</td><td>${OCC[i]}</td><td>26</td></tr>`).join('')}</table>`;
     const seg = $('monSpecSeg');
     seg.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
       seg.querySelectorAll('button').forEach(x => { x.classList.toggle('active', x === b); x.setAttribute('aria-checked', x === b); });
       const table = b.dataset.view === 'table';
       $('monSpecPlot').hidden = table; $('monSpecTable').hidden = !table;
-      if (!table && window.Plotly) Plotly.Plots.resize('monSpecPlot'); });
+      if (!table) window.dispatchEvent(new Event('resize')); });
   })();
 
   const sitePick = $('ltiSitePick');
