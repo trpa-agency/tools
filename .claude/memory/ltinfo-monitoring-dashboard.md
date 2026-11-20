@@ -11,7 +11,7 @@ The tools QA gallery shows it as one beta card in apps.json (id `ltinfo-monitori
 
 Lake Tahoe Currents still lives at trpa-agency.github.io/Monitoring/Currents/ and was not part of the move.
 
-qa/data/design-system.html, section 19 (LT Info Monitoring Dashboard), defines style and brand only: color roles, type, chart and map palettes, a static specimen, map and popup look, and rules. Since Nov. 18, 2026 it no longer loads or describes the Monitoring/ltinfo kit, which is a retired prototype.
+qa/data/design-system.html, section 19 (LT Info Monitoring Dashboard), defines style and brand only: color roles, type, chart and map palettes, a static specimen, map and popup look, and rules. Since Nov. 19, 2026 the Monitoring Dashboard stack is Leaflet maps on Esri Light Gray Canvas (base and reference raster tiles, no key) with World Hillshade at 60 percent in a multiply pane, and Vega-Lite charts styled by MON_VL_CONFIG (palettes as named ranges); the section shows both live. Since Nov. 18, 2026 it no longer loads or describes the Monitoring/ltinfo kit, which is a retired prototype.
 
 **Why:** one repo owns the monitoring program pages, so the tools site links to it instead of mirroring its pages.
 **How to apply:** add new monitoring program pages in that repo, not as cards here; keep the single card's description current if the index changes shape.
