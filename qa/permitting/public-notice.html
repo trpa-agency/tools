@@ -55,6 +55,10 @@
     .hdr-back:hover { color: var(--trpa-blue); }
     .hdr-links { display: flex; align-items: center; gap: 0.2rem; }
     .hdr-sep { width: 1px; height: 18px; background: var(--gray-border); margin: 0 0.3rem; }
+    #staffBtn.signed-in { --calcite-button-text-color: var(--trpa-forest); }
+    .staff-note { display: flex; align-items: center; gap: 0.45rem; font-size: 0.7rem; line-height: 1.4; color: var(--trpa-navy);
+      background: #EEF3E6; border: 1px solid #C9D6B3; border-radius: 7px; padding: 0.4rem 0.6rem; }
+    .staff-note calcite-icon { color: var(--trpa-forest); flex-shrink: 0; }
     .beta-chip { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
       color: var(--trpa-orange); border: 1px solid var(--trpa-orange); border-radius: 999px; padding: 0.1rem 0.5rem; margin-right: 0.4rem; }
 
@@ -218,6 +222,11 @@
       <calcite-button id="lnkPermit" href="https://gis.trpa.org/PermitReview/" target="_blank" rel="noopener" icon-start="inspection"
         appearance="transparent" kind="neutral" scale="s" title="Permit Review Map" label="Permit Review Map"></calcite-button>
       <span class="hdr-sep" aria-hidden="true"></span>
+      <calcite-button id="restartBtn" icon-start="reset" appearance="transparent" kind="neutral" scale="s"
+        title="Start over: clear the subject property, the list, and the settings" label="Start over"><span class="link-label">Start over</span></calcite-button>
+      <calcite-button id="staffBtn" icon-start="sign-in" appearance="transparent" kind="neutral" scale="s"
+        title="Staff sign in: adds owner names from the TRPA Portal parcel layer" label="Staff sign in"><span class="link-label" id="staffBtnText">Staff sign in</span></calcite-button>
+      <span class="hdr-sep" aria-hidden="true"></span>
       <calcite-button id="shareBtn" icon-start="link" appearance="transparent" kind="neutral" scale="s"
         title="Copy a link that reopens this list setup (subject parcels and distance)" label="Copy link"></calcite-button>
       <calcite-button id="aboutBtn" icon-start="information" appearance="transparent" kind="neutral" scale="s"
@@ -230,6 +239,11 @@
   <div id="appBody">
     <aside id="sidePanel" aria-label="Notice list controls">
     <div id="panelScroll">
+      <div class="staff-note" id="staffNote" hidden>
+        <calcite-icon icon="user-key" scale="s"></calcite-icon>
+        <span>Staff view: owner names from the secured parcel layer. Signed in as <strong id="staffUser"></strong>.
+          Owner names stay in this browser tab; don't share exports outside the agency.</span>
+      </div>
 
       <section class="panel-sec">
         <h2 class="sec-title"><span class="sec-num">1</span> Subject property
@@ -295,11 +309,12 @@
         <h2 class="sec-title"><span class="sec-num">4</span> Export</h2>
         <label class="field">First line on each owner label
           <select id="line1Sel">
+            <option value="__owner" hidden disabled>Owner name (staff)</option>
             <option value="Property Owner">Property Owner</option>
             <option value="Owner or Current Occupant">Owner or Current Occupant</option>
             <option value="">None (address only)</option>
           </select>
-          <span class="field-help">Owner names are not in the public parcel service, so labels address the owner of record by role.</span>
+          <span class="field-help" id="line1Help">Owner names are not in the public parcel service, so labels address the owner of record by role. Staff can sign in to add names.</span>
         </label>
         <label class="field">Label sheet
           <select id="sheetSel">
@@ -376,7 +391,10 @@
       </ul>
       <h3>Notes</h3>
       <ul>
-        <li>Owner names are not published in the parcel service, so labels are addressed to the owner of record by role.</li>
+        <li>Owner names are not published in the public parcel service, so labels are addressed to the owner of record by role.
+          TRPA staff can choose <em>Staff sign in</em> to sign in with their TRPA Portal account; the list then comes from the
+          secured Parcel Master layer, with owner names in the table, labels, and CSV. Names are never put in links.</li>
+        <li><em>Start over</em> clears the subject property, the list, and the settings. A staff sign-in stays in place.</li>
         <li>Roughly one parcel in a hundred has no usable mailing address on file (most are public agency holdings). Those rows
           stay in the table and the CSV flagged <em>Incomplete</em>, and are left out of the labels.</li>
         <li><em>Owner-occupied</em> means the mailing address matches the property address. With the occupant option on,
@@ -393,7 +411,17 @@
     const FIELDS = ["OBJECTID", "APN", "APO_ADDRESS", "PSTL_TOWN", "PSTL_STATE", "PSTL_ZIP5",
       "MAIL_ADD1", "MAIL_ADD2", "MAIL_CITY", "MAIL_STATE", "MAIL_ZIP5",
       "JURISDICTION", "COUNTY", "OWNERSHIP_TYPE", "LTINFO_HYPERLINK"];
-    const PERMIT_REVIEW_URL = "https://gis.trpa.org/PermitReview/";
+    // Staff mode: staff sign in with their TRPA Portal account (the SDK's own sign-in
+    // dialog; maps.trpa.org/server is federated with maps.trpa.org/portal), then parcel
+    // queries go to the secured layer with that token. Queries still fall back to JSONP
+    // with the token on the office network.
+    const STAFF = {
+      parcelsUrl: SVC + "Parcel_Master/FeatureServer/0",
+      ownerFields: ["OWN_FULL"],
+      expirationMin: 480,
+      storeKey: "trpa-public-notice-staff",
+    };
+    const PERMIT_REVIEW_URL ="https://gis.trpa.org/PermitReview/";
     const PERMIT_PARCELS_DS = "dataSource_1-18bd6d48e43-layer-73";
     const BASIN = { center: [-120.04, 39.09], zoom: 9 };
     const COUNTY_NAMES = { WA: "Washoe County, NV", CC: "Carson City, NV", DG: "Douglas County, NV",
@@ -448,6 +476,10 @@
     let clickMode = null;     // null | "select" | "refine"
     let gridApi = null;
     let selectBtnEl, refineBtnEl;
+    let staff = null;         // { token, expires, user, fields, ownerFields } while signed in
+    let queryJSON = null;     // esri/rest/query executeQueryJSON (for the secured layer)
+    let idManager = null;     // esri/identity/IdentityManager (Portal sign-in dialog)
+    const ownerOn = () => !!(staff && staff.ownerFields.length);
 
     // ── JSONP fallback (office-network CORS, see the locator for the history) ──
     let jsonpSeq = 0;
@@ -476,7 +508,9 @@
     // polygon's envelope (a URL-safe size) and filters to the true shape here.
     async function queryParcels(opts) {
       const num = opts.num || 2000;
-      const base = { outFields: FIELDS, returnGeometry: true, outSpatialReference: view.spatialReference };
+      // Signed-in staff query the secured layer (same parcels plus owner names).
+      const s = staff, url = s ? STAFF.parcelsUrl : PARCELS_URL, fields = s ? s.fields : FIELDS;
+      const base = { outFields: fields, returnGeometry: true, outSpatialReference: view.spatialReference };
       try {
         const out = []; let start = 0;
         for (;;) {
@@ -484,7 +518,7 @@
           if (opts.where) { q.where = opts.where; if (opts.orderByFields) q.orderByFields = opts.orderByFields; }
           if (opts.point) { q.geometry = opts.point; q.spatialRelationship = "intersects"; }
           if (opts.polygon) { q.geometry = opts.polygon; q.spatialRelationship = "intersects"; }
-          const r = await parcelsFL.queryFeatures(q);
+          const r = s ? await queryJSON(url, q, { query: { token: s.token } }) : await parcelsFL.queryFeatures(q);
           out.push(...r.features);
           if (!opts.polygon || !r.exceededTransferLimit || !r.features.length) break;
           start += r.features.length;
@@ -492,15 +526,19 @@
         return out;
       } catch (e) {
         console.warn("Parcel query failed, retrying as JSONP:", e && e.message);
-        const params = { outFields: FIELDS.join(","), returnGeometry: "true", outSR: "3857", inSR: "3857",
+        const params = { outFields: fields.join(","), returnGeometry: "true", outSR: "3857", inSR: "3857",
           resultRecordCount: String(num), spatialRel: "esriSpatialRelIntersects" };
+        if (s) params.token = s.token;
         if (opts.where) { params.where = opts.where; if (opts.orderByFields) params.orderByFields = opts.orderByFields.join(","); }
         if (opts.point) { params.geometry = `${opts.point.x},${opts.point.y}`; params.geometryType = "esriGeometryPoint"; }
         if (opts.polygon) { const e = opts.polygon.extent; params.geometry = `${e.xmin},${e.ymin},${e.xmax},${e.ymax}`; params.geometryType = "esriGeometryEnvelope"; }
         const out = []; let offset = 0;
         for (;;) {
-          const r = await jsonp(PARCELS_URL + "/query", { ...params, resultOffset: String(offset) });
-          if (r.error) throw new Error(r.error.message || "Parcel query error");
+          const r = await jsonp(url + "/query", { ...params, resultOffset: String(offset) });
+          if (r.error) {
+            if (s && [403, 498, 499].includes(r.error.code)) { staffSignOut({ reason: "expired", noRebuild: true }); }
+            throw new Error(r.error.message || "Parcel query error");
+          }
           const feats = graphicsFromEsriJson(r);
           out.push(...feats);
           if (!opts.polygon || !r.exceededTransferLimit || !feats.length) break;
@@ -545,8 +583,10 @@
       "esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/layers/GraphicsLayer", "esri/Graphic",
       "esri/widgets/ScaleBar", "esri/widgets/Home", "esri/widgets/Sketch", "esri/widgets/Expand", "esri/widgets/BasemapToggle",
       "esri/geometry/geometryEngine", "esri/geometry/Point", "esri/geometry/Polygon", "esri/geometry/support/webMercatorUtils",
-    ], (Map, MapView, FeatureLayer, GraphicsLayer, Graphic, ScaleBar, Home, Sketch, Expand, BasemapToggle, geometryEngine, Point, Polygon, wmUtils) => {
+      "esri/rest/query", "esri/identity/IdentityManager",
+    ], (Map, MapView, FeatureLayer, GraphicsLayer, Graphic, ScaleBar, Home, Sketch, Expand, BasemapToggle, geometryEngine, Point, Polygon, wmUtils, restQuery, IdentityManager) => {
       window._Graphic = Graphic; window._Point = Point; window._Polygon = Polygon; window._wm = wmUtils; GE = geometryEngine;
+      queryJSON = restQuery.executeQueryJSON; idManager = IdentityManager;
 
       // Lot lines close in (the queries run server-side and don't need this to draw)
       parcelsFL = new FeatureLayer({ url: PARCELS_URL, outFields: ["OBJECTID"], legendEnabled: false, listMode: "hide", minScale: 24000,
@@ -596,7 +636,7 @@
           if (clickMode === "select") addSubjectAt(e.mapPoint); else refineAt(e.mapPoint);
         });
         $("footStatus").textContent = "Add a subject property to begin.";
-        applyShareHash();
+        restoreStaff().finally(applyShareHash);
       });
     });
 
@@ -718,25 +758,20 @@
         const prevRows = rows;
         const prevInclude = new Map(rows.map(r => [r.apn, r.include]));   // keep manual exclusions across a re-run
         rows = feats.map(g => {
-          const a = g.attributes, apn = a.APN || String(a.OBJECTID);
-          const isSubject = subjectApns.has(apn);
-          const r = {
-            apn, oid: a.OBJECTID, geometry: g.geometry, attrs: a, isSubject,
-            situs: hasSitus(a) ? a.APO_ADDRESS : "", situsCity: a.PSTL_TOWN || "", situsState: a.PSTL_STATE || "", situsZip: a.PSTL_ZIP5 || "",
-            mail1: (a.MAIL_ADD1 || "").trim(), mail2: (a.MAIL_ADD2 || "").trim(), mailCity: (a.MAIL_CITY || "").trim(),
-            mailState: (a.MAIL_STATE || "").trim(), mailZip: String(a.MAIL_ZIP5 || "").trim(),
-            jurisdiction: a.JURISDICTION || "", county: a.COUNTY || "", ownership: a.OWNERSHIP_TYPE || "",
-            incomplete: isIncomplete(a), ownerOccupied: isOwnerOccupied(a), mailKey: mailKey(a),
-            ltinfo: a.LTINFO_HYPERLINK || `https://parcels.laketahoeinfo.org/Parcel/Detail/${encodeURIComponent(apn)}`,
-          };
-          r.mailing = [r.mail2, r.mail1].filter(Boolean).join(", ");
+          const r = makeRow(g), apn = r.apn;
+          const isSubject = r.isSubject = subjectApns.has(apn);
           r.include = prevInclude.has(apn) ? prevInclude.get(apn) : (isSubject ? includeSubject : true);
           if (isSubject && !includeSubject) r.include = false;
           return r;
         });
         // parcels added by hand on the map stay on the list across a rebuild
         const have = new Set(rows.map(r => r.apn));
-        prevRows.filter(r => r.added && !have.has(r.apn)).forEach(r => rows.push(r));
+        // (re-read after a sign-in or sign-out so owner names come and go with it)
+        for (const r of prevRows.filter(r => r.added && !have.has(r.apn))) {
+          if (r.ownerMode === ownerOn()) { rows.push(r); continue; }
+          const f = (await queryParcels({ where: `APN = '${escSql(r.apn)}'`, num: 1 }))[0];
+          if (f) rows.push({ ...makeRow(f), added: true, include: r.include });
+        }
         rows.sort((a, b) => (b.isSubject - a.isSubject) || a.apn.localeCompare(b.apn));
         markDuplicates();
         const cur = distanceSetting();
@@ -749,6 +784,24 @@
         console.error(e); $("footStatus").textContent = "The parcel query failed.";
         toast("Couldn't query parcels, check the network connection and try again.", 5000);
       } finally { btn.loading = false; btn.disabled = !subjects.length; }
+    }
+    // One list row from a parcel feature. Owner names come only from the secured
+    // layer; with names on, the dedupe key adds the owner so two different owners
+    // who share a mailing address (a management company, say) each get a label.
+    function makeRow(g) {
+      const a = g.attributes, apn = a.APN || String(a.OBJECTID);
+      const owner = ownerOn() ? [...new Set(staff.ownerFields.map(f => String(a[f] ?? "").trim()).filter(Boolean))].join(" & ") : "";
+      const r = {
+        apn, oid: a.OBJECTID, geometry: g.geometry, attrs: a, isSubject: false, owner, ownerMode: ownerOn(),
+        situs: hasSitus(a) ? a.APO_ADDRESS : "", situsCity: a.PSTL_TOWN || "", situsState: a.PSTL_STATE || "", situsZip: a.PSTL_ZIP5 || "",
+        mail1: (a.MAIL_ADD1 || "").trim(), mail2: (a.MAIL_ADD2 || "").trim(), mailCity: (a.MAIL_CITY || "").trim(),
+        mailState: (a.MAIL_STATE || "").trim(), mailZip: String(a.MAIL_ZIP5 || "").trim(),
+        jurisdiction: a.JURISDICTION || "", county: a.COUNTY || "", ownership: a.OWNERSHIP_TYPE || "",
+        incomplete: isIncomplete(a), ownerOccupied: isOwnerOccupied(a), mailKey: mailKey(a) + (owner ? "|" + normAddr(owner) : ""),
+        ltinfo: a.LTINFO_HYPERLINK || `https://parcels.laketahoeinfo.org/Parcel/Detail/${encodeURIComponent(apn)}`,
+      };
+      r.mailing = [r.mail2, r.mail1].filter(Boolean).join(", ");
+      return r;
     }
     // Among included rows with a complete address, later rows that share a
     // mailing address point at the first one (used by dedupe and the badges).
@@ -772,14 +825,7 @@
         if (r) { r.include = !r.include; toast(`${r.situs || "APN " + apn} ${r.include ? "added back to" : "removed from"} the list.`); }
         else {
           const a = f.attributes;
-          rows.push({ apn, oid: a.OBJECTID, geometry: f.geometry, attrs: a, isSubject: false, added: true,
-            situs: hasSitus(a) ? a.APO_ADDRESS : "", situsCity: a.PSTL_TOWN || "", situsState: a.PSTL_STATE || "", situsZip: a.PSTL_ZIP5 || "",
-            mail1: (a.MAIL_ADD1 || "").trim(), mail2: (a.MAIL_ADD2 || "").trim(), mailCity: (a.MAIL_CITY || "").trim(),
-            mailState: (a.MAIL_STATE || "").trim(), mailZip: String(a.MAIL_ZIP5 || "").trim(),
-            mailing: [(a.MAIL_ADD2 || "").trim(), (a.MAIL_ADD1 || "").trim()].filter(Boolean).join(", "),
-            jurisdiction: a.JURISDICTION || "", county: a.COUNTY || "", ownership: a.OWNERSHIP_TYPE || "",
-            incomplete: isIncomplete(a), ownerOccupied: isOwnerOccupied(a), mailKey: mailKey(a), include: true,
-            ltinfo: a.LTINFO_HYPERLINK || `https://parcels.laketahoeinfo.org/Parcel/Detail/${encodeURIComponent(apn)}` });
+          rows.push({ ...makeRow(f), added: true, include: true });
           toast(`${hasSitus(a) ? a.APO_ADDRESS : "APN " + apn} added to the list.`);
           if (!lastRun) lastRun = { subjectKeys: subjects.map(s => s.key).join("|"), ...distanceSetting(), includeSubject: $("includeSubject").checked };
         }
@@ -829,6 +875,7 @@
           { field: "include", headerName: "Include", width: 84, editable: true, cellDataType: "boolean", pinned: "left" },
           { field: "apn", headerName: "APN", width: 118, pinned: "left",
             cellRenderer: (p) => `<a href="${escHtml(p.data.ltinfo)}" target="_blank" rel="noopener" title="Open on Lake Tahoe Info">${escHtml(p.value)}</a>` },
+          { field: "owner", headerName: "Owner", flex: 1.3, minWidth: 160, hide: !ownerOn(), valueFormatter: (p) => p.value || "(no name on file)" },
           { field: "situs", headerName: "Property address", flex: 1.2, minWidth: 150, valueFormatter: (p) => p.value || "(no situs address)" },
           { field: "mailing", headerName: "Mailing address", flex: 1.4, minWidth: 170 },
           { field: "mailCity", headerName: "City", width: 130 },
@@ -875,7 +922,9 @@
         if (r.incomplete) { skipped++; continue; }
         if (dedupe) { if (seenMail.has(r.mailKey)) continue; seenMail.add(r.mailKey); }
         const add2 = r.mail2 && !normAddr(r.mail1).startsWith(normAddr(r.mail2)) ? up(r.mail2) : "";
-        labels.push([line1, add2, up(r.mail1), up(cityLine(r.mailCity, r.mailState, r.mailZip))].filter(Boolean)); owner++;
+        // Owner name (staff) falls back to the role line when a parcel has no name on file
+        const first = line1 === "__owner" ? (r.owner ? up(r.owner) : "Property Owner") : line1;
+        labels.push([first, add2, up(r.mail1), up(cityLine(r.mailCity, r.mailState, r.mailZip))].filter(Boolean)); owner++;
       }
       if (occupants) {
         for (const r of inc) {
@@ -933,14 +982,14 @@
     // ───────────────────────── CSV ─────────────────────────
     $("csvBtn").addEventListener("click", () => {
       const inc = rows.filter(r => r.include);
-      const cols = [["APN", r => r.apn], ["Property Address", r => r.situs], ["Property City", r => r.situsCity], ["Property State", r => r.situsState],
+      const cols = [["APN", r => r.apn], ...(ownerOn() ? [["Owner Name", r => r.owner]] : []), ["Property Address", r => r.situs], ["Property City", r => r.situsCity], ["Property State", r => r.situsState],
         ["Property ZIP", r => r.situsZip], ["Mail Address 1", r => r.mail1], ["Mail Address 2", r => r.mail2], ["Mail City", r => r.mailCity],
         ["Mail State", r => r.mailState], ["Mail ZIP", r => r.mailZip], ["Jurisdiction", r => r.jurisdiction], ["County", r => r.county],
         ["Ownership Type", r => r.ownership], ["Subject Parcel", r => r.isSubject ? "Yes" : ""], ["Owner Occupied", r => r.ownerOccupied ? "Yes" : ""],
         ["Mailing Address Complete", r => r.incomplete ? "No" : "Yes"], ["Same Mailing Address As", r => r.dupOf || ""], ["Lake Tahoe Info", r => r.ltinfo]];
       const q = (v) => { const s = String(v ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
       const meta = [`# Public notice list`, `# Subject: ${subjects.map(s => s.label).join("; ")}`,
-        `# Distance: ${lastRun ? fmtDist(lastRun) : "n/a"}`, `# Generated: ${new Date().toLocaleString()} from maps.trpa.org Parcels`];
+        `# Distance: ${lastRun ? fmtDist(lastRun) : "n/a"}`, `# Generated: ${new Date().toLocaleString()} from maps.trpa.org ${ownerOn() ? "Parcel_Master (staff, with owner names; internal use)" : "Parcels"}`];
       const lines = [...meta, cols.map(c => q(c[0])).join(","), ...inc.map(r => cols.map(c => q(c[1](r))).join(","))];
       downloadBlob(new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" }), exportSlug() + ".csv");
       toast(`CSV saved, ${inc.length} parcels.`);
@@ -1057,7 +1106,7 @@
       if (p.has("sub")) $("includeSubject").checked = p.get("sub") === "1";
       if (p.has("dd")) $("dedupeSwitch").checked = p.get("dd") === "1";
       if (p.has("occ")) $("occupantSwitch").checked = p.get("occ") === "1";
-      if (p.has("l1") && [...$("line1Sel").options].some(o => o.value === p.get("l1"))) $("line1Sel").value = p.get("l1");
+      if (p.has("l1") && [...$("line1Sel").options].some(o => o.value === p.get("l1") && !o.disabled)) $("line1Sel").value = p.get("l1");
       if (p.has("sheet") && SHEETS[p.get("sheet")]) $("sheetSel").value = p.get("sheet");
       const apns = (p.get("apn") || "").split("|").map(s => s.trim()).filter(Boolean);
       let missing = 0;
@@ -1068,6 +1117,115 @@
       if (missing) toast(`${missing} linked parcel${missing === 1 ? "" : "s"} couldn't be found.`, 5000);
       if (subjects.length) await findParcels();
     }
+
+    // ───────────────────────── Start over ─────────────────────────
+    // Clears subjects, the list, and the settings in place (no reload, so a staff
+    // sign-in survives). The share hash goes too, so a reload doesn't bring it back.
+    function startOver() {
+      if (!view) return;
+      if (rows.length && !window.confirm("Start over? This clears the subject property and the notice list.")) return;
+      if (clickMode) setClickMode(clickMode);
+      rows = []; lastRun = null;
+      resultLayer.removeAll(); highlightLayer.removeAll();
+      if (gridApi) { gridApi.setGridOption("rowData", []); gridApi.setGridOption("quickFilterText", ""); }
+      $("quickFilter").value = ""; $("drawer").hidden = true; setDrawerCollapsed(false); $("drawerCount").textContent = "";
+      const preset = $("distSeg").querySelector('[data-value="300"]');
+      $("distSeg").querySelectorAll("button").forEach(x => { const on = x === preset; x.classList.toggle("active", on); x.setAttribute("aria-checked", on ? "true" : "false"); });
+      $("customDist").hidden = true; $("distInput").value = 300; $("unitSel").value = "feet";
+      $("includeSubject").checked = true; $("dedupeSwitch").checked = true; $("occupantSwitch").checked = false;
+      $("line1Sel").value = ownerOn() ? "__owner" : "Property Owner";
+      $("sheetSel").value = "5160"; $("startLabel").value = 1; $("startLabel").max = 30;
+      input.value = ""; clearBtn.style.display = "none"; closeSuggest();
+      clearSubjects();
+      ["csvBtn", "pdfBtn", "mapBtn"].forEach(id => { $(id).disabled = true; });
+      if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+      view.goTo({ center: BASIN.center, zoom: BASIN.zoom }, { duration: 500 }).catch(() => {});
+      $("footStatus").textContent = "Add a subject property to begin.";
+      toast("Started over.");
+    }
+    $("restartBtn").addEventListener("click", startOver);
+
+    // ───────────────────────── Staff sign-in ─────────────────────────
+    // The SDK's sign-in dialog asks for a TRPA Portal username and password and
+    // trades them for a token at the Portal; the password never touches this page's
+    // code. The token lives in sessionStorage for this tab only and is dropped at
+    // expiry or sign-out. Owner names never go into share links.
+    const LINE1_HELP = $("line1Help").textContent;
+    let signingIn = false;
+    function setStaffUI() {
+      const on = !!staff, b = $("staffBtn");
+      b.classList.toggle("signed-in", on);
+      b.iconStart = on ? "sign-out" : "sign-in";
+      $("staffBtnText").textContent = on ? "Sign out" : "Staff sign in";
+      b.label = on ? `Sign out ${staff.user}` : "Staff sign in";
+      b.title = on ? `Signed in as ${staff.user}. Click to sign out and go back to the public parcel layer.`
+        : "Staff sign in: adds owner names from the TRPA Portal parcel layer";
+      $("staffNote").hidden = !on; $("staffUser").textContent = on ? staff.user : "";
+      const opt = $("line1Sel").querySelector('[value="__owner"]');
+      opt.hidden = opt.disabled = !ownerOn();
+      if (ownerOn()) $("line1Sel").value = "__owner";
+      else if ($("line1Sel").value === "__owner") $("line1Sel").value = "Property Owner";
+      $("line1Help").textContent = ownerOn()
+        ? "Owner names come from the secured parcel layer. A parcel with no name on file gets “Property Owner”." : LINE1_HELP;
+      if (gridApi) gridApi.setColumnsVisible(["owner"], ownerOn());
+    }
+    async function staffSignIn() {
+      if (!idManager) { toast("The map is still loading, try again in a moment.", 3000); return; }
+      if (signingIn) return; signingIn = true;
+      const b = $("staffBtn"); b.loading = true;
+      try {
+        idManager.tokenValidity = STAFF.expirationMin;
+        const cred = await idManager.getCredential(STAFF.parcelsUrl);
+        await activateStaff({ token: cred.token, expires: cred.expires || Date.now() + STAFF.expirationMin * 60000, user: cred.userId || "staff" });
+      } catch (e) {
+        if (e && /aborted|cancel/i.test(e.name + " " + e.message)) toast("Sign-in cancelled.");
+        else { console.error(e); toast("Sign-in didn't work. Check the username and password, or the network connection.", 5000); }
+      } finally { signingIn = false; b.loading = false; }
+    }
+    async function activateStaff(cred, opts = {}) {
+      // Read the secured layer's schema with the token. JSONP works on and off the office network.
+      let info;
+      try { info = await jsonp(STAFF.parcelsUrl, { token: cred.token }); }
+      catch (e) { if (!opts.quiet) toast("Couldn't reach the secured parcel layer, try again.", 5000); return false; }
+      if (info.error) {
+        if (!opts.quiet) toast(info.error.code === 403 ? `${cred.user} doesn't have access to the owner parcel layer. Ask the GIS team to share it.`
+          : `The owner parcel layer turned down the sign-in (${info.error.message || info.error.code}).`, 6000);
+        return false;
+      }
+      const names = new Set((info.fields || []).map(f => f.name));
+      if (!names.has("APN")) { if (!opts.quiet) toast("The owner parcel layer doesn't match the public one (no APN field).", 6000); return false; }
+      const missing = FIELDS.filter(f => !names.has(f));
+      if (missing.length) console.warn("Parcel_Master is missing fields the list uses:", missing.join(", "));
+      const ownerFields = STAFF.ownerFields.filter(f => names.has(f));
+      staff = { ...cred, fields: [...FIELDS.filter(f => names.has(f)), ...ownerFields], ownerFields };
+      try { sessionStorage.setItem(STAFF.storeKey, JSON.stringify(cred)); } catch (e) {}
+      clearTimeout(activateStaff._t);
+      activateStaff._t = setTimeout(() => staffSignOut({ reason: "expired" }), Math.min(2147483647, Math.max(0, cred.expires - Date.now())));
+      setStaffUI();
+      if (!opts.quiet) toast(ownerOn() ? `Signed in as ${staff.user}. Owner names are on.` : "Signed in, but the layer has no owner name field.", 4000);
+      if (rows.length) await findParcels();
+      return true;
+    }
+    async function staffSignOut(opts = {}) {
+      if (!staff) return;
+      staff = null; clearTimeout(activateStaff._t);
+      if (idManager) idManager.destroyCredentials();
+      try { sessionStorage.removeItem(STAFF.storeKey); } catch (e) {}
+      // drop names already in memory, then rebuild from the public layer
+      rows.forEach(r => { r.owner = ""; r.ownerMode = null; STAFF.ownerFields.forEach(f => { delete r.attrs[f]; }); r.mailKey = mailKey(r.attrs); });
+      setStaffUI();
+      if (rows.length) { markDuplicates(); renderResults(); }
+      toast(opts.reason === "expired" ? "Staff sign-in expired. Back on the public parcel layer; sign in again for owner names."
+        : "Signed out. Back on the public parcel layer.", 5000);
+      if (rows.length && !opts.noRebuild) await findParcels();
+    }
+    async function restoreStaff() {
+      let cred = null;
+      try { cred = JSON.parse(sessionStorage.getItem(STAFF.storeKey) || "null"); } catch (e) {}
+      if (!cred || !cred.token || !(cred.expires > Date.now() + 60000)) { try { sessionStorage.removeItem(STAFF.storeKey); } catch (e) {} return; }
+      if (!(await activateStaff(cred, { quiet: true }))) { try { sessionStorage.removeItem(STAFF.storeKey); } catch (e) {} }
+    }
+    $("staffBtn").addEventListener("click", () => { if (staff) staffSignOut(); else staffSignIn(); });
 
     // ───────────────────────── Panel + about ─────────────────────────
     function setPanelCollapsed(c) { document.body.classList.toggle("panel-collapsed", c); $("panelToggleIcon").icon = c ? "chevron-right" : "chevron-left"; }
